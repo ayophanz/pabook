@@ -1964,12 +1964,12 @@ __webpack_require__.r(__webpack_exports__);
     upload: function upload() {
       var _this4 = this;
 
-      var formData = new FormData();
+      //const formData = new FormData();
       var images = [];
       var count = 0;
       this.files.forEach(function (file) {
         images.push([{
-          fileDetails: file
+          filesize: file.size
         }, {
           filename: file.name
         }, {
@@ -1978,7 +1978,6 @@ __webpack_require__.r(__webpack_exports__);
         count++;
       });
       this.$emit('images', images);
-      console.log(images);
     },
     resetField: function resetField() {
       this.isDragging = false;
@@ -2198,6 +2197,7 @@ var country_json_src_country_by_capital_city_json__WEBPACK_IMPORTED_MODULE_0___n
   },
   data: function data() {
     return {
+      tempImage: '',
       isCheckCover: false,
       isAdmin: false,
       imageUrl: null,
@@ -2230,7 +2230,9 @@ var country_json_src_country_by_capital_city_json__WEBPACK_IMPORTED_MODULE_0___n
     toggleCheck: function toggleCheck() {
       if (this.isCheckCover) {
         this.isCheckCover = false;
-        this.imageUrl = '../storage/images/upload/hotelImages/' + this.form.image;
+        this.form.errors.clear('image');
+        this.form.image = this.tempImage;
+        this.imageUrl = '../storage/images/upload/hotelImages/' + this.tempImage;
       } else {
         this.imageUrl = null;
         this.isCheckCover = true;
@@ -2244,10 +2246,16 @@ var country_json_src_country_by_capital_city_json__WEBPACK_IMPORTED_MODULE_0___n
         var action = null;
         if (this.hotelId != null) action = this.form.put('/api/update-hotel/' + this.hotelId);else action = this.form.post('/api/create-hotel');
         action.then(function (response) {
-          if (self.hotelId == null) self.form.reset();
+          var msg = 'Hotel updated successfully';
+
+          if (self.hotelId == null) {
+            msg = 'Hotel created successfully';
+            self.form.reset();
+          }
+
           toast.fire({
             type: 'success',
-            title: 'User created successfully'
+            title: msg
           });
         })["catch"](function (error) {
           console.log(error);
@@ -2306,8 +2314,8 @@ var country_json_src_country_by_capital_city_json__WEBPACK_IMPORTED_MODULE_0___n
           self.form.zip_code = response.data.zip_code;
           self.form.phone_number = response.data.phone_number;
           self.form.email = response.data.email;
-          self.form.image = response.data.image;
-          self.imageUrl = '../storage/images/upload/hotelImages/' + self.form.image;
+          self.tempImage = response.data.image;
+          self.imageUrl = '../storage/images/upload/hotelImages/' + self.tempImage;
         });
       }
     }
@@ -2574,17 +2582,35 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  watch: {
+    '$route': function $route(to, from) {
+      if (to.path === '/add-room') {
+        this.resetComponent();
+      } else {
+        to.params.roomId;
+      }
+    }
+  },
   components: {
     'repeater-field': _components_repeaterField__WEBPACK_IMPORTED_MODULE_1__["default"],
     'image-uploader': _components_ImageUploader__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
+      roomId: null,
+      tempImage: '',
       tempData: [],
+      isCheckCover: false,
       buttonText: 'Save',
       hotels: [],
       types: [],
@@ -2597,12 +2623,25 @@ __webpack_require__.r(__webpack_exports__);
         no_of_room: 1,
         image: '',
         hotel: 0,
+        changeFeature: '',
         featureData: [{}],
         gallery: []
       })
     };
   },
   methods: {
+    toggleCheck: function toggleCheck() {
+      if (this.isCheckCover) {
+        this.isCheckCover = false;
+        this.form.errors.clear('image');
+        this.form.image = this.tempImage;
+        this.imageUrl = '../storage/images/upload/roomImages/gallery-' + this.roomId + '/' + this.tempImage;
+      } else {
+        this.imageUrl = null;
+        this.isCheckCover = true;
+        this.form.image = null;
+      }
+    },
     loadHotels: function loadHotels() {
       if (this.$gate.superAdminOrhotelOwner()) {
         var self = this;
@@ -2622,17 +2661,24 @@ __webpack_require__.r(__webpack_exports__);
     register: function register() {
       if (this.$gate.superAdminOrhotelOwner()) {
         fire.$emit('uploadImage');
+        this.form.changeFeature = this.isCheckCover;
         var self = this;
         var action = null;
-        action = this.form.post('/api/create-room');
+        if (this.roomId != null) action = this.form.put('/api/update-room/' + this.roomId);else action = this.form.post('/api/create-room');
         action.then(function (response) {
-          self.form.reset();
-          fire.$emit('reset');
-          fire.$emit('resetGallery');
-          self.imageUrl = null;
+          var msg = 'Room updated successfully';
+
+          if (self.roomId == null) {
+            msg = 'Room created successfully';
+            self.form.reset();
+            fire.$emit('reset');
+            fire.$emit('resetGallery');
+            self.imageUrl = null;
+          }
+
           toast.fire({
             type: 'success',
-            title: 'User created successfully'
+            title: msg
           });
         })["catch"](function (error) {
           console.log(error);
@@ -2672,16 +2718,19 @@ __webpack_require__.r(__webpack_exports__);
           self.form.description = response.data.description;
           self.form.price = response.data.price;
           self.form.no_of_room = response.data.total_room;
-          self.form.image = response.data.image;
+          self.tempImage = response.data.image;
           var url = '../storage/images/upload/roomImages/gallery-' + id + '/';
-          self.imageUrl = url + self.form.image;
+          self.imageUrl = url + self.tempImage;
           self.form.hotel = response.data.room_refer.hotel_id;
           self.form.featureData = JSON.parse(response.data.room_feature.value);
           self.$refs.repeaterUpdate.fields = self.form.featureData;
           var images = JSON.parse(response.data.room_gallery.value);
           images.forEach(function (item) {
             self.$refs.uploaderUpdate.images.push(url + item[1]['filename']);
-            self.$refs.uploaderUpdate.files.push(item[0]['fileDetails']);
+            self.$refs.uploaderUpdate.files.push({
+              'name': item[1]['filename'],
+              'size': item[0]['filesize']
+            });
           });
         });
         this.ifChange();
@@ -2924,10 +2973,16 @@ __webpack_require__.r(__webpack_exports__);
         var action = null;
         if (this.typeId != null) action = this.form.put('/api/update-room-type/' + this.typeId);else action = this.form.post('/api/create-room-type');
         action.then(function (response) {
-          if (self.typeId == null) self.form.name = '';
+          var msg = 'Room Type updated successfully';
+
+          if (self.typeId == null) {
+            self.form.name = '';
+            msg = 'Room Type created successfully';
+          }
+
           toast.fire({
             type: 'success',
-            title: 'User created successfully'
+            title: msg
           });
         })["catch"](function (error) {
           console.log(error);
@@ -62529,6 +62584,36 @@ var render = function() {
                   1
                 ),
                 _vm._v(" "),
+                _vm.roomId != null
+                  ? _c("div", { staticClass: "form-group" }, [
+                      _c(
+                        "div",
+                        { staticClass: "custom-control custom-switch" },
+                        [
+                          _c("input", {
+                            staticClass: "custom-control-input",
+                            attrs: {
+                              type: "checkbox",
+                              id: "isChangeCover",
+                              name: "isChangeCover"
+                            },
+                            domProps: { checked: _vm.isCheckCover },
+                            on: { click: _vm.toggleCheck }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "label",
+                            {
+                              staticClass: "custom-control-label",
+                              attrs: { for: "isChangeCover" }
+                            },
+                            [_vm._v("Change feature image")]
+                          )
+                        ]
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
                 _c(
                   "div",
                   { staticClass: "form-group" },
@@ -62537,11 +62622,13 @@ var render = function() {
                     _vm._v(" "),
                     _c("br"),
                     _vm._v(" "),
-                    _c("input", {
-                      class: { "is-invalid": _vm.form.errors.has("image") },
-                      attrs: { type: "file", name: "image" },
-                      on: { change: _vm.updateImage }
-                    }),
+                    _vm.isCheckCover == true || _vm.roomId == null
+                      ? _c("input", {
+                          class: { "is-invalid": _vm.form.errors.has("image") },
+                          attrs: { type: "file", name: "image" },
+                          on: { change: _vm.updateImage }
+                        })
+                      : _vm._e(),
                     _vm._v(" "),
                     _c("has-error", {
                       attrs: { form: _vm.form, field: "image" }

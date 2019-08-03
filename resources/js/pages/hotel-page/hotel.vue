@@ -110,6 +110,7 @@
         },
         data() {
           return {
+            tempImage: '',
             isCheckCover: false,
             isAdmin: false,
             imageUrl: null,
@@ -142,7 +143,9 @@
           toggleCheck () {
             if(this.isCheckCover) {
               this.isCheckCover = false;
-              this.imageUrl = '../storage/images/upload/hotelImages/'+this.form.image;
+              this.form.errors.clear('image');
+              this.form.image = this.tempImage;
+              this.imageUrl = '../storage/images/upload/hotelImages/'+this.tempImage;
             }else{
               this.imageUrl = null;
               this.isCheckCover = true;
@@ -159,11 +162,14 @@
                 else
                     action = this.form.post('/api/create-hotel')            
                 action.then(function (response) { 
-                    if(self.hotelId==null) 
+                    let msg = 'Hotel updated successfully';
+                    if(self.hotelId==null) {
+                      msg = 'Hotel created successfully';
                       self.form.reset();
+                    }
                     toast.fire({
                       type: 'success',
-                      title: 'User created successfully'
+                      title: msg
                     })
 
                 })
@@ -226,8 +232,8 @@
                     self.form.zip_code = response.data.zip_code;
                     self.form.phone_number = response.data.phone_number;
                     self.form.email = response.data.email;
-                    self.form.image = response.data.image;
-                    self.imageUrl = '../storage/images/upload/hotelImages/'+self.form.image;
+                    self.tempImage = response.data.image;
+                    self.imageUrl = '../storage/images/upload/hotelImages/'+self.tempImage;
                   }
                 );  
             }
@@ -245,3 +251,4 @@
         }
     }
 </script>
+

@@ -98,12 +98,42 @@ class RoomController extends Controller
           return Room::where('id', $id)->with('roomFeature', 'roomRefer')->first();
    }
 
+   public function update(Request $request, $id) {
+      $data = [
+              'name'        => 'required|string|max:191|unique_name:rooms,name,type_id,'.$request['type'].','.$id,
+              'type'        => 'required|numeric|min:1',
+              'price'       => 'required|min:1|regex:/^\d+(\.\d{1,2})?$/',
+              'no_of_room'  => 'required|numeric|min:1',
+              'hotel'       => 'required|numeric|min:1'
+              ];
+
+      $customMessages = [
+                        'unique_name' => 'The :attribute field is already exist in the same room type.'
+                        ];        
+                        
+      $dataCreate = [
+                    'name'        => $request['name'],
+                    'type_id'     => $request['type'],
+                    'description' => $request['description'],
+                    'price'       => $request['price'],
+                    'total_room'  => $request['no_of_room']
+                    ]; 
+
+      if($request['changeFeature']) 
+          $data['image'] = 'required|image64:jpeg,jpg,png';                                  
+
+      $this->validate($request, $data, $customMessages);
+
+      return '';
+   }
+
    public function destroy($id) {
     	if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner')) {
             $room = Room::where('id', $id)->first();
 
             if($room) {
                 File::deleteDirectory(storage_path('app/public/images/upload/roomImages/gallery-'.$id));
+                RoomMeta::where('room_id', $id)->delete();
                 return Room::where('id', $id)->delete();
             }
             return die('Something went wrong!');

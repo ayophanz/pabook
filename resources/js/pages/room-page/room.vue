@@ -64,10 +64,16 @@
                             <input v-model="form.no_of_room" type="number" class="form-control" :class="{ 'is-invalid': form.errors.has('no_of_room') }" id="name">
                             <has-error :form="form" field="no_of_room"></has-error>
                         </div>
+                        <div class="form-group" v-if="roomId != null">
+                          <div class="custom-control custom-switch">
+                            <input @click="toggleCheck" :checked="isCheckCover" type="checkbox" class="custom-control-input" id="isChangeCover" name="isChangeCover">
+                            <label class="custom-control-label" for="isChangeCover">Change feature image</label>
+                          </div>
+                        </div>
                         <div class="form-group">
                             <label for="image">Feature image <span class="required-asterisk">*</span></label>
                             </br>
-                            <input type="file" @change="updateImage" :class="{ 'is-invalid': form.errors.has('image') }" name="image">
+                            <input v-if="isCheckCover == true || roomId == null" type="file" @change="updateImage" :class="{ 'is-invalid': form.errors.has('image') }" name="image">
                             <has-error :form="form" field="image"></has-error>
                             <div class="cover-preview">
                               <img :src="imageUrl">
@@ -89,13 +95,25 @@
     import RepeaterInputComponent from '../../components/repeaterField';
     import ImageUploader from '../../components/ImageUploader';
     export default {
+        watch: {
+            '$route' (to, from) {
+               if(to.path === '/add-room') {
+                  this.resetComponent();
+               }else{
+                  to.params.roomId
+               }
+            }
+        },
         components: {
             'repeater-field': RepeaterInputComponent,
             'image-uploader': ImageUploader
         },
         data() {
             return {
+                roomId: null,
+                tempImage: '',
                 tempData: [],
+                isCheckCover: false,
                 buttonText: 'Save',
                 hotels: [],
                 types: [],
@@ -108,12 +126,25 @@
                     no_of_room: 1,
                     image: '',
                     hotel: 0,
+                    changeFeature: '',
                     featureData: [{}],
                     gallery: []
                 })
             }
         },
         methods: {
+            toggleCheck () {
+                if(this.isCheckCover) {
+                  this.isCheckCover = false;
+                  this.form.errors.clear('image');
+                  this.form.image = this.tempImage;
+                  this.imageUrl = '../storage/images/upload/roomImages/gallery-'+this.roomId+'/'+this.tempImage;
+                }else{
+                  this.imageUrl = null;
+                  this.isCheckCover = true;
+                  this.form.image = null;
+                }
+            },
             loadHotels() {
                 if(this.$gate.superAdminOrhotelOwner()) {
                     let self = this
@@ -139,17 +170,26 @@
             register() {
                 if(this.$gate.superAdminOrhotelOwner()) {
                     fire.$emit('uploadImage');
+                    this.form.changeFeature = this.isCheckCover
                     let self = this
                     let action = null;
-                    action = this.form.post('/api/create-room')            
-                    action.then(function (response) { 
-                        self.form.reset();
-                        fire.$emit('reset');
-                        fire.$emit('resetGallery');
-                        self.imageUrl = null;
+                    if(this.roomId!=null) 
+                        action = this.form.put('/api/update-room/'+this.roomId);
+                    else
+                        action = this.form.post('/api/create-room')            
+                    action.then(function (response) {
+                        let msg = 'Room updated successfully';
+                        if(self.roomId==null)  {
+                            msg = 'Room created successfully';
+                            self.form.reset();
+                            fire.$emit('reset');
+                            fire.$emit('resetGallery');
+                            self.imageUrl = null;
+                        }
+                        
                         toast.fire({
                           type: 'success',
-                          title: 'User created successfully'
+                          title: msg
                         })
 
                     })
@@ -191,16 +231,19 @@
                         self.form.description = response.data.description;
                         self.form.price = response.data.price;
                         self.form.no_of_room = response.data.total_room;
-                        self.form.image = response.data.image;
+                        self.tempImage = response.data.image;
                         let url = '../storage/images/upload/roomImages/gallery-'+id+'/';
-                        self.imageUrl = url+self.form.image;
+                        self.imageUrl = url+self.tempImage;
                         self.form.hotel = response.data.room_refer.hotel_id;
                         self.form.featureData = JSON.parse(response.data.room_feature.value);
                         self.$refs.repeaterUpdate.fields = self.form.featureData;
                         let images = JSON.parse(response.data.room_gallery.value);
                         images.forEach(item => {
                             self.$refs.uploaderUpdate.images.push(url+item[1]['filename']);
-                            self.$refs.uploaderUpdate.files.push(item[0]['fileDetails']);
+                            self.$refs.uploaderUpdate.files.push({
+                                'name':item[1]['filename'],
+                                'size':item[0]['filesize']
+                            });
                         });
                       }
                     ); 

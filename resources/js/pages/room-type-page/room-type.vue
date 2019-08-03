@@ -71,11 +71,14 @@
                 else
                     action = this.form.post('/api/create-room-type')  
                   action.then(function (response) { 
-                      if(self.typeId==null) 
+                      let msg = 'Room Type updated successfully';
+                      if(self.typeId==null) {
                         self.form.name = '';
+                        msg = 'Room Type created successfully';
+                      }
                       toast.fire({
                         type: 'success',
-                        title: 'User created successfully'
+                        title: msg
                       })
                   })
                   .catch(function (error) {

@@ -90,15 +90,14 @@ export default {
             return `${(Math.round(size * 100) / 100)} ${fSExt[i]}`;
         },
         upload() {
-            const formData = new FormData();
+            //const formData = new FormData();
             let images = [];
             let count = 0;
             this.files.forEach(file => {
-                images.push([{fileDetails:file}, {filename:file.name}, {image:this.images[count]}]);
+                images.push([{filesize:file.size}, {filename:file.name}, {image:this.images[count]}]);
                 count++;
             });
             this.$emit('images', images);
-            console.log(images);
         },
         resetField() {
             this.isDragging = false;
