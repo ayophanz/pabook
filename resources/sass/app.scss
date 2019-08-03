@@ -1,0 +1,120 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+$fa-font-path: "../webfonts";
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+@import '~admin-lte/dist/css/adminlte.min.css';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '~@fortawesome/fontawesome-free/scss/solid.scss';
+@import '~@fortawesome/fontawesome-free/scss/brands.scss';
+
+
+img.brand-image {
+    width: 35px;
+    box-shadow: none;
+    background-color: white;
+    opacity: 1 !important;
+}
+
+.sidebar {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+.sidebar-dark-primary .nav-treeview>.nav-item>.nav-link.active, .sidebar-dark-primary .nav-treeview>.nav-item>.nav-link.active:hover {
+    color: #fff !important;
+    background-color: rgba(255,255,255,.1) !important;
+}
+
+.sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active {
+    box-shadow: none !important;
+    background: none;
+}
+
+.router-link-exact-active {
+    color: #fff !important;
+    background-color: rgba(255,255,255,.1) !important;
+}
+
+.sidebar-dark-primary .nav-sidebar>.nav-item>.nav-treeview {
+    background-color: rgba(73, 80, 87, 0.5607843137254902);
+}
+
+.card {
+    border-radius: 0px !important;
+    border: 0px !important;
+}
+
+.swal2-actions .swal2-confirm {
+    margin-left: 5px;
+}
+
+.swal2-actions .swal2-cancel {
+    margin-right: 5px;
+}
+
+.main-sidebar {
+    overflow-x: hidden;
+}
+
+.card-primary:not(.card-outline) .card-header, .card-primary:not(.card-outline) .card-header a {
+    color: #212529;
+    border-radius: 0px;
+}
+
+.form-control {
+    border-radius: 0px;
+}
+
+.nav-pills .nav-link {
+    border-radius: 0px !important;
+}
+
+.custom-switch label {
+    cursor: pointer;
+}
+
+.subtitle {
+  color: #314b5f;
+}
+
+.cover-preview img {
+    max-width: 100%;
+    margin-top: 10px;
+}
+
+.image-circle {
+    text-align: center;
+}
+
+.image-circle img {
+    height: 75px;
+    width: 75px !important;
+    border-radius: 100%;
+}
+
+.lightbox img {
+    width: 70% !important;
+    height: auto !important;
+    border-radius: 0px;
+}
+
+.border-bottom {
+    z-index: 0 !important;
+}
+
+span.required-asterisk {
+    color: red;
+}
+
+.invalid-feedback {
+    display: block !important;
+}
+
+.cover-preview {
+    text-align: center;
+}
