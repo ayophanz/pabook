@@ -99,6 +99,7 @@ class RoomController extends Controller
    }
 
    public function update(Request $request, $id) {
+      $room=null;
       $data = [
               'name'        => 'required|string|max:191|unique_name:rooms,name,type_id,'.$request['type'].','.$id,
               'type'        => 'required|numeric|min:1',
@@ -109,26 +110,64 @@ class RoomController extends Controller
 
       $customMessages = [
                         'unique_name' => 'The :attribute field is already exist in the same room type.'
-                        ];        
+                        ];
                         
-      $dataCreate = [
+      $dataUpdate = [
                     'name'        => $request['name'],
                     'type_id'     => $request['type'],
                     'description' => $request['description'],
                     'price'       => $request['price'],
                     'total_room'  => $request['no_of_room']
-                    ]; 
+                    ];
 
       if($request['changeFeature']) 
-          $data['image'] = 'required|image64:jpeg,jpg,png';                                  
+        $data['image'] = 'required|image64:jpeg,jpg,png';
 
       $this->validate($request, $data, $customMessages);
 
-      return '';
+      if(\Gate::allows('superAdmin')) 
+        $room = Room::where('id', $id)->update($dataUpdate);
+
+      if($request->image && $request['changeFeature']) {
+        $folder = public_path().'/storage/images/upload/roomImages/gallery-'.$id.'/';
+        if (!File::exists($folder)) 
+            File::makeDirectory($folder, 0775, true);
+
+        $image =  $room->name.'-'.$id.'.'.explode('/', 
+             explode(':', substr($request->image, 0, 
+             strpos($request->image, ';')))[1])[1];
+        unlink(storage_path('app/public/images/upload/roomImages/gallery-'.$id.'/'.$image));
+        \Image::make($request->image)
+        ->save(public_path('storage/images/upload/roomImages/gallery-'.$id.'/').$image);
+         Room::where('id', $id)->update(['image'=>$image]);
+      }
+
+      $featureDataTemp = array_filter($request->featureData, function($v) { return !is_null($v['value']); });
+      if($featureDataTemp) {
+        $dataMetaUpdate = ['value' => json_encode($featureDataTemp)];
+        RoomMeta::whrere('room_id', $id)->where('meta_key', 'room_feature')->update($dataMetaUpdate);
+      }
+
+      if($request->gallery) {
+        $file = [];                     
+        foreach ($request->gallery as $key => $subArr) {
+            $image = $subArr['1']['filename'];
+            unlink(storage_path('app/public/images/upload/roomImages/gallery-'.$id.'/'.$image));
+            \Image::make($subArr['2']['image'])
+            ->save(public_path('storage/images/upload/roomImages/gallery-'.$id.'/').$image); 
+            unset($subArr['2']);
+            $file[$key] = $subArr;  
+        }
+
+        $dataMetaUpdate = ['value' => json_encode($file)];
+        RoomMeta::where('room_id', $id)->where('meta_key', 'room_gallery')->update($dataMetaUpdate);                  
+      }
+
+      return ( ($room!=null)? $room : die('Something went wrong!') );
    }
 
    public function destroy($id) {
-    	if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner')) {
+    	if(\Gate::allows('superAdmin')) {
             $room = Room::where('id', $id)->first();
 
             if($room) {
@@ -138,7 +177,7 @@ class RoomController extends Controller
             }
             return die('Something went wrong!');
         }
-    }
+   }
 
 
 

@@ -133,6 +133,21 @@
             }
         },
         methods: {
+            getBase64Image(imgUrl, callback) {
+                let img = new Image();
+                img.onload = function(){
+                  let canvas = document.createElement("canvas");
+                  canvas.width = img.width;
+                  canvas.height = img.height;
+                  let ctx = canvas.getContext("2d");
+                  ctx.drawImage(img, 0, 0);
+                  let dataURL = canvas.toDataURL("image/png");
+                      dataURL = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+                  callback(dataURL); // the base64 string
+                };
+                img.setAttribute('crossOrigin', 'anonymous'); //
+                img.src = imgUrl;
+            },
             toggleCheck () {
                 if(this.isCheckCover) {
                   this.isCheckCover = false;
@@ -174,7 +189,7 @@
                     let self = this
                     let action = null;
                     if(this.roomId!=null) 
-                        action = this.form.put('/api/update-room/'+this.roomId);
+                        action = this.form.put('/api/update-room/'+this.roomId)
                     else
                         action = this.form.post('/api/create-room')            
                     action.then(function (response) {
@@ -239,7 +254,9 @@
                         self.$refs.repeaterUpdate.fields = self.form.featureData;
                         let images = JSON.parse(response.data.room_gallery.value);
                         images.forEach(item => {
-                            self.$refs.uploaderUpdate.images.push(url+item[1]['filename']);
+                            self.getBase64Image(url+item[1]['filename'], function(base64image){
+                                 self.$refs.uploaderUpdate.images.push('data:image/jpeg;base64,'+base64image);
+                            });
                             self.$refs.uploaderUpdate.files.push({
                                 'name':item[1]['filename'],
                                 'size':item[0]['filesize']

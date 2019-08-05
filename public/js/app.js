@@ -2630,6 +2630,24 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    getBase64Image: function getBase64Image(imgUrl, callback) {
+      var img = new Image();
+
+      img.onload = function () {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        var dataURL = canvas.toDataURL("image/png");
+        dataURL = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+        callback(dataURL); // the base64 string
+      };
+
+      img.setAttribute('crossOrigin', 'anonymous'); //
+
+      img.src = imgUrl;
+    },
     toggleCheck: function toggleCheck() {
       if (this.isCheckCover) {
         this.isCheckCover = false;
@@ -2726,7 +2744,9 @@ __webpack_require__.r(__webpack_exports__);
           self.$refs.repeaterUpdate.fields = self.form.featureData;
           var images = JSON.parse(response.data.room_gallery.value);
           images.forEach(function (item) {
-            self.$refs.uploaderUpdate.images.push(url + item[1]['filename']);
+            self.getBase64Image(url + item[1]['filename'], function (base64image) {
+              self.$refs.uploaderUpdate.images.push('data:image/jpeg;base64,' + base64image);
+            });
             self.$refs.uploaderUpdate.files.push({
               'name': item[1]['filename'],
               'size': item[0]['filesize']
