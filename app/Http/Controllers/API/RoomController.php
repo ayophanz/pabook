@@ -123,45 +123,45 @@ class RoomController extends Controller
       if($request['changeFeature']) 
         $data['image'] = 'required|image64:jpeg,jpg,png';
 
-      $this->validate($request, $data, $customMessages);
+      //$this->validate($request, $data, $customMessages);
 
-      if(\Gate::allows('superAdmin')) 
-        $room = Room::where('id', $id)->update($dataUpdate);
+      // if(\Gate::allows('superAdmin')) 
+      //   $room = Room::where('id', $id)->update($dataUpdate);
 
-      if($request->image && $request['changeFeature']) {
-        $folder = public_path().'/storage/images/upload/roomImages/gallery-'.$id.'/';
-        if (!File::exists($folder)) 
-            File::makeDirectory($folder, 0775, true);
+      // if($request->image && $request['changeFeature']) {
+      //   $folder = public_path().'/storage/images/upload/roomImages/gallery-'.$id.'/';
+      //   if (!File::exists($folder)) 
+      //       File::makeDirectory($folder, 0775, true);
 
-        $image =  $room->name.'-'.$id.'.'.explode('/', 
-             explode(':', substr($request->image, 0, 
-             strpos($request->image, ';')))[1])[1];
-        unlink(storage_path('app/public/images/upload/roomImages/gallery-'.$id.'/'.$image));
-        \Image::make($request->image)
-        ->save(public_path('storage/images/upload/roomImages/gallery-'.$id.'/').$image);
-         Room::where('id', $id)->update(['image'=>$image]);
-      }
+      //   $image =  $room->name.'-'.$id.'.'.explode('/', 
+      //        explode(':', substr($request->image, 0, 
+      //        strpos($request->image, ';')))[1])[1];
+      //   unlink(storage_path('app/public/images/upload/roomImages/gallery-'.$id.'/'.$image));
+      //   \Image::make($request->image)
+      //   ->save(public_path('storage/images/upload/roomImages/gallery-'.$id.'/').$image);
+      //    Room::where('id', $id)->update(['image'=>$image]);
+      // }
 
-      $featureDataTemp = array_filter($request->featureData, function($v) { return !is_null($v['value']); });
-      if($featureDataTemp) {
-        $dataMetaUpdate = ['value' => json_encode($featureDataTemp)];
-        RoomMeta::whrere('room_id', $id)->where('meta_key', 'room_feature')->update($dataMetaUpdate);
-      }
+      // $featureDataTemp = array_filter($request->featureData, function($v) { return !is_null($v['value']); });
+      // if($featureDataTemp) {
+      //   $dataMetaUpdate = ['value' => json_encode($featureDataTemp)];
+      //   RoomMeta::whrere('room_id', $id)->where('meta_key', 'room_feature')->update($dataMetaUpdate);
+      // }
 
-      if($request->gallery) {
-        $file = [];                     
-        foreach ($request->gallery as $key => $subArr) {
-            $image = $subArr['1']['filename'];
-            unlink(storage_path('app/public/images/upload/roomImages/gallery-'.$id.'/'.$image));
-            \Image::make($subArr['2']['image'])
-            ->save(public_path('storage/images/upload/roomImages/gallery-'.$id.'/').$image); 
-            unset($subArr['2']);
-            $file[$key] = $subArr;  
-        }
+      // if($request->gallery) {
+      //   $file = [];                     
+      //   foreach ($request->gallery as $key => $subArr) {
+      //       $image = $subArr['1']['filename'];
+      //       unlink(storage_path('app/public/images/upload/roomImages/gallery-'.$id.'/'.$image));
+      //       \Image::make($subArr['2']['image'])
+      //       ->save(public_path('storage/images/upload/roomImages/gallery-'.$id.'/').$image); 
+      //       unset($subArr['2']);
+      //       $file[$key] = $subArr;  
+      //   }
 
-        $dataMetaUpdate = ['value' => json_encode($file)];
-        RoomMeta::where('room_id', $id)->where('meta_key', 'room_gallery')->update($dataMetaUpdate);                  
-      }
+      //   $dataMetaUpdate = ['value' => json_encode($file)];
+      //   RoomMeta::where('room_id', $id)->where('meta_key', 'room_gallery')->update($dataMetaUpdate);                  
+      // }
 
       return ( ($room!=null)? $room : die('Something went wrong!') );
    }

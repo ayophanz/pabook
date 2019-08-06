@@ -11,7 +11,6 @@
             <!-- <button @click="upload" class="btn btn-outline-primary btn-flat"><i class="fas fa-cloud-upload-alt fa-1x"></i> Upload</button> -->
         </div>
 
-
         <div v-show="!images.length">
             <i class="fa fa-cloud-upload"></i>
             <p>Drag your images here</p>
@@ -24,6 +23,7 @@
 
         <div class="images-preview" v-show="images.length">
             <div class="img-wrapper" v-for="(image, index) in images" :key="index">
+                <span class="remove-img" @click="removeImg(index)"><i class="fas fa-times-circle"></i></span>
                 <img :src="image" :alt="`Image Uplaoder ${index}`">
                 <div class="details">
                     <span class="name" v-text="files[index].name"></span>
@@ -44,6 +44,10 @@ export default {
         images: []
     }),
     methods: {
+        removeImg(index) {
+            this.files.splice(index, 1);
+            this.images.splice(index, 1);
+        },
         OnDragEnter(e) {
             e.preventDefault();
             
@@ -170,6 +174,7 @@ export default {
             justify-content: space-between;
             background: #fff;
             box-shadow: 5px 5px 20px #3e3737;
+            position: relative;
             img {
                 max-height: 105px;
             }
@@ -205,5 +210,22 @@ export default {
             margin: 0px;
         }
     }
+}
+span.remove-img {
+    background: white;
+    position: absolute;
+    right: -10px;
+    top: -5px;
+    border-radius: 100px;
+    display: inherit;
+    height: 19px;
+}
+span.remove-img i {
+    color: red;
+    vertical-align: top;
+}
+span.remove-img:hover {
+    transform: scale(1.2);
+    cursor: pointer;
 }
 </style>

@@ -1902,6 +1902,10 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    removeImg: function removeImg(index) {
+      this.files.splice(index, 1);
+      this.images.splice(index, 1);
+    },
     OnDragEnter: function OnDragEnter(e) {
       e.preventDefault();
       this.dragCount++;
@@ -8376,7 +8380,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".uploader[data-v-4984bfe4] {\n  width: 100%;\n  background: #ced4da;\n  color: #fff;\n  padding: 40px 15px;\n  text-align: center;\n  border: 1px solid #ced4da;\n  font-size: 20px;\n  position: relative;\n}\n.uploader.dragging[data-v-4984bfe4] {\n  background: #fff;\n  color: #2196F3;\n  border: 3px dashed #2196F3;\n}\n.uploader.dragging .file-input label[data-v-4984bfe4] {\n  background: #2196F3;\n  color: #fff;\n}\n.uploader i.main-icon[data-v-4984bfe4] {\n  font-size: 85px;\n}\n.uploader .file-input[data-v-4984bfe4] {\n  width: 200px;\n  margin: auto;\n  height: 68px;\n  position: relative;\n}\n.uploader .file-input label[data-v-4984bfe4],\n.uploader .file-input input[data-v-4984bfe4] {\n  background: #3490dc;\n  color: #ffffff;\n  width: 100%;\n  position: absolute;\n  left: 0;\n  top: 0;\n  padding: 10px;\n  margin-top: 7px;\n  cursor: pointer;\n}\n.uploader .file-input input[data-v-4984bfe4] {\n  opacity: 0;\n  z-index: -2;\n}\n.uploader .images-preview[data-v-4984bfe4] {\n  display: flex;\n  flex-wrap: wrap;\n  margin-top: 20px;\n}\n.uploader .images-preview .img-wrapper[data-v-4984bfe4] {\n  width: 160px;\n  display: flex;\n  flex-direction: column;\n  margin: 10px;\n  height: 150px;\n  justify-content: space-between;\n  background: #fff;\n  box-shadow: 5px 5px 20px #3e3737;\n}\n.uploader .images-preview .img-wrapper img[data-v-4984bfe4] {\n  max-height: 105px;\n}\n.uploader .images-preview .details[data-v-4984bfe4] {\n  font-size: 12px;\n  background: #fff;\n  color: #000;\n  display: flex;\n  flex-direction: column;\n  align-items: self-start;\n  padding: 3px 6px;\n}\n.uploader .images-preview .details .name[data-v-4984bfe4] {\n  overflow: hidden;\n  height: 18px;\n}\n.uploader .upload-control[data-v-4984bfe4] {\n  position: absolute;\n  width: 100%;\n  background: #fff;\n  top: 0;\n  left: 0;\n  padding: 10px;\n  padding-bottom: 4px;\n  text-align: right;\n}\n.uploader .upload-control button[data-v-4984bfe4], .uploader .upload-control label[data-v-4984bfe4] {\n  font-size: 15px;\n  cursor: pointer;\n}\n.uploader .upload-control label[data-v-4984bfe4] {\n  margin: 0px;\n}", ""]);
+exports.push([module.i, ".uploader[data-v-4984bfe4] {\n  width: 100%;\n  background: #ced4da;\n  color: #fff;\n  padding: 40px 15px;\n  text-align: center;\n  border: 1px solid #ced4da;\n  font-size: 20px;\n  position: relative;\n}\n.uploader.dragging[data-v-4984bfe4] {\n  background: #fff;\n  color: #2196F3;\n  border: 3px dashed #2196F3;\n}\n.uploader.dragging .file-input label[data-v-4984bfe4] {\n  background: #2196F3;\n  color: #fff;\n}\n.uploader i.main-icon[data-v-4984bfe4] {\n  font-size: 85px;\n}\n.uploader .file-input[data-v-4984bfe4] {\n  width: 200px;\n  margin: auto;\n  height: 68px;\n  position: relative;\n}\n.uploader .file-input label[data-v-4984bfe4],\n.uploader .file-input input[data-v-4984bfe4] {\n  background: #3490dc;\n  color: #ffffff;\n  width: 100%;\n  position: absolute;\n  left: 0;\n  top: 0;\n  padding: 10px;\n  margin-top: 7px;\n  cursor: pointer;\n}\n.uploader .file-input input[data-v-4984bfe4] {\n  opacity: 0;\n  z-index: -2;\n}\n.uploader .images-preview[data-v-4984bfe4] {\n  display: flex;\n  flex-wrap: wrap;\n  margin-top: 20px;\n}\n.uploader .images-preview .img-wrapper[data-v-4984bfe4] {\n  width: 160px;\n  display: flex;\n  flex-direction: column;\n  margin: 10px;\n  height: 150px;\n  justify-content: space-between;\n  background: #fff;\n  box-shadow: 5px 5px 20px #3e3737;\n  position: relative;\n}\n.uploader .images-preview .img-wrapper img[data-v-4984bfe4] {\n  max-height: 105px;\n}\n.uploader .images-preview .details[data-v-4984bfe4] {\n  font-size: 12px;\n  background: #fff;\n  color: #000;\n  display: flex;\n  flex-direction: column;\n  align-items: self-start;\n  padding: 3px 6px;\n}\n.uploader .images-preview .details .name[data-v-4984bfe4] {\n  overflow: hidden;\n  height: 18px;\n}\n.uploader .upload-control[data-v-4984bfe4] {\n  position: absolute;\n  width: 100%;\n  background: #fff;\n  top: 0;\n  left: 0;\n  padding: 10px;\n  padding-bottom: 4px;\n  text-align: right;\n}\n.uploader .upload-control button[data-v-4984bfe4], .uploader .upload-control label[data-v-4984bfe4] {\n  font-size: 15px;\n  cursor: pointer;\n}\n.uploader .upload-control label[data-v-4984bfe4] {\n  margin: 0px;\n}\nspan.remove-img[data-v-4984bfe4] {\n  background: white;\n  position: absolute;\n  right: -10px;\n  top: -5px;\n  border-radius: 100px;\n  display: inherit;\n  height: 19px;\n}\nspan.remove-img i[data-v-4984bfe4] {\n  color: red;\n  vertical-align: top;\n}\nspan.remove-img[data-v-4984bfe4]:hover {\n  transform: scale(1.2);\n  cursor: pointer;\n}", ""]);
 
 // exports
 
@@ -61409,6 +61413,19 @@ var render = function() {
         },
         _vm._l(_vm.images, function(image, index) {
           return _c("div", { key: index, staticClass: "img-wrapper" }, [
+            _c(
+              "span",
+              {
+                staticClass: "remove-img",
+                on: {
+                  click: function($event) {
+                    return _vm.removeImg(index)
+                  }
+                }
+              },
+              [_c("i", { staticClass: "fas fa-times-circle" })]
+            ),
+            _vm._v(" "),
             _c("img", {
               attrs: { src: image, alt: "Image Uplaoder " + index }
             }),
