@@ -1,5 +1,15 @@
 <template>
     <div class="" id="root">
+      <loading 
+        :height="128"
+        :width="128"
+        :transition="`fade`"
+        :loader="`dots`"
+        :background-color="`#fff`"
+        :color="`#007bff`"
+        :active.sync="isLoading" 
+        :is-full-page="fullPage">
+      </loading>
       <form @submit.prevent="register" role="form">
         <div class="row justify-content-center">
             <div class="col-md-9">
@@ -87,7 +97,7 @@
                    </div> 
                 </div>
                 <div class="card-footer">
-                  <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat"><i class="fa fa-save"></i> Save</button>
+                  <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat"><i class="fa fa-save"></i> {{buttonText}}</button>
                 </div>
             </div>    
           </div>
@@ -98,6 +108,8 @@
 
 <script>
     import countries_list from 'country-json/src/country-by-capital-city.json'
+    import Loading from 'vue-loading-overlay'
+    import 'vue-loading-overlay/dist/vue-loading.css'
     export default {
         watch: {
             '$route' (to, from) {
@@ -108,8 +120,13 @@
                }
             }
         },
+        components: {
+          Loading
+        },
         data() {
           return {
+            fullPage: true,
+            isLoading: false,
             tempImage: '',
             isCheckCover: false,
             isAdmin: false,
@@ -154,6 +171,7 @@
           },
           register() {
             if(this.$gate.superAdminOrhotelOwner()) {
+                this.isLoading = true;
                 let self = this
                 this.form.changeCover = this.isCheckCover
                 let action = null;
@@ -167,6 +185,7 @@
                       msg = 'Hotel created successfully';
                       self.form.reset();
                     }
+                    self.isLoading = false;
                     toast.fire({
                       type: 'success',
                       title: msg
@@ -176,6 +195,7 @@
                 .catch(function (error) {
                     console.log(error); 
 
+                    self.isLoading = false;
                     toast.fire({
                       type: 'error',
                       title: 'Something went wrong!'

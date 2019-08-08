@@ -1,5 +1,15 @@
 <template>
     <div class="row justify-content-center">
+        <loading 
+        :height="128"
+        :width="128"
+        :transition="`fade`"
+        :loader="`dots`"
+        :background-color="`#fff`"
+        :color="`#007bff`"
+        :active.sync="isLoading" 
+        :is-full-page="fullPage">
+      </loading>
         <div class="col-12">
           <div class="card">
             <div class="card-header">
@@ -53,10 +63,17 @@
 </template>
 
 <script>
+    import Loading from 'vue-loading-overlay'
+    import 'vue-loading-overlay/dist/vue-loading.css'
     export default {
+        components: {
+            Loading
+        },
         data() {
             return {
-                users : ''
+                users : '',
+                fullPage: true,
+                isLoading: false
             }
         },
         methods: {
@@ -73,16 +90,20 @@
             },
             deleteUser(userId) {
                 if(this.$gate.superAdminOrhotelOwner()) {
+                    this.isLoading = true;
+                    let self = this
                     axios.delete('/api/delete-user/'+userId)
                     .then(
                         function (response) {
+                            self.isLoading = false;
+                            toast.fire({
+                              type: 'success',
+                              title: 'User deleted successfully'
+                            })
                             fire.$emit('afterCreated');
                         }
                     );
-                    toast.fire({
-                      type: 'success',
-                      title: 'User deleted successfully'
-                    })
+                    
                 }
             },
             selectUser(userId) {

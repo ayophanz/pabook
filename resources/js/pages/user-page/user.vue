@@ -1,5 +1,15 @@
 <template>
     <div class="container" id="root">
+      <loading 
+        :height="128"
+        :width="128"
+        :transition="`fade`"
+        :loader="`dots`"
+        :background-color="`#fff`"
+        :color="`#007bff`"
+        :active.sync="isLoading" 
+        :is-full-page="fullPage">
+      </loading>
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
@@ -73,6 +83,8 @@
 </template>
 
 <script>
+  import Loading from 'vue-loading-overlay'
+  import 'vue-loading-overlay/dist/vue-loading.css'
   export default {
         watch: {
             '$route' (to, from) {
@@ -83,8 +95,13 @@
                }
             }
         },
+        components: {
+            Loading
+        },
         data() {
           return {
+            fullPage: true,
+            isLoading: false,
             isRecep: true,
             isSuperAdmin: false,
             isCheckPass: false,
@@ -118,6 +135,7 @@
           },
           register () {
             if(this.$gate.superAdminOrhotelOwner()) {
+              this.isLoading = true;
               let self = this
               this.form.changePass = this.isCheckPass
               let action = null;
@@ -128,14 +146,14 @@
               action.then(function (response) { 
                   if(self.userId==null) 
                       self.form.reset();
-                  
+                  self.isLoading = false;
                   toast.fire({
                     type: 'success',
                     title: 'User created successfully'
                   })
               })
               .catch(function (error) {
-                  console.log(error); 
+                  self.isLoading = false;
                   toast.fire({
                     type: 'error',
                     title: 'Something went wrong!'

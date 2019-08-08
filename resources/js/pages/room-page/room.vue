@@ -1,5 +1,15 @@
 <template>
     <div class="" id="root">
+      <loading 
+        :height="128"
+        :width="128"
+        :transition="`fade`"
+        :loader="`dots`"
+        :background-color="`#fff`"
+        :color="`#007bff`"
+        :active.sync="isLoading" 
+        :is-full-page="fullPage">
+      </loading>
         <form @submit.prevent="register" role="form">
             <div class="row justify-content-center">
                 <div class="col-md-9">
@@ -91,9 +101,11 @@
 </template>
 
 <script>
-    import CurrencyFormatComponent from '../../components/autoCurrency';
-    import RepeaterInputComponent from '../../components/repeaterField';
-    import ImageUploader from '../../components/ImageUploader';
+    import CurrencyFormatComponent from '../../components/autoCurrency'
+    import RepeaterInputComponent from '../../components/repeaterField'
+    import ImageUploader from '../../components/ImageUploader'
+    import Loading from 'vue-loading-overlay'
+    import 'vue-loading-overlay/dist/vue-loading.css'
     export default {
         watch: {
             '$route' (to, from) {
@@ -105,11 +117,14 @@
             }
         },
         components: {
-            'repeater-field': RepeaterInputComponent,
-            'image-uploader': ImageUploader
+            RepeaterInputComponent,
+            ImageUploader,
+            Loading
         },
         data() {
             return {
+                fullPage: true,
+                isLoading: false,
                 roomId: null,
                 tempImage: '',
                 tempData: [],
@@ -145,7 +160,7 @@
                       dataURL = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
                   callback(dataURL); // the base64 string
                 };
-                img.setAttribute('crossOrigin', 'anonymous'); //
+                img.setAttribute('crossOrigin', 'anonymous'); 
                 img.src = imgUrl;
             },
             toggleCheck () {
@@ -184,6 +199,7 @@
             },
             register() {
                 if(this.$gate.superAdminOrhotelOwner()) {
+                    this.isLoading = true;
                     fire.$emit('uploadImage');
                     this.form.changeFeature = this.isCheckCover
                     let self = this
@@ -202,6 +218,7 @@
                             self.imageUrl = null;
                         }
                         
+                        self.isLoading = false;
                         toast.fire({
                           type: 'success',
                           title: msg
@@ -211,6 +228,7 @@
                     .catch(function (error) {
                         console.log(error); 
 
+                        self.isLoading = false;
                         toast.fire({
                           type: 'error',
                           title: 'Something went wrong!'

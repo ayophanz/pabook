@@ -1,5 +1,15 @@
 <template>
     <div class="row justify-content-center">
+        <loading 
+            :height="128"
+            :width="128"
+            :transition="`fade`"
+            :loader="`dots`"
+            :background-color="`#fff`"
+            :color="`#007bff`"
+            :active.sync="isLoading" 
+            :is-full-page="fullPage">
+          </loading>
         <div class="col-12">
           <div class="card">
             <div class="card-header">
@@ -73,13 +83,18 @@
 <script>
     import styles from 'vue-pure-lightbox/dist/VuePureLightbox.css'
     import VuePureLightbox from 'vue-pure-lightbox'
+    import Loading from 'vue-loading-overlay'
+    import 'vue-loading-overlay/dist/vue-loading.css'
     export default {
         components:{
-            VuePureLightbox
+            VuePureLightbox,
+            Loading
         },
         data() {
             return {
-                hotels: ''
+                hotels: '',
+                fullPage: true,
+                isLoading: false
             }
         },
         methods: {
@@ -99,16 +114,19 @@
             },
             deleteHotel(hotelId) {
                 if(this.$gate.superAdminOrhotelOwner()) {
+                    this.isLoading = true;
+                    let self = this;
                     axios.delete('/api/delete-hotel/'+hotelId)
                     .then(
                         function (response) {
+                            self.isLoading = false;
+                            toast.fire({
+                              type: 'success',
+                              title: 'User deleted successfully'
+                            })
                             fire.$emit('HotelCreated');
                         }
                     );
-                    toast.fire({
-                      type: 'success',
-                      title: 'User deleted successfully'
-                    })
                 }
             },
             selectHotel(hotelId) {

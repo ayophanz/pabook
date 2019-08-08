@@ -27,11 +27,12 @@
                 <img :src="image" :alt="`Image Uplaoder ${index}`">
                 <div class="details">
                     <span class="name" v-text="files[index].name"></span>
-                    <span class="size" v-text="getFileSize(files[index].size)"></span>
+                    <!-- <span class="size" v-text="getFileSize(files[index].size)"></span> -->
                 </div>
             </div>
         </div>
     </div>
+
 </template>
 
 <script>
