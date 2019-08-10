@@ -73,7 +73,7 @@ Route::post('/create-room', 'API\RoomController@create');
 
 Route::get('/edit-room/{id}', 'API\RoomController@show');
 
-Route::put('/update-room/{id}', 'API\RoomController@update');
+Route::post('/update-room/{id}', 'API\RoomController@update');
 
 Route::delete('/delete-room/{id}', 'API\RoomController@destroy');
 

@@ -25,6 +25,9 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.9.0",
+        "@fullcalendar/core": "^4.2.0",
+        "@fullcalendar/daygrid": "^4.2.0",
+        "@fullcalendar/vue": "^4.2.2",
         "admin-lte": "^3.0.0-alpha.2",
         "country-json": "^1.0.9",
         "datatables.net": "^1.10.19",

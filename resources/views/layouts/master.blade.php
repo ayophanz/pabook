@@ -52,10 +52,34 @@
       </div>
 
       <nav class="mt-2">
-        <ul class="nav nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <ul class="nav nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="true">
+
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-calendar-alt"></i>
+              <p>
+                Bookings
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <router-link to="/bookings" class="nav-link">
+                  <i class="nav-icon fas fa-list"></i>
+                  <p>Bookings</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/add-hotel" class="nav-link">
+                    <i class="nav-icon fas fa-plus-circle"></i>
+                  <p>Add</p>
+                </router-link>
+              </li>
+            </ul>
+          </li>
 
           @if(Gate::check('superAdmin') || Gate::check('hotelOwner'))
-          <li class="nav-item has-treeview menu-open">
+          <li class="nav-item has-treeview {{Request::is('hotels', 'add-hotel', 'edit-hotel/*')?'menu-open':''}}">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-hotel"></i>
               <p>
@@ -80,7 +104,8 @@
           </li>
           @endif   
 
-          <li class="nav-item has-treeview">
+          @if(Gate::check('superAdmin') || Gate::check('hotelOwner'))
+          <li class="nav-item has-treeview {{Request::is('rooms', 'add-room', 'edit-room/*')?'menu-open':''}}">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-bed"></i>
               <p>
@@ -103,9 +128,10 @@
               </li>
             </ul>
           </li>
+          @endif
 
           @if(Gate::check('superAdmin') || Gate::check('hotelOwner'))
-          <li class="nav-item has-treeview">
+          <li class="nav-item has-treeview {{Request::is('room-types', 'add-room-type', 'edit-room-type/*')?'menu-open':''}}">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-door-closed"></i>
               <p>
@@ -131,7 +157,7 @@
           @endif
 
           @if(Gate::check('superAdmin') || Gate::check('hotelOwner'))
-          <li class="nav-item has-treeview">
+          <li class="nav-item has-treeview {{Request::is('users', 'add-user', 'edit-user/*')?'menu-open':''}}">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-users-cog"></i>
               <p>
@@ -180,6 +206,7 @@
           </li>
         </ul>
       </nav>
+
     </div>
   </aside>
 

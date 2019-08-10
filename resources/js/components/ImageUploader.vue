@@ -27,7 +27,7 @@
                 <img :src="image" :alt="`Image Uplaoder ${index}`">
                 <div class="details">
                     <span class="name" v-text="files[index].name"></span>
-                    <!-- <span class="size" v-text="getFileSize(files[index].size)"></span> -->
+                    <span class="size" v-text="getFileSize(files[index].size)"></span>
                 </div>
             </div>
         </div>
@@ -78,14 +78,23 @@ export default {
                 this.$toastr.e(`${file.name} is not an image`);
                 return;
             }
-            this.files.push(file);
+            
             const img = new Image(),
                 reader = new FileReader();
-            reader.onload = (e) => this.images.push(e.target.result);
-            reader.readAsDataURL(file);
+            if(file['size'] < 300000) {
+                this.files.push(file);
+                reader.onload = (e) => this.images.push(e.target.result);
+                reader.readAsDataURL(file);
+            }else{
+                toast.fire({
+                    type: 'error',
+                    title: 'You are uploading large file, Please upload only less than 300kb file.'
+                })
+            }    
+            
         },
         getFileSize(size) {
-            const fSExt = ['Bytes', 'KB', 'MB', 'GB'];
+            const fSExt = ['Bytes', 'KB', 'MB'];
             let i = 0;
             
             while(size > 900) {

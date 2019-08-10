@@ -16,8 +16,12 @@ class RoomTypeController extends Controller
 
    public function index($id=null) {
       if($id) {
+        if(\Gate::allows('hotelOwner'))
+           return RoomType::where('hotel_id', $id)->with('roomTypeRefer')->orderBy('created_at', 'desc')->get();
+
         if(\Gate::allows('superAdmin'))
           return RoomType::where('hotel_id', $id)->with('roomTypeRefer')->orderBy('created_at', 'desc')->get();
+     
       }else{
         if(\Gate::allows('hotelOwner'))
            return RoomType::whereIn('hotel_id', $this->hotel_ids())->with('roomTypeRefer')->orderBy('created_at', 'desc')->get(); 

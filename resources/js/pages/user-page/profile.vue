@@ -1,5 +1,15 @@
 <template>
       <div class="col-md-12">
+        <loading 
+          :height="128"
+          :width="128"
+          :transition="`fade`"
+          :loader="`dots`"
+          :background-color="`#fff`"
+          :color="`#007bff`"
+          :active.sync="isLoading" 
+          :is-full-page="fullPage">
+        </loading>
           <div class="container-fluid">
             <div class="row justify-content-center">
               <div class="col-md-3">
@@ -347,9 +357,16 @@
 </template>
 
 <script>
+  import Loading from 'vue-loading-overlay'
+  import 'vue-loading-overlay/dist/vue-loading.css'
     export default {
+        components: {
+            Loading
+        },
         data() {
             return {
+                fullPage: true,
+                isLoading: false,
                 isCheckPass: false,
                 super_admin: false,
                 isEdit: false,
@@ -386,20 +403,20 @@
                 }
             },
             updateProfile() {
+                this.isLoading = true;
+                let self = this
                 this.form.changePass = this.isCheckPass
-                this.form.post('/api/update-profile')
-                .then(function (response) { 
-                    console.log('created') 
-
+                this.form.put('/api/update-profile')
+                .then(function (response) {  
+                    self.isLoading = false;
                     toast.fire({
                       type: 'success',
-                      title: 'User created successfully'
+                      title: 'Profile updated successfully'
                     })
 
                 })
                 .catch(function (error) {
-                    console.log(error); 
-
+                    self.isLoading = false;
                     toast.fire({
                       type: 'error',
                       title: 'Something went wrong!'

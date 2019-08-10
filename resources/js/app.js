@@ -25,6 +25,12 @@ Vue.use(VueRouter)
 let routes = [
 
     /**
+     * Booking
+     */
+    {path: '/bookings', component: require('./pages/booking-page/booking.vue').default},
+    {path: '/add-entry', component: require('./pages/room-type-page/room-type.vue').default},
+
+    /**
      * RoomType
      */
     {path: '/room-types', component: require('./pages/room-type-page/room-types.vue').default},

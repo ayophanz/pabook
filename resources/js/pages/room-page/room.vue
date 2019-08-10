@@ -148,6 +148,14 @@
             }
         },
         methods: {
+            resetComponent() {
+               this.buttonText = 'Save';
+               this.roomId = null;
+               this.imageUrl = null;
+               fire.$emit('reset'); 
+               fire.$emit('resetGallery');
+               this.form.reset();
+            },
             getBase64Image(imgUrl, callback) {
                 let img = new Image();
                 img.onload = function(){
@@ -205,7 +213,7 @@
                     let self = this
                     let action = null;
                     if(this.roomId!=null) 
-                        action = this.form.put('/api/update-room/'+this.roomId)
+                        action = this.form.post('/api/update-room/'+this.roomId)
                     else
                         action = this.form.post('/api/create-room')            
                     action.then(function (response) {
@@ -240,7 +248,7 @@
             updateImage(e) {
                 let file = e.target.files[0];
                 let reader = new FileReader();
-                if(file['size'] < 2111775) {
+                if(file['size'] < 300000) {
                   reader.onloadend = (file) => {
                     this.imageUrl = reader.result;
                     this.form.image = reader.result;
@@ -249,7 +257,7 @@
                 }else{
                   toast.fire({
                     type: 'error',
-                    title: 'You are uploading large file, Please upload only less than 2MB file.'
+                    title: 'You are uploading large file, Please upload only less than 300kb file.'
                   })
                 }
             },

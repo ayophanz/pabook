@@ -184,6 +184,7 @@
                     if(self.hotelId==null) {
                       msg = 'Hotel created successfully';
                       self.form.reset();
+                      self.imageUrl = null;
                     }
                     self.isLoading = false;
                     toast.fire({
@@ -207,7 +208,7 @@
           updateCover(e) {
             let file = e.target.files[0];
             let reader = new FileReader();
-            if(file['size'] < 2111775) {
+            if(file['size'] < 300000) {
               reader.onloadend = (file) => {
                 this.imageUrl = reader.result;
                 this.form.image = reader.result;
@@ -216,7 +217,7 @@
             }else{
               toast.fire({
                 type: 'error',
-                title: 'You are uploading large file, Please upload only less than 2MB file.'
+                title: 'You are uploading large file, Please upload only less than 300kb file.'
               })
             }
           },
