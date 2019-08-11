@@ -15,9 +15,9 @@ class Room extends Model
     			'total_room'
     			];
 
-    protected $with = ['roomRefer', 'roomFeature', 'roomGallery'];           
+    protected $with = ['roomType', 'roomFeature', 'roomGallery'];           
 
-    public function roomRefer() {
+    public function roomType() {
         return $this->belongsTo(RoomType::class, 'type_id', 'id'); 
     }
 

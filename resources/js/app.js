@@ -10,6 +10,8 @@ window.Vue = require('vue');
 
 import moment from 'moment'
 
+window.moment = moment
+
 import { Form, HasError, AlertError } from 'vform'
 
 import Gate from './Gate';
@@ -28,7 +30,7 @@ let routes = [
      * Booking
      */
     {path: '/bookings', component: require('./pages/booking-page/booking.vue').default},
-    {path: '/add-entry', component: require('./pages/room-type-page/room-type.vue').default},
+    {path: '/add-book-entry', component: require('./pages/booking-page/add-entry.vue').default},
 
     /**
      * RoomType
@@ -104,6 +106,7 @@ const sure = swal.mixin({
 window.sure = sure
 
 window.fire = new Vue();
+
 
 /**
  * The following block of code may be used to automatically register your

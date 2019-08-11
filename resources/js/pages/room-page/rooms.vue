@@ -42,7 +42,7 @@
 
                                 <tr v-for="room in rooms" :key="room.id">
                                     <td>{{room.id}}</td>
-                                    <td>{{room.room_refer.name}}</td>
+                                    <td>{{room.room_type.name}}</td>
                                     <td>{{room.name}}</td>
                                     <td>{{room.description}}</td>
                                     <td>{{room.price}}</td>

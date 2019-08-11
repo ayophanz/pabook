@@ -16,9 +16,9 @@ class RoomTypeController extends Controller
    }
 
    public function index($id=null) {
-      $hotelId = explode(',', $id)[0];
-      $roomId  = explode(',', $id)[1];
-      if($hotelId) {
+      if($id) {
+        $hotelId = explode(',', $id)[0];
+        $roomId  = explode(',', $id)[1];
         if(\Gate::allows('hotelOwner') || \Gate::allows('superAdmin'))
            return RoomType::where('hotel_id', $hotelId)->whereNotIn('id', $this->roomTypeIds($hotelId, $roomId))->with('roomTypeRefer')->orderBy('created_at', 'desc')->get();
      
@@ -116,7 +116,7 @@ class RoomTypeController extends Controller
         $rooms = Room::select('type_id')->where('id', '!=', $roomId)->whereIn('type_id', $roomType)->get()->toArray();
 
       foreach ($rooms as $key => $value) {
-        unset($rooms[$key]['room_refer']);
+        unset($rooms[$key]['room_type']);
         unset($rooms[$key]['room_feature']);
         unset($rooms[$key]['room_gallery']);
       }

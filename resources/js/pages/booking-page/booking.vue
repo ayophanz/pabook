@@ -3,7 +3,15 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">Example Component</div>
+                    <div class="card-header">
+                        <div class="card-tool">
+                            <router-link to="/add-book-entry">
+                                <button class="btn btn-outline-primary btn-flat">
+                                    <i class="fa fa-plus-circle"></i> Add
+                                </button>
+                            </router-link>
+                        </div>
+                    </div>
 
                     <div class="card-body">
                         <FullCalendar defaultView="dayGridMonth" :plugins="calendarPlugins" />

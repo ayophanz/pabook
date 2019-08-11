@@ -77,6 +77,8 @@ Route::post('/update-room/{id}', 'API\RoomController@update');
 
 Route::delete('/delete-room/{id}', 'API\RoomController@destroy');
 
+Route::get('/load-rooms/{start}/{end}', 'API\RoomController@availableRooms');
+
 // Client ID: 1
 // Client secret: qrGGChraskfl3MXtcrSXK5afaFehdffW519S5pHX
 // Password grant client created successfully.

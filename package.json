@@ -37,6 +37,7 @@
         "vue-loading-overlay": "^3.2.0",
         "vue-progressbar": "^0.7.5",
         "vue-pure-lightbox": "^3.1.0",
-        "vue-router": "^3.0.7"
+        "vue-router": "^3.0.7",
+        "vue2-daterange-picker": "^0.3.0"
     }
 }

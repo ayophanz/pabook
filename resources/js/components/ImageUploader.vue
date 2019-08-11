@@ -8,7 +8,6 @@
         
         <div class="upload-control" v-show="images.length">
             <label for="file" class="btn btn-primary btn-flat">Select a file</label>
-            <!-- <button @click="upload" class="btn btn-outline-primary btn-flat"><i class="fas fa-cloud-upload-alt fa-1x"></i> Upload</button> -->
         </div>
 
         <div v-show="!images.length">
@@ -104,7 +103,6 @@ export default {
             return `${(Math.round(size * 100) / 100)} ${fSExt[i]}`;
         },
         upload() {
-            //const formData = new FormData();
             let images = [];
             let count = 0;
             this.files.forEach(file => {

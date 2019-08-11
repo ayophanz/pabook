@@ -16586,3 +16586,35 @@ span.required-asterisk {
   text-align: center;
 }
 
+.daterangepicker .drp-buttons .btn {
+  border-radius: 0px;
+}
+
+button.applyBtn {
+  background-color: #3490dc;
+  border: 1px solid #3490dc;
+}
+
+button.applyBtn:hover {
+  background-color: #227dc7;
+  border-color: #2176bd;
+}
+
+button.applyBtn.disabled,
+button.applyBtn:disabled {
+  background-color: #357ebd;
+  border-color: #357ebd;
+}
+
+button.applyBtn:not(:disabled):not(.disabled):active,
+button.applyBtn:not(:disabled):not(.disabled).active,
+.show > button.applyBtn.dropdown-toggle {
+  background-color: #3490dc;
+  border: 1px solid #3490dc;
+}
+
+button.applyBtn:focus,
+button.applyBtn.focus {
+  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.25) !important;
+}
+

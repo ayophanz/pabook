@@ -18,10 +18,10 @@ class RoomController extends Controller
 
    public function index() {
         if(\Gate::allows('hotelOwner'))
-          return Room::whereIn('type_id', $this->owner())->with('roomRefer')->orderBy('created_at', 'desc')->get();
+          return Room::whereIn('type_id', $this->owner())->with('roomType')->orderBy('created_at', 'desc')->get();
 
         if(\Gate::allows('superAdmin'))
-		      return Room::with('roomRefer')->orderBy('created_at', 'desc')->get();
+		      return Room::with('roomType')->orderBy('created_at', 'desc')->get();
    }
 
    public function create(Request $request) {
@@ -90,7 +90,11 @@ class RoomController extends Controller
 
    public function show($id) {
       if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner')) 
-          return Room::where('id', $id)->with('roomFeature', 'roomRefer')->first();
+          return Room::where('id', $id)->with('roomFeature', 'roomType')->first();
+   }
+
+   public function availableRooms($start=null, $end=null) {
+      return Room::with('roomType')->get();
    }
 
    public function update(Request $request, $id) {

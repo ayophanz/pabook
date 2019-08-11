@@ -70,7 +70,7 @@
                 </router-link>
               </li>
               <li class="nav-item">
-                <router-link to="/add-hotel" class="nav-link">
+                <router-link to="/add-book-entry" class="nav-link">
                     <i class="nav-icon fas fa-plus-circle"></i>
                   <p>Add</p>
                 </router-link>
