@@ -277,7 +277,7 @@
                         self.tempImage = response.data.image;
                         let url = '../storage/images/upload/roomImages/gallery-'+id+'/';
                         self.imageUrl = url+self.tempImage;
-                        self.form.hotel = response.data.room_refer.hotel_id;
+                        self.form.hotel = response.data.room_type.hotel_id;
                         self.form.featureData = JSON.parse(response.data.room_feature.value);
                         self.$refs.repeaterUpdate.fields = self.form.featureData;
                         let images = JSON.parse(response.data.room_gallery.value);

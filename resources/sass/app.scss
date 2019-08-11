@@ -97,11 +97,16 @@ img.brand-image {
     border-radius: 100%;
 }
 
-.lightbox img {
-    width: 70% !important;
-    height: auto !important;
-    border-radius: 0px;
+.lightbox__image {
+    transform: scale(0.7);
+    text-align: center
 }
+
+// .lightbox img {
+//     width: 70% !important;
+//     height: auto !important;
+//     border-radius: 0px;
+// }
 
 .border-bottom {
     z-index: 0 !important;

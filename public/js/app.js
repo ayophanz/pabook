@@ -12852,9 +12852,13 @@ Vue.component('repeater-input', {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue2-daterange-picker */ "./node_modules/vue2-daterange-picker/src/index.js");
-/* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue2-daterange-picker/dist/vue2-daterange-picker.css */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css");
-/* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vue_pure_lightbox_dist_VuePureLightbox_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-pure-lightbox/dist/VuePureLightbox.css */ "./node_modules/vue-pure-lightbox/dist/VuePureLightbox.css");
+/* harmony import */ var vue_pure_lightbox_dist_VuePureLightbox_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_pure_lightbox_dist_VuePureLightbox_css__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue_pure_lightbox__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-pure-lightbox */ "./node_modules/vue-pure-lightbox/dist/VuePureLightbox.common.js");
+/* harmony import */ var vue_pure_lightbox__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_pure_lightbox__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue2-daterange-picker */ "./node_modules/vue2-daterange-picker/src/index.js");
+/* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-daterange-picker/dist/vue2-daterange-picker.css */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css");
+/* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__);
 //
 //
 //
@@ -12907,15 +12911,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    DateRangePicker: vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_0__["default"]
+    VuePureLightbox: vue_pure_lightbox__WEBPACK_IMPORTED_MODULE_1___default.a,
+    DateRangePicker: vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
-      rooms: [{}],
+      rooms: [],
       night: 0,
       defaultStartDate: '',
       defaultEndDate: '',
@@ -12928,6 +12951,10 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    viewGallery: function viewGallery() {},
+    getImgUrl: function getImgUrl(id, img) {
+      return '../storage/images/upload/roomImages/gallery-' + id + '/' + img;
+    },
     updateValues: function updateValues() {
       var start = moment(this.dateRange.startDate, 'M/D/YYYY');
       var end = moment(this.dateRange.endDate, 'M/D/YYYY');
@@ -12942,20 +12969,8 @@ __webpack_require__.r(__webpack_exports__);
       if (this.$gate.superAdminOrhotelOwner()) {
         var self = this;
         axios.get('/api/load-rooms/' + start + '/' + end).then(function (response) {
-          var data = response.data;
-          self.rooms.push({
-            name: data.name,
-            price: data.price,
-            available: data.total_room,
-            //hotel: data.room_type.room_type_refer.name,
-            //type: data.room_type.name, 
-            description: data.description,
-            featureImage: data.image //feature: data.room_feature.value,
-            //gallery: data.room_gallery.value
-
-          });
+          self.rooms = response.data;
         });
-        console.log(this.rooms);
       }
     }
   },
@@ -13762,7 +13777,7 @@ __webpack_require__.r(__webpack_exports__);
           self.tempImage = response.data.image;
           var url = '../storage/images/upload/roomImages/gallery-' + id + '/';
           self.imageUrl = url + self.tempImage;
-          self.form.hotel = response.data.room_refer.hotel_id;
+          self.form.hotel = response.data.room_type.hotel_id;
           self.form.featureData = JSON.parse(response.data.room_feature.value);
           self.$refs.repeaterUpdate.fields = self.form.featureData;
           var images = JSON.parse(response.data.room_gallery.value);
@@ -19728,7 +19743,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.night-stay span {\r\n    font-size: 26px;\n}\n.night-stay {\r\n    margin-top: 20px;\n}\r\n", ""]);
+exports.push([module.i, "\n.night-stay span {\r\n    font-size: 26px;\n}\n.night-stay {\r\n    margin-top: 20px;\n}\n.item-image {\r\n    height: 230px;\r\n    background-repeat: no-repeat;\r\n    background-position: center;\r\n    background-size: cover;\r\n    cursor: pointer;\n}\n.card-item .card-body {\r\n    padding: 0px;\n}\n.room-details {\r\n    padding: 15px;\n}\n.card-item .card-footer {\r\n    text-align: right;\n}\n.item-image a {\r\n    display: block;\n}\r\n", ""]);
 
 // exports
 
@@ -74842,9 +74857,48 @@ var render = function() {
         _c(
           "div",
           { staticClass: "row justify-content-center" },
-          _vm._l(_vm.rooms, function(room, key) {
-            return _c("div", { key: room.key, staticClass: "col-md-4" }, [
-              _vm._m(0, true)
+          _vm._l(_vm.rooms, function(room) {
+            return _c("div", { key: room.id, staticClass: "col-md-4" }, [
+              _c("div", { staticClass: "card card-item" }, [
+                _c(
+                  "div",
+                  { staticClass: "card-body" },
+                  [
+                    _c("vue-pure-lightbox", {
+                      staticClass: "item-image",
+                      style: {
+                        "background-image":
+                          "url(" + _vm.getImgUrl(room.id, room.image) + ")"
+                      },
+                      attrs: { images: [_vm.getImgUrl(room.id, room.image)] }
+                    }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "room-details" }, [
+                      _c("span", [_vm._v("name: " + _vm._s(room.name))]),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("price: " + _vm._s(room.price))]),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("span", [
+                        _vm._v("type: " + _vm._s(room.room_type.name))
+                      ]),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("span", [
+                        _vm._v(
+                          "hotel: " +
+                            _vm._s(room.room_type.room_type_refer.name)
+                        )
+                      ]),
+                      _c("br")
+                    ])
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _vm._m(0, true)
+              ])
             ])
           }),
           0
@@ -74858,10 +74912,12 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card card-item" }, [
-      _c("div", { staticClass: "card-body" }, [_vm._v("test body")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "card-footer" }, [_vm._v("test footer")])
+    return _c("div", { staticClass: "card-footer" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-primary btn-flat", attrs: { type: "button" } },
+        [_c("i", { staticClass: "fas fa-map-marked-alt" }), _vm._v(" Book Now")]
+      )
     ])
   }
 ]

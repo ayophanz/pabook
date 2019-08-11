@@ -37,10 +37,26 @@
             <div class="result-wrapper container">
                 <div class="row justify-content-center">
 
-                    <div class="col-md-4" v-for="(room, key) in rooms" :key="room.key">
+                    <div class="col-md-4" v-for="room in rooms" :key="room.id">
                         <div class="card card-item">
-                            <div class="card-body">test body</div>
-                            <div class="card-footer">test footer</div>
+                            <div class="card-body">
+                                <vue-pure-lightbox
+                                    :style="{ 'background-image' : `url(${getImgUrl(room.id, room.image)})` }"
+                                    class="item-image"
+                                    :images="[
+                                      getImgUrl(room.id, room.image)
+                                    ]"
+                                ></vue-pure-lightbox>
+                                <div class="room-details">
+                                    <span>name: {{room.name}}</span><br />
+                                    <span>price: {{room.price}}</span><br />
+                                    <span>type: {{room.room_type.name}}</span><br />
+                                    <span>hotel: {{room.room_type.room_type_refer.name}}</span><br />
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="button" class="btn btn-primary btn-flat"><i class="fas fa-map-marked-alt"></i> Book Now</button>
+                            </div>
                         </div>
                     </div>
 
@@ -51,15 +67,18 @@
 </template>
 
 <script>
+    import styles from 'vue-pure-lightbox/dist/VuePureLightbox.css'
+    import VuePureLightbox from 'vue-pure-lightbox'
     import DateRangePicker from 'vue2-daterange-picker'
     import 'vue2-daterange-picker/dist/vue2-daterange-picker.css' 
     export default {
         components:{
+            VuePureLightbox,
             DateRangePicker
         },
         data() {
             return {
-                 rooms: [{}],
+                 rooms: [],
                  night: 0,
                  defaultStartDate: '',
                  defaultEndDate: '',
@@ -72,6 +91,12 @@
             }
         },
         methods: {
+            viewGallery() {
+
+            },
+            getImgUrl(id,img) {
+                return '../storage/images/upload/roomImages/gallery-'+id+'/'+img;
+            },
             updateValues() {
                 const start = moment(this.dateRange.startDate, 'M/D/YYYY');
                 const end = moment(this.dateRange.endDate, 'M/D/YYYY');
@@ -88,21 +113,9 @@
                     axios.get('/api/load-rooms/'+start+'/'+end)
                     .then(
                         function (response) {
-                            let data = response.data;
-                            self.rooms.push({ 
-                                name: data.name,
-                                price: data.price,
-                                available: data.total_room,
-                                //hotel: data.room_type.room_type_refer.name,
-                                //type: data.room_type.name, 
-                                description: data.description,
-                                featureImage: data.image,
-                                //feature: data.room_feature.value,
-                                //gallery: data.room_gallery.value
-                            });
+                            self.rooms = response.data;
                         }
                     );
-                    console.log(this.rooms);
                }
             }
         },
@@ -118,5 +131,24 @@
 }
 .night-stay {
     margin-top: 20px;
+}
+.item-image {
+    height: 230px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    cursor: pointer;
+}
+.card-item .card-body {
+    padding: 0px;
+}
+.room-details {
+    padding: 15px;
+}
+ .card-item .card-footer {
+    text-align: right;
+}
+.item-image a {
+    display: block;
 }
 </style>
