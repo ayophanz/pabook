@@ -134,7 +134,7 @@
                 types: [],
                 imageUrl: null,
                 form: new form({
-                    type: 0,
+                    type: null,
                     name: '',
                     description: '',
                     price: 1,
@@ -196,11 +196,13 @@
             },
             ifChange() {
                 if(this.$gate.superAdminOrhotelOwner()) {
+                  this.isLoading = true;
                     let self = this
-                    axios.get('/api/room-types/'+self.form.hotel)
+                    axios.get('/api/room-types/'+self.form.hotel+','+self.roomId)
                     .then(
                         function (response) {
                             self.types = response.data
+                            self.isLoading = false;
                         }
                     );
                 }
@@ -288,9 +290,10 @@
                                 'size':item[0]['filesize']
                             });
                         });
+                        self.ifChange();
                       }
                     ); 
-                    this.ifChange();
+                    
                 }
             }
         },

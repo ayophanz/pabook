@@ -240,6 +240,7 @@
           },
           hotelDetails(id) {
             if(this.$gate.superAdminOrhotelOwner()) {
+              this.isLoading = true;
               let self = this;
               axios.get('/api/edit-hotel/'+id)
                 .then(
@@ -255,6 +256,7 @@
                     self.form.email = response.data.email;
                     self.tempImage = response.data.image;
                     self.imageUrl = '../storage/images/upload/hotelImages/'+self.tempImage;
+                    self.isLoading = false;
                   }
                 );  
             }

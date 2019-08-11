@@ -1,5 +1,15 @@
 <template>
     <div class="container" id="root">
+      <loading 
+        :height="128"
+        :width="128"
+        :transition="`fade`"
+        :loader="`dots`"
+        :background-color="`#fff`"
+        :color="`#007bff`"
+        :active.sync="isLoading" 
+        :is-full-page="fullPage">
+      </loading>
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
@@ -35,6 +45,8 @@
     </div>
 </template>
 <script>
+    import Loading from 'vue-loading-overlay'
+    import 'vue-loading-overlay/dist/vue-loading.css'
     export default {
       watch: {
             '$route' (to, from) {
@@ -45,8 +57,13 @@
                }
             }
         },
+        components: {
+            Loading
+        },
         data() {
             return {
+                fullPage: true,
+                isLoading: false,
                 typeId: null,
                 hotels: [],
                 buttonText: 'Save',
@@ -64,6 +81,7 @@
             },
             register () {
                 if(this.$gate.superAdminOrhotelOwner()) {
+                  this.isLoading = true;
                   let self = this
                   let action = null;
                   if(this.typeId!=null) 
@@ -76,13 +94,14 @@
                         self.form.name = '';
                         msg = 'Room Type created successfully';
                       }
+                      self.isLoading = false;
                       toast.fire({
                         type: 'success',
                         title: msg
                       })
                   })
                   .catch(function (error) {
-                      console.log(error); 
+                      self.isLoading = false; 
                       toast.fire({
                         type: 'error',
                         title: 'Something went wrong!'
@@ -103,12 +122,14 @@
             },
             typeDetails(id) {
                 if(this.$gate.superAdminOrhotelOwner()) {
+                  this.isLoading = true;
                   let self = this;
                   axios.get('/api/edit-room-type/'+id)
                     .then(
                       function (response) {
                         self.form.hotel = response.data.hotel_id;
                         self.form.name = response.data.name;
+                        self.isLoading = false;
                       }
                     );    
                 }

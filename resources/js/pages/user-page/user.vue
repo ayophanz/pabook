@@ -177,6 +177,7 @@
           },
           userDetails(id) {
             if(this.$gate.superAdminOrhotelOwner()) {
+              this.isLoading = true;
               let self = this;
               axios.get('/api/edit-user/'+id)
                 .then(
@@ -185,6 +186,7 @@
                     self.form.email = response.data.email;
                     self.form.role = response.data.role;
                     self.form.status = response.data.status;
+                    self.isLoading = false;
                   }
                 );    
             }

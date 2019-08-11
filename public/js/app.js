@@ -13144,6 +13144,7 @@ var country_json_src_country_by_capital_city_json__WEBPACK_IMPORTED_MODULE_0___n
     },
     hotelDetails: function hotelDetails(id) {
       if (this.$gate.superAdminOrhotelOwner()) {
+        this.isLoading = true;
         var self = this;
         axios.get('/api/edit-hotel/' + id).then(function (response) {
           self.form.owner = response.data.owner_id;
@@ -13157,6 +13158,7 @@ var country_json_src_country_by_capital_city_json__WEBPACK_IMPORTED_MODULE_0___n
           self.form.email = response.data.email;
           self.tempImage = response.data.image;
           self.imageUrl = '../storage/images/upload/hotelImages/' + self.tempImage;
+          self.isLoading = false;
         });
       }
     }
@@ -13498,7 +13500,7 @@ __webpack_require__.r(__webpack_exports__);
       types: [],
       imageUrl: null,
       form: new form({
-        type: 0,
+        type: null,
         name: '',
         description: '',
         price: 1,
@@ -13559,9 +13561,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     ifChange: function ifChange() {
       if (this.$gate.superAdminOrhotelOwner()) {
+        this.isLoading = true;
         var self = this;
-        axios.get('/api/room-types/' + self.form.hotel).then(function (response) {
+        axios.get('/api/room-types/' + self.form.hotel + ',' + self.roomId).then(function (response) {
           self.types = response.data;
+          self.isLoading = false;
         });
       }
     },
@@ -13644,8 +13648,8 @@ __webpack_require__.r(__webpack_exports__);
               'size': item[0]['filesize']
             });
           });
+          self.ifChange();
         });
-        this.ifChange();
       }
     }
   },
@@ -13838,6 +13842,10 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue_loading_overlay__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-loading-overlay */ "./node_modules/vue-loading-overlay/dist/vue-loading.min.js");
+/* harmony import */ var vue_loading_overlay__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_loading_overlay__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue_loading_overlay_dist_vue_loading_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-loading-overlay/dist/vue-loading.css */ "./node_modules/vue-loading-overlay/dist/vue-loading.css");
+/* harmony import */ var vue_loading_overlay_dist_vue_loading_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_loading_overlay_dist_vue_loading_css__WEBPACK_IMPORTED_MODULE_1__);
 //
 //
 //
@@ -13874,6 +13882,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   watch: {
     '$route': function $route(to, from) {
@@ -13884,8 +13904,13 @@ __webpack_require__.r(__webpack_exports__);
       }
     }
   },
+  components: {
+    Loading: vue_loading_overlay__WEBPACK_IMPORTED_MODULE_0___default.a
+  },
   data: function data() {
     return {
+      fullPage: true,
+      isLoading: false,
       typeId: null,
       hotels: [],
       buttonText: 'Save',
@@ -13903,6 +13928,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     register: function register() {
       if (this.$gate.superAdminOrhotelOwner()) {
+        this.isLoading = true;
         var self = this;
         var action = null;
         if (this.typeId != null) action = this.form.put('/api/update-room-type/' + this.typeId);else action = this.form.post('/api/create-room-type');
@@ -13914,12 +13940,13 @@ __webpack_require__.r(__webpack_exports__);
             msg = 'Room Type created successfully';
           }
 
+          self.isLoading = false;
           toast.fire({
             type: 'success',
             title: msg
           });
         })["catch"](function (error) {
-          console.log(error);
+          self.isLoading = false;
           toast.fire({
             type: 'error',
             title: 'Something went wrong!'
@@ -13937,10 +13964,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     typeDetails: function typeDetails(id) {
       if (this.$gate.superAdminOrhotelOwner()) {
+        this.isLoading = true;
         var self = this;
         axios.get('/api/edit-room-type/' + id).then(function (response) {
           self.form.hotel = response.data.hotel_id;
           self.form.name = response.data.name;
+          self.isLoading = false;
         });
       }
     }
@@ -14707,12 +14736,14 @@ __webpack_require__.r(__webpack_exports__);
     },
     userDetails: function userDetails(id) {
       if (this.$gate.superAdminOrhotelOwner()) {
+        this.isLoading = true;
         var self = this;
         axios.get('/api/edit-user/' + id).then(function (response) {
           self.form.fullname = response.data.name;
           self.form.email = response.data.email;
           self.form.role = response.data.role;
           self.form.status = response.data.status;
+          self.isLoading = false;
         });
       }
     },
@@ -19398,7 +19429,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".uploader[data-v-4984bfe4] {\n  width: 100%;\n  background: #ced4da;\n  color: #fff;\n  padding: 40px 15px;\n  text-align: center;\n  border: 1px solid #ced4da;\n  font-size: 20px;\n  position: relative;\n}\n.uploader.dragging[data-v-4984bfe4] {\n  background: #fff;\n  color: #2196F3;\n  border: 3px dashed #2196F3;\n}\n.uploader.dragging .file-input label[data-v-4984bfe4] {\n  background: #2196F3;\n  color: #fff;\n}\n.uploader i.main-icon[data-v-4984bfe4] {\n  font-size: 85px;\n}\n.uploader .file-input[data-v-4984bfe4] {\n  width: 200px;\n  margin: auto;\n  height: 68px;\n  position: relative;\n}\n.uploader .file-input label[data-v-4984bfe4],\n.uploader .file-input input[data-v-4984bfe4] {\n  background: #3490dc;\n  color: #ffffff;\n  width: 100%;\n  position: absolute;\n  left: 0;\n  top: 0;\n  padding: 10px;\n  margin-top: 7px;\n  cursor: pointer;\n}\n.uploader .file-input input[data-v-4984bfe4] {\n  opacity: 0;\n  z-index: -2;\n}\n.uploader .images-preview[data-v-4984bfe4] {\n  display: flex;\n  flex-wrap: wrap;\n  margin-top: 20px;\n}\n.uploader .images-preview .img-wrapper[data-v-4984bfe4] {\n  width: 160px;\n  display: flex;\n  flex-direction: column;\n  margin: 10px;\n  height: 150px;\n  justify-content: space-between;\n  background: #fff;\n  box-shadow: 5px 5px 20px #3e3737;\n  position: relative;\n}\n.uploader .images-preview .img-wrapper img[data-v-4984bfe4] {\n  max-height: 105px;\n}\n.uploader .images-preview .details[data-v-4984bfe4] {\n  font-size: 12px;\n  background: #fff;\n  color: #000;\n  display: flex;\n  flex-direction: column;\n  align-items: self-start;\n  padding: 3px 6px;\n}\n.uploader .images-preview .details .name[data-v-4984bfe4] {\n  overflow: hidden;\n  height: 18px;\n}\n.uploader .upload-control[data-v-4984bfe4] {\n  position: absolute;\n  width: 100%;\n  background: #fff;\n  top: 0;\n  left: 0;\n  padding: 10px;\n  padding-bottom: 4px;\n  text-align: right;\n}\n.uploader .upload-control button[data-v-4984bfe4], .uploader .upload-control label[data-v-4984bfe4] {\n  font-size: 15px;\n  cursor: pointer;\n}\n.uploader .upload-control label[data-v-4984bfe4] {\n  margin: 0px;\n}\nspan.remove-img[data-v-4984bfe4] {\n  background: white;\n  position: absolute;\n  right: -10px;\n  top: -5px;\n  border-radius: 100px;\n  display: inherit;\n  height: 19px;\n}\nspan.remove-img i[data-v-4984bfe4] {\n  color: red;\n  vertical-align: top;\n}\nspan.remove-img[data-v-4984bfe4]:hover {\n  transform: scale(1.2);\n  cursor: pointer;\n}", ""]);
+exports.push([module.i, ".uploader[data-v-4984bfe4] {\n  width: 100%;\n  background: #ced4da;\n  color: #fff;\n  padding: 40px 15px;\n  text-align: center;\n  border: 1px solid #ced4da;\n  font-size: 20px;\n  position: relative;\n}\n.uploader.dragging[data-v-4984bfe4] {\n  background: #fff;\n  color: #2196F3;\n  border: 3px dashed #ced4da;\n}\n.uploader.dragging .file-input label[data-v-4984bfe4] {\n  background: #2196F3;\n  color: #fff;\n}\n.uploader i.main-icon[data-v-4984bfe4] {\n  font-size: 85px;\n}\n.uploader .file-input[data-v-4984bfe4] {\n  width: 200px;\n  margin: auto;\n  height: 68px;\n  position: relative;\n}\n.uploader .file-input label[data-v-4984bfe4],\n.uploader .file-input input[data-v-4984bfe4] {\n  background: #3490dc;\n  color: #ffffff;\n  width: 100%;\n  position: absolute;\n  left: 0;\n  top: 0;\n  padding: 10px;\n  margin-top: 7px;\n  cursor: pointer;\n}\n.uploader .file-input input[data-v-4984bfe4] {\n  opacity: 0;\n  z-index: -2;\n}\n.uploader .images-preview[data-v-4984bfe4] {\n  display: flex;\n  flex-wrap: wrap;\n  margin-top: 20px;\n}\n.uploader .images-preview .img-wrapper[data-v-4984bfe4] {\n  width: 160px;\n  display: flex;\n  flex-direction: column;\n  margin: 10px;\n  height: 150px;\n  justify-content: space-between;\n  background: #fff;\n  box-shadow: 5px 5px 20px #3e3737;\n  position: relative;\n}\n.uploader .images-preview .img-wrapper img[data-v-4984bfe4] {\n  max-height: 105px;\n}\n.uploader .images-preview .details[data-v-4984bfe4] {\n  font-size: 12px;\n  background: #fff;\n  color: #000;\n  display: flex;\n  flex-direction: column;\n  align-items: self-start;\n  padding: 3px 6px;\n}\n.uploader .images-preview .details .name[data-v-4984bfe4] {\n  overflow: hidden;\n  height: 18px;\n}\n.uploader .upload-control[data-v-4984bfe4] {\n  position: absolute;\n  width: 100%;\n  background: #fff;\n  top: 0;\n  left: 0;\n  padding: 10px;\n  padding-bottom: 4px;\n  text-align: right;\n}\n.uploader .upload-control button[data-v-4984bfe4], .uploader .upload-control label[data-v-4984bfe4] {\n  font-size: 15px;\n  cursor: pointer;\n}\n.uploader .upload-control label[data-v-4984bfe4] {\n  margin: 0px;\n}\nspan.remove-img[data-v-4984bfe4] {\n  background: white;\n  position: absolute;\n  right: -10px;\n  top: -5px;\n  border-radius: 100px;\n  display: inherit;\n  height: 19px;\n}\nspan.remove-img i[data-v-4984bfe4] {\n  color: red;\n  vertical-align: top;\n}\nspan.remove-img[data-v-4984bfe4]:hover {\n  transform: scale(1.2);\n  cursor: pointer;\n}", ""]);
 
 // exports
 
@@ -74270,161 +74301,184 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container", attrs: { id: "root" } }, [
-    _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-12" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _c(
-              "div",
-              { staticClass: "card-tool" },
-              [
-                _c("router-link", { attrs: { to: "/room-types" } }, [
-                  _c(
-                    "button",
-                    { staticClass: "btn btn-outline-primary btn-flat" },
-                    [
-                      _c("i", { staticClass: "fa fa-arrow-left" }),
-                      _vm._v(" Back")
-                    ]
-                  )
-                ])
-              ],
-              1
-            )
-          ]),
-          _vm._v(" "),
-          _c(
-            "form",
-            {
-              attrs: { role: "form" },
-              on: {
-                submit: function($event) {
-                  $event.preventDefault()
-                  return _vm.register($event)
-                }
-              }
-            },
-            [
-              _c("div", { staticClass: "card-body" }, [
-                _c(
-                  "div",
-                  { staticClass: "form-group" },
-                  [
-                    _vm._m(0),
-                    _vm._v(" "),
+  return _c(
+    "div",
+    { staticClass: "container", attrs: { id: "root" } },
+    [
+      _c("loading", {
+        attrs: {
+          height: 128,
+          width: 128,
+          transition: "fade",
+          loader: "dots",
+          "background-color": "#fff",
+          color: "#007bff",
+          active: _vm.isLoading,
+          "is-full-page": _vm.fullPage
+        },
+        on: {
+          "update:active": function($event) {
+            _vm.isLoading = $event
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "row justify-content-center" }, [
+        _c("div", { staticClass: "col-md-12" }, [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header" }, [
+              _c(
+                "div",
+                { staticClass: "card-tool" },
+                [
+                  _c("router-link", { attrs: { to: "/room-types" } }, [
                     _c(
-                      "select",
-                      {
+                      "button",
+                      { staticClass: "btn btn-outline-primary btn-flat" },
+                      [
+                        _c("i", { staticClass: "fa fa-arrow-left" }),
+                        _vm._v(" Back")
+                      ]
+                    )
+                  ])
+                ],
+                1
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "form",
+              {
+                attrs: { role: "form" },
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.register($event)
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "card-body" }, [
+                  _c(
+                    "div",
+                    { staticClass: "form-group" },
+                    [
+                      _vm._m(0),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.hotel,
+                              expression: "form.hotel"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: { "is-invalid": _vm.form.errors.has("hotel") },
+                          attrs: { disabled: _vm.typeId != null, id: "hotel" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.form,
+                                "hotel",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        _vm._l(_vm.hotels, function(item) {
+                          return _c(
+                            "option",
+                            {
+                              domProps: {
+                                selected: item.id === _vm.form.hotel,
+                                value: item.id
+                              }
+                            },
+                            [_vm._v(_vm._s(item.name))]
+                          )
+                        }),
+                        0
+                      ),
+                      _vm._v(" "),
+                      _c("has-error", {
+                        attrs: { form: _vm.form, field: "role" }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "form-group" },
+                    [
+                      _vm._m(1),
+                      _vm._v(" "),
+                      _c("input", {
                         directives: [
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.form.hotel,
-                            expression: "form.hotel"
+                            value: _vm.form.name,
+                            expression: "form.name"
                           }
                         ],
                         staticClass: "form-control",
-                        class: { "is-invalid": _vm.form.errors.has("hotel") },
-                        attrs: { disabled: _vm.typeId != null, id: "hotel" },
+                        class: { "is-invalid": _vm.form.errors.has("name") },
+                        attrs: { type: "text", id: "name" },
+                        domProps: { value: _vm.form.name },
                         on: {
-                          change: function($event) {
-                            var $$selectedVal = Array.prototype.filter
-                              .call($event.target.options, function(o) {
-                                return o.selected
-                              })
-                              .map(function(o) {
-                                var val = "_value" in o ? o._value : o.value
-                                return val
-                              })
-                            _vm.$set(
-                              _vm.form,
-                              "hotel",
-                              $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            )
-                          }
-                        }
-                      },
-                      _vm._l(_vm.hotels, function(item) {
-                        return _c(
-                          "option",
-                          {
-                            domProps: {
-                              selected: item.id === _vm.form.hotel,
-                              value: item.id
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
                             }
-                          },
-                          [_vm._v(_vm._s(item.name))]
-                        )
-                      }),
-                      0
-                    ),
-                    _vm._v(" "),
-                    _c("has-error", {
-                      attrs: { form: _vm.form, field: "role" }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "form-group" },
-                  [
-                    _vm._m(1),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.form.name,
-                          expression: "form.name"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      class: { "is-invalid": _vm.form.errors.has("name") },
-                      attrs: { type: "text", id: "name" },
-                      domProps: { value: _vm.form.name },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
+                            _vm.$set(_vm.form, "name", $event.target.value)
                           }
-                          _vm.$set(_vm.form, "name", $event.target.value)
                         }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("has-error", {
-                      attrs: { form: _vm.form, field: "name" }
-                    })
-                  ],
-                  1
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "card-footer" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-outline-primary btn-flat",
-                    attrs: { disabled: _vm.form.busy, type: "submit" }
-                  },
-                  [
-                    _c("i", { staticClass: "fa fa-save" }),
-                    _vm._v(" " + _vm._s(_vm.buttonText))
-                  ]
-                )
-              ])
-            ]
-          )
+                      }),
+                      _vm._v(" "),
+                      _c("has-error", {
+                        attrs: { form: _vm.form, field: "name" }
+                      })
+                    ],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "card-footer" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-outline-primary btn-flat",
+                      attrs: { disabled: _vm.form.busy, type: "submit" }
+                    },
+                    [
+                      _c("i", { staticClass: "fa fa-save" }),
+                      _vm._v(" " + _vm._s(_vm.buttonText))
+                    ]
+                  )
+                ])
+              ]
+            )
+          ])
         ])
       ])
-    ])
-  ])
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {

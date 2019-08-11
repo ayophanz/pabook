@@ -178,7 +178,8 @@ class RoomController extends Controller
       $file = [];                     
       foreach ($images as $key => $subArr) {
           $image = $subArr['1']['filename'];
-          if($action=='update')
+          $fileExist = public_path().'/storage/images/upload/roomImages/gallery-'.$id.'/'.$image;
+          if($action=='update' && File::exists($fileExist))
             unlink(storage_path('app/public/images/upload/roomImages/gallery-'.$id.'/'.$image));
           \Image::make($subArr['2']['image'])
           ->save(public_path('storage/images/upload/roomImages/gallery-'.$id.'/').$image); 
@@ -221,7 +222,6 @@ class RoomController extends Controller
       }else{
         //
       }
-
     }
 
 }

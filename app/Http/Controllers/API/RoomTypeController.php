@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\RoomType;
 use App\hotel;
+use App\Room;
 
 class RoomTypeController extends Controller
 {
@@ -15,12 +16,11 @@ class RoomTypeController extends Controller
    }
 
    public function index($id=null) {
-      if($id) {
-        if(\Gate::allows('hotelOwner'))
-           return RoomType::where('hotel_id', $id)->with('roomTypeRefer')->orderBy('created_at', 'desc')->get();
-
-        if(\Gate::allows('superAdmin'))
-          return RoomType::where('hotel_id', $id)->with('roomTypeRefer')->orderBy('created_at', 'desc')->get();
+      $hotelId = explode(',', $id)[0];
+      $roomId  = explode(',', $id)[1];
+      if($hotelId) {
+        if(\Gate::allows('hotelOwner') || \Gate::allows('superAdmin'))
+           return RoomType::where('hotel_id', $hotelId)->whereNotIn('id', $this->roomTypeIds($hotelId, $roomId))->with('roomTypeRefer')->orderBy('created_at', 'desc')->get();
      
       }else{
         if(\Gate::allows('hotelOwner'))
@@ -101,4 +101,27 @@ class RoomTypeController extends Controller
    public function hotel_ids() {
       return Hotel::select('id')->where('owner_id', auth('api')->user()->id)->get()->toArray();
    }
+
+   /**
+    *  Get unassigned room types
+    */
+   public function roomTypeIds($hotelId, $roomId) {
+      $roomType = RoomType::select('id')->where('hotel_id', $hotelId)->get()->toArray();
+      foreach ($roomType as $key => $value) {
+        unset($roomType[$key]['room_type_refer']);
+      }
+      
+      $rooms = Room::select('type_id')->whereIn('type_id', $roomType)->get()->toArray();
+      if($roomId!=null) 
+        $rooms = Room::select('type_id')->where('id', '!=', $roomId)->whereIn('type_id', $roomType)->get()->toArray();
+
+      foreach ($rooms as $key => $value) {
+        unset($rooms[$key]['room_refer']);
+        unset($rooms[$key]['room_feature']);
+        unset($rooms[$key]['room_gallery']);
+      }
+
+      return $rooms;
+   }
+
 }

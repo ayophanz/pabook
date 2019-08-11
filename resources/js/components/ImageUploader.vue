@@ -140,7 +140,7 @@ export default {
     &.dragging {
         background: #fff;
         color: #2196F3;
-        border: 3px dashed #2196F3;
+        border: 3px dashed #ced4da;
         .file-input label {
             background: #2196F3;
             color: #fff;
