@@ -1,5 +1,15 @@
 <template>
     <div id="root">
+        <loading 
+            :height="128"
+            :width="128"
+            :transition="`fade`"
+            :loader="`dots`"
+            :background-color="`#fff`"
+            :color="`#007bff`"
+            :active.sync="isLoading" 
+            :is-full-page="fullPage">
+        </loading>
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
@@ -43,15 +53,12 @@
                                 <vue-pure-lightbox
                                     :style="{ 'background-image' : `url(${getImgUrl(room.id, room.image)})` }"
                                     class="item-image"
-                                    :images="[
-                                      getImgUrl(room.id, room.image)
-                                    ]"
+                                    :images="gallery(room.id, room.room_gallery.value)"
                                 ></vue-pure-lightbox>
                                 <div class="room-details">
                                     <span>name: {{room.name}}</span><br />
                                     <span>price: {{room.price}}</span><br />
                                     <span>type: {{room.room_type.name}}</span><br />
-                                    <span>hotel: {{room.room_type.room_type_refer.name}}</span><br />
                                 </div>
                             </div>
                             <div class="card-footer">
@@ -70,29 +77,39 @@
     import styles from 'vue-pure-lightbox/dist/VuePureLightbox.css'
     import VuePureLightbox from 'vue-pure-lightbox'
     import DateRangePicker from 'vue2-daterange-picker'
-    import 'vue2-daterange-picker/dist/vue2-daterange-picker.css' 
+    import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
+    import Loading from 'vue-loading-overlay'
+    import 'vue-loading-overlay/dist/vue-loading.css' 
     export default {
         components:{
             VuePureLightbox,
-            DateRangePicker
+            DateRangePicker,
+            Loading
         },
         data() {
             return {
-                 rooms: [],
-                 night: 0,
-                 defaultStartDate: '',
-                 defaultEndDate: '',
-                 direction: 'center',
-                 separator: ' - ',
-                 applyLabel: 'Apply',
-                 cancelLabel: 'Cancel',
-                 dateRange: '',
-                 firstDay: moment.localeData().firstDayOfWeek()
+                fullPage: true,
+                isLoading: false,
+                rooms: [],
+                night: 0,
+                defaultStartDate: '',
+                defaultEndDate: '',
+                direction: 'center',
+                separator: ' - ',
+                applyLabel: 'Apply',
+                cancelLabel: 'Cancel',
+                dateRange: '',
+                firstDay: moment.localeData().firstDayOfWeek()
             }
         },
         methods: {
-            viewGallery() {
-
+            gallery(id, images) {
+                let tempImg = JSON.parse(images);
+                let newImages = [];
+                tempImg.forEach(function(item, index){
+                    newImages.push('../storage/images/upload/roomImages/gallery-'+id+'/'+item[1]['filename']);
+                });
+                return newImages;
             },
             getImgUrl(id,img) {
                 return '../storage/images/upload/roomImages/gallery-'+id+'/'+img;
@@ -109,11 +126,13 @@
             },
             loadRooms(start, end) {
                 if(this.$gate.superAdminOrhotelOwner()) {
+                    this.isLoading = true;
                     let self = this;
                     axios.get('/api/load-rooms/'+start+'/'+end)
                     .then(
                         function (response) {
                             self.rooms = response.data;
+                            self.isLoading = false;
                         }
                     );
                }

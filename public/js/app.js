@@ -12859,6 +12859,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue2-daterange-picker */ "./node_modules/vue2-daterange-picker/src/index.js");
 /* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-daterange-picker/dist/vue2-daterange-picker.css */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css");
 /* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var vue_loading_overlay__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-loading-overlay */ "./node_modules/vue-loading-overlay/dist/vue-loading.min.js");
+/* harmony import */ var vue_loading_overlay__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_loading_overlay__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var vue_loading_overlay_dist_vue_loading_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-loading-overlay/dist/vue-loading.css */ "./node_modules/vue-loading-overlay/dist/vue-loading.css");
+/* harmony import */ var vue_loading_overlay_dist_vue_loading_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(vue_loading_overlay_dist_vue_loading_css__WEBPACK_IMPORTED_MODULE_5__);
 //
 //
 //
@@ -12927,6 +12931,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 
@@ -12934,10 +12947,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     VuePureLightbox: vue_pure_lightbox__WEBPACK_IMPORTED_MODULE_1___default.a,
-    DateRangePicker: vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_2__["default"]
+    DateRangePicker: vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_2__["default"],
+    Loading: vue_loading_overlay__WEBPACK_IMPORTED_MODULE_4___default.a
   },
   data: function data() {
     return {
+      fullPage: true,
+      isLoading: false,
       rooms: [],
       night: 0,
       defaultStartDate: '',
@@ -12951,7 +12967,14 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    viewGallery: function viewGallery() {},
+    gallery: function gallery(id, images) {
+      var tempImg = JSON.parse(images);
+      var newImages = [];
+      tempImg.forEach(function (item, index) {
+        newImages.push('../storage/images/upload/roomImages/gallery-' + id + '/' + item[1]['filename']);
+      });
+      return newImages;
+    },
     getImgUrl: function getImgUrl(id, img) {
       return '../storage/images/upload/roomImages/gallery-' + id + '/' + img;
     },
@@ -12967,9 +12990,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     loadRooms: function loadRooms(start, end) {
       if (this.$gate.superAdminOrhotelOwner()) {
+        this.isLoading = true;
         var self = this;
         axios.get('/api/load-rooms/' + start + '/' + end).then(function (response) {
           self.rooms = response.data;
+          self.isLoading = false;
         });
       }
     }
@@ -74750,162 +74775,180 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "root" } }, [
-    _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-12" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _c(
-              "div",
-              { staticClass: "card-tool" },
-              [
-                _c("router-link", { attrs: { to: "/bookings" } }, [
-                  _c(
-                    "button",
-                    { staticClass: "btn btn-outline-primary btn-flat" },
-                    [
-                      _c("i", { staticClass: "fa fa-arrow-left" }),
-                      _vm._v(" Back")
-                    ]
-                  )
-                ])
-              ],
-              1
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _c("div", { staticClass: "row justify-content-center" }, [
+  return _c(
+    "div",
+    { attrs: { id: "root" } },
+    [
+      _c("loading", {
+        attrs: {
+          height: 128,
+          width: 128,
+          transition: "fade",
+          loader: "dots",
+          "background-color": "#fff",
+          color: "#007bff",
+          active: _vm.isLoading,
+          "is-full-page": _vm.fullPage
+        },
+        on: {
+          "update:active": function($event) {
+            _vm.isLoading = $event
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "row justify-content-center" }, [
+        _c("div", { staticClass: "col-md-12" }, [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header" }, [
               _c(
                 "div",
-                { staticClass: "col-md-4" },
+                { staticClass: "card-tool" },
                 [
-                  _vm._v(
-                    "\n                            Select Date:\n                            "
-                  ),
-                  _c("date-range-picker", {
-                    ref: "picker",
-                    attrs: {
-                      opens: _vm.direction,
-                      "locale-data": { firstDay: 1, format: "MMMM Do YYYY" },
-                      ",": "",
-                      "time-picker": false,
-                      ",": "",
-                      ranges: false,
-                      ",": ""
-                    },
-                    on: { update: _vm.updateValues },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "input",
-                        fn: function(picker) {
-                          return _c(
-                            "div",
-                            { staticStyle: { "min-width": "350px" } },
-                            [
-                              _vm._v(
-                                "\n                                    " +
-                                  _vm._s(
-                                    _vm._f("formatDate")(
-                                      (_vm.defaultStartDate = picker.startDate)
-                                    )
-                                  ) +
-                                  " - " +
-                                  _vm._s(
-                                    _vm._f("formatDate")(
-                                      (_vm.defaultEndDate = picker.endDate)
-                                    )
-                                  ) +
-                                  "\n                                "
-                              )
-                            ]
-                          )
-                        }
-                      }
-                    ]),
-                    model: {
-                      value: _vm.dateRange,
-                      callback: function($$v) {
-                        _vm.dateRange = $$v
-                      },
-                      expression: "dateRange"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass: "night-stay",
-                      staticStyle: { "text-align": "center" }
-                    },
-                    [
-                      _c("span", [
-                        _c("i", { staticClass: "fas fa-moon" }),
-                        _vm._v(" " + _vm._s(_vm.totalNights()))
-                      ])
-                    ]
-                  )
+                  _c("router-link", { attrs: { to: "/bookings" } }, [
+                    _c(
+                      "button",
+                      { staticClass: "btn btn-outline-primary btn-flat" },
+                      [
+                        _c("i", { staticClass: "fa fa-arrow-left" }),
+                        _vm._v(" Back")
+                      ]
+                    )
+                  ])
                 ],
                 1
               )
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "result-wrapper container" }, [
-        _c(
-          "div",
-          { staticClass: "row justify-content-center" },
-          _vm._l(_vm.rooms, function(room) {
-            return _c("div", { key: room.id, staticClass: "col-md-4" }, [
-              _c("div", { staticClass: "card card-item" }, [
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _c("div", { staticClass: "row justify-content-center" }, [
                 _c(
                   "div",
-                  { staticClass: "card-body" },
+                  { staticClass: "col-md-4" },
                   [
-                    _c("vue-pure-lightbox", {
-                      staticClass: "item-image",
-                      style: {
-                        "background-image":
-                          "url(" + _vm.getImgUrl(room.id, room.image) + ")"
+                    _vm._v(
+                      "\n                            Select Date:\n                            "
+                    ),
+                    _c("date-range-picker", {
+                      ref: "picker",
+                      attrs: {
+                        opens: _vm.direction,
+                        "locale-data": { firstDay: 1, format: "MMMM Do YYYY" },
+                        ",": "",
+                        "time-picker": false,
+                        ",": "",
+                        ranges: false,
+                        ",": ""
                       },
-                      attrs: { images: [_vm.getImgUrl(room.id, room.image)] }
+                      on: { update: _vm.updateValues },
+                      scopedSlots: _vm._u([
+                        {
+                          key: "input",
+                          fn: function(picker) {
+                            return _c(
+                              "div",
+                              { staticStyle: { "min-width": "350px" } },
+                              [
+                                _vm._v(
+                                  "\n                                    " +
+                                    _vm._s(
+                                      _vm._f("formatDate")(
+                                        (_vm.defaultStartDate =
+                                          picker.startDate)
+                                      )
+                                    ) +
+                                    " - " +
+                                    _vm._s(
+                                      _vm._f("formatDate")(
+                                        (_vm.defaultEndDate = picker.endDate)
+                                      )
+                                    ) +
+                                    "\n                                "
+                                )
+                              ]
+                            )
+                          }
+                        }
+                      ]),
+                      model: {
+                        value: _vm.dateRange,
+                        callback: function($$v) {
+                          _vm.dateRange = $$v
+                        },
+                        expression: "dateRange"
+                      }
                     }),
                     _vm._v(" "),
-                    _c("div", { staticClass: "room-details" }, [
-                      _c("span", [_vm._v("name: " + _vm._s(room.name))]),
-                      _c("br"),
-                      _vm._v(" "),
-                      _c("span", [_vm._v("price: " + _vm._s(room.price))]),
-                      _c("br"),
-                      _vm._v(" "),
-                      _c("span", [
-                        _vm._v("type: " + _vm._s(room.room_type.name))
-                      ]),
-                      _c("br"),
-                      _vm._v(" "),
-                      _c("span", [
-                        _vm._v(
-                          "hotel: " +
-                            _vm._s(room.room_type.room_type_refer.name)
-                        )
-                      ]),
-                      _c("br")
-                    ])
+                    _c(
+                      "div",
+                      {
+                        staticClass: "night-stay",
+                        staticStyle: { "text-align": "center" }
+                      },
+                      [
+                        _c("span", [
+                          _c("i", { staticClass: "fas fa-moon" }),
+                          _vm._v(" " + _vm._s(_vm.totalNights()))
+                        ])
+                      ]
+                    )
                   ],
                   1
-                ),
-                _vm._v(" "),
-                _vm._m(0, true)
+                )
               ])
             ])
-          }),
-          0
-        )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "result-wrapper container" }, [
+          _c(
+            "div",
+            { staticClass: "row justify-content-center" },
+            _vm._l(_vm.rooms, function(room) {
+              return _c("div", { key: room.id, staticClass: "col-md-4" }, [
+                _c("div", { staticClass: "card card-item" }, [
+                  _c(
+                    "div",
+                    { staticClass: "card-body" },
+                    [
+                      _c("vue-pure-lightbox", {
+                        staticClass: "item-image",
+                        style: {
+                          "background-image":
+                            "url(" + _vm.getImgUrl(room.id, room.image) + ")"
+                        },
+                        attrs: {
+                          images: _vm.gallery(room.id, room.room_gallery.value)
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "room-details" }, [
+                        _c("span", [_vm._v("name: " + _vm._s(room.name))]),
+                        _c("br"),
+                        _vm._v(" "),
+                        _c("span", [_vm._v("price: " + _vm._s(room.price))]),
+                        _c("br"),
+                        _vm._v(" "),
+                        _c("span", [
+                          _vm._v("type: " + _vm._s(room.room_type.name))
+                        ]),
+                        _c("br")
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _vm._m(0, true)
+                ])
+              ])
+            }),
+            0
+          )
+        ])
       ])
-    ])
-  ])
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
