@@ -17,6 +17,6 @@
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('name');
+//Route::get('/', 'HomeController@index')->name('name');
 
 Route::get('/{vue?}', 'HomeController@index')->where('vue', '[\/\w\.-]*');

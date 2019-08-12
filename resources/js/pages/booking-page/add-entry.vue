@@ -107,7 +107,6 @@
         methods: {
             book(room) {
                 let amenities = '';
-                let description = 'Description: <br /><p>'+room.description+'</p>';
                 let feature = JSON.parse(room.room_feature.value); 
                  feature.forEach(function(item, index){
                       amenities += '<li><i class="fas fa-check"></i> '+item['value']+'</li>';
@@ -121,7 +120,6 @@
                     '<ul>'+
                     amenities+
                     '</ul>'+
-                     description+
                     '</div>',
                   showCloseButton: true,
                   showCancelButton: false,
@@ -156,7 +154,7 @@
                 return ((this.night <= 1)? this.night+' night' : this.night+' nights');
             },
             loadRooms(start, end) {
-                if(this.$gate.superAdminOrhotelOwner()) {
+                if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
                     this.isLoading = true;
                     let self = this;
                     axios.get('/api/load-rooms/'+start+'/'+end)

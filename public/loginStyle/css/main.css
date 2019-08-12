@@ -447,6 +447,13 @@ iframe {
   border-color: #d33f8d;
 }
 
+span.invalid-feedback.access-failed {
+    font-size: 16px;
+    font-family: Montserrat-ExtraBold;
+    color: #ffffff;
+    line-height: 3;
+    text-align: center;
+}
 
 
 /*------------------------------------------------------------------

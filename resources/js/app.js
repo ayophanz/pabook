@@ -78,13 +78,6 @@ Vue.filter('formatDate', function(created){
     return moment(created).format('MMMM Do YYYY');
 })
 
-import VueProgressBar from 'vue-progressbar'
-Vue.use(VueProgressBar, {
-  color: 'rgb(143, 255, 199)',
-  failedColor: 'red',
-  height: '2px'
-})
-
 import swal from 'sweetalert2'
 window.swal = swal
 

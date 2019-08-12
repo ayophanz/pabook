@@ -21,4 +21,9 @@ export default class Gate {
 			return	true;
 	}
 
+	superAdminOrhotelOwnerOrhotelReceptionist() {
+		if(this.user.role === 'hotel_owner' || this.user.role === 'super_admin' || this.user.role === 'hotel_receptionist')
+			return	true;
+	}
+
 }

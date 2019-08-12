@@ -95,7 +95,11 @@ class RoomController extends Controller
    }
 
    public function availableRooms($start=null, $end=null) {
-      return Room::where('status', 'active')->with('roomType', 'roomGallery')->get();
+      if(\Gate::allows('hotelOwner') || \Gate::allows('hotelReceptionist')) 
+        return Room::whereIn('type_id', $this->owner())->where('status', 'active')->with('roomType', 'roomGallery')->get();
+
+      if(\Gate::allows('superAdmin')) 
+        return Room::where('status', 'active')->with('roomType', 'roomGallery')->get();
    }
 
    public function update(Request $request, $id) {
