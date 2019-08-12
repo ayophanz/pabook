@@ -18,10 +18,21 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    @if(Request::is('login'))
+        <link rel="stylesheet" type="text/css" href="{{ asset('loginStyle/css/util.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('loginStyle/css/main.css') }}">
+        <style type="text/css">
+        .pb-4, .py-4 {
+            padding: 0px !important;
+        }
+        </style>
+    @endif
+
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        {{-- <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
@@ -70,7 +81,7 @@
                     </ul>
                 </div>
             </div>
-        </nav>
+        </nav> --}}
 
         <main class="py-4">
             @yield('content')
