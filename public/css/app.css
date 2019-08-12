@@ -16628,6 +16628,21 @@ button.applyBtn.focus {
 }
 
 .main-sidebar:hover {
-  z-index: 1;
+  z-index: 2;
+}
+
+li.nav-item.logout {
+  background-color: #343a40;
+  border-radius: 100px;
+  width: 40px;
+  text-align: center;
+}
+
+li.nav-item.logout a {
+  color: white !important;
+}
+
+li.nav-item.logout:hover {
+  transform: scale(0.9);
 }
 

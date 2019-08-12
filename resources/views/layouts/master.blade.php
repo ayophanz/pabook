@@ -32,7 +32,23 @@
       </div>
     </form>
 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item logout">
+        <a class="nav-link" href="{{ route('logout') }}"
+            onclick="event.preventDefault();
+                          document.getElementById('logout-form').submit();">
+             <i class="fas fa-power-off nav-icon fa-1x"></i>
+        </a>
+
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+      </li>
+    </ul>
+
   </nav>
+
+
 
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <a href="index3.html" class="brand-link">
@@ -190,20 +206,6 @@
               </p>
             </router-link>
           </li> 
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('logout') }}"
-                onclick="event.preventDefault();
-                              document.getElementById('logout-form').submit();">
-                 <i class="fas fa-power-off nav-icon"></i>
-              <p>  
-                 {{ __('Logout') }}
-              </p>
-            </a>
-
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
-          </li>
         </ul>
       </nav>
       <div class="user-panel mt-1 pb-1 mb-1 d-flex"> </div>
