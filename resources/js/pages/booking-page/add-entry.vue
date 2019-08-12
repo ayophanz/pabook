@@ -15,7 +15,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-tool">
-                            <router-link to="/bookings"><button class="btn btn-outline-primary btn-flat"><i class="fa fa-arrow-left"></i> Back</button></router-link>
+                            <router-link to="/"><button class="btn btn-outline-primary btn-flat"><i class="fa fa-arrow-left"></i> Back</button></router-link>
                         </div>
                     </div>
 
@@ -26,6 +26,7 @@
                                 <date-range-picker
                                         ref="picker"
                                         :opens="direction"
+                                        :minDate="minDate"
                                         :locale-data="{ firstDay: 1, format: 'MMMM Do YYYY' }"
                                         v-model="dateRange",
                                         :time-picker="false",
@@ -62,7 +63,7 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button type="button" class="btn btn-primary btn-flat"><i class="fas fa-map-marked-alt"></i> Book Now</button>
+                                <button type="button" @click="book(room)" class="btn btn-primary btn-flat"><i class="fas fa-map-marked-alt"></i> Book Now</button>
                             </div>
                         </div>
                     </div>
@@ -94,6 +95,7 @@
                 night: 0,
                 defaultStartDate: '',
                 defaultEndDate: '',
+                minDate: '',
                 direction: 'center',
                 separator: ' - ',
                 applyLabel: 'Apply',
@@ -103,6 +105,35 @@
             }
         },
         methods: {
+            book(room) {
+                let amenities = '';
+                let description = 'Description: <br /><p>'+room.description+'</p>';
+                let feature = JSON.parse(room.room_feature.value); 
+                 feature.forEach(function(item, index){
+                      amenities += '<li><i class="fas fa-check"></i> '+item['value']+'</li>';
+                 });
+                let details = '<strong>Price: <span>'+room.price+'</span><br />Night(s): <span>'+this.night+'</span><br />Total price: <span>'+(room.price*this.night)+'</span><br />Date: <span>'+moment(this.defaultStartDate).format('MMMM Do YYYY')+' - '+moment(this.defaultEndDate).format('MMMM Do YYYY')+'</span><br />Arrival time: <span>2:00pm</span> | Departure Time: <span>12:00pm</span><br />Hotel: <span>'+room.room_type.room_type_refer.name+'</span><br />Amenities: </strong>';
+                paynow.fire({
+                  title: '<strong>'+room.room_type.name+'</strong>',
+                  type: 'info',
+                  html: '<div class="swal-body">' +
+                    details+
+                    '<ul>'+
+                    amenities+
+                    '</ul>'+
+                     description+
+                    '</div>',
+                  showCloseButton: true,
+                  showCancelButton: false,
+                  focusConfirm: false,
+                  confirmButtonText:
+                    '<i class="fas fa-shopping-cart fa-2x"></i> Proceed to payment',
+                  confirmButtonAriaLabel: 'Thumbs up, payment',
+                  cancelButtonText:
+                    '<i class="fa fa-thumbs-down"></i>',
+                  cancelButtonAriaLabel: 'Thumbs down'
+                });
+            },
             gallery(id, images) {
                 let tempImg = JSON.parse(images);
                 let newImages = [];
@@ -139,7 +170,7 @@
             }
         },
         created() {
-
+            this.minDate = new Date();
         }
     }
 </script>
@@ -169,5 +200,15 @@
 }
 .item-image a {
     display: block;
+}
+.swal-body {
+    text-align: left;
+    line-height: 2;
+}
+.swal-body span {
+    font-weight: bold;
+}
+.swal-body ul {
+    list-style: none;
 }
 </style>

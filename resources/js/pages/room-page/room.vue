@@ -41,7 +41,7 @@
                         <has-error :form="form" field="description"></has-error>
                       </div>
                       <div class="form-group">
-                        <label for="feature">Features </label>
+                        <label for="feature">Amenities </label>
                         <repeater-input :dataValue="form.featureData" ref="repeaterUpdate" @dataFeature="form.featureData = $event"></repeater-input>
                       </div>
                       <div class="form-group">
@@ -59,6 +59,12 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        <div class="form-group">
+                          <div class="custom-control custom-switch">
+                            <input @click="toggleStatus" :checked="isCheckStatus" type="checkbox" class="custom-control-input" id="isChangeStatus" name="isChangeStatus">
+                            <label class="custom-control-label" for="isChangeStatus">{{ form.status }}</label>
+                          </div>
+                        </div>
                         <div class="form-group">
                             <label for="name">Name <span class="required-asterisk">*</span></label>
                             <input v-model="form.name" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }" id="name">
@@ -129,11 +135,13 @@
                 tempImage: '',
                 tempData: [],
                 isCheckCover: false,
+                isCheckStatus: false,
                 buttonText: 'Save',
                 hotels: [],
                 types: [],
                 imageUrl: null,
                 form: new form({
+                    status: 'pending',
                     type: null,
                     name: '',
                     description: '',
@@ -182,6 +190,15 @@
                   this.isCheckCover = true;
                   this.form.image = null;
                 }
+            },
+            toggleStatus() {
+              if(this.isCheckStatus) {
+                this.isCheckStatus = false;
+                this.form.status = 'pending';
+              }else{
+                this.isCheckStatus = true;
+                this.form.status = 'active';
+              }
             },
             loadHotels() {
                 if(this.$gate.superAdminOrhotelOwner()) {
@@ -269,6 +286,7 @@
                   axios.get('/api/edit-room/'+id)
                     .then(
                       function (response) {
+                        self.form.status = response.data.status;
                         self.form.type = response.data.type_id;
                         self.form.name = response.data.name;
                         self.form.description = response.data.description;
@@ -291,6 +309,10 @@
                             });
                         });
                         self.ifChange();
+                        if(self.form.status=='active')
+                          self.isCheckStatus = true;
+                        else
+                          self.isCheckStatus = false;
                       }
                     ); 
                     

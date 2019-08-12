@@ -12,7 +12,8 @@ class Room extends Model
     			'description', 
     			'price',
     			'image',
-    			'total_room'
+    			'total_room',
+                'status'
     			];
 
     protected $with = ['roomType', 'roomFeature', 'roomGallery'];           

@@ -12938,6 +12938,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -12958,6 +12959,7 @@ __webpack_require__.r(__webpack_exports__);
       night: 0,
       defaultStartDate: '',
       defaultEndDate: '',
+      minDate: '',
       direction: 'center',
       separator: ' - ',
       applyLabel: 'Apply',
@@ -12967,6 +12969,27 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    book: function book(room) {
+      var amenities = '';
+      var description = 'Description: <br /><p>' + room.description + '</p>';
+      var feature = JSON.parse(room.room_feature.value);
+      feature.forEach(function (item, index) {
+        amenities += '<li><i class="fas fa-check"></i> ' + item['value'] + '</li>';
+      });
+      var details = '<strong>Price: <span>' + room.price + '</span><br />Night(s): <span>' + this.night + '</span><br />Total price: <span>' + room.price * this.night + '</span><br />Date: <span>' + moment(this.defaultStartDate).format('MMMM Do YYYY') + ' - ' + moment(this.defaultEndDate).format('MMMM Do YYYY') + '</span><br />Arrival time: <span>2:00pm</span> | Departure Time: <span>12:00pm</span><br />Hotel: <span>' + room.room_type.room_type_refer.name + '</span><br />Amenities: </strong>';
+      paynow.fire({
+        title: '<strong>' + room.room_type.name + '</strong>',
+        type: 'info',
+        html: '<div class="swal-body">' + details + '<ul>' + amenities + '</ul>' + description + '</div>',
+        showCloseButton: true,
+        showCancelButton: false,
+        focusConfirm: false,
+        confirmButtonText: '<i class="fas fa-shopping-cart fa-2x"></i> Proceed to payment',
+        confirmButtonAriaLabel: 'Thumbs up, payment',
+        cancelButtonText: '<i class="fa fa-thumbs-down"></i>',
+        cancelButtonAriaLabel: 'Thumbs down'
+      });
+    },
     gallery: function gallery(id, images) {
       var tempImg = JSON.parse(images);
       var newImages = [];
@@ -12999,7 +13022,9 @@ __webpack_require__.r(__webpack_exports__);
       }
     }
   },
-  created: function created() {}
+  created: function created() {
+    this.minDate = new Date();
+  }
 });
 
 /***/ }),
@@ -13634,6 +13659,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -13662,11 +13693,13 @@ __webpack_require__.r(__webpack_exports__);
       tempImage: '',
       tempData: [],
       isCheckCover: false,
+      isCheckStatus: false,
       buttonText: 'Save',
       hotels: [],
       types: [],
       imageUrl: null,
       form: new form({
+        status: 'pending',
         type: null,
         name: '',
         description: '',
@@ -13716,6 +13749,15 @@ __webpack_require__.r(__webpack_exports__);
         this.imageUrl = null;
         this.isCheckCover = true;
         this.form.image = null;
+      }
+    },
+    toggleStatus: function toggleStatus() {
+      if (this.isCheckStatus) {
+        this.isCheckStatus = false;
+        this.form.status = 'pending';
+      } else {
+        this.isCheckStatus = true;
+        this.form.status = 'active';
       }
     },
     loadHotels: function loadHotels() {
@@ -13794,6 +13836,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.$gate.superAdminOrhotelOwner()) {
         var self = this;
         axios.get('/api/edit-room/' + id).then(function (response) {
+          self.form.status = response.data.status;
           self.form.type = response.data.type_id;
           self.form.name = response.data.name;
           self.form.description = response.data.description;
@@ -13816,6 +13859,7 @@ __webpack_require__.r(__webpack_exports__);
             });
           });
           self.ifChange();
+          if (self.form.status == 'active') self.isCheckStatus = true;else self.isCheckStatus = false;
         });
       }
     }
@@ -19768,7 +19812,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.night-stay span {\r\n    font-size: 26px;\n}\n.night-stay {\r\n    margin-top: 20px;\n}\n.item-image {\r\n    height: 230px;\r\n    background-repeat: no-repeat;\r\n    background-position: center;\r\n    background-size: cover;\r\n    cursor: pointer;\n}\n.card-item .card-body {\r\n    padding: 0px;\n}\n.room-details {\r\n    padding: 15px;\n}\n.card-item .card-footer {\r\n    text-align: right;\n}\n.item-image a {\r\n    display: block;\n}\r\n", ""]);
+exports.push([module.i, "\n.night-stay span {\r\n    font-size: 26px;\n}\n.night-stay {\r\n    margin-top: 20px;\n}\n.item-image {\r\n    height: 230px;\r\n    background-repeat: no-repeat;\r\n    background-position: center;\r\n    background-size: cover;\r\n    cursor: pointer;\n}\n.card-item .card-body {\r\n    padding: 0px;\n}\n.room-details {\r\n    padding: 15px;\n}\n.card-item .card-footer {\r\n    text-align: right;\n}\n.item-image a {\r\n    display: block;\n}\n.swal-body {\r\n    text-align: left;\r\n    line-height: 2;\n}\n.swal-body span {\r\n    font-weight: bold;\n}\n.swal-body ul {\r\n    list-style: none;\n}\r\n", ""]);
 
 // exports
 
@@ -74805,7 +74849,7 @@ var render = function() {
                 "div",
                 { staticClass: "card-tool" },
                 [
-                  _c("router-link", { attrs: { to: "/bookings" } }, [
+                  _c("router-link", { attrs: { to: "/" } }, [
                     _c(
                       "button",
                       { staticClass: "btn btn-outline-primary btn-flat" },
@@ -74833,6 +74877,7 @@ var render = function() {
                       ref: "picker",
                       attrs: {
                         opens: _vm.direction,
+                        minDate: _vm.minDate,
                         "locale-data": { firstDay: 1, format: "MMMM Do YYYY" },
                         ",": "",
                         "time-picker": false,
@@ -74938,7 +74983,24 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _vm._m(0, true)
+                  _c("div", { staticClass: "card-footer" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary btn-flat",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.book(room)
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "fas fa-map-marked-alt" }),
+                        _vm._v(" Book Now")
+                      ]
+                    )
+                  ])
                 ])
               ])
             }),
@@ -74950,20 +75012,7 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-footer" }, [
-      _c(
-        "button",
-        { staticClass: "btn btn-primary btn-flat", attrs: { type: "button" } },
-        [_c("i", { staticClass: "fas fa-map-marked-alt" }), _vm._v(" Book Now")]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -76142,7 +76191,7 @@ var render = function() {
                     { staticClass: "form-group" },
                     [
                       _c("label", { attrs: { for: "feature" } }, [
-                        _vm._v("Features ")
+                        _vm._v("Amenities ")
                       ]),
                       _vm._v(" "),
                       _c("repeater-input", {
@@ -76186,6 +76235,30 @@ var render = function() {
                 _vm._m(2),
                 _vm._v(" "),
                 _c("div", { staticClass: "card-body" }, [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("div", { staticClass: "custom-control custom-switch" }, [
+                      _c("input", {
+                        staticClass: "custom-control-input",
+                        attrs: {
+                          type: "checkbox",
+                          id: "isChangeStatus",
+                          name: "isChangeStatus"
+                        },
+                        domProps: { checked: _vm.isCheckStatus },
+                        on: { click: _vm.toggleStatus }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "label",
+                        {
+                          staticClass: "custom-control-label",
+                          attrs: { for: "isChangeStatus" }
+                        },
+                        [_vm._v(_vm._s(_vm.form.status))]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
                   _c(
                     "div",
                     { staticClass: "form-group" },
@@ -76520,11 +76593,13 @@ var render = function() {
                           _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(room.name))]),
                           _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(room.description))]),
-                          _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(room.price))]),
                           _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(room.total_room))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(room.status))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(room.created_at))]),
                           _vm._v(" "),
                           _c(
                             "td",
@@ -76539,8 +76614,6 @@ var render = function() {
                             ],
                             1
                           ),
-                          _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(room.created_at))]),
                           _vm._v(" "),
                           _c(
                             "td",
@@ -76609,15 +76682,15 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Name")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Description")]),
-        _vm._v(" "),
         _c("th", [_vm._v("Price")]),
         _vm._v(" "),
         _c("th", [_vm._v("Total Room")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Image")]),
+        _c("th", [_vm._v("Status")]),
         _vm._v(" "),
         _c("th", [_vm._v("Created At")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Image")]),
         _vm._v(" "),
         _c("th", [_vm._v("Action")])
       ])
@@ -95796,7 +95869,7 @@ var routes = [
  * Booking
  */
 {
-  path: '/bookings',
+  path: '/',
   component: __webpack_require__(/*! ./pages/booking-page/booking.vue */ "./resources/js/pages/booking-page/booking.vue")["default"]
 }, {
   path: '/add-book-entry',
@@ -95892,6 +95965,14 @@ var sure = sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.mixin({
   buttonsStyling: false
 });
 window.sure = sure;
+var paynow = sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.mixin({
+  customClass: {
+    confirmButton: 'btn btn-outline-primary btn-flat',
+    cancelButton: 'btn btn-outline-danger btn-flat'
+  },
+  buttonsStyling: false
+});
+window.paynow = paynow;
 window.fire = new Vue();
 /**
  * The following block of code may be used to automatically register your

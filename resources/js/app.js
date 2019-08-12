@@ -29,7 +29,7 @@ let routes = [
     /**
      * Booking
      */
-    {path: '/bookings', component: require('./pages/booking-page/booking.vue').default},
+    {path: '/', component: require('./pages/booking-page/booking.vue').default},
     {path: '/add-book-entry', component: require('./pages/booking-page/add-entry.vue').default},
 
     /**
@@ -104,6 +104,15 @@ const sure = swal.mixin({
   buttonsStyling: false,
 })
 window.sure = sure
+
+const paynow = swal.mixin({
+  customClass: {
+    confirmButton: 'btn btn-outline-primary btn-flat',
+    cancelButton: 'btn btn-outline-danger btn-flat'
+  },
+  buttonsStyling: false,
+})
+window.paynow = paynow
 
 window.fire = new Vue();
 

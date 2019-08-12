@@ -30,11 +30,11 @@
                                     <th>Id</th>
                                     <th>Room Type</th>
                                     <th>Name</th>
-                                    <th>Description</th>
                                     <th>Price</th>
                                     <th>Total Room</th>
-                                    <th>Image</th>
+                                    <th>Status</th>
                                     <th>Created At</th>
+                                    <th>Image</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -44,9 +44,10 @@
                                     <td>{{room.id}}</td>
                                     <td>{{room.room_type.name}}</td>
                                     <td>{{room.name}}</td>
-                                    <td>{{room.description}}</td>
                                     <td>{{room.price}}</td>
                                     <td>{{room.total_room}}</td>
+                                    <td>{{room.status}}</td>
+                                    <td>{{room.created_at}}</td>
                                     <td>
                                         <vue-pure-lightbox
                                             class="image-circle"
@@ -56,7 +57,6 @@
                                             ]"
                                         ></vue-pure-lightbox>
                                     </td>
-                                    <td>{{room.created_at}}</td>
                                     <td>
                                         <router-link :to="`/edit-room/${room.id}`"  class="btn btn-outline-primary btn-flat"><i class="fa fa-edit"></i> Edit</router-link>&nbsp;&nbsp;
                                         <a href="#" @click.prevent="selectRoom(room.id)" :data-id="room.id" class="btn btn-outline-danger btn-flat"><i class="fa fa-trash"></i> Delete</a>

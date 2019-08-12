@@ -40,6 +40,7 @@ class RoomController extends Controller
                         ];        
                         
       $dataCreate = [
+                    'status'      => $request['status'],
                     'name'        => $request['name'],
                     'type_id'     => $request['type'],
                     'description' => $request['description'],
@@ -94,7 +95,7 @@ class RoomController extends Controller
    }
 
    public function availableRooms($start=null, $end=null) {
-      return Room::with('roomType')->get();
+      return Room::where('status', 'active')->with('roomType', 'roomGallery')->get();
    }
 
    public function update(Request $request, $id) {
@@ -112,6 +113,7 @@ class RoomController extends Controller
                         ];
                         
       $dataUpdate = [
+                    'status'      => $request['status'],
                     'name'        => $request['name'],
                     'type_id'     => $request['type'],
                     'description' => $request['description'],

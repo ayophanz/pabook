@@ -21,6 +21,7 @@ class CreateRoomsTable extends Migration
             $table->float('price');
             $table->string('image')->nullable(); 
             $table->integer('total_room');
+            $table->string('status')->default('active');
             $table->timestamps();
         });
     }

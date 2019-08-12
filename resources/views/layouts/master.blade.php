@@ -64,7 +64,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <router-link to="/bookings" class="nav-link">
+                <router-link to="/" class="nav-link">
                   <i class="nav-icon fas fa-list"></i>
                   <p>Bookings</p>
                 </router-link>
@@ -203,6 +203,19 @@
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                 @csrf
             </form>
+          </li>
+        </ul>
+      </nav>
+      <div class="user-panel mt-1 pb-1 mb-1 d-flex"> </div>
+      
+      <nav class="mt-2">
+        <ul class="nav nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="true">
+
+          <li class="nav-item has-treeview">
+            <router-link to="/add-user" class="nav-link">
+              <i class="fas fa-sliders-h nav-icon"></i>
+              <p>Settings</p>
+            </router-link>
           </li>
         </ul>
       </nav>
