@@ -12991,7 +12991,15 @@ __webpack_require__.r(__webpack_exports__);
         cancelButtonAriaLabel: 'Thumbs down'
       }).then(function (result) {
         if (result.value) {
-          _this.$router.push('/walk-in-payment/10');
+          _this.$router.push({
+            path: '/walk-in-payment',
+            query: {
+              roomId: room.id,
+              roomType: room.room_type.name,
+              roomName: room.name,
+              dateStay: _this.defaultStartDate + '<>' + _this.defaultEndDate
+            }
+          });
         }
       });
     },
@@ -13097,6 +13105,10 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue_loading_overlay__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-loading-overlay */ "./node_modules/vue-loading-overlay/dist/vue-loading.min.js");
+/* harmony import */ var vue_loading_overlay__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_loading_overlay__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue_loading_overlay_dist_vue_loading_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-loading-overlay/dist/vue-loading.css */ "./node_modules/vue-loading-overlay/dist/vue-loading.css");
+/* harmony import */ var vue_loading_overlay_dist_vue_loading_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_loading_overlay_dist_vue_loading_css__WEBPACK_IMPORTED_MODULE_1__);
 //
 //
 //
@@ -13169,9 +13181,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    Loading: vue_loading_overlay__WEBPACK_IMPORTED_MODULE_0___default.a
+  },
   data: function data() {
     return {
+      fullPage: true,
+      isLoading: false,
       isCheckConsent: false,
       notEnough: true,
       bookInfo: [{}],
@@ -13184,8 +13214,8 @@ __webpack_require__.r(__webpack_exports__);
         change: 0,
         total: 100,
         gRequest: '',
-        dateStay: null,
-        night: 0,
+        dateStart: null,
+        dateEnd: null,
         room_id: null
       })
     };
@@ -13202,9 +13232,22 @@ __webpack_require__.r(__webpack_exports__);
         this.isCheckConsent = true;
       }
     },
-    register: function register() {}
+    register: function register() {},
+    loadRoom: function loadRoom() {
+      this.form.room_id = this.$route.query.roomId;
+      this.bookInfo.push({
+        roomName: this.$route.query.roomName
+      });
+      this.bookInfo.push({
+        roomType: this.$route.query.roomType
+      });
+      console.log(this.bookInfo);
+    }
   },
-  created: function created() {}
+  created: function created() {
+    this.loadRoom();
+    console.log(this.$route.query.dateStay);
+  }
 });
 
 /***/ }),
@@ -75224,337 +75267,373 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-10" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _c(
-              "div",
-              { staticClass: "card-tool" },
-              [
-                _c("router-link", { attrs: { to: "/add-book-entry" } }, [
-                  _c(
-                    "button",
-                    { staticClass: "btn btn-outline-primary btn-flat" },
-                    [
-                      _c("i", { staticClass: "fa fa-arrow-left" }),
-                      _vm._v(" Back")
-                    ]
-                  )
-                ])
-              ],
-              1
-            )
-          ]),
-          _vm._v(" "),
-          _c(
-            "form",
-            {
-              attrs: { role: "form" },
-              on: {
-                submit: function($event) {
-                  $event.preventDefault()
-                  return _vm.register($event)
-                }
-              }
-            },
-            [
-              _c("div", { staticClass: "card-body" }, [
-                _c("h4", [_vm._v("Guest info.")]),
-                _c("hr"),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "form-group" },
-                  [
-                    _vm._m(0),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.form.fullname,
-                          expression: "form.fullname"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      class: { "is-invalid": _vm.form.errors.has("fullname") },
-                      attrs: {
-                        type: "text",
-                        id: "fullname",
-                        placeholder: "Enter fullname"
-                      },
-                      domProps: { value: _vm.form.fullname },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.form, "fullname", $event.target.value)
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("has-error", {
-                      attrs: { form: _vm.form, field: "fullname" }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "form-group" },
-                  [
-                    _c("label", { attrs: { for: "email" } }, [
-                      _vm._v("Email address ")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.form.email,
-                          expression: "form.email"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      class: { "is-invalid": _vm.form.errors.has("email") },
-                      attrs: {
-                        type: "email",
-                        id: "email",
-                        placeholder: "Enter email"
-                      },
-                      domProps: { value: _vm.form.email },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.form, "email", $event.target.value)
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("has-error", {
-                      attrs: { form: _vm.form, field: "email" }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "form-group" },
-                  [
-                    _vm._m(1),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.form.phone_no,
-                          expression: "form.phone_no"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      class: { "is-invalid": _vm.form.errors.has("phone_no") },
-                      attrs: {
-                        type: "text",
-                        id: "phone_no",
-                        placeholder: "Enter phone_no"
-                      },
-                      domProps: { value: _vm.form.phone_no },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.form, "phone_no", $event.target.value)
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("has-error", {
-                      attrs: { form: _vm.form, field: "phone_no" }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("div", { staticClass: "custom-control custom-switch" }, [
-                    _c("input", {
-                      staticClass: "custom-control-input",
-                      attrs: {
-                        type: "checkbox",
-                        id: "isCheckConsent",
-                        name: "isCheckConsent"
-                      },
-                      domProps: { checked: _vm.isCheckConsent },
-                      on: { click: _vm.toggleCheck }
-                    }),
-                    _vm._v(" "),
+  return _c(
+    "div",
+    { staticClass: "container" },
+    [
+      _c("loading", {
+        attrs: {
+          height: 128,
+          width: 128,
+          transition: "fade",
+          loader: "dots",
+          "background-color": "#fff",
+          color: "#007bff",
+          active: _vm.isLoading,
+          "is-full-page": _vm.fullPage
+        },
+        on: {
+          "update:active": function($event) {
+            _vm.isLoading = $event
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "row justify-content-center" }, [
+        _c("div", { staticClass: "col-md-10" }, [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header" }, [
+              _c(
+                "div",
+                { staticClass: "card-tool" },
+                [
+                  _c("router-link", { attrs: { to: "/add-book-entry" } }, [
                     _c(
-                      "label",
-                      {
-                        staticClass: "custom-control-label",
-                        attrs: { for: "isCheckConsent" }
-                      },
+                      "button",
+                      { staticClass: "btn btn-outline-primary btn-flat" },
                       [
-                        _vm._v(
-                          "Make you have permission to collect data from guest before enable this."
-                        )
+                        _c("i", { staticClass: "fa fa-arrow-left" }),
+                        _vm._v(" Back")
                       ]
                     )
                   ])
-                ]),
-                _vm._v(" "),
-                _c("br"),
-                _vm._v(" "),
-                _c("h4", [_vm._v("Booking info.")]),
-                _c("hr"),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _vm._m(2),
-                  _c("br"),
+                ],
+                1
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "form",
+              {
+                attrs: { role: "form" },
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.register($event)
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "card-body" }, [
+                  _c("h4", [_vm._v("Guest info.")]),
+                  _c("hr"),
                   _vm._v(" "),
-                  _vm._m(3),
-                  _c("br"),
+                  _c(
+                    "div",
+                    { staticClass: "form-group" },
+                    [
+                      _vm._m(0),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.fullname,
+                            expression: "form.fullname"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        class: {
+                          "is-invalid": _vm.form.errors.has("fullname")
+                        },
+                        attrs: {
+                          type: "text",
+                          id: "fullname",
+                          placeholder: "Enter fullname"
+                        },
+                        domProps: { value: _vm.form.fullname },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.form, "fullname", $event.target.value)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("has-error", {
+                        attrs: { form: _vm.form, field: "fullname" }
+                      })
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
-                  _vm._m(4),
-                  _c("br"),
+                  _c(
+                    "div",
+                    { staticClass: "form-group" },
+                    [
+                      _c("label", { attrs: { for: "email" } }, [
+                        _vm._v("Email address ")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.email,
+                            expression: "form.email"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        class: { "is-invalid": _vm.form.errors.has("email") },
+                        attrs: {
+                          type: "email",
+                          id: "email",
+                          placeholder: "Enter email"
+                        },
+                        domProps: { value: _vm.form.email },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.form, "email", $event.target.value)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("has-error", {
+                        attrs: { form: _vm.form, field: "email" }
+                      })
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
-                  _vm._m(5),
-                  _c("br"),
+                  _c(
+                    "div",
+                    { staticClass: "form-group" },
+                    [
+                      _vm._m(1),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.phone_no,
+                            expression: "form.phone_no"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        class: {
+                          "is-invalid": _vm.form.errors.has("phone_no")
+                        },
+                        attrs: {
+                          type: "text",
+                          id: "phone_no",
+                          placeholder: "Enter phone_no"
+                        },
+                        domProps: { value: _vm.form.phone_no },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.form, "phone_no", $event.target.value)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("has-error", {
+                        attrs: { form: _vm.form, field: "phone_no" }
+                      })
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
-                  _c("label", { attrs: { for: "night" } }, [
-                    _vm._v("Night(s): "),
-                    _c("span", [_vm._v(_vm._s(_vm.$route.params.night))])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "gRequest" } }, [
-                    _vm._v("Guest request ")
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("div", { staticClass: "custom-control custom-switch" }, [
+                      _c("input", {
+                        staticClass: "custom-control-input",
+                        attrs: {
+                          type: "checkbox",
+                          id: "isCheckConsent",
+                          name: "isCheckConsent"
+                        },
+                        domProps: { checked: _vm.isCheckConsent },
+                        on: { click: _vm.toggleCheck }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "label",
+                        {
+                          staticClass: "custom-control-label",
+                          attrs: { for: "isCheckConsent" }
+                        },
+                        [
+                          _vm._v(
+                            "Make you have permission to collect data from guest before enable this."
+                          )
+                        ]
+                      )
+                    ])
                   ]),
                   _vm._v(" "),
-                  _c("textarea", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.form.gRequest,
-                        expression: "form.gRequest"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    class: { "is-invalid": _vm.form.errors.has("gRequest") },
-                    attrs: { rows: "6", id: "gRequest" },
-                    domProps: { value: _vm.form.gRequest },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.form, "gRequest", $event.target.value)
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("h4", [_vm._v("Payment")]),
-                _c("hr"),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "amount" } }, [
-                    _vm._v("Total payment: "),
-                    _c("span", [_vm._v(_vm._s(_vm.form.total))])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "form-group" },
-                  [
-                    _c("label", { attrs: { for: "amount" } }, [
-                      _vm._v("Cash amount ")
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("h4", [_vm._v("Booking info.")]),
+                  _c("hr"),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "roomType" } }, [
+                      _vm._v("Room Id: "),
+                      _c("span", [_vm._v(_vm._s(_vm.form.room_id))])
+                    ]),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("label", { attrs: { for: "roomType" } }, [
+                      _vm._v("Room type: "),
+                      _c("span", [_vm._v(_vm._s(_vm.bookInfo["roomName"]))])
+                    ]),
+                    _c("br"),
+                    _vm._v(" "),
+                    _vm._m(2),
+                    _c("br"),
+                    _vm._v(" "),
+                    _vm._m(3),
+                    _c("br"),
+                    _vm._v(" "),
+                    _vm._m(4),
+                    _c("br"),
+                    _vm._v(" "),
+                    _vm._m(5)
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "gRequest" } }, [
+                      _vm._v("Guest request ")
                     ]),
                     _vm._v(" "),
-                    _c("input", {
+                    _c("textarea", {
                       directives: [
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.form.amount,
-                          expression: "form.amount"
+                          value: _vm.form.gRequest,
+                          expression: "form.gRequest"
                         }
                       ],
                       staticClass: "form-control",
-                      class: { "is-invalid": _vm.notEnough },
-                      attrs: {
-                        type: "number",
-                        id: "amount",
-                        placeholder: "Enter amount"
-                      },
-                      domProps: { value: _vm.form.amount },
+                      class: { "is-invalid": _vm.form.errors.has("gRequest") },
+                      attrs: { rows: "6", id: "gRequest" },
+                      domProps: { value: _vm.form.gRequest },
                       on: {
-                        input: [
-                          function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.form, "amount", $event.target.value)
-                          },
-                          _vm.moneyChange
-                        ]
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.form, "gRequest", $event.target.value)
+                        }
                       }
-                    }),
-                    _vm._v(" "),
-                    _c("has-error", {
-                      attrs: { form: _vm.form, field: "amount" }
                     })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "amount" } }, [
-                    _vm._v("Change: "),
-                    _c("span", [_vm._v(_vm._s(_vm.form.change))])
+                  ]),
+                  _vm._v(" "),
+                  _c("h4", [_vm._v("Payment")]),
+                  _c("hr"),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "amount" } }, [
+                      _vm._v("Total payment: "),
+                      _c("span", [_vm._v(_vm._s(_vm.form.total))])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "form-group" },
+                    [
+                      _c("label", { attrs: { for: "amount" } }, [
+                        _vm._v("Cash amount ")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.amount,
+                            expression: "form.amount"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        class: { "is-invalid": _vm.notEnough },
+                        attrs: {
+                          type: "number",
+                          id: "amount",
+                          placeholder: "Enter amount"
+                        },
+                        domProps: { value: _vm.form.amount },
+                        on: {
+                          input: [
+                            function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.form, "amount", $event.target.value)
+                            },
+                            _vm.moneyChange
+                          ]
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("has-error", {
+                        attrs: { form: _vm.form, field: "amount" }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "amount" } }, [
+                      _vm._v("Change: "),
+                      _c("span", [_vm._v(_vm._s(_vm.form.change))])
+                    ])
                   ])
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "card-footer" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-outline-primary btn-flat",
-                    attrs: { disabled: _vm.form.busy, type: "submit" }
-                  },
-                  [_c("i", { staticClass: "fa fa-save" }), _vm._v(" Book")]
-                ),
+                ]),
                 _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-outline-success btn-flat",
-                    attrs: { disabled: _vm.form.busy, type: "submit" }
-                  },
-                  [_c("i", { staticClass: "fa fa-save" }), _vm._v(" Check In")]
-                )
-              ])
-            ]
-          )
+                _c("div", { staticClass: "card-footer" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-outline-primary btn-flat",
+                      attrs: { disabled: _vm.form.busy, type: "submit" }
+                    },
+                    [_c("i", { staticClass: "fa fa-save" }), _vm._v(" Book")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-outline-success btn-flat",
+                      attrs: { disabled: _vm.form.busy, type: "submit" }
+                    },
+                    [
+                      _c("i", { staticClass: "fa fa-save" }),
+                      _vm._v(" Check In")
+                    ]
+                  )
+                ])
+              ]
+            )
+          ])
         ])
       ])
-    ])
-  ])
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
@@ -75579,26 +75658,17 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("label", { attrs: { for: "roomType" } }, [
-      _vm._v("Room Id: "),
-      _c("span", [_vm._v("11")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", { attrs: { for: "roomType" } }, [
-      _vm._v("Room type: "),
-      _c("span", [_vm._v("test")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("label", { attrs: { for: "roomName" } }, [
       _vm._v("Room name: "),
+      _c("span")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "dateStay" } }, [
+      _vm._v("Date start: "),
       _c("span", [_vm._v("test")])
     ])
   },
@@ -75607,8 +75677,17 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("label", { attrs: { for: "dateStay" } }, [
-      _vm._v("Date stay: "),
+      _vm._v("Date end: "),
       _c("span", [_vm._v("test")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "night" } }, [
+      _vm._v("Night(s): "),
+      _c("span")
     ])
   }
 ]
@@ -96401,7 +96480,7 @@ var routes = [
   path: '/add-book-entry',
   component: __webpack_require__(/*! ./pages/booking-page/add-entry.vue */ "./resources/js/pages/booking-page/add-entry.vue")["default"]
 }, {
-  path: '/walk-in-payment/:night',
+  path: '/walk-in-payment',
   component: __webpack_require__(/*! ./pages/booking-page/payment-method.vue */ "./resources/js/pages/booking-page/payment-method.vue")["default"]
 },
 /**

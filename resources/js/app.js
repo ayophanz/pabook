@@ -31,7 +31,7 @@ let routes = [
      */
     {path: '/', component: require('./pages/booking-page/booking.vue').default},
     {path: '/add-book-entry', component: require('./pages/booking-page/add-entry.vue').default},
-    {path: '/walk-in-payment/:night', component: require('./pages/booking-page/payment-method.vue').default},
+    {path: '/walk-in-payment', component: require('./pages/booking-page/payment-method.vue').default},
 
     /**
      * RoomType

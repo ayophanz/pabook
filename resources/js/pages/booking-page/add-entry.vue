@@ -132,7 +132,7 @@
                   cancelButtonAriaLabel: 'Thumbs down'
                 }).then((result) => {
                   if (result.value) {
-                    this.$router.push('/walk-in-payment/10');
+                    this.$router.push({ path: '/walk-in-payment', query: {roomId:room.id, roomType:room.room_type.name, roomName:room.name, dateStay:this.defaultStartDate+'<>'+this.defaultEndDate} })
                   }
                 })
             },

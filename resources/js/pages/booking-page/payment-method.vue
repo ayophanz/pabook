@@ -1,5 +1,15 @@
 <template>
     <div class="container">
+        <loading 
+            :height="128"
+            :width="128"
+            :transition="`fade`"
+            :loader="`dots`"
+            :background-color="`#fff`"
+            :color="`#007bff`"
+            :active.sync="isLoading" 
+            :is-full-page="fullPage">
+        </loading>
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card">
@@ -36,11 +46,12 @@
                             <br />
                             <h4>Booking info.</h4><hr>
                             <div class="form-group">
-                                <label for="roomType">Room Id: <span>11</span></label><br />
-                                <label for="roomType">Room type: <span>test</span></label><br />
-                                <label for="roomName">Room name: <span>test</span></label><br />
-                                <label for="dateStay">Date stay: <span>test</span></label><br />
-                                <label for="night">Night(s): <span>{{$route.params.night}}</span></label>
+                                <label for="roomType">Room Id: <span>{{form.room_id}}</span></label><br />
+                                <label for="roomType">Room type: <span>{{bookInfo['roomName']}}</span></label><br />
+                                <label for="roomName">Room name: <span></span></label><br />
+                                <label for="dateStay">Date start: <span>test</span></label><br />
+                                <label for="dateStay">Date end: <span>test</span></label><br />
+                                <label for="night">Night(s): <span></span></label>
                             </div>
                             <div class="form-group">
                                 <label for="gRequest">Guest request </label>
@@ -71,9 +82,16 @@
 </template>
 
 <script>
+    import Loading from 'vue-loading-overlay'
+    import 'vue-loading-overlay/dist/vue-loading.css' 
     export default {
+        components:{
+            Loading
+        },
         data() {
             return {
+                fullPage: true,
+                isLoading: false,
                 isCheckConsent: false,
                 notEnough: true,
                 bookInfo: [{}],
@@ -86,8 +104,8 @@
                     change: 0,
                     total: 100,
                     gRequest: '',
-                    dateStay: null,
-                    night: 0,
+                    dateStart: null,
+                    dateEnd: null,
                     room_id: null
                 })
             }
@@ -109,10 +127,17 @@
             },
             register() {
 
+            },
+            loadRoom() {
+                this.form.room_id = this.$route.query.roomId;
+                this.bookInfo.push({roomName:this.$route.query.roomName});
+                this.bookInfo.push({roomType:this.$route.query.roomType});
+                console.log(this.bookInfo);
             }
         },
         created() {
-
+            this.loadRoom();
+            console.log(this.$route.query.dateStay);
         }
     }
 </script>
