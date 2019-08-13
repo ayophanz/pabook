@@ -9,6 +9,7 @@ use App\Room;
 use App\RoomMeta;
 use App\RoomType;
 use App\Hotel;
+use App\UserMeta;
 
 class RoomController extends Controller
 {
@@ -224,6 +225,11 @@ class RoomController extends Controller
       $user = auth('api')->user();
       if($roomType==0) {
         $hotel = Hotel::select('id')->where('owner_id', $user->id)->get()->toArray();
+        if(empty($hotel)) {
+          $userMeta = UserMeta::select('user_id')->where('value', $user->id)->first();
+          $hotel = Hotel::select('id')->where('owner_id', $userMeta->user_id)->get()->toArray();
+        }
+
         $roomType = RoomType::select('id')->whereIn('hotel_id', $hotel)->get()->toArray();
         foreach ($roomType as $key => $value) {
           unset($roomType[$key]['room_type_refer']);

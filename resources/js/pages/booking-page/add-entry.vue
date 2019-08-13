@@ -130,7 +130,11 @@
                   cancelButtonText:
                     '<i class="fa fa-thumbs-down"></i>',
                   cancelButtonAriaLabel: 'Thumbs down'
-                });
+                }).then((result) => {
+                  if (result.value) {
+                    this.$router.push('/walk-in-payment/10');
+                  }
+                })
             },
             gallery(id, images) {
                 let tempImg = JSON.parse(images);
