@@ -40,18 +40,20 @@
                             <div class="form-group">
                                 <div class="custom-control custom-switch">
                                   <input @click="toggleCheck" :checked="isCheckConsent" type="checkbox" class="custom-control-input" id="isCheckConsent" name="isCheckConsent">
-                                  <label class="custom-control-label" for="isCheckConsent">Make you have permission to collect data from guest before enable this.</label>
+                                  <label class="custom-control-label" for="isCheckConsent">Make you sure have permission to collect data from guest before enable this.</label>
                                 </div>
                             </div>
                             <br />
                             <h4>Booking info.</h4><hr>
                             <div class="form-group">
                                 <label for="roomType">Room Id: <span>{{form.room_id}}</span></label><br />
-                                <label for="roomType">Room type: <span>{{bookInfo['roomName']}}</span></label><br />
-                                <label for="roomName">Room name: <span></span></label><br />
-                                <label for="dateStay">Date start: <span>test</span></label><br />
-                                <label for="dateStay">Date end: <span>test</span></label><br />
-                                <label for="night">Night(s): <span></span></label>
+                                <label for="roomType">Room type: <span>{{bookInfo['roomType']}}</span></label><br />
+                                <label for="roomName">Room name: <span>{{bookInfo['roomName']}}</span></label><br />
+                                <label for="dateStay">Date start: <span>{{form.dateStart}}</span></label><br />
+                                <label for="dateStay">Date end: <span>{{form.dateEnd}}</span></label><br />
+                                <label for="night">Night(s): <span>{{bookInfo['night']}}</span></label><br />
+                                <label for="checkInTime">Check In: <span>2:00pm</span></label><br />
+                                <label for="checkOutTime">Check Out: <span>12:00pm</span></label><br />
                             </div>
                             <div class="form-group">
                                 <label for="gRequest">Guest request </label>
@@ -72,7 +74,7 @@
                         </div>
                         <div class="card-footer">
                           <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat"><i class="fa fa-save"></i> Book</button>
-                          <button :disabled="form.busy" type="submit" class="btn btn-outline-success btn-flat"><i class="fa fa-save"></i> Check In</button>
+                          <button :disabled="form.busy" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-save"></i> Check In</button>
                         </div>
                     </form>
                 </div>
@@ -94,7 +96,7 @@
                 isLoading: false,
                 isCheckConsent: false,
                 notEnough: true,
-                bookInfo: [{}],
+                bookInfo: [],
                 form: new form({
                     fullname: '',
                     email: '',
@@ -102,10 +104,10 @@
                     consent: false,
                     amount: 0,
                     change: 0,
-                    total: 100,
+                    total: 0,
                     gRequest: '',
-                    dateStart: null,
-                    dateEnd: null,
+                    dateStart: '',
+                    dateEnd: '',
                     room_id: null
                 })
             }
@@ -130,14 +132,22 @@
             },
             loadRoom() {
                 this.form.room_id = this.$route.query.roomId;
-                this.bookInfo.push({roomName:this.$route.query.roomName});
-                this.bookInfo.push({roomType:this.$route.query.roomType});
-                console.log(this.bookInfo);
+                this.bookInfo['roomName'] = this.$route.query.roomName;
+                this.bookInfo['roomType'] = this.$route.query.roomType;
+                this.form.dateStart = moment(this.$route.query.dateStay.split('<>')[0]).format('MMMM Do YYYY')
+                this.form.dateEnd = moment(this.$route.query.dateStay.split('<>')[1]).format('MMMM Do YYYY')
+
+                const start = moment(new Date(this.$route.query.dateStay.split('<>')[0]), 'M/D/YYYY');
+                const end = moment(new Date(this.$route.query.dateStay.split('<>')[1]), 'M/D/YYYY');
+                const diffDays = end.diff(start, 'days');
+
+                this.bookInfo['night'] =  diffDays;
+
+                this.form.total = (this.$route.query.price) * this.bookInfo['night'];
             }
         },
-        created() {
+        mounted() {
             this.loadRoom();
-            console.log(this.$route.query.dateStay);
         }
     }
 </script>

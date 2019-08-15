@@ -100,7 +100,7 @@
                 separator: ' - ',
                 applyLabel: 'Apply',
                 cancelLabel: 'Cancel',
-                dateRange: '',
+                dateRange: {startDate: new Date(), endDate: new Date().setDate(new Date().getDate() + 1) },
                 firstDay: moment.localeData().firstDayOfWeek()
             }
         },
@@ -111,7 +111,7 @@
                  feature.forEach(function(item, index){
                       amenities += '<li><i class="fas fa-check"></i> '+item['value']+'</li>';
                  });
-                let details = '<strong>Price: <span>'+room.price+'</span><br />Night(s): <span>'+this.night+'</span><br />Total price: <span>'+(room.price*this.night)+'</span><br />Date: <span>'+moment(this.defaultStartDate).format('MMMM Do YYYY')+' - '+moment(this.defaultEndDate).format('MMMM Do YYYY')+'</span><br />Arrival time: <span>2:00pm</span> | Departure Time: <span>12:00pm</span><br />Hotel: <span>'+room.room_type.room_type_refer.name+'</span><br />Amenities: </strong>';
+                let details = '<strong>Price: <span>'+room.price+'</span><br />Night(s): <span>'+this.night+'</span><br />Total price: <span>'+(room.price*this.night)+'</span><br />Date: <span>'+moment(this.defaultStartDate).format('MMMM Do YYYY')+' - '+moment(this.defaultEndDate).format('MMMM Do YYYY')+'</span><br />CheckIn Time: <span>2:00pm</span> | CheckOut Time: <span>12:00pm</span><br />Hotel: <span>'+room.room_type.room_type_refer.name+'</span><br />Amenities: </strong>';
                 paynow.fire({
                   title: '<strong>'+room.room_type.name+'</strong>',
                   type: 'info',
@@ -132,7 +132,7 @@
                   cancelButtonAriaLabel: 'Thumbs down'
                 }).then((result) => {
                   if (result.value) {
-                    this.$router.push({ path: '/walk-in-payment', query: {roomId:room.id, roomType:room.room_type.name, roomName:room.name, dateStay:this.defaultStartDate+'<>'+this.defaultEndDate} })
+                    this.$router.push({ path: '/walk-in-payment', query: {roomId:room.id, roomType:room.room_type.name, roomName:room.name, dateStay:this.defaultStartDate+'<>'+this.defaultEndDate, price:room.price} })
                   }
                 })
             },
@@ -173,6 +173,7 @@
         },
         created() {
             this.minDate = new Date();
+            this.updateValues();
         }
     }
 </script>

@@ -12964,7 +12964,10 @@ __webpack_require__.r(__webpack_exports__);
       separator: ' - ',
       applyLabel: 'Apply',
       cancelLabel: 'Cancel',
-      dateRange: '',
+      dateRange: {
+        startDate: new Date(),
+        endDate: new Date().setDate(new Date().getDate() + 1)
+      },
       firstDay: moment.localeData().firstDayOfWeek()
     };
   },
@@ -12977,7 +12980,7 @@ __webpack_require__.r(__webpack_exports__);
       feature.forEach(function (item, index) {
         amenities += '<li><i class="fas fa-check"></i> ' + item['value'] + '</li>';
       });
-      var details = '<strong>Price: <span>' + room.price + '</span><br />Night(s): <span>' + this.night + '</span><br />Total price: <span>' + room.price * this.night + '</span><br />Date: <span>' + moment(this.defaultStartDate).format('MMMM Do YYYY') + ' - ' + moment(this.defaultEndDate).format('MMMM Do YYYY') + '</span><br />Arrival time: <span>2:00pm</span> | Departure Time: <span>12:00pm</span><br />Hotel: <span>' + room.room_type.room_type_refer.name + '</span><br />Amenities: </strong>';
+      var details = '<strong>Price: <span>' + room.price + '</span><br />Night(s): <span>' + this.night + '</span><br />Total price: <span>' + room.price * this.night + '</span><br />Date: <span>' + moment(this.defaultStartDate).format('MMMM Do YYYY') + ' - ' + moment(this.defaultEndDate).format('MMMM Do YYYY') + '</span><br />CheckIn Time: <span>2:00pm</span> | CheckOut Time: <span>12:00pm</span><br />Hotel: <span>' + room.room_type.room_type_refer.name + '</span><br />Amenities: </strong>';
       paynow.fire({
         title: '<strong>' + room.room_type.name + '</strong>',
         type: 'info',
@@ -12997,7 +13000,8 @@ __webpack_require__.r(__webpack_exports__);
               roomId: room.id,
               roomType: room.room_type.name,
               roomName: room.name,
-              dateStay: _this.defaultStartDate + '<>' + _this.defaultEndDate
+              dateStay: _this.defaultStartDate + '<>' + _this.defaultEndDate,
+              price: room.price
             }
           });
         }
@@ -13037,6 +13041,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.minDate = new Date();
+    this.updateValues();
   }
 });
 
@@ -13192,6 +13197,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -13204,7 +13211,7 @@ __webpack_require__.r(__webpack_exports__);
       isLoading: false,
       isCheckConsent: false,
       notEnough: true,
-      bookInfo: [{}],
+      bookInfo: [],
       form: new form({
         fullname: '',
         email: '',
@@ -13212,10 +13219,10 @@ __webpack_require__.r(__webpack_exports__);
         consent: false,
         amount: 0,
         change: 0,
-        total: 100,
+        total: 0,
         gRequest: '',
-        dateStart: null,
-        dateEnd: null,
+        dateStart: '',
+        dateEnd: '',
         room_id: null
       })
     };
@@ -13235,18 +13242,19 @@ __webpack_require__.r(__webpack_exports__);
     register: function register() {},
     loadRoom: function loadRoom() {
       this.form.room_id = this.$route.query.roomId;
-      this.bookInfo.push({
-        roomName: this.$route.query.roomName
-      });
-      this.bookInfo.push({
-        roomType: this.$route.query.roomType
-      });
-      console.log(this.bookInfo);
+      this.bookInfo['roomName'] = this.$route.query.roomName;
+      this.bookInfo['roomType'] = this.$route.query.roomType;
+      this.form.dateStart = moment(this.$route.query.dateStay.split('<>')[0]).format('MMMM Do YYYY');
+      this.form.dateEnd = moment(this.$route.query.dateStay.split('<>')[1]).format('MMMM Do YYYY');
+      var start = moment(new Date(this.$route.query.dateStay.split('<>')[0]), 'M/D/YYYY');
+      var end = moment(new Date(this.$route.query.dateStay.split('<>')[1]), 'M/D/YYYY');
+      var diffDays = end.diff(start, 'days');
+      this.bookInfo['night'] = diffDays;
+      this.form.total = this.$route.query.price * this.bookInfo['night'];
     }
   },
-  created: function created() {
+  mounted: function mounted() {
     this.loadRoom();
-    console.log(this.$route.query.dateStay);
   }
 });
 
@@ -75475,7 +75483,7 @@ var render = function() {
                         },
                         [
                           _vm._v(
-                            "Make you have permission to collect data from guest before enable this."
+                            "Make you sure have permission to collect data from guest before enable this."
                           )
                         ]
                       )
@@ -75496,7 +75504,31 @@ var render = function() {
                     _vm._v(" "),
                     _c("label", { attrs: { for: "roomType" } }, [
                       _vm._v("Room type: "),
+                      _c("span", [_vm._v(_vm._s(_vm.bookInfo["roomType"]))])
+                    ]),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("label", { attrs: { for: "roomName" } }, [
+                      _vm._v("Room name: "),
                       _c("span", [_vm._v(_vm._s(_vm.bookInfo["roomName"]))])
+                    ]),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("label", { attrs: { for: "dateStay" } }, [
+                      _vm._v("Date start: "),
+                      _c("span", [_vm._v(_vm._s(_vm.form.dateStart))])
+                    ]),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("label", { attrs: { for: "dateStay" } }, [
+                      _vm._v("Date end: "),
+                      _c("span", [_vm._v(_vm._s(_vm.form.dateEnd))])
+                    ]),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("label", { attrs: { for: "night" } }, [
+                      _vm._v("Night(s): "),
+                      _c("span", [_vm._v(_vm._s(_vm.bookInfo["night"]))])
                     ]),
                     _c("br"),
                     _vm._v(" "),
@@ -75504,12 +75536,7 @@ var render = function() {
                     _c("br"),
                     _vm._v(" "),
                     _vm._m(3),
-                    _c("br"),
-                    _vm._v(" "),
-                    _vm._m(4),
-                    _c("br"),
-                    _vm._v(" "),
-                    _vm._m(5)
+                    _c("br")
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "form-group" }, [
@@ -75617,7 +75644,7 @@ var render = function() {
                   _c(
                     "button",
                     {
-                      staticClass: "btn btn-outline-success btn-flat",
+                      staticClass: "btn btn-primary btn-flat",
                       attrs: { disabled: _vm.form.busy, type: "submit" }
                     },
                     [
@@ -75658,36 +75685,18 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("label", { attrs: { for: "roomName" } }, [
-      _vm._v("Room name: "),
-      _c("span")
+    return _c("label", { attrs: { for: "checkInTime" } }, [
+      _vm._v("Check In: "),
+      _c("span", [_vm._v("2:00pm")])
     ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("label", { attrs: { for: "dateStay" } }, [
-      _vm._v("Date start: "),
-      _c("span", [_vm._v("test")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", { attrs: { for: "dateStay" } }, [
-      _vm._v("Date end: "),
-      _c("span", [_vm._v("test")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", { attrs: { for: "night" } }, [
-      _vm._v("Night(s): "),
-      _c("span")
+    return _c("label", { attrs: { for: "checkOutTime" } }, [
+      _vm._v("Check Out: "),
+      _c("span", [_vm._v("12:00pm")])
     ])
   }
 ]
