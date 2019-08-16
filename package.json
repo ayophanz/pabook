@@ -32,9 +32,11 @@
         "country-json": "^1.0.9",
         "datatables.net": "^1.10.19",
         "datatables.net-dt": "^1.10.19",
+        "moment": "^2.24.0",
         "sweetalert2": "^8.13.4",
         "vform": "^1.0.1",
         "vue-loading-overlay": "^3.2.0",
+        "vue-money-format": "^1.1.1",
         "vue-pure-lightbox": "^3.1.0",
         "vue-router": "^3.0.7",
         "vue2-daterange-picker": "^0.3.0"

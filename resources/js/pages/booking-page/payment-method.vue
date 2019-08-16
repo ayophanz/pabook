@@ -39,9 +39,10 @@
                             </div>
                             <div class="form-group">
                                 <div class="custom-control custom-switch">
-                                  <input @click="toggleCheck" :checked="isCheckConsent" type="checkbox" class="custom-control-input" id="isCheckConsent" name="isCheckConsent">
+                                  <input v-model="form.consent" @click="toggleCheck" :checked="isCheckConsent" type="checkbox" class="custom-control-input" id="isCheckConsent" name="isCheckConsent">
                                   <label class="custom-control-label" for="isCheckConsent">Make you sure have permission to collect data from guest before enable this.</label>
                                 </div>
+                                <has-error :form="form" field="consent"></has-error>
                             </div>
                             <br />
                             <h4>Booking info.</h4><hr>
@@ -61,7 +62,14 @@
                             </div>
                             <h4>Payment</h4><hr>
                             <div class="form-group">
-                                <label for="amount">Total payment: <span>{{form.total}}</span></label>
+                                <label for="amount">Total payment: <span>
+                                <money-format :value="form.total" 
+                                  :locale='lang' 
+                                  :currency-code='curreny' 
+                                  :subunit-value="true" 
+                                  :hide-subunits="true">
+                                </money-format>
+                                </span></label>
                             </div>
                             <div class="form-group">
                                 <label for="amount">Cash amount </label>
@@ -73,8 +81,8 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                          <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat"><i class="fa fa-save"></i> Book</button>
-                          <button :disabled="form.busy" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-save"></i> Check In</button>
+                          <button :disabled="form.busy" type="submit" @click="submitTrigger('book')" class="btn btn-outline-primary btn-flat"><i class="fa fa-save"></i> Book</button>
+                          <button :disabled="form.busy" type="submit" @click="submitTrigger('checkin')" class="btn btn-primary btn-flat"><i class="fa fa-save"></i> Check In</button>
                         </div>
                     </form>
                 </div>
@@ -86,18 +94,23 @@
 <script>
     import Loading from 'vue-loading-overlay'
     import 'vue-loading-overlay/dist/vue-loading.css' 
+    import MoneyFormat from 'vue-money-format'
     export default {
         components:{
-            Loading
+            Loading,
+            MoneyFormat
         },
         data() {
             return {
+                lang: 'en',
+                curreny: 'USD',
                 fullPage: true,
                 isLoading: false,
                 isCheckConsent: false,
                 notEnough: true,
                 bookInfo: [],
                 form: new form({
+                    btnSubmit: '',
                     fullname: '',
                     email: '',
                     phone_no: '',
@@ -113,6 +126,9 @@
             }
         },
         methods: {
+            submitTrigger(value) {
+                this.form.btnSubmit = value;
+            },
             moneyChange(event) {
                 this.form.change = event.target.value - this.form.total;
                 if(this.form.total <= this.form.amount)
@@ -128,7 +144,30 @@
                 }
             },
             register() {
+                if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+                    this.isLoading = true;
+                    let self = this
+                    this.form.post('/api/create-book').then(
+                    function (response) {
+                        let msg = 'Booked';
+                        if(self.form.btnSubmit=='checkin') {
+                            msg = 'Check In';
+                        }
+                        self.isLoading = false;
+                        toast.fire({
+                          type: 'success',
+                          title: msg+' successfully'
+                        })
 
+                    }).catch(function (error) {
+                        console.log(error); 
+                        self.isLoading = false;
+                        toast.fire({
+                          type: 'error',
+                          title: 'Something went wrong!'
+                        })
+                    });
+                }
             },
             loadRoom() {
                 this.form.room_id = this.$route.query.roomId;

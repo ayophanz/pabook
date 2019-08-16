@@ -31,8 +31,7 @@
                                         v-model="dateRange",
                                         :time-picker="false",
                                         :ranges="false",
-                                        @update="updateValues"
-                                >
+                                        @update="updateValues">
                                     <div slot="input" slot-scope="picker" style="min-width: 350px;">
                                         {{ defaultStartDate=picker.startDate | formatDate }} - {{ defaultEndDate=picker.endDate | formatDate }}
                                     </div>
@@ -100,7 +99,7 @@
                 separator: ' - ',
                 applyLabel: 'Apply',
                 cancelLabel: 'Cancel',
-                dateRange: {startDate: new Date(), endDate: new Date().setDate(new Date().getDate() + 1) },
+                dateRange: {startDate: new Date(), endDate: new Date(new Date().setDate(new Date().getDate() + 1)) },
                 firstDay: moment.localeData().firstDayOfWeek()
             }
         },
@@ -148,6 +147,7 @@
                 return '../storage/images/upload/roomImages/gallery-'+id+'/'+img;
             },
             updateValues() {
+                
                 const start = moment(this.dateRange.startDate, 'M/D/YYYY');
                 const end = moment(this.dateRange.endDate, 'M/D/YYYY');
                 const diffDays = end.diff(start, 'days');

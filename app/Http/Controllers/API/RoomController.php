@@ -28,7 +28,7 @@ class RoomController extends Controller
    public function create(Request $request) {
    	  $room = null;
    	  $data = [
-              'name' 	    => 'required|string|max:191|unique_name:rooms,name,type_id,'.$request['type'].',0',
+              'name' 	      => 'required|string|max:191|unique_name:rooms,name,type_id,'.$request['type'].',0',
               'type'        => 'required|numeric|min:1',
               'price'       => 'required|min:1|regex:/^\d+(\.\d{1,2})?$/',
               'no_of_room'  => 'required|numeric|min:1',

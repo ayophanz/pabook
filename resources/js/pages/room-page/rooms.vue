@@ -44,7 +44,14 @@
                                     <td>{{room.id}}</td>
                                     <td>{{room.room_type.name}}</td>
                                     <td>{{room.name}}</td>
-                                    <td>{{room.price}}</td>
+                                    <td>
+                                        <money-format :value="room.price" 
+                                          :locale='lang' 
+                                          :currency-code='curreny' 
+                                          :subunit-value="true" 
+                                          :hide-subunits="true">
+                                        </money-format>
+                                    </td>
                                     <td>{{room.total_room}}</td>
                                     <td>{{room.status}}</td>
                                     <td>{{room.created_at}}</td>
@@ -79,13 +86,17 @@
     import VuePureLightbox from 'vue-pure-lightbox'
     import Loading from 'vue-loading-overlay'
     import 'vue-loading-overlay/dist/vue-loading.css'
+    import MoneyFormat from 'vue-money-format'
     export default {
         components: {
              VuePureLightbox,
-             Loading
+             Loading,
+             MoneyFormat
         },
         data() {
             return {
+                lang: 'en',
+                curreny: 'USD',
                 fullPage: true,
                 isLoading: false,
                 rooms: []
