@@ -5,11 +5,19 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Booking;
+use DateTime;
 
 class BookController extends Controller
 {
     public function __construct() {
         $this->middleware('auth:api');
+   }
+
+   public function index() {
+
+    if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner') || \Gate::allows('hotel_receptionist')) 
+      return Booking::all();
+
    }
 
    public function create(Request $request) {
@@ -29,14 +37,17 @@ class BookController extends Controller
    		$customMessages = [
                         'greater_than_field' => 'The amount is not enough.'
                         ];
-   		
+
+      $sdate = new \DateTime($request['dateStart']);
+      $edate = new \DateTime($request['dateEnd']);   
+
    		$dataCreate = [
    			'room_id'   => $request['room_id'],
    			'name'      => $request['fullname'],
    			'email'     => $request['email'],
    			'phone_no'  => $request['phone_no'],
-   			'dateStart' => $request['dateStart'],
-   			'dateEnd'   => $request['dateEnd'],
+   			'dateStart' => $sdate,
+   			'dateEnd'   => $edate,
    			'amount'    => $request['amount'],
         'status'    => $request['btnSubmit']
    		];

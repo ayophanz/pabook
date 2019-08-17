@@ -150,14 +150,17 @@
                     this.form.post('/api/create-book').then(
                     function (response) {
                         let msg = 'Booked';
+                        //self.form.reset();
                         if(self.form.btnSubmit=='checkin') {
                             msg = 'Check In';
                         }
+
                         self.isLoading = false;
                         toast.fire({
                           type: 'success',
                           title: msg+' successfully'
                         })
+                        self.$router.push({ path: '/', query: {value:'test'} });
 
                     }).catch(function (error) {
                         console.log(error); 
@@ -175,7 +178,6 @@
                 this.bookInfo['roomType'] = this.$route.query.roomType;
                 this.form.dateStart = moment(this.$route.query.dateStay.split('<>')[0]).format('MMMM Do YYYY')
                 this.form.dateEnd = moment(this.$route.query.dateStay.split('<>')[1]).format('MMMM Do YYYY')
-
                 const start = moment(new Date(this.$route.query.dateStay.split('<>')[0]), 'M/D/YYYY');
                 const end = moment(new Date(this.$route.query.dateStay.split('<>')[1]), 'M/D/YYYY');
                 const diffDays = end.diff(start, 'days');

@@ -34,11 +34,7 @@ class RoomController extends Controller
               'no_of_room'  => 'required|numeric|min:1',
               'hotel'       => 'required|numeric|min:1',
               'image'       => 'required|image64:jpeg,jpg,png'
-              ];
-
-      $customMessages = [
-                        'unique_name' => 'The :attribute field is already exist in the same room type.'
-                        ];        
+              ];                                
                         
       $dataCreate = [
                     'status'      => $request['status'],

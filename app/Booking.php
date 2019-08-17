@@ -11,8 +11,8 @@ class Booking extends Model
     			'name', 
     			'email', 
     			'phone_no',
-    			'start',
-    			'end',
+    			'dateStart',
+    			'dateEnd',
                 'amount',
                 'user_id',
                 'status'
