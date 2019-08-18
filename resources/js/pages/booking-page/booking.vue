@@ -20,6 +20,7 @@
                         :plugins="calendarPlugins" 
                         :events="dataEvent"
                         @eventClick="showEvent"
+                        @eventRender="render"
                         />
                     </div>
                 </div>
@@ -57,7 +58,35 @@
             }
         },
         methods: {
-            generateButton(status) {
+            dateDiff(dateS, dateE) {
+                // let sDate = moment(dateS).format('MMMM Do YYYY');
+                // let eDate = moment(dateE).format('MMMM Do YYYY');
+                const start = moment(new Date(dateE), 'M/D/YYYY');
+                const end = moment(new Date(dateS), 'M/D/YYYY');
+                return end.diff(start, 'days');
+            },
+            generateButton(arg) {
+                let status = arg.event.classNames[0];
+                let roomId = arg.event.extendedProps.roomId;
+                let roomType = arg.event.extendedProps.roomType;
+                let roomName = arg.event.extendedProps.roomName;
+                let name = arg.event.extendedProps.name;
+                let email = arg.event.extendedProps.email;
+                let phone = arg.event.extendedProps.phone;
+                let dateS = moment(arg.event.extendedProps.dateS).format('MMMM Do YYYY');
+                let dateE = moment(arg.event.extendedProps.dateE).format('MMMM Do YYYY');
+                let amount = arg.event.extendedProps.amount;
+                let night = this.dateDiff(dateS, dateE);
+                let features = JSON.parse(arg.event.extendedProps.features);
+                let featuresApp = '';
+                if(!features.length == 0) {
+                    featuresApp = '<ul>';
+                    features.forEach(function(item, index){
+                        featuresApp += '<li><i class="fas fa-check"></i> '+item.value+'</li>';
+                    });
+                    featuresApp +='</ul>'
+                }
+
                 this.btnGuestAct = $('<div>');
                 let statusName = 'Cancel this book';
                 if(status=='cal-checkin') {
@@ -72,14 +101,28 @@
                 this.btnGuestAct.prepend(this.createButton(statusName, 'btn-primary', 'fa-sign-out-alt', function() {
                    guestAction.close();
                 }));
+                this.btnGuestAct.prepend(
+                    '<div class="details">'
+                    +'Date Start: <span>'+dateS+'</span><br />'
+                    +'Date End: <span>'+dateE+'</span><br />'
+                    +'Night Stay: <span>'+night+'</span><br />'
+                    +'Total: <span>'+amount+'</span><br />'
+                    +'Room Id: <span>'+roomId+'</span><br />'
+                    +'Room Type: <span>'+roomType+'</span><br />'
+                    +'Room Name: <span>'+roomName+'</span><br />'
+                    +'Amenities: '+featuresApp
+                    +'<div class="guestInfo">Name: <span>'+name+'</span><br />'
+                    +'Phone: <span>'+phone+'</span><br />'
+                    +'Email: <span>'+email+'</span><br />'
+                    +'</div><br />');
             },
             createButton(text, btnCss, icon, cb) {
               return $('<button class="btn '+btnCss+' btn-flat"><i class="fas '+icon+'"></i> ' + text + '</button>').on('click', cb);
             },
             showEvent(arg) {
-                this.generateButton(arg.event.classNames[0]);
+                this.generateButton(arg);
                 guestAction.fire({
-                      title: '<strong>Action</strong>',
+                      title: '<strong>Details</strong>',
                       type: 'info',
                       html: this.btnGuestAct,
                       showConfirmButton: false,
@@ -87,6 +130,15 @@
                       showCancelButton: false
                 })
                 console.log(arg);
+            },
+            render(event) {
+                if(event.event.classNames[0]=='cal-checkin') {
+                    event.el.firstChild.innerHTML = '<i class="fas fa-calendar-check"></i> '+event.el.firstChild.innerHTML;
+                }else if(event.event.classNames[0]=='cal-book') {
+                    event.el.firstChild.innerHTML = '<i class="fas fa-calendar-minus"></i> '+event.el.firstChild.innerHTML;
+                }else{
+                    event.el.firstChild.innerHTML = '<i class="fas fa-calendar-times"></i> '+event.el.firstChild.innerHTML;
+                }
             },
             loadBookings() {
                 if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
@@ -113,7 +165,8 @@
                                     title:item.name+' | '+diffDays+' days left to '+remain,
                                     start:item.dateStart,
                                     end:item.dateEnd,
-                                    className:statusClass
+                                    className:statusClass,
+                                    extendedProps: {roomId:item.room_id, roomType:item.room.room_type.name, roomName:item.room.name, features:item.room.room_feature.value, amount:item.amount, email:item.email, phone:item.phone_no, dateS:item.dateStart, dateE:item.dateEnd, status:item.status, name:item.name}
                                 });
                             });
                         }
@@ -161,5 +214,18 @@
     .cal-checkout {
         background-color: gray!important;
         border: 1px;
+    }
+    .fc-day-grid-event .fc-content {
+        padding: 0px 5px;
+    }
+    .details span {
+        font-weight: 700;
+    }
+    .details {
+        text-align: left;
+        line-height: 1.6;
+    }
+    .details ul {
+        list-style: none;
     }
 </style>

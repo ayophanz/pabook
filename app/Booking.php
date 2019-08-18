@@ -17,4 +17,10 @@ class Booking extends Model
                 'user_id',
                 'status'
     			];
+
+    protected $with = ['room'];           
+
+    public function room() {
+        return $this->belongsTo(Room::class, 'room_id', 'id'); 
+    }            
 }

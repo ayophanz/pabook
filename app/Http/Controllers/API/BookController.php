@@ -16,7 +16,7 @@ class BookController extends Controller
    public function index() {
 
     if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner') || \Gate::allows('hotel_receptionist')) 
-      return Booking::all();
+      return Booking::with('room')->get();
 
    }
 

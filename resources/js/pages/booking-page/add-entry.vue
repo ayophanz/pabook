@@ -206,7 +206,7 @@
 }
 .swal-body {
     text-align: left;
-    line-height: 2;
+    line-height: 1.6;
 }
 .swal-body span {
     font-weight: bold;

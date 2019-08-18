@@ -15240,6 +15240,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -15265,7 +15266,36 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    generateButton: function generateButton(status) {
+    dateDiff: function dateDiff(dateS, dateE) {
+      // let sDate = moment(dateS).format('MMMM Do YYYY');
+      // let eDate = moment(dateE).format('MMMM Do YYYY');
+      var start = moment(new Date(dateE), 'M/D/YYYY');
+      var end = moment(new Date(dateS), 'M/D/YYYY');
+      return end.diff(start, 'days');
+    },
+    generateButton: function generateButton(arg) {
+      var status = arg.event.classNames[0];
+      var roomId = arg.event.extendedProps.roomId;
+      var roomType = arg.event.extendedProps.roomType;
+      var roomName = arg.event.extendedProps.roomName;
+      var name = arg.event.extendedProps.name;
+      var email = arg.event.extendedProps.email;
+      var phone = arg.event.extendedProps.phone;
+      var dateS = moment(arg.event.extendedProps.dateS).format('MMMM Do YYYY');
+      var dateE = moment(arg.event.extendedProps.dateE).format('MMMM Do YYYY');
+      var amount = arg.event.extendedProps.amount;
+      var night = this.dateDiff(dateS, dateE);
+      var features = JSON.parse(arg.event.extendedProps.features);
+      var featuresApp = '';
+
+      if (!features.length == 0) {
+        featuresApp = '<ul>';
+        features.forEach(function (item, index) {
+          featuresApp += '<li><i class="fas fa-check"></i> ' + item.value + '</li>';
+        });
+        featuresApp += '</ul>';
+      }
+
       this.btnGuestAct = $('<div>');
       var statusName = 'Cancel this book';
 
@@ -15282,14 +15312,15 @@ __webpack_require__.r(__webpack_exports__);
       this.btnGuestAct.prepend(this.createButton(statusName, 'btn-primary', 'fa-sign-out-alt', function () {
         guestAction.close();
       }));
+      this.btnGuestAct.prepend('<div class="details">' + 'Date Start: <span>' + dateS + '</span><br />' + 'Date End: <span>' + dateE + '</span><br />' + 'Night Stay: <span>' + night + '</span><br />' + 'Total: <span>' + amount + '</span><br />' + 'Room Id: <span>' + roomId + '</span><br />' + 'Room Type: <span>' + roomType + '</span><br />' + 'Room Name: <span>' + roomName + '</span><br />' + 'Amenities: ' + featuresApp + '<div class="guestInfo">Name: <span>' + name + '</span><br />' + 'Phone: <span>' + phone + '</span><br />' + 'Email: <span>' + email + '</span><br />' + '</div><br />');
     },
     createButton: function createButton(text, btnCss, icon, cb) {
       return $('<button class="btn ' + btnCss + ' btn-flat"><i class="fas ' + icon + '"></i> ' + text + '</button>').on('click', cb);
     },
     showEvent: function showEvent(arg) {
-      this.generateButton(arg.event.classNames[0]);
+      this.generateButton(arg);
       guestAction.fire({
-        title: '<strong>Action</strong>',
+        title: '<strong>Details</strong>',
         type: 'info',
         html: this.btnGuestAct,
         showConfirmButton: false,
@@ -15297,6 +15328,15 @@ __webpack_require__.r(__webpack_exports__);
         showCancelButton: false
       });
       console.log(arg);
+    },
+    render: function render(event) {
+      if (event.event.classNames[0] == 'cal-checkin') {
+        event.el.firstChild.innerHTML = '<i class="fas fa-calendar-check"></i> ' + event.el.firstChild.innerHTML;
+      } else if (event.event.classNames[0] == 'cal-book') {
+        event.el.firstChild.innerHTML = '<i class="fas fa-calendar-minus"></i> ' + event.el.firstChild.innerHTML;
+      } else {
+        event.el.firstChild.innerHTML = '<i class="fas fa-calendar-times"></i> ' + event.el.firstChild.innerHTML;
+      }
     },
     loadBookings: function loadBookings() {
       if (this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
@@ -15320,7 +15360,20 @@ __webpack_require__.r(__webpack_exports__);
               title: item.name + ' | ' + diffDays + ' days left to ' + remain,
               start: item.dateStart,
               end: item.dateEnd,
-              className: statusClass
+              className: statusClass,
+              extendedProps: {
+                roomId: item.room_id,
+                roomType: item.room.room_type.name,
+                roomName: item.room.name,
+                features: item.room.room_feature.value,
+                amount: item.amount,
+                email: item.email,
+                phone: item.phone_no,
+                dateS: item.dateStart,
+                dateE: item.dateEnd,
+                status: item.status,
+                name: item.name
+              }
             });
           });
         });
@@ -22187,7 +22240,7 @@ exports.i(__webpack_require__(/*! -!../../../../node_modules/css-loader!@fullcal
 exports.i(__webpack_require__(/*! -!../../../../node_modules/css-loader!@fullcalendar/daygrid/main.css */ "./node_modules/css-loader/index.js!./node_modules/@fullcalendar/daygrid/main.css"), "");
 
 // module
-exports.push([module.i, ".fc-button-primary {\n  background-color: #3490dc !important;\n  border-color: #3490dc !important;\n  border-radius: 0px;\n}\n.fc-button-primary:not(:disabled):active:focus, .fc-button-primary:not(:disabled).fc-button-active:focus {\n  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.2901960784) !important;\n}\n.fc-button-primary:focus {\n  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.2901960784) !important;\n}\n.fc-event, .fc-event-dot {\n  background-color: #3788d8 !important;\n  border-radius: 0px;\n  color: white !important;\n  font-size: 16px;\n  cursor: pointer;\n}\n.cal-checkin {\n  background-color: #28a745 !important;\n  border: 1px;\n}\n.fc-time {\n  display: none;\n}\n.cal-checkout {\n  background-color: gray !important;\n  border: 1px;\n}", ""]);
+exports.push([module.i, ".fc-button-primary {\n  background-color: #3490dc !important;\n  border-color: #3490dc !important;\n  border-radius: 0px;\n}\n.fc-button-primary:not(:disabled):active:focus, .fc-button-primary:not(:disabled).fc-button-active:focus {\n  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.2901960784) !important;\n}\n.fc-button-primary:focus {\n  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.2901960784) !important;\n}\n.fc-event, .fc-event-dot {\n  background-color: #3788d8 !important;\n  border-radius: 0px;\n  color: white !important;\n  font-size: 16px;\n  cursor: pointer;\n}\n.cal-checkin {\n  background-color: #28a745 !important;\n  border: 1px;\n}\n.fc-time {\n  display: none;\n}\n.cal-checkout {\n  background-color: gray !important;\n  border: 1px;\n}\n.fc-day-grid-event .fc-content {\n  padding: 0px 5px;\n}\n.details span {\n  font-weight: 700;\n}\n.details {\n  text-align: left;\n  line-height: 1.6;\n}\n.details ul {\n  list-style: none;\n}", ""]);
 
 // exports
 
@@ -22282,7 +22335,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.night-stay span {\r\n    font-size: 26px;\n}\n.night-stay {\r\n    margin-top: 20px;\n}\n.item-image {\r\n    height: 230px;\r\n    background-repeat: no-repeat;\r\n    background-position: center;\r\n    background-size: cover;\r\n    cursor: pointer;\n}\n.card-item .card-body {\r\n    padding: 0px;\n}\n.room-details {\r\n    padding: 15px;\n}\n.card-item .card-footer {\r\n    text-align: right;\n}\n.item-image a {\r\n    display: block;\n}\n.swal-body {\r\n    text-align: left;\r\n    line-height: 2;\n}\n.swal-body span {\r\n    font-weight: bold;\n}\n.swal-body ul {\r\n    list-style: none;\n}\r\n", ""]);
+exports.push([module.i, "\n.night-stay span {\r\n    font-size: 26px;\n}\n.night-stay {\r\n    margin-top: 20px;\n}\n.item-image {\r\n    height: 230px;\r\n    background-repeat: no-repeat;\r\n    background-position: center;\r\n    background-size: cover;\r\n    cursor: pointer;\n}\n.card-item .card-body {\r\n    padding: 0px;\n}\n.room-details {\r\n    padding: 15px;\n}\n.card-item .card-footer {\r\n    text-align: right;\n}\n.item-image a {\r\n    display: block;\n}\n.swal-body {\r\n    text-align: left;\r\n    line-height: 1.6;\n}\n.swal-body span {\r\n    font-weight: bold;\n}\n.swal-body ul {\r\n    list-style: none;\n}\r\n", ""]);
 
 // exports
 
@@ -77686,7 +77739,7 @@ var render = function() {
                   plugins: _vm.calendarPlugins,
                   events: _vm.dataEvent
                 },
-                on: { eventClick: _vm.showEvent }
+                on: { eventClick: _vm.showEvent, eventRender: _vm.render }
               })
             ],
             1
