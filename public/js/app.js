@@ -15249,24 +15249,54 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      btnGuestAct: '',
       dataEvent: [{
-        title: 'event 1 | 4 days left',
+        title: 'event 1 | 0 days left',
         start: '2019-08-01',
         end: '2019-08-05',
-        classNames: ['cal-checkin']
+        classNames: ['cal-checkout']
       }, {
-        title: 'event 2 | 4 days left',
+        title: 'event 2 | 0 days left',
         start: '2019-08-02',
         end: '2019-08-06',
-        className: ['cal-book']
+        className: ['cal-checkout']
       }],
       calendarPlugins: [_fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_1___default.a, _fullcalendar_interaction__WEBPACK_IMPORTED_MODULE_2__["default"]]
     };
   },
   methods: {
+    generateButton: function generateButton(status) {
+      this.btnGuestAct = $('<div>');
+      var statusName = 'Cancel this book';
+
+      if (status == 'cal-checkin') {
+        this.btnGuestAct.append(this.createButton('Extend Stay', 'btn-primary', 'fa-plus', function () {
+          guestAction.close();
+        }));
+        this.btnGuestAct.append(this.createButton('AddOns', 'btn-primary', 'fa-plus-circle', function () {
+          guestAction.close();
+        }));
+        statusName = 'Check Out';
+      }
+
+      this.btnGuestAct.prepend(this.createButton(statusName, 'btn-primary', 'fa-sign-out-alt', function () {
+        guestAction.close();
+      }));
+    },
+    createButton: function createButton(text, btnCss, icon, cb) {
+      return $('<button class="btn ' + btnCss + ' btn-flat"><i class="fas ' + icon + '"></i> ' + text + '</button>').on('click', cb);
+    },
     showEvent: function showEvent(arg) {
+      this.generateButton(arg.event.classNames[0]);
+      guestAction.fire({
+        title: '<strong>Action</strong>',
+        type: 'info',
+        html: this.btnGuestAct,
+        showConfirmButton: false,
+        showCloseButton: true,
+        showCancelButton: false
+      });
       console.log(arg);
-      console.log(arg.event.title);
     },
     loadBookings: function loadBookings() {
       if (this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
@@ -15274,15 +15304,16 @@ __webpack_require__.r(__webpack_exports__);
         axios.get('/api/bookings').then(function (response) {
           response.data.forEach(function (item, index) {
             var remain = 'Check In';
-            var endConverted = new Date(item.dateEnd).toISOString();
             var start = moment(new Date(), 'M/D/YYYY');
-            var end = moment(new Date(endConverted), 'M/D/YYYY');
-            var diffDays = end.diff(start, 'days');
+            var end = moment(new Date(item.dateStart), 'M/D/YYYY');
+            var diffDays = end.diff(start, 'days') + 1;
             var statusClass = 'cal-book';
 
             if (item.status == 'checkin') {
               statusClass = 'cal-checkin';
               remain = 'Check Out';
+              end = moment(new Date(item.dateEnd), 'M/D/YYYY');
+              diffDays = end.diff(start, 'days');
             }
 
             self.dataEvent.push({
@@ -22156,7 +22187,7 @@ exports.i(__webpack_require__(/*! -!../../../../node_modules/css-loader!@fullcal
 exports.i(__webpack_require__(/*! -!../../../../node_modules/css-loader!@fullcalendar/daygrid/main.css */ "./node_modules/css-loader/index.js!./node_modules/@fullcalendar/daygrid/main.css"), "");
 
 // module
-exports.push([module.i, ".fc-button-primary {\n  background-color: #3490dc !important;\n  border-color: #3490dc !important;\n  border-radius: 0px;\n}\n.fc-button-primary:not(:disabled):active:focus, .fc-button-primary:not(:disabled).fc-button-active:focus {\n  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.2901960784) !important;\n}\n.fc-button-primary:focus {\n  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.2901960784) !important;\n}\n.fc-event, .fc-event-dot {\n  background-color: #3788d8 !important;\n  border-radius: 0px;\n  color: white !important;\n  font-size: 16px;\n  cursor: pointer;\n}\n.cal-checkin {\n  background-color: #28a745 !important;\n  border: 1px;\n}\n.fc-time {\n  display: none;\n}", ""]);
+exports.push([module.i, ".fc-button-primary {\n  background-color: #3490dc !important;\n  border-color: #3490dc !important;\n  border-radius: 0px;\n}\n.fc-button-primary:not(:disabled):active:focus, .fc-button-primary:not(:disabled).fc-button-active:focus {\n  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.2901960784) !important;\n}\n.fc-button-primary:focus {\n  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.2901960784) !important;\n}\n.fc-event, .fc-event-dot {\n  background-color: #3788d8 !important;\n  border-radius: 0px;\n  color: white !important;\n  font-size: 16px;\n  cursor: pointer;\n}\n.cal-checkin {\n  background-color: #28a745 !important;\n  border: 1px;\n}\n.fc-time {\n  display: none;\n}\n.cal-checkout {\n  background-color: gray !important;\n  border: 1px;\n}", ""]);
 
 // exports
 
@@ -99176,6 +99207,7 @@ var paynow = sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.mixin({
   buttonsStyling: false
 });
 window.paynow = paynow;
+window.guestAction = sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a;
 window.fire = new Vue();
 /**
  * The following block of code may be used to automatically register your

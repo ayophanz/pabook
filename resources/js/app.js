@@ -108,6 +108,8 @@ const paynow = swal.mixin({
 })
 window.paynow = paynow
 
+window.guestAction = swal
+
 window.fire = new Vue();
 
 

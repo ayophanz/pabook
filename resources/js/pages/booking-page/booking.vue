@@ -38,27 +38,55 @@
         },
         data() {
             return {
+                btnGuestAct: '',
                 dataEvent: [
                             { 
-                                title: 'event 1 | 4 days left', 
+                                title: 'event 1 | 0 days left', 
                                 start: '2019-08-01', 
                                 end: '2019-08-05', 
-                                classNames: ['cal-checkin'] 
+                                classNames: ['cal-checkout'] 
                             },
                             { 
-                                title: 'event 2 | 4 days left', 
+                                title: 'event 2 | 0 days left', 
                                 start: '2019-08-02', 
                                 end: '2019-08-06', 
-                                className: ['cal-book'] 
+                                className: ['cal-checkout'] 
                             }
                           ],
                 calendarPlugins: [ dayGridPlugin, interactionPlugin ]
             }
         },
         methods: {
+            generateButton(status) {
+                this.btnGuestAct = $('<div>');
+                let statusName = 'Cancel this book';
+                if(status=='cal-checkin') {
+                    this.btnGuestAct.append(this.createButton('Extend Stay', 'btn-primary', 'fa-plus', function() {
+                       guestAction.close();
+                    }));
+                    this.btnGuestAct.append(this.createButton('AddOns', 'btn-primary', 'fa-plus-circle', function() {
+                       guestAction.close();
+                    }));
+                    statusName = 'Check Out';
+                }
+                this.btnGuestAct.prepend(this.createButton(statusName, 'btn-primary', 'fa-sign-out-alt', function() {
+                   guestAction.close();
+                }));
+            },
+            createButton(text, btnCss, icon, cb) {
+              return $('<button class="btn '+btnCss+' btn-flat"><i class="fas '+icon+'"></i> ' + text + '</button>').on('click', cb);
+            },
             showEvent(arg) {
+                this.generateButton(arg.event.classNames[0]);
+                guestAction.fire({
+                      title: '<strong>Action</strong>',
+                      type: 'info',
+                      html: this.btnGuestAct,
+                      showConfirmButton: false,
+                      showCloseButton: true,
+                      showCancelButton: false
+                })
                 console.log(arg);
-                console.log(arg.event.title);
             },
             loadBookings() {
                 if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
@@ -69,17 +97,18 @@
                             response.data.forEach(function(item, index){
                                 
                                 let remain = 'Check In';
-                                let endConverted = new Date(item.dateEnd).toISOString();
                                 const start = moment(new Date(), 'M/D/YYYY');
-                                const end = moment(new Date(endConverted), 'M/D/YYYY');
-                                const diffDays = end.diff(start, 'days');
+                                let end = moment(new Date(item.dateStart), 'M/D/YYYY');
+                                let diffDays = end.diff(start, 'days') + 1;
 
                                 let statusClass = 'cal-book';
                                 if(item.status=='checkin') {
                                     statusClass = 'cal-checkin';
                                     remain = 'Check Out';
+                                    end = moment(new Date(item.dateEnd), 'M/D/YYYY');
+                                    diffDays = end.diff(start, 'days');
                                 }
-                                
+
                                 self.dataEvent.push({
                                     title:item.name+' | '+diffDays+' days left to '+remain,
                                     start:item.dateStart,
@@ -128,5 +157,9 @@
     }
     .fc-time {
         display: none;
+    }
+    .cal-checkout {
+        background-color: gray!important;
+        border: 1px;
     }
 </style>
