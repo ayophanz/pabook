@@ -21,6 +21,7 @@
                         :events="dataEvent"
                         @eventClick="showEvent"
                         @eventRender="render"
+                        @eventMouseover="hover"
                         />
                     </div>
                 </div>
@@ -40,29 +41,14 @@
         data() {
             return {
                 btnGuestAct: '',
-                dataEvent: [
-                            { 
-                                title: 'event 1 | 0 days left', 
-                                start: '2019-08-01', 
-                                end: '2019-08-05', 
-                                classNames: ['cal-checkout'] 
-                            },
-                            { 
-                                title: 'event 2 | 0 days left', 
-                                start: '2019-08-02', 
-                                end: '2019-08-06', 
-                                className: ['cal-checkout'] 
-                            }
-                          ],
+                dataEvent: [],
                 calendarPlugins: [ dayGridPlugin, interactionPlugin ]
             }
         },
         methods: {
             dateDiff(dateS, dateE) {
-                // let sDate = moment(dateS).format('MMMM Do YYYY');
-                // let eDate = moment(dateE).format('MMMM Do YYYY');
-                const start = moment(new Date(dateE), 'M/D/YYYY');
-                const end = moment(new Date(dateS), 'M/D/YYYY');
+                const start = moment(new Date(dateS), 'M/D/YYYY');
+                const end = moment(new Date(dateE), 'M/D/YYYY');
                 return end.diff(start, 'days');
             },
             generateButton(arg) {
@@ -76,7 +62,7 @@
                 let dateS = moment(arg.event.extendedProps.dateS).format('MMMM Do YYYY');
                 let dateE = moment(arg.event.extendedProps.dateE).format('MMMM Do YYYY');
                 let amount = arg.event.extendedProps.amount;
-                let night = this.dateDiff(dateS, dateE);
+                let night = this.dateDiff(arg.event.extendedProps.dateS, arg.event.extendedProps.dateE);
                 let features = JSON.parse(arg.event.extendedProps.features);
                 let featuresApp = '';
                 if(!features.length == 0) {
@@ -129,7 +115,9 @@
                       showCloseButton: true,
                       showCancelButton: false
                 })
-                console.log(arg);
+            },
+            hover(event) {
+                console.log(event);
             },
             render(event) {
                 if(event.event.classNames[0]=='cal-checkin') {

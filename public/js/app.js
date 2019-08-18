@@ -15241,6 +15241,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -15251,26 +15252,14 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       btnGuestAct: '',
-      dataEvent: [{
-        title: 'event 1 | 0 days left',
-        start: '2019-08-01',
-        end: '2019-08-05',
-        classNames: ['cal-checkout']
-      }, {
-        title: 'event 2 | 0 days left',
-        start: '2019-08-02',
-        end: '2019-08-06',
-        className: ['cal-checkout']
-      }],
+      dataEvent: [],
       calendarPlugins: [_fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_1___default.a, _fullcalendar_interaction__WEBPACK_IMPORTED_MODULE_2__["default"]]
     };
   },
   methods: {
     dateDiff: function dateDiff(dateS, dateE) {
-      // let sDate = moment(dateS).format('MMMM Do YYYY');
-      // let eDate = moment(dateE).format('MMMM Do YYYY');
-      var start = moment(new Date(dateE), 'M/D/YYYY');
-      var end = moment(new Date(dateS), 'M/D/YYYY');
+      var start = moment(new Date(dateS), 'M/D/YYYY');
+      var end = moment(new Date(dateE), 'M/D/YYYY');
       return end.diff(start, 'days');
     },
     generateButton: function generateButton(arg) {
@@ -15284,7 +15273,7 @@ __webpack_require__.r(__webpack_exports__);
       var dateS = moment(arg.event.extendedProps.dateS).format('MMMM Do YYYY');
       var dateE = moment(arg.event.extendedProps.dateE).format('MMMM Do YYYY');
       var amount = arg.event.extendedProps.amount;
-      var night = this.dateDiff(dateS, dateE);
+      var night = this.dateDiff(arg.event.extendedProps.dateS, arg.event.extendedProps.dateE);
       var features = JSON.parse(arg.event.extendedProps.features);
       var featuresApp = '';
 
@@ -15327,7 +15316,9 @@ __webpack_require__.r(__webpack_exports__);
         showCloseButton: true,
         showCancelButton: false
       });
-      console.log(arg);
+    },
+    hover: function hover(event) {
+      console.log(event);
     },
     render: function render(event) {
       if (event.event.classNames[0] == 'cal-checkin') {
@@ -77739,7 +77730,11 @@ var render = function() {
                   plugins: _vm.calendarPlugins,
                   events: _vm.dataEvent
                 },
-                on: { eventClick: _vm.showEvent, eventRender: _vm.render }
+                on: {
+                  eventClick: _vm.showEvent,
+                  eventRender: _vm.render,
+                  eventMouseover: _vm.hover
+                }
               })
             ],
             1
