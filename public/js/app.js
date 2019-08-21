@@ -16962,6 +16962,7 @@ __webpack_require__.r(__webpack_exports__);
       hotels: [],
       hotelsCapa: [],
       receps: [],
+      isAvailEmpty: false,
       recepName: 'No name',
       form: new form({
         recep: '',
@@ -16980,8 +16981,6 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         this.form.assignHotel.splice(item.id, 1);
       }
-
-      console.log(this.form.assignHotel);
     },
     recepCap: function recepCap(action) {
       if (this.$gate.superAdmin()) {
@@ -17011,13 +17010,13 @@ __webpack_require__.r(__webpack_exports__);
       this.recepCap('remove');
     },
     selectRecep: function selectRecep() {
+      this.form.assignHotel = [];
       var self = this;
       this.receps.forEach(function (item, index) {
         if (self.form.recep == item.id) {
           self.recepName = item.name;
         }
       });
-      console.log();
       this.loadUserCap(this.receps);
       this.loadHotels(this.receps);
     },
@@ -17045,6 +17044,10 @@ __webpack_require__.r(__webpack_exports__);
         axios.get('/api/hotels/' + this.form.hotelOwner + '/' + this.form.recep + '/1').then(function (response) {
           response.data.forEach(function (item, index) {
             self.hotelsCapa.push({
+              id: item.id,
+              name: item.name
+            });
+            self.form.assignHotel.push({
               id: item.id,
               name: item.name
             });
@@ -80846,7 +80849,7 @@ var render = function() {
                       "button",
                       {
                         staticClass: "btn btn-outline-primary btn-flat",
-                        attrs: { type: "button" },
+                        attrs: { disabled: _vm.isAvailEmpty, type: "button" },
                         on: { click: _vm.addCap }
                       },
                       [_c("i", { staticClass: "fas fa-arrow-left  fa-2x" })]

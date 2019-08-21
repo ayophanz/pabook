@@ -62,7 +62,7 @@
                             </div>
                         </div>
                         <div class="col-md-2 text-center align-self-center">
-                            <button @click="addCap" type="button" class="btn btn-outline-primary btn-flat"><i class="fas fa-arrow-left  fa-2x"></i></button><br /><br />
+                            <button @click="addCap" :disabled="isAvailEmpty" type="button" class="btn btn-outline-primary btn-flat"><i class="fas fa-arrow-left  fa-2x"></i></button><br /><br />
                             <button @click="removeCap" type="button" class="btn btn-outline-primary btn-flat"><i class="fas fa-arrow-right fa-2x"></i></button>
                         </div>
                         <div class="col-md-5 text-center">
@@ -102,6 +102,7 @@
                 hotels: [],
                 hotelsCapa: [],
                 receps: [],
+                isAvailEmpty: false,
                 recepName: 'No name',
                 form: new form({
                   recep: '',
@@ -117,7 +118,6 @@
                 }else{
                     this.form.assignHotel.splice(item.id,1);
                 }
-                console.log(this.form.assignHotel);
             },
             recepCap(action) {
                 if(this.$gate.superAdmin()) {
@@ -149,13 +149,13 @@
                 this.recepCap('remove'); 
             },
             selectRecep() {
+                this.form.assignHotel = [];
                 let self = this
                 this.receps.forEach(function(item, index){
                     if(self.form.recep==item.id) {
                         self.recepName = item.name;
                     }
                 });
-                console.log();
                 this.loadUserCap(this.receps);
                 this.loadHotels(this.receps);
 
@@ -186,6 +186,7 @@
                         function (response) {
                             response.data.forEach(function(item, index){
                                 self.hotelsCapa.push({id:item.id,name:item.name});
+                                self.form.assignHotel.push({id:item.id,name:item.name});
                             });
                             self.isLoading = false;
                         }

@@ -130,12 +130,13 @@ class UserController extends Controller
         if(\Gate::allows('superAdmin')) {
             if($action=='add') {
                 $isMetakeyExist = UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->first();
-                if($isMetakeyExist)
+                if($isMetakeyExist) {
                     return UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->update($userMeta);
-               else
+               }else{
                     return UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->create($userMeta);
+               }
             }else{
-                //
+                return UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->update($userMeta);
             }
         }
     }
