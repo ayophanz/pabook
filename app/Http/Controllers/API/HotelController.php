@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Hotel;
+use App\UserMeta;
 
 class HotelController extends Controller
 {
@@ -12,15 +13,21 @@ class HotelController extends Controller
         $this->middleware('auth:api');
     }
 
-    public function index($id=null) {
-        if($id==null) {
+    public function index($id=null,$recep=null) {
+        if($id==null && $recep==null) {
             if(\Gate::allows('superAdmin'))
     		    return Hotel::orderBy('created_at', 'desc')->get();
             if(\Gate::allows('hotelOwner'))
                 return Hotel::where('owner_id',  $this->ownerId())->orderBy('created_at', 'desc')->get(); 
         }else{
-            if(\Gate::allows('superAdmin'))
-                return Hotel::where('owner_id', $id)->orderBy('created_at', 'desc')->get();
+            if(\Gate::allows('superAdmin')) {
+                $exist_recep = UserMeta::select('value')->where('meta_key', 'assign_to_hotel')->where('user_id', $recep)->get();
+                $exist_recep = json_decode(json_encode($exist_recep),true);
+                $toarr = array();
+                if($exist_recep)
+                    $toarr = explode(',', substr($exist_recep[0]['value'], 1, -1));
+                return Hotel::whereNotIn('id', $toarr)->where('owner_id', $id)->orderBy('created_at', 'desc')->get();
+            }
         } 	
     }
 

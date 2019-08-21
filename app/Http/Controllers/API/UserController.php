@@ -125,7 +125,7 @@ class UserController extends Controller
             if($action=='add') {
                 $isMetakeyExist = UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->first();
                 if($isMetakeyExist)
-                    return UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->update([]);
+                    return UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->update($userMeta);
                else
                     return UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->create($userMeta);
             }else{

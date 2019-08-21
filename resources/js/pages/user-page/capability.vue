@@ -73,7 +73,7 @@
                                 <div class="card-body">
                                     <div class="row text-left">
                                         <div class="col-12">
-                                            <div v-for="item in hotels" class="custom-control custom-switch"><input @click="isChck(item.id,$event)" :value="item.id" type="checkbox" :id="'capa-'+item.id" class="custom-control-input"> <label :for="'capa-'+item.id" class="custom-control-label">{{item.name}}</label></div>
+                                            <div v-for="item in hotels" class="custom-control custom-switch"><input :checked="false" @click="isChck(item.id,$event)" :value="item.id" type="checkbox" :id="'capa-'+item.id" class="custom-control-input"> <label :for="'capa-'+item.id" class="custom-control-label">{{item.name}}</label></div>
                                         </div>
                                     </div>
                                 </div>
@@ -122,11 +122,13 @@
                 if(this.$gate.superAdmin()) {
                     this.isLoading = true;
                     let self = this;
-                    this.form.post('/api/recep-capability/'+action).then(function (response) { 
+                    this.form.post('/api/recep-capability/'+action).then(function (response) {
+                        
                         toast.fire({
                             type: 'success',
                             title: 'User created successfully'
                         });
+                        self.loadHotels();
                         self.isLoading = false;
                     })
                     .catch(function (error) {
@@ -145,24 +147,31 @@
                 this.recepCap('remove'); 
             },
             selectRecep() {
-                this.isLoading = true;
-                let self = this;
                 this.receps.forEach(function(item, index){
                     if(self.form.recep==item.id) {
                         self.recepName = item.name;
                     }
                 });
 
+                this.loadHotels();
+
+            },
+            loadHotels() {
                 if(this.$gate.superAdmin()) {
-                    axios.get('/api/hotels/'+this.form.hotelOwner)
+                    this.hotels = [];
+                    this.isLoading = true;
+                    let self = this;
+                    axios.get('/api/hotels/'+this.form.hotelOwner+'/'+this.form.recep)
                     .then(
                         function (response) {
-                            self.hotels = response.data
+                            response.data.forEach(function(item, index){
+                                self.hotels.push({id:item.id,name:item.name});
+                            });
                             self.isLoading = false;
+                            console.log(response.data);
                         }
                     );
                 }
-
             },
             ifChangehotelOwner() {
                 if(this.$gate.superAdmin()) {

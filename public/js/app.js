@@ -16982,19 +16982,24 @@ __webpack_require__.r(__webpack_exports__);
     recepCap: function recepCap(action) {
       if (this.$gate.superAdmin()) {
         this.isLoading = true;
-        var self = this;
+
+        var _self = this;
+
         this.form.post('/api/recep-capability/' + action).then(function (response) {
           toast.fire({
             type: 'success',
             title: 'User created successfully'
           });
-          self.isLoading = false;
+
+          _self.loadHotels();
+
+          _self.isLoading = false;
         })["catch"](function (error) {
           toast.fire({
             type: 'error',
             title: 'Something went wrong!'
           });
-          self.isLoading = false;
+          _self.isLoading = false;
         });
       }
     },
@@ -17005,36 +17010,50 @@ __webpack_require__.r(__webpack_exports__);
       this.recepCap('remove');
     },
     selectRecep: function selectRecep() {
-      this.isLoading = true;
-      var self = this;
       this.receps.forEach(function (item, index) {
         if (self.form.recep == item.id) {
           self.recepName = item.name;
         }
       });
-
+      this.loadHotels();
+    },
+    loadHotels: function loadHotels() {
       if (this.$gate.superAdmin()) {
-        axios.get('/api/hotels/' + this.form.hotelOwner).then(function (response) {
-          self.hotels = response.data;
-          self.isLoading = false;
+        this.hotels = [];
+        this.isLoading = true;
+
+        var _self2 = this;
+
+        axios.get('/api/hotels/' + this.form.hotelOwner + '/' + this.form.recep).then(function (response) {
+          response.data.forEach(function (item, index) {
+            _self2.hotels.push({
+              id: item.id,
+              name: item.name
+            });
+          });
+          _self2.isLoading = false;
+          console.log(response.data);
         });
       }
     },
     ifChangehotelOwner: function ifChangehotelOwner() {
       if (this.$gate.superAdmin()) {
         this.isLoading = true;
-        var self = this;
+
+        var _self3 = this;
+
         axios.get('/api/hotel-receptionist/' + this.form.hotelOwner).then(function (response) {
-          self.receps = response.data;
-          self.isLoading = false;
+          _self3.receps = response.data;
+          _self3.isLoading = false;
         });
       }
     },
     loadOwner: function loadOwner() {
       if (this.$gate.superAdmin()) {
-        var self = this;
+        var _self4 = this;
+
         axios.get('/api/hotel-owners').then(function (response) {
-          self.hotelOwners = response.data;
+          _self4.hotelOwners = response.data;
         });
       }
     }
@@ -80815,7 +80834,7 @@ var render = function() {
                                     type: "checkbox",
                                     id: "capa-" + item.id
                                   },
-                                  domProps: { value: item.id },
+                                  domProps: { checked: false, value: item.id },
                                   on: {
                                     click: function($event) {
                                       return _vm.isChck(item.id, $event)
