@@ -43,7 +43,7 @@ Route::post('/recep-capability/{action}', 'API\UserController@recapCap');
 */
 Route::get('/hotels', 'API\HotelController@index');
 
-Route::get('/hotels/{id}/{recep}', 'API\HotelController@index');
+Route::get('/hotels/{id}/{recep}/{capa}', 'API\HotelController@index');
 
 Route::post('/create-hotel', 'API\HotelController@create');
 

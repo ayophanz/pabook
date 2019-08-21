@@ -13,7 +13,7 @@ class HotelController extends Controller
         $this->middleware('auth:api');
     }
 
-    public function index($id=null,$recep=null) {
+    public function index($id=null,$recep=null,$capa=null) {
         if($id==null && $recep==null) {
             if(\Gate::allows('superAdmin'))
     		    return Hotel::orderBy('created_at', 'desc')->get();
@@ -26,7 +26,10 @@ class HotelController extends Controller
                 $toarr = array();
                 if($exist_recep)
                     $toarr = explode(',', substr($exist_recep[0]['value'], 1, -1));
-                return Hotel::whereNotIn('id', $toarr)->where('owner_id', $id)->orderBy('created_at', 'desc')->get();
+                if($capa=='1') 
+                    return Hotel::whereIn('id', $toarr)->where('owner_id', $id)->orderBy('created_at', 'desc')->get();
+                else
+                    return Hotel::whereNotIn('id', $toarr)->where('owner_id', $id)->orderBy('created_at', 'desc')->get();
             }
         } 	
     }

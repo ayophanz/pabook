@@ -109,6 +109,12 @@ class UserController extends Controller
     }
 
     public function recapCap(Request $request, $action) {
+       // dd('tet');
+        $hotel_ids = array();
+        foreach ($request['assignHotel'] as $key => $value) {
+            array_push($hotel_ids, $value['id']);
+        }
+
         $data = [
                 'recep' => 'required|numeric|min:1'
                 ];
@@ -116,7 +122,7 @@ class UserController extends Controller
         $userMeta = [
                 'user_id'  => $request['recep'],
                 'meta_key' => 'assign_to_hotel',
-                'value'    => json_encode($request['assignHotel'])
+                'value'    => json_encode($hotel_ids)
                 ];        
         
         $this->validate($request, $data);

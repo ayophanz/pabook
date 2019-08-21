@@ -54,9 +54,9 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="row text-left">
-                                        <!-- <div class="col-12">
-                                            <div v-for="item in hotels" class="custom-control custom-switch"><input @click="isChck(item.id,$event)" :value="item.id" type="checkbox" :id="'user-capa-'+item.id" class="custom-control-input"> <label :for="'user-capa-'+item.id" class="custom-control-label">{{item.name}}</label></div>
-                                        </div> -->
+                                        <div class="col-12">
+                                            <div v-for="item in hotelsCapa" class="custom-control custom-switch"><input @click="isChck(item,$event)" :value="item.id" type="checkbox" :id="'user-capa-'+item.id" class="custom-control-input"> <label :for="'user-capa-'+item.id" class="custom-control-label">{{item.name}}</label></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -73,7 +73,7 @@
                                 <div class="card-body">
                                     <div class="row text-left">
                                         <div class="col-12">
-                                            <div v-for="item in hotels" class="custom-control custom-switch"><input :checked="false" @click="isChck(item.id,$event)" :value="item.id" type="checkbox" :id="'capa-'+item.id" class="custom-control-input"> <label :for="'capa-'+item.id" class="custom-control-label">{{item.name}}</label></div>
+                                            <div v-for="item in hotels" class="custom-control custom-switch"><input :checked="false" @click="isChck(item,$event)" :value="item.id" type="checkbox" :id="'capa-'+item.id" class="custom-control-input"> <label :for="'capa-'+item.id" class="custom-control-label">{{item.name}}</label></div>
                                         </div>
                                     </div>
                                 </div>
@@ -100,6 +100,7 @@
                 isLoading: false,
                 hotelOwners: [],
                 hotels: [],
+                hotelsCapa: [],
                 receps: [],
                 recepName: 'No name',
                 form: new form({
@@ -110,11 +111,11 @@
             }
         },
         methods: {
-            isChck(id, event) {
+            isChck(item, event) {
                 if(event.target.checked) {
-                    this.form.assignHotel.push(id);
+                    this.form.assignHotel.push({id:item.id,name:item.name});
                 }else{
-                    this.form.assignHotel.splice(this.form.assignHotel.indexOf(id),1);
+                    this.form.assignHotel.splice(item.id,1);
                 }
                 console.log(this.form.assignHotel);
             },
@@ -128,6 +129,7 @@
                             type: 'success',
                             title: 'User created successfully'
                         });
+                        self.loadUserCap();
                         self.loadHotels();
                         self.isLoading = false;
                     })
@@ -153,6 +155,7 @@
                     }
                 });
 
+                this.loadUserCap();
                 this.loadHotels();
 
             },
@@ -161,11 +164,28 @@
                     this.hotels = [];
                     this.isLoading = true;
                     let self = this;
-                    axios.get('/api/hotels/'+this.form.hotelOwner+'/'+this.form.recep)
+                    axios.get('/api/hotels/'+this.form.hotelOwner+'/'+this.form.recep+'/0')
                     .then(
                         function (response) {
                             response.data.forEach(function(item, index){
                                 self.hotels.push({id:item.id,name:item.name});
+                            });
+                            self.isLoading = false;
+                            console.log(response.data);
+                        }
+                    );
+                }
+            },
+            loadUserCap() {
+                if(this.$gate.superAdmin()) {
+                    this.hotelsCapa = [];
+                    this.isLoading = true;
+                    let self = this;
+                    axios.get('/api/hotels/'+this.form.hotelOwner+'/'+this.form.recep+'/1')
+                    .then(
+                        function (response) {
+                            response.data.forEach(function(item, index){
+                                self.hotelsCapa.push({id:item.id,name:item.name});
                             });
                             self.isLoading = false;
                             console.log(response.data);

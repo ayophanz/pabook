@@ -16960,6 +16960,7 @@ __webpack_require__.r(__webpack_exports__);
       isLoading: false,
       hotelOwners: [],
       hotels: [],
+      hotelsCapa: [],
       receps: [],
       recepName: 'No name',
       form: new form({
@@ -16970,11 +16971,14 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    isChck: function isChck(id, event) {
+    isChck: function isChck(item, event) {
       if (event.target.checked) {
-        this.form.assignHotel.push(id);
+        this.form.assignHotel.push({
+          id: item.id,
+          name: item.name
+        });
       } else {
-        this.form.assignHotel.splice(this.form.assignHotel.indexOf(id), 1);
+        this.form.assignHotel.splice(item.id, 1);
       }
 
       console.log(this.form.assignHotel);
@@ -16990,6 +16994,8 @@ __webpack_require__.r(__webpack_exports__);
             type: 'success',
             title: 'User created successfully'
           });
+
+          _self.loadUserCap();
 
           _self.loadHotels();
 
@@ -17015,6 +17021,7 @@ __webpack_require__.r(__webpack_exports__);
           self.recepName = item.name;
         }
       });
+      this.loadUserCap();
       this.loadHotels();
     },
     loadHotels: function loadHotels() {
@@ -17024,7 +17031,7 @@ __webpack_require__.r(__webpack_exports__);
 
         var _self2 = this;
 
-        axios.get('/api/hotels/' + this.form.hotelOwner + '/' + this.form.recep).then(function (response) {
+        axios.get('/api/hotels/' + this.form.hotelOwner + '/' + this.form.recep + '/0').then(function (response) {
           response.data.forEach(function (item, index) {
             _self2.hotels.push({
               id: item.id,
@@ -17036,24 +17043,43 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
     },
-    ifChangehotelOwner: function ifChangehotelOwner() {
+    loadUserCap: function loadUserCap() {
       if (this.$gate.superAdmin()) {
+        this.hotelsCapa = [];
         this.isLoading = true;
 
         var _self3 = this;
 
-        axios.get('/api/hotel-receptionist/' + this.form.hotelOwner).then(function (response) {
-          _self3.receps = response.data;
+        axios.get('/api/hotels/' + this.form.hotelOwner + '/' + this.form.recep + '/1').then(function (response) {
+          response.data.forEach(function (item, index) {
+            _self3.hotelsCapa.push({
+              id: item.id,
+              name: item.name
+            });
+          });
           _self3.isLoading = false;
+          console.log(response.data);
+        });
+      }
+    },
+    ifChangehotelOwner: function ifChangehotelOwner() {
+      if (this.$gate.superAdmin()) {
+        this.isLoading = true;
+
+        var _self4 = this;
+
+        axios.get('/api/hotel-receptionist/' + this.form.hotelOwner).then(function (response) {
+          _self4.receps = response.data;
+          _self4.isLoading = false;
         });
       }
     },
     loadOwner: function loadOwner() {
       if (this.$gate.superAdmin()) {
-        var _self4 = this;
+        var _self5 = this;
 
         axios.get('/api/hotel-owners').then(function (response) {
-          _self4.hotelOwners = response.data;
+          _self5.hotelOwners = response.data;
         });
       }
     }
@@ -80782,7 +80808,45 @@ var render = function() {
                       ])
                     ]),
                     _vm._v(" "),
-                    _vm._m(2)
+                    _c("div", { staticClass: "card-body" }, [
+                      _c("div", { staticClass: "row text-left" }, [
+                        _c(
+                          "div",
+                          { staticClass: "col-12" },
+                          _vm._l(_vm.hotelsCapa, function(item) {
+                            return _c(
+                              "div",
+                              { staticClass: "custom-control custom-switch" },
+                              [
+                                _c("input", {
+                                  staticClass: "custom-control-input",
+                                  attrs: {
+                                    type: "checkbox",
+                                    id: "user-capa-" + item.id
+                                  },
+                                  domProps: { value: item.id },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.isChck(item, $event)
+                                    }
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "label",
+                                  {
+                                    staticClass: "custom-control-label",
+                                    attrs: { for: "user-capa-" + item.id }
+                                  },
+                                  [_vm._v(_vm._s(item.name))]
+                                )
+                              ]
+                            )
+                          }),
+                          0
+                        )
+                      ])
+                    ])
                   ])
                 ]),
                 _vm._v(" "),
@@ -80816,7 +80880,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "col-md-5 text-center" }, [
                   _c("div", { staticClass: "card set-h-500" }, [
-                    _vm._m(3),
+                    _vm._m(2),
                     _vm._v(" "),
                     _c("div", { staticClass: "card-body" }, [
                       _c("div", { staticClass: "row text-left" }, [
@@ -80837,7 +80901,7 @@ var render = function() {
                                   domProps: { checked: false, value: item.id },
                                   on: {
                                     click: function($event) {
-                                      return _vm.isChck(item.id, $event)
+                                      return _vm.isChck(item, $event)
                                     }
                                   }
                                 }),
@@ -80885,14 +80949,6 @@ var staticRenderFns = [
     return _c("label", { attrs: { for: "recep" } }, [
       _vm._v("Receptionist "),
       _c("span", { staticClass: "required-asterisk" }, [_vm._v("*")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-body" }, [
-      _c("div", { staticClass: "row text-left" })
     ])
   },
   function() {
