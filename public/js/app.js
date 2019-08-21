@@ -16986,26 +16986,21 @@ __webpack_require__.r(__webpack_exports__);
     recepCap: function recepCap(action) {
       if (this.$gate.superAdmin()) {
         this.isLoading = true;
-
-        var _self = this;
-
+        var self = this;
         this.form.post('/api/recep-capability/' + action).then(function (response) {
           toast.fire({
             type: 'success',
             title: 'User created successfully'
           });
-
-          _self.loadUserCap();
-
-          _self.loadHotels();
-
-          _self.isLoading = false;
+          self.loadUserCap();
+          self.loadHotels();
+          self.isLoading = false;
         })["catch"](function (error) {
           toast.fire({
             type: 'error',
             title: 'Something went wrong!'
           });
-          _self.isLoading = false;
+          self.isLoading = false;
         });
       }
     },
@@ -17016,30 +17011,29 @@ __webpack_require__.r(__webpack_exports__);
       this.recepCap('remove');
     },
     selectRecep: function selectRecep() {
+      var self = this;
       this.receps.forEach(function (item, index) {
         if (self.form.recep == item.id) {
           self.recepName = item.name;
         }
       });
-      this.loadUserCap();
-      this.loadHotels();
+      console.log();
+      this.loadUserCap(this.receps);
+      this.loadHotels(this.receps);
     },
     loadHotels: function loadHotels() {
       if (this.$gate.superAdmin()) {
         this.hotels = [];
         this.isLoading = true;
-
-        var _self2 = this;
-
+        var self = this;
         axios.get('/api/hotels/' + this.form.hotelOwner + '/' + this.form.recep + '/0').then(function (response) {
           response.data.forEach(function (item, index) {
-            _self2.hotels.push({
+            self.hotels.push({
               id: item.id,
               name: item.name
             });
           });
-          _self2.isLoading = false;
-          console.log(response.data);
+          self.isLoading = false;
         });
       }
     },
@@ -17047,39 +17041,33 @@ __webpack_require__.r(__webpack_exports__);
       if (this.$gate.superAdmin()) {
         this.hotelsCapa = [];
         this.isLoading = true;
-
-        var _self3 = this;
-
+        var self = this;
         axios.get('/api/hotels/' + this.form.hotelOwner + '/' + this.form.recep + '/1').then(function (response) {
           response.data.forEach(function (item, index) {
-            _self3.hotelsCapa.push({
+            self.hotelsCapa.push({
               id: item.id,
               name: item.name
             });
           });
-          _self3.isLoading = false;
-          console.log(response.data);
+          self.isLoading = false;
         });
       }
     },
     ifChangehotelOwner: function ifChangehotelOwner() {
       if (this.$gate.superAdmin()) {
         this.isLoading = true;
-
-        var _self4 = this;
-
+        var self = this;
         axios.get('/api/hotel-receptionist/' + this.form.hotelOwner).then(function (response) {
-          _self4.receps = response.data;
-          _self4.isLoading = false;
+          self.receps = response.data;
+          self.isLoading = false;
         });
       }
     },
     loadOwner: function loadOwner() {
       if (this.$gate.superAdmin()) {
-        var _self5 = this;
-
+        var self = this;
         axios.get('/api/hotel-owners').then(function (response) {
-          _self5.hotelOwners = response.data;
+          self.hotelOwners = response.data;
         });
       }
     }

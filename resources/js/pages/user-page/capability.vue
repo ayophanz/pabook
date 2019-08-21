@@ -149,14 +149,15 @@
                 this.recepCap('remove'); 
             },
             selectRecep() {
+                let self = this
                 this.receps.forEach(function(item, index){
                     if(self.form.recep==item.id) {
                         self.recepName = item.name;
                     }
                 });
-
-                this.loadUserCap();
-                this.loadHotels();
+                console.log();
+                this.loadUserCap(this.receps);
+                this.loadHotels(this.receps);
 
             },
             loadHotels() {
@@ -171,7 +172,6 @@
                                 self.hotels.push({id:item.id,name:item.name});
                             });
                             self.isLoading = false;
-                            console.log(response.data);
                         }
                     );
                 }
@@ -188,7 +188,6 @@
                                 self.hotelsCapa.push({id:item.id,name:item.name});
                             });
                             self.isLoading = false;
-                            console.log(response.data);
                         }
                     );
                 }
