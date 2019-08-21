@@ -81,8 +81,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                          <button :disabled="form.busy" type="submit" @click="submitTrigger('book')" class="btn btn-outline-primary btn-flat"><i class="fa fa-save"></i> Book</button>
-                          <button :disabled="form.busy" type="submit" @click="submitTrigger('checkin')" class="btn btn-primary btn-flat"><i class="fa fa-save"></i> Check In</button>
+                          <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat"><i class="fa fa-save"></i> {{buttonTxt}}</button>
                         </div>
                     </form>
                 </div>
@@ -109,6 +108,7 @@
                 isCheckConsent: false,
                 notEnough: true,
                 bookInfo: [],
+                buttonTxt: '',
                 form: new form({
                     btnSubmit: '',
                     fullname: '',
@@ -189,6 +189,14 @@
         },
         mounted() {
             this.loadRoom();
+            let now = moment(new Date()).format('MMMM Do YYYY');
+            if(now==this.form.dateStart) {
+                this.form.btnSubmit = 'checkin';
+                this.buttonTxt = 'Check In';
+            }else{
+                this.btnSubmit = 'book';
+                this.buttonTxt = 'Book';
+            }
         }
     }
 </script>

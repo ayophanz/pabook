@@ -22,8 +22,8 @@ class BookController extends Controller
 
    public function create(Request $request) {
    		$data = [
-   			'fullname'  => 'required|string|max:191',
-   			'email'     => 'required|string|email|max:191',
+   			    'fullname'  => 'required|string|max:191',
+   			    'email'     => 'required|string|email|max:191',
             'phone_no'  => 'required',
             'consent'   => 'accepted',
             'total'     => 'required',

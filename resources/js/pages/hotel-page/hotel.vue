@@ -63,10 +63,6 @@
           </div>
           <div class="col-md-3">
             <div class="card">
-                <div class="card-header">
-                    <div class="card-tool">
-                    </div>
-                </div>
                 <div class="card-body">
                     <div class="form-group" v-if="isAdmin">
                       <label for="owner">Hotel owner <span class="required-asterisk">*</span></label>

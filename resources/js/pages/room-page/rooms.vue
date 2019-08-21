@@ -27,24 +27,24 @@
                         <table id="table-user" class="table table-bordered table-striped dataTable" role="grid">
                             <thead>
                                 <tr role="row">
-                                    <th>Id</th>
-                                    <th>Room Type</th>
-                                    <th>Name</th>
-                                    <th>Price</th>
-                                    <th>Total Room</th>
-                                    <th>Status</th>
-                                    <th>Created At</th>
-                                    <th>Image</th>
-                                    <th>Action</th>
+                                    <th class="text-center">Id</th>
+                                    <th class="text-center">Room Type</th>
+                                    <th class="text-center">Name</th>
+                                    <th class="text-center">Price</th>
+                                    <th class="text-center">Total Room</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Created At</th>
+                                    <th class="text-center">Image</th>
+                                    <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
 
                                 <tr v-for="room in rooms" :key="room.id">
-                                    <td>{{room.id}}</td>
-                                    <td>{{room.room_type.name}}</td>
-                                    <td>{{room.name}}</td>
-                                    <td>
+                                    <td class="align-middle text-center">{{room.id}}</td>
+                                    <td class="align-middle text-center">{{room.room_type.name}}</td>
+                                    <td class="align-middle text-center">{{room.name}}</td>
+                                    <td class="align-middle text-center">
                                         <money-format :value="room.price" 
                                           :locale='lang' 
                                           :currency-code='curreny' 
@@ -52,10 +52,10 @@
                                           :hide-subunits="true">
                                         </money-format>
                                     </td>
-                                    <td>{{room.total_room}}</td>
-                                    <td>{{room.status}}</td>
-                                    <td>{{room.created_at}}</td>
-                                    <td>
+                                    <td class="align-middle text-center">{{room.total_room}}</td>
+                                    <td class="align-middle text-center">{{room.status}}</td>
+                                    <td class="align-middle text-center">{{room.created_at}}</td>
+                                    <td class="align-middle text-center">
                                         <vue-pure-lightbox
                                             class="image-circle"
                                             :thumbnail="getImgUrl(room.image, room.id)"
@@ -64,7 +64,7 @@
                                             ]"
                                         ></vue-pure-lightbox>
                                     </td>
-                                    <td>
+                                    <td class="align-middle text-center">
                                         <router-link :to="`/edit-room/${room.id}`"  class="btn btn-outline-primary btn-flat"><i class="fa fa-edit"></i> Edit</router-link>&nbsp;&nbsp;
                                         <a href="#" @click.prevent="selectRoom(room.id)" :data-id="room.id" class="btn btn-outline-danger btn-flat"><i class="fa fa-trash"></i> Delete</a>
                                     </td>

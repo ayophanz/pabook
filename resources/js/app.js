@@ -60,7 +60,8 @@ let routes = [
     {path: '/profile', component: require('./pages/user-page/profile.vue').default},
     {path: '/users', component: require('./pages/user-page/users.vue').default},
     {path: '/add-user', component: require('./pages/user-page/user.vue').default},
-    {path: '/edit-user/:userId', component: require('./pages/user-page/user.vue').default}
+    {path: '/edit-user/:userId', component: require('./pages/user-page/user.vue').default},
+    {path: '/users-capability', component: require('./pages/user-page/capability.vue').default}
 ]
 
 const router = new VueRouter({

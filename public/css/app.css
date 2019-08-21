@@ -16478,6 +16478,14 @@ readers do not read off random characters that represent icons */
   font-family: "Font Awesome 5 Brands";
 }
 
+.set-h-500 {
+  height: 500px;
+}
+
+.set-mb-100 {
+  margin-bottom: 100px;
+}
+
 img.brand-image {
   width: 35px;
   box-shadow: none;

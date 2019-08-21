@@ -12,11 +12,16 @@ class HotelController extends Controller
         $this->middleware('auth:api');
     }
 
-    public function index() {
-        if(\Gate::allows('superAdmin'))
-		    return Hotel::orderBy('created_at', 'desc')->get();
-        if(\Gate::allows('hotelOwner'))
-            return Hotel::where('owner_id',  $this->ownerId())->orderBy('created_at', 'desc')->get();  	
+    public function index($id=null) {
+        if($id==null) {
+            if(\Gate::allows('superAdmin'))
+    		    return Hotel::orderBy('created_at', 'desc')->get();
+            if(\Gate::allows('hotelOwner'))
+                return Hotel::where('owner_id',  $this->ownerId())->orderBy('created_at', 'desc')->get(); 
+        }else{
+            if(\Gate::allows('superAdmin'))
+                return Hotel::where('owner_id', $id)->orderBy('created_at', 'desc')->get();
+        } 	
     }
 
     public function create(Request $request) {

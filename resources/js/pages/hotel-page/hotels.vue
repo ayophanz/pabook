@@ -27,33 +27,33 @@
                         <table id="table-user" class="table table-bordered table-striped dataTable" role="grid">
                             <thead>
                                 <tr role="row">
-                                    <th>Id</th>
-                                    <th>Name</th>
-                                    <th>Address</th>
-                                    <th>City</th>
-                                    <th>State / Province</th>
-                                    <th>Country</th>
-                                    <th>Zip Code</th>
-                                    <th>Phone Number</th>
-                                    <th>Email</th>
-                                    <th>Image</th>
-                                    <th>Created At</th>
-                                    <th>Action</th>
+                                    <th class="text-center">Id</th>
+                                    <th class="text-center">Name</th>
+                                    <th class="text-center">Address</th>
+                                    <th class="text-center">City</th>
+                                    <th class="text-center">State / Province</th>
+                                    <th class="text-center">Country</th>
+                                    <th class="text-center">Zip Code</th>
+                                    <th class="text-center">Phone Number</th>
+                                    <th class="text-center">Email</th>
+                                    <th class="text-center">Image</th>
+                                    <th class="text-center">Created At</th>
+                                    <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
 
                                 <tr v-for="hotel in hotels" :key="hotel.id">
-                                    <td>{{hotel.id}}</td>
-                                    <td>{{hotel.name}}</td>
-                                    <td>{{hotel.address}}</td>
-                                    <td>{{hotel.city}}</td>
-                                    <td>{{hotel.state_province}}</td>
-                                    <td>{{hotel.country}}</td>
-                                    <td>{{hotel.zip_code}}</td>
-                                    <td>{{hotel.phone_number}}</td>
-                                    <td>{{hotel.email}}</td>
-                                    <td>
+                                    <td class="align-middle text-center">{{hotel.id}}</td>
+                                    <td class="align-middle text-center">{{hotel.name}}</td>
+                                    <td class="align-middle text-center">{{hotel.address}}</td>
+                                    <td class="align-middle text-center">{{hotel.city}}</td>
+                                    <td class="align-middle text-center">{{hotel.state_province}}</td>
+                                    <td class="align-middle text-center">{{hotel.country}}</td>
+                                    <td class="align-middle text-center">{{hotel.zip_code}}</td>
+                                    <td class="align-middle text-center">{{hotel.phone_number}}</td>
+                                    <td class="align-middle text-center">{{hotel.email}}</td>
+                                    <td class="align-middle text-center">
                                         <vue-pure-lightbox
                                             class="image-circle"
                                             :thumbnail="getImgUrl(hotel.image)"
@@ -62,8 +62,8 @@
                                             ]"
                                         ></vue-pure-lightbox>
                                     </td>
-                                    <td>{{hotel.created_at}}</td>
-                                    <td>
+                                    <td class="align-middle text-center">{{hotel.created_at}}</td>
+                                    <td class="align-middle text-center">
                                         <router-link :to="`/edit-hotel/${hotel.id}`"  class="btn btn-outline-primary btn-flat"><i class="fa fa-edit"></i> Edit</router-link>&nbsp;&nbsp;
                                         <a href="#" @click.prevent="selectHotel(hotel.id)" :data-id="hotel.id" class="btn btn-outline-danger btn-flat"><i class="fa fa-trash"></i> Delete</a>
                                     </td>

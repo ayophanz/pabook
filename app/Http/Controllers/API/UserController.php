@@ -102,7 +102,37 @@ class UserController extends Controller
             return User::select('id', 'email')->where('role', 'hotel_owner')->get();
     }
 
+    public function hotelReceptionist($id) {
+        if(\Gate::allows('superAdmin'))
+            $recep = UserMeta::select('value')->where('meta_key', 'receptionist_id')->where('user_id', $id)->get()->toArray();
+            return User::where('role', 'hotel_receptionist')->where('status', 'active')->whereIn('id', $recep)->get();
+    }
 
+    public function recapCap(Request $request, $action) {
+        $data = [
+                'recep' => 'required|numeric|min:1'
+                ];
+
+        $userMeta = [
+                'user_id'  => $request['recep'],
+                'meta_key' => 'assign_to_hotel',
+                'value'    => json_encode($request['assignHotel'])
+                ];        
+        
+        $this->validate($request, $data);
+                
+        if(\Gate::allows('superAdmin')) {
+            if($action=='add') {
+                $isMetakeyExist = UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->first();
+                if($isMetakeyExist)
+                    return UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->update([]);
+               else
+                    return UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->create($userMeta);
+            }else{
+                //
+            }
+        }
+    }
 
     /**
     *  Extra function

@@ -29,15 +29,21 @@ Route::delete('/delete-user/{id}', 'API\UserController@destroy');
 
 Route::get('/hotel-owners', 'API\UserController@hotelOwner');
 
+Route::get('/hotel-receptionist/{id}', 'API\UserController@hotelReceptionist');
+
 Route::get('/profile', 'API\UserController@profile');
 
 Route::put('/update-profile', 'API\UserController@UpdateProfile');
+
+Route::post('/recep-capability/{action}', 'API\UserController@recapCap');
 
 
 /**
 * Hotel management
 */
 Route::get('/hotels', 'API\HotelController@index');
+
+Route::get('/hotels/{id}', 'API\HotelController@index');
 
 Route::post('/create-hotel', 'API\HotelController@create');
 

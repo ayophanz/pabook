@@ -16,12 +16,11 @@
                     <div class="card-body">
                         <FullCalendar 
                         ref="fullCalendar"
-                        defaultView="dayGridMonth" 
+                        :defaultView="calendarView"
                         :plugins="calendarPlugins" 
                         :events="dataEvent"
                         @eventClick="showEvent"
                         @eventRender="render"
-                        @eventMouseover="hover"
                         />
                     </div>
                 </div>
@@ -40,9 +39,11 @@
         },
         data() {
             return {
+                monthAppend: [],
                 btnGuestAct: '',
                 dataEvent: [],
-                calendarPlugins: [ dayGridPlugin, interactionPlugin ]
+                calendarPlugins: [ dayGridPlugin, interactionPlugin ],
+                calendarView: 'dayGridMonth'//listMonth , dayGridMonth
             }
         },
         methods: {
@@ -56,11 +57,13 @@
                 let roomId = arg.event.extendedProps.roomId;
                 let roomType = arg.event.extendedProps.roomType;
                 let roomName = arg.event.extendedProps.roomName;
+                let hotel = arg.event.extendedProps.hotel;
                 let name = arg.event.extendedProps.name;
                 let email = arg.event.extendedProps.email;
                 let phone = arg.event.extendedProps.phone;
                 let dateS = moment(arg.event.extendedProps.dateS).format('MMMM Do YYYY');
                 let dateE = moment(arg.event.extendedProps.dateE).format('MMMM Do YYYY');
+                let price = arg.event.extendedProps.price;
                 let amount = arg.event.extendedProps.amount;
                 let night = this.dateDiff(arg.event.extendedProps.dateS, arg.event.extendedProps.dateE);
                 let features = JSON.parse(arg.event.extendedProps.features);
@@ -89,13 +92,15 @@
                 }));
                 this.btnGuestAct.prepend(
                     '<div class="details">'
-                    +'Date Start: <span>'+dateS+'</span><br />'
-                    +'Date End: <span>'+dateE+'</span><br />'
+                    +'Date: <span>'+dateS+' - '+dateE+'</span><br />'
+                    +'CheckIn Time: <span>2:00pm</span> | CheckOut Time: <span>12:00pm</span><br />'
                     +'Night Stay: <span>'+night+'</span><br />'
-                    +'Total: <span>'+amount+'</span><br />'
+                    +'Price: <span>'+price+'</span><br />'
+                    +'Total Price: <span>'+amount+'</span><br />'
                     +'Room Id: <span>'+roomId+'</span><br />'
-                    +'Room Type: <span>'+roomType+'</span><br />'
                     +'Room Name: <span>'+roomName+'</span><br />'
+                    +'Room Type: <span>'+roomType+'</span><br />'
+                    +'Hotel: <span>'+hotel+'</span><br />'
                     +'Amenities: '+featuresApp
                     +'<div class="guestInfo">Name: <span>'+name+'</span><br />'
                     +'Phone: <span>'+phone+'</span><br />'
@@ -116,9 +121,6 @@
                       showCancelButton: false
                 })
             },
-            hover(event) {
-                console.log(event);
-            },
             render(event) {
                 if(event.event.classNames[0]=='cal-checkin') {
                     event.el.firstChild.innerHTML = '<i class="fas fa-calendar-check"></i> '+event.el.firstChild.innerHTML;
@@ -127,6 +129,14 @@
                 }else{
                     event.el.firstChild.innerHTML = '<i class="fas fa-calendar-times"></i> '+event.el.firstChild.innerHTML;
                 }
+            },
+            loadingCustomHead() {
+                let append = '<option value="0">test</option>';
+                this.monthAppend.forEach(function(item, index){
+                    append = '<option value="'+item.value+'">'+item.name+'</option>';
+                });
+                $(".fc-header-toolbar .fc-right").prepend('<select class="custom-select-month-header fc-button-primary" style="cursor:pointer;height:2.4em;vertical-align:middle;min-width:100px;">'+append+'</select>');
+                console.log(append);
             },
             loadBookings() {
                 if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
@@ -154,8 +164,17 @@
                                     start:item.dateStart,
                                     end:item.dateEnd,
                                     className:statusClass,
-                                    extendedProps: {roomId:item.room_id, roomType:item.room.room_type.name, roomName:item.room.name, features:item.room.room_feature.value, amount:item.amount, email:item.email, phone:item.phone_no, dateS:item.dateStart, dateE:item.dateEnd, status:item.status, name:item.name}
+                                    extendedProps: {roomId:item.room_id, roomType:item.room.room_type.name, roomName:item.room.name, features:item.room.room_feature.value, amount:item.amount, email:item.email, phone:item.phone_no, dateS:item.dateStart, dateE:item.dateEnd, status:item.status, name:item.name, price:item.room.price, hotel:item.room.room_type.room_type_refer.name}
                                 });
+
+                                const monthNames = ["January", "February", "March", "April", "May", "June",
+                                                      "July", "August", "September", "October", "November", "December"
+                                                   ];
+
+                                let monthValue = new Date(item.dateStart).getMonth();
+
+                                self.monthAppend.push({name:monthNames[monthValue], value:monthValue}); 
+
                             });
                         }
                     );
@@ -164,6 +183,9 @@
         },
         created() {
             this.loadBookings();
+        },
+        mounted() {
+            this.loadingCustomHead();
         }
     }
 </script>
@@ -215,5 +237,42 @@
     }
     .details ul {
         list-style: none;
+    }
+    .fc-widget-header {
+        background: #f7f7f7;
+        color: #495057;
+    }
+    .custom-select-month-header option {
+        background-color: white;
+        color: black;
+    }
+    .fc-unthemed .fc-divider, .fc-unthemed .fc-popover .fc-header, .fc-unthemed .fc-list-heading td {
+        background: #eee;
+        color: black;
+    }
+    tr.fc-list-item.cal-book, tr.fc-list-item.cal-book:hover {
+        cursor: pointer;
+        background-color: #3490dc !important;
+        color: white;
+    }
+    tr.fc-list-item.cal-checkin, tr.fc-list-item.cal-checkin:hover {
+        cursor: pointer;
+        background-color: #28a745 !important;
+        color: white;   
+    }
+    .fc-unthemed .fc-list-item:hover td {
+        background-color: none !important;
+        color: black;
+    }
+    td.fc-list-item-time.fc-widget-content {
+        padding: 0px 5px;
+    }
+    td.fc-list-item-title.fc-widget-content {
+        padding: 0px 5px;
+    }
+    #toggle-view {
+        background-color: transparent !important;
+        color: #3490dc;
+        border: 0px;
     }
 </style>

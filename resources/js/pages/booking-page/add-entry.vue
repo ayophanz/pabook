@@ -110,9 +110,9 @@
                  feature.forEach(function(item, index){
                       amenities += '<li><i class="fas fa-check"></i> '+item['value']+'</li>';
                  });
-                let details = '<strong>Price: <span>'+room.price+'</span><br />Night(s): <span>'+this.night+'</span><br />Total price: <span>'+(room.price*this.night)+'</span><br />Date: <span>'+moment(this.defaultStartDate).format('MMMM Do YYYY')+' - '+moment(this.defaultEndDate).format('MMMM Do YYYY')+'</span><br />CheckIn Time: <span>2:00pm</span> | CheckOut Time: <span>12:00pm</span><br />Hotel: <span>'+room.room_type.room_type_refer.name+'</span><br />Amenities: </strong>';
+                let details = '<strong>Date: <span>'+moment(this.defaultStartDate).format('MMMM Do YYYY')+' - '+moment(this.defaultEndDate).format('MMMM Do YYYY')+'</span><br />CheckIn Time: <span>2:00pm</span> | CheckOut Time: <span>12:00pm</span><br />Night Stay: <span>'+this.night+'</span><br />Price: <span>'+room.price+'</span><br />Total price: <span>'+(room.price*this.night)+'</span><br />Room Id: <span>'+room.id+'</span><br />Room Name: <span>'+room.name+'</span><br />Room Type: <span>'+room.room_type.name+'</span><br />Hotel: <span>'+room.room_type.room_type_refer.name+'</span><br />Amenities: </strong>';
                 paynow.fire({
-                  title: '<strong>'+room.room_type.name+'</strong>',
+                  title: '<strong>Details</strong>',
                   type: 'info',
                   html: '<div class="swal-body">' +
                     details+

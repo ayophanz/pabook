@@ -16,6 +16,7 @@
               <div class="card-header">
                 <div class="card-tool">
                     <router-link to="/users"><button class="btn btn-outline-primary btn-flat"><i class="fa fa-arrow-left"></i> Back</button></router-link>
+                    <router-link to="/users-capability"><button class="btn btn-outline-primary btn-flat">Capability <i class="fa fa-arrow-right"></i></button></router-link>
                 </div>
               </div>
 
@@ -33,7 +34,7 @@
                   </div>
                   <div class="form-group">
                     <label for="role">Role <span class="required-asterisk">*</span></label>
-                    <select v-model="form.role" @change="ifChange" class="form-control" :class="{ 'is-invalid': form.errors.has('role') }" id="role">
+                    <select v-model="form.role" @change="ifChangeRole" class="form-control" :class="{ 'is-invalid': form.errors.has('role') }" id="role">
                       <option v-for="item in role" :selected="item === form.role" :value="item">{{item}}</option>
                     </select>
                     <has-error :form="form" field="role"></has-error>
@@ -191,7 +192,7 @@
                 );    
             }
           },
-          ifChange() {
+          ifChangeRole() {
             this.hotelOwners(this.form.role);
           },
           hotelOwners(role) {
@@ -206,8 +207,8 @@
               this.userId = this.$route.params.userId;  
               this.userDetails(this.userId);
               this.buttonText = 'Update';
-              if(this.$gate.hotelOwner()) 
-                 this.role.splice(0, 1);
+              //if(this.$gate.hotelOwner()) 
+                 //this.role.splice(0, 1);
               this.hotelOwners(this.form.role);
           }else{
               //

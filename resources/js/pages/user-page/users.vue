@@ -19,6 +19,11 @@
                             <i class="fa fa-plus-circle"></i> Add
                         </button>
                     </router-link>
+                    <router-link to="/users-capability">
+                        <button class="btn btn-outline-primary btn-flat">
+                            Capability <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </router-link>
                 </div>
             </div>
             <div class="card-body">

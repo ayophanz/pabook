@@ -35,7 +35,11 @@ class RoomController extends Controller
               'hotel'       => 'required|numeric|min:1',
               'image'       => 'required|image64:jpeg,jpg,png'
               ];                                
-                        
+      
+      $customMessages = [
+                        'min' => 'The :attribute is required'
+                        ];          
+
       $dataCreate = [
                     'status'      => $request['status'],
                     'name'        => $request['name'],

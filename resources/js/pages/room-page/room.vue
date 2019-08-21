@@ -54,10 +54,6 @@
               </div>
               <div class="col-md-3">
                 <div class="card">
-                    <div class="card-header">
-                        <div class="card-tool">
-                        </div>
-                    </div>
                     <div class="card-body">
                         <div class="form-group">
                           <div class="custom-control custom-switch">
