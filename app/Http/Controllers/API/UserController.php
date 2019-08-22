@@ -110,14 +110,17 @@ class UserController extends Controller
 
     public function recapCap(Request $request, $action) {
        // dd('tet');
+        
+
+        $data = [
+                'recep' => 'required|numeric|min:1',
+                'assignHotel' => 'required'
+                ];
+
         $hotel_ids = array();
         foreach ($request['assignHotel'] as $key => $value) {
             array_push($hotel_ids, $value['id']);
-        }
-
-        $data = [
-                'recep' => 'required|numeric|min:1'
-                ];
+        }        
 
         $userMeta = [
                 'user_id'  => $request['recep'],

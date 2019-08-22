@@ -55,7 +55,7 @@
                                 <div class="card-body">
                                     <div class="row text-left">
                                         <div class="col-12">
-                                            <div v-for="item in hotelsCapa" class="custom-control custom-switch"><input @click="isChck(item,$event)" :value="item.id" type="checkbox" :id="'user-capa-'+item.id" class="custom-control-input"> <label :for="'user-capa-'+item.id" class="custom-control-label">{{item.name}}</label></div>
+                                            <div v-for="item in hotelsCapa" class="custom-control custom-switch"><input @click="isNotChck(item,$event)" :value="item.id" type="checkbox" :id="'user-capa-'+item.id" class="custom-control-input"> <label :for="'user-capa-'+item.id" class="custom-control-label">{{item.name}}</label></div>
                                         </div>
                                     </div>
                                 </div>
@@ -99,9 +99,11 @@
                 fullPage: true,
                 isLoading: false,
                 hotelOwners: [],
+                receps: [],
                 hotels: [],
                 hotelsCapa: [],
-                receps: [],
+                tempArrLeft: [],
+                tempArrRight: [],
                 isAvailEmpty: false,
                 recepName: 'No name',
                 form: new form({
@@ -112,11 +114,18 @@
             }
         },
         methods: {
+            isNotChck(item, event) {
+                if(event.target.checked) {
+                    this.tempArrRight.push({id:item.id,name:item.name});            
+                }else{
+                    this.tempArrRight.splice(this.tempArrRight.indexOf(item),1); 
+                }
+            },
             isChck(item, event) {
                 if(event.target.checked) {
-                    this.form.assignHotel.push({id:item.id,name:item.name});
+                    this.tempArrLeft.push({id:item.id,name:item.name});
                 }else{
-                    this.form.assignHotel.splice(item.id,1);
+                     this.tempArrLeft.splice(this.tempArrLeft.indexOf(item),1);
                 }
             },
             recepCap(action) {
@@ -143,12 +152,16 @@
                 }
             },
             addCap() {
+                this.form.assignHotel = this.tempArrLeft;
                 this.recepCap('add'); 
             },
             removeCap() {
+                this.form.assignHotel = this.tempArrRight;
                 this.recepCap('remove'); 
             },
             selectRecep() {
+                this.tempArrLeft = [];
+                this.tempArrRight = [];
                 this.form.assignHotel = [];
                 let self = this
                 this.receps.forEach(function(item, index){
@@ -186,7 +199,6 @@
                         function (response) {
                             response.data.forEach(function(item, index){
                                 self.hotelsCapa.push({id:item.id,name:item.name});
-                                self.form.assignHotel.push({id:item.id,name:item.name});
                             });
                             self.isLoading = false;
                         }

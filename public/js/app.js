@@ -16959,9 +16959,11 @@ __webpack_require__.r(__webpack_exports__);
       fullPage: true,
       isLoading: false,
       hotelOwners: [],
+      receps: [],
       hotels: [],
       hotelsCapa: [],
-      receps: [],
+      tempArrLeft: [],
+      tempArrRight: [],
       isAvailEmpty: false,
       recepName: 'No name',
       form: new form({
@@ -16972,14 +16974,24 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    isChck: function isChck(item, event) {
+    isNotChck: function isNotChck(item, event) {
       if (event.target.checked) {
-        this.form.assignHotel.push({
+        this.tempArrRight.push({
           id: item.id,
           name: item.name
         });
       } else {
-        this.form.assignHotel.splice(item.id, 1);
+        this.tempArrRight.splice(this.tempArrRight.indexOf(item), 1);
+      }
+    },
+    isChck: function isChck(item, event) {
+      if (event.target.checked) {
+        this.tempArrLeft.push({
+          id: item.id,
+          name: item.name
+        });
+      } else {
+        this.tempArrLeft.splice(this.tempArrLeft.indexOf(item), 1);
       }
     },
     recepCap: function recepCap(action) {
@@ -17004,12 +17016,16 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     addCap: function addCap() {
+      this.form.assignHotel = this.tempArrLeft;
       this.recepCap('add');
     },
     removeCap: function removeCap() {
+      this.form.assignHotel = this.tempArrRight;
       this.recepCap('remove');
     },
     selectRecep: function selectRecep() {
+      this.tempArrLeft = [];
+      this.tempArrRight = [];
       this.form.assignHotel = [];
       var self = this;
       this.receps.forEach(function (item, index) {
@@ -17044,10 +17060,6 @@ __webpack_require__.r(__webpack_exports__);
         axios.get('/api/hotels/' + this.form.hotelOwner + '/' + this.form.recep + '/1').then(function (response) {
           response.data.forEach(function (item, index) {
             self.hotelsCapa.push({
-              id: item.id,
-              name: item.name
-            });
-            self.form.assignHotel.push({
               id: item.id,
               name: item.name
             });
@@ -80818,7 +80830,7 @@ var render = function() {
                                   domProps: { value: item.id },
                                   on: {
                                     click: function($event) {
-                                      return _vm.isChck(item, $event)
+                                      return _vm.isNotChck(item, $event)
                                     }
                                   }
                                 }),
