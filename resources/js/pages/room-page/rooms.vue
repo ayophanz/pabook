@@ -28,6 +28,7 @@
                             <thead>
                                 <tr role="row">
                                     <th class="text-center">Id</th>
+                                    <th class="text-center">Hotel</th>
                                     <th class="text-center">Room Type</th>
                                     <th class="text-center">Name</th>
                                     <th class="text-center">Price</th>
@@ -42,6 +43,7 @@
 
                                 <tr v-for="room in rooms" :key="room.id">
                                     <td class="align-middle text-center">{{room.id}}</td>
+                                    <td class="align-middle text-center">{{room.room_type.room_type_refer.name}}</td>
                                     <td class="align-middle text-center">{{room.room_type.name}}</td>
                                     <td class="align-middle text-center">{{room.name}}</td>
                                     <td class="align-middle text-center">

@@ -31,6 +31,8 @@ Route::get('/hotel-owners', 'API\UserController@hotelOwner');
 
 Route::get('/hotel-receptionist/{id}', 'API\UserController@hotelReceptionist');
 
+Route::get('/hotel-receptionist', 'API\UserController@hotelReceptionist');
+
 Route::get('/profile', 'API\UserController@profile');
 
 Route::put('/update-profile', 'API\UserController@UpdateProfile');

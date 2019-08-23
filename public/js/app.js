@@ -16502,6 +16502,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -16951,6 +16953,7 @@ __webpack_require__.r(__webpack_exports__);
       fullPage: true,
       isLoading: false,
       rePick: false,
+      isAdmin: false,
       hotelOwners: [],
       receps: [],
       hotels: [],
@@ -16979,7 +16982,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     recepCap: function recepCap(action) {
-      if (this.$gate.superAdmin()) {
+      if (this.$gate.superAdminOrhotelOwner()) {
         this.isLoading = true;
         var self = this;
         this.form.post('/api/recep-capability/' + action).then(function (response) {
@@ -17009,7 +17012,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     loadHotels: function loadHotels() {
-      if (this.$gate.superAdmin()) {
+      if (this.$gate.superAdminOrhotelOwner()) {
         this.hotels = [];
         var self = this;
         axios.get('/api/hotels/' + this.form.hotelOwner + '/' + this.form.recep + '/0').then(function (response) {
@@ -17028,7 +17031,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     loadUserCap: function loadUserCap() {
-      if (this.$gate.superAdmin()) {
+      if (this.$gate.superAdminOrhotelOwner()) {
         if (this.rePick) {
           this.isLoading = true;
         }
@@ -17062,17 +17065,27 @@ __webpack_require__.r(__webpack_exports__);
     loadOwner: function loadOwner() {
       if (this.$gate.superAdmin()) {
         var self = this;
+        this.isAdmin = true;
         axios.get('/api/hotel-owners').then(function (response) {
           self.hotelOwners = response.data;
+        });
+      } else if (this.$gate.hotelOwner()) {
+        this.form.hotelOwner = '0';
+
+        var _self = this;
+
+        this.isAdmin = false;
+        this.isLoading = true;
+        axios.get('/api/hotel-receptionist').then(function (response) {
+          _self.receps = response.data;
+          console.log(response.data);
+          _self.isLoading = false;
         });
       }
     }
   },
   created: function created() {
-    this.isLoading = true;
     this.loadOwner();
-    this.isLoading = false;
-    console.log('Component mounted.');
   }
 });
 
@@ -80049,6 +80062,16 @@ var render = function() {
                           _c(
                             "td",
                             { staticClass: "align-middle text-center" },
+                            [
+                              _vm._v(
+                                _vm._s(room.room_type.room_type_refer.name)
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "td",
+                            { staticClass: "align-middle text-center" },
                             [_vm._v(_vm._s(room.room_type.name))]
                           ),
                           _vm._v(" "),
@@ -80171,6 +80194,8 @@ var staticRenderFns = [
     return _c("thead", [
       _c("tr", { attrs: { role: "row" } }, [
         _c("th", { staticClass: "text-center" }, [_vm._v("Id")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Hotel")]),
         _vm._v(" "),
         _c("th", { staticClass: "text-center" }, [_vm._v("Room Type")]),
         _vm._v(" "),
@@ -80617,141 +80642,156 @@ var render = function() {
           _c("div", { staticClass: "card-body" }, [
             _c("div", { staticClass: "container" }, [
               _c("div", { staticClass: "row justify-content-center" }, [
-                _c("div", { staticClass: "col-md-6" }, [
-                  _c(
-                    "div",
-                    { staticClass: "form-group" },
-                    [
-                      _vm._m(0),
-                      _vm._v(" "),
+                _vm.isAdmin
+                  ? _c("div", { staticClass: "col-md-6" }, [
                       _c(
-                        "select",
-                        {
-                          directives: [
+                        "div",
+                        { staticClass: "form-group" },
+                        [
+                          _vm._m(0),
+                          _vm._v(" "),
+                          _c(
+                            "select",
                             {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.form.hotelOwner,
-                              expression: "form.hotelOwner"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          class: {
-                            "is-invalid": _vm.form.errors.has("hotelOwner")
-                          },
-                          attrs: { id: "hotelOwner" },
-                          on: {
-                            change: [
-                              function($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function(o) {
-                                    return o.selected
-                                  })
-                                  .map(function(o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.$set(
-                                  _vm.form,
-                                  "hotelOwner",
-                                  $event.target.multiple
-                                    ? $$selectedVal
-                                    : $$selectedVal[0]
-                                )
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.hotelOwner,
+                                  expression: "form.hotelOwner"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("hotelOwner")
                               },
-                              _vm.ifChangehotelOwner
-                            ]
-                          }
-                        },
-                        _vm._l(_vm.hotelOwners, function(item) {
-                          return _c(
-                            "option",
-                            {
-                              domProps: {
-                                selected: item.id === _vm.form.hotelOwner,
-                                value: item.id
+                              attrs: { id: "hotelOwner" },
+                              on: {
+                                change: [
+                                  function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.form,
+                                      "hotelOwner",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  },
+                                  _vm.ifChangehotelOwner
+                                ]
                               }
                             },
-                            [_vm._v(_vm._s(item.email))]
-                          )
-                        }),
-                        0
-                      ),
-                      _vm._v(" "),
-                      _c("has-error", {
-                        attrs: { form: _vm.form, field: "hotelOwner" }
-                      })
-                    ],
-                    1
-                  )
-                ]),
+                            _vm._l(_vm.hotelOwners, function(item) {
+                              return _c(
+                                "option",
+                                {
+                                  domProps: {
+                                    selected: item.id === _vm.form.hotelOwner,
+                                    value: item.id
+                                  }
+                                },
+                                [_vm._v(_vm._s(item.email))]
+                              )
+                            }),
+                            0
+                          ),
+                          _vm._v(" "),
+                          _c("has-error", {
+                            attrs: { form: _vm.form, field: "hotelOwner" }
+                          })
+                        ],
+                        1
+                      )
+                    ])
+                  : _vm._e(),
                 _vm._v(" "),
-                _c("div", { staticClass: "col-md-6" }, [
-                  _c(
-                    "div",
-                    { staticClass: "form-group" },
-                    [
-                      _vm._m(1),
-                      _vm._v(" "),
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.form.recep,
-                              expression: "form.recep"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          class: { "is-invalid": _vm.form.errors.has("recep") },
-                          attrs: { id: "recep" },
-                          on: {
-                            change: [
-                              function($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function(o) {
-                                    return o.selected
-                                  })
-                                  .map(function(o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.$set(
-                                  _vm.form,
-                                  "recep",
-                                  $event.target.multiple
-                                    ? $$selectedVal
-                                    : $$selectedVal[0]
-                                )
-                              },
-                              _vm.selectRecep
-                            ]
-                          }
-                        },
-                        _vm._l(_vm.receps, function(item) {
-                          return _c(
-                            "option",
-                            {
-                              domProps: {
-                                selected: item.id === _vm.form.recep,
-                                value: item.id
+                _c(
+                  "div",
+                  {
+                    class: {
+                      "col-md-12": _vm.isAdmin == false,
+                      "col-md-6": _vm.isAdmin == true
+                    }
+                  },
+                  [
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _vm._m(1),
+                        _vm._v(" "),
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.form.recep,
+                                expression: "form.recep"
                               }
+                            ],
+                            staticClass: "form-control",
+                            class: {
+                              "is-invalid": _vm.form.errors.has("recep")
                             },
-                            [_vm._v(_vm._s(item.email))]
-                          )
-                        }),
-                        0
-                      ),
-                      _vm._v(" "),
-                      _c("has-error", {
-                        attrs: { form: _vm.form, field: "recep" }
-                      })
-                    ],
-                    1
-                  )
-                ])
+                            attrs: { id: "recep" },
+                            on: {
+                              change: [
+                                function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.form,
+                                    "recep",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                },
+                                _vm.selectRecep
+                              ]
+                            }
+                          },
+                          _vm._l(_vm.receps, function(item) {
+                            return _c(
+                              "option",
+                              {
+                                domProps: {
+                                  selected: item.id === _vm.form.recep,
+                                  value: item.id
+                                }
+                              },
+                              [_vm._v(_vm._s(item.email))]
+                            )
+                          }),
+                          0
+                        ),
+                        _vm._v(" "),
+                        _c("has-error", {
+                          attrs: { form: _vm.form, field: "recep" }
+                        })
+                      ],
+                      1
+                    )
+                  ]
+                )
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "row" }, [

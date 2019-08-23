@@ -21,7 +21,7 @@
             <div class="card-body">
                 <div class="container">
                     <div class="row justify-content-center">
-                        <div class="col-md-6">
+                        <div class="col-md-6" v-if="isAdmin">
                             <div class="form-group">
                                 <label for="hotelOwner">Hotel Owner <span class="required-asterisk">*</span></label>
                                 <select v-model="form.hotelOwner" @change="ifChangehotelOwner" class="form-control" :class="{ 'is-invalid': form.errors.has('hotelOwner') }" id="hotelOwner">
@@ -30,7 +30,7 @@
                                 <has-error :form="form" field="hotelOwner"></has-error>
                             </div> 
                         </div>
-                        <div class="col-md-6">
+                        <div :class="{'col-md-12':  isAdmin==false, 'col-md-6':  isAdmin==true}">
                             <div class="form-group">
                                 <label for="recep">Receptionist <span class="required-asterisk">*</span></label>
                                 <select @change="selectRecep" v-model="form.recep" class="form-control" :class="{ 'is-invalid': form.errors.has('recep') }" id="recep">
@@ -91,6 +91,7 @@
                 fullPage: true,
                 isLoading: false,
                 rePick: false,
+                isAdmin: false,
                 hotelOwners: [],
                 receps: [],
                 hotels: [],
@@ -116,7 +117,7 @@
                 }
             },
             recepCap(action) {
-                if(this.$gate.superAdmin()) { 
+                if(this.$gate.superAdminOrhotelOwner()) { 
                     this.isLoading = true;
                     let self = this;
                     this.form.post('/api/recep-capability/'+action).then(function (response) {
@@ -147,7 +148,7 @@
                 });
             },
             loadHotels() {
-                if(this.$gate.superAdmin()) {
+                if(this.$gate.superAdminOrhotelOwner()) {
                     this.hotels = [];
                     let self = this;
                     axios.get('/api/hotels/'+this.form.hotelOwner+'/'+this.form.recep+'/0')
@@ -165,7 +166,7 @@
                 }
             },
             loadUserCap() {
-                if(this.$gate.superAdmin()) {
+                if(this.$gate.superAdminOrhotelOwner()) {
                     if(this.rePick) {
                         this.isLoading = true;
                     }
@@ -201,20 +202,31 @@
             loadOwner() {
                 if(this.$gate.superAdmin()) {
                     let self = this
+                    this.isAdmin = true;
                     axios.get('/api/hotel-owners')
                     .then(
                         function (response) {
                             self.hotelOwners = response.data
                         }
                     );
+                }else if(this.$gate.hotelOwner()) {
+                    this.form.hotelOwner = '0';
+                    let self = this
+                    this.isAdmin = false;
+                    this.isLoading = true;
+                    axios.get('/api/hotel-receptionist')
+                    .then(
+                        function (response) {
+                            self.receps = response.data
+                            console.log(response.data);
+                            self.isLoading = false;
+                        }
+                    );
                 }
             }
         },
         created() {
-            this.isLoading = true;
             this.loadOwner();
-            this.isLoading = false;
-            console.log('Component mounted.')
         }
     }
 </script>

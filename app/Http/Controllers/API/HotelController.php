@@ -20,7 +20,9 @@ class HotelController extends Controller
             if(\Gate::allows('hotelOwner'))
                 return Hotel::where('owner_id',  $this->ownerId())->orderBy('created_at', 'desc')->get(); 
         }else{
-            if(\Gate::allows('superAdmin')) {
+            if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner')) {
+                if($id=='0')
+                    $id = $this->ownerId();
                 $exist_recep = UserMeta::select('value')->where('meta_key', 'assign_to_hotel')->where('user_id', $recep)->get();
                 $exist_recep = json_decode(json_encode($exist_recep),true);
                 $toarr = array();
