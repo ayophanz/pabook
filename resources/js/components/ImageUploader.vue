@@ -173,6 +173,8 @@ export default {
         display: flex;
         flex-wrap: wrap;
         margin-top: 20px;
+        flex-flow: wrap-reverse;
+        flex-direction: row-reverse;
         .img-wrapper {
             width: 160px;
             display: flex;
