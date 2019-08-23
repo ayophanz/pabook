@@ -16,6 +16,7 @@
                     <div class="card-body">
                         <FullCalendar 
                         ref="fullCalendar"
+                        :config="config"
                         :defaultView="calendarView"
                         :plugins="calendarPlugins" 
                         :events="dataEvent"
@@ -39,14 +40,22 @@
         },
         data() {
             return {
+                dit: new Date(2019, 0, 1),
                 monthAppend: [],
                 btnGuestAct: '',
+                config: {goToDate: new Date(2019, 0, 1)},
                 dataEvent: [],
                 calendarPlugins: [ dayGridPlugin, interactionPlugin ],
                 calendarView: 'dayGridMonth'//listMonth , dayGridMonth
             }
         },
         methods: {
+            filterMonth() {
+               //let calendarApi = this.$refs.fullCalendar.getApi(); // from the ref="..."
+               // calendarApi.gotoDate('2000-01-01') // call a method on the Calendar object
+              //let calendarApi = this.$refs.fullCalendar.fireMethod('gotoDate', '2019-01-01'); // from the ref="..."
+             // calendarApi.gotoDate('2000-01-01') // call a method on the Calendar object
+            },
             dateDiff(dateS, dateE) {
                 const start = moment(new Date(dateS), 'M/D/YYYY');
                 const end = moment(new Date(dateE), 'M/D/YYYY');
@@ -131,12 +140,11 @@
                 }
             },
             loadingCustomHead() {
-                let append = '<option value="0">test</option>';
+                let append = '<option value="0">Filter by month</option>';
                 this.monthAppend.forEach(function(item, index){
-                    append = '<option value="'+item.value+'">'+item.name+'</option>';
+                    append += '<option value="'+item.value+'">'+item.name+'</option>';
                 });
                 $(".fc-header-toolbar .fc-right").prepend('<select class="custom-select-month-header fc-button-primary" style="cursor:pointer;height:2.4em;vertical-align:middle;min-width:100px;">'+append+'</select>');
-                console.log(append);
             },
             loadBookings() {
                 if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
@@ -167,15 +175,20 @@
                                     extendedProps: {roomId:item.room_id, roomType:item.room.room_type.name, roomName:item.room.name, features:item.room.room_feature.value, amount:item.amount, email:item.email, phone:item.phone_no, dateS:item.dateStart, dateE:item.dateEnd, status:item.status, name:item.name, price:item.room.price, hotel:item.room.room_type.room_type_refer.name}
                                 });
 
-                                const monthNames = ["January", "February", "March", "April", "May", "June",
-                                                      "July", "August", "September", "October", "November", "December"
-                                                   ];
+                                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
                                 let monthValue = new Date(item.dateStart).getMonth();
-
-                                self.monthAppend.push({name:monthNames[monthValue], value:monthValue}); 
-
+                                let existData = false;
+                                self.monthAppend.forEach(function(item, index){
+                                    if(item.name==monthNames[monthValue-1]) {
+                                       existData = true; 
+                                    }
+                                });
+                                if(existData==false) {
+                                    self.monthAppend.push({name:monthNames[monthValue-1], value:monthValue});
+                                } 
                             });
+                            self.loadingCustomHead();
                         }
                     );
                 }
@@ -183,9 +196,7 @@
         },
         created() {
             this.loadBookings();
-        },
-        mounted() {
-            this.loadingCustomHead();
+            this.filterMonth();
         }
     }
 </script>

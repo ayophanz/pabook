@@ -15241,6 +15241,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -15250,8 +15251,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      dit: new Date(2019, 0, 1),
       monthAppend: [],
       btnGuestAct: '',
+      config: {
+        goToDate: new Date(2019, 0, 1)
+      },
       dataEvent: [],
       calendarPlugins: [_fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_1___default.a, _fullcalendar_interaction__WEBPACK_IMPORTED_MODULE_2__["default"]],
       calendarView: 'dayGridMonth' //listMonth , dayGridMonth
@@ -15259,6 +15264,11 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    filterMonth: function filterMonth() {//let calendarApi = this.$refs.fullCalendar.getApi(); // from the ref="..."
+      // calendarApi.gotoDate('2000-01-01') // call a method on the Calendar object
+      //let calendarApi = this.$refs.fullCalendar.fireMethod('gotoDate', '2019-01-01'); // from the ref="..."
+      // calendarApi.gotoDate('2000-01-01') // call a method on the Calendar object
+    },
     dateDiff: function dateDiff(dateS, dateE) {
       var start = moment(new Date(dateS), 'M/D/YYYY');
       var end = moment(new Date(dateE), 'M/D/YYYY');
@@ -15331,12 +15341,11 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     loadingCustomHead: function loadingCustomHead() {
-      var append = '<option value="0">test</option>';
+      var append = '<option value="0">Filter by month</option>';
       this.monthAppend.forEach(function (item, index) {
-        append = '<option value="' + item.value + '">' + item.name + '</option>';
+        append += '<option value="' + item.value + '">' + item.name + '</option>';
       });
       $(".fc-header-toolbar .fc-right").prepend('<select class="custom-select-month-header fc-button-primary" style="cursor:pointer;height:2.4em;vertical-align:middle;min-width:100px;">' + append + '</select>');
-      console.log(append);
     },
     loadBookings: function loadBookings() {
       if (this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
@@ -15379,20 +15388,28 @@ __webpack_require__.r(__webpack_exports__);
             });
             var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
             var monthValue = new Date(item.dateStart).getMonth();
-            self.monthAppend.push({
-              name: monthNames[monthValue],
-              value: monthValue
+            var existData = false;
+            self.monthAppend.forEach(function (item, index) {
+              if (item.name == monthNames[monthValue - 1]) {
+                existData = true;
+              }
             });
+
+            if (existData == false) {
+              self.monthAppend.push({
+                name: monthNames[monthValue - 1],
+                value: monthValue
+              });
+            }
           });
+          self.loadingCustomHead();
         });
       }
     }
   },
   created: function created() {
     this.loadBookings();
-  },
-  mounted: function mounted() {
-    this.loadingCustomHead();
+    this.filterMonth();
   }
 });
 
@@ -15606,7 +15623,7 @@ __webpack_require__.r(__webpack_exports__);
       this.form.btnSubmit = 'checkin';
       this.buttonTxt = 'Check In';
     } else {
-      this.btnSubmit = 'book';
+      this.form.btnSubmit = 'book';
       this.buttonTxt = 'Book';
     }
   }
@@ -77999,6 +78016,7 @@ var render = function() {
               _c("FullCalendar", {
                 ref: "fullCalendar",
                 attrs: {
+                  config: _vm.config,
                   defaultView: _vm.calendarView,
                   plugins: _vm.calendarPlugins,
                   events: _vm.dataEvent

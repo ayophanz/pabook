@@ -194,7 +194,7 @@
                 this.form.btnSubmit = 'checkin';
                 this.buttonTxt = 'Check In';
             }else{
-                this.btnSubmit = 'book';
+                this.form.btnSubmit = 'book';
                 this.buttonTxt = 'Book';
             }
         }
