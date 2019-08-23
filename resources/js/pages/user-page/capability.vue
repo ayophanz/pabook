@@ -20,8 +20,8 @@
 
             <div class="card-body">
                 <div class="container">
-                    <div class="row justify-content-center set-mb-100">
-                        <div class="col-md-5">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="hotelOwner">Hotel Owner <span class="required-asterisk">*</span></label>
                                 <select v-model="form.hotelOwner" @change="ifChangehotelOwner" class="form-control" :class="{ 'is-invalid': form.errors.has('hotelOwner') }" id="hotelOwner">
@@ -30,52 +30,44 @@
                                 <has-error :form="form" field="hotelOwner"></has-error>
                             </div> 
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="recep">Receptionist <span class="required-asterisk">*</span></label>
-                                <select v-model="form.recep" class="form-control" :class="{ 'is-invalid': form.errors.has('recep') }" id="recep">
+                                <select @change="selectRecep" v-model="form.recep" class="form-control" :class="{ 'is-invalid': form.errors.has('recep') }" id="recep">
                                   <option v-for="item in receps" :selected="item.id === form.recep" :value="item.id">{{item.email}}</option>
                                 </select>
                                 <has-error :form="form" field="recep"></has-error>
                             </div> 
                         </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="goBtn" style="visibility:hidden;">testdsadsdadsad</label>
-                                <button type="submit" @click="selectRecep" class="btn btn-outline-primary btn-flat" id="goBtn"><i class="fas fa-search"></i> Go</button>
-                            </div>
-                        </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-5 text-center">
+                        <div class="col-md-12 text-center">
                             <div class="card set-h-500">
                                 <div class="card-header">
                                     <h6><strong>{{recepName}}</strong> capabilities</h6>
                                 </div>
                                 <div class="card-body">
+
+                                     <!--Assign capability-->
                                     <div class="row text-left">
                                         <div class="col-12">
-                                            <div v-for="item in hotelsCapa" class="custom-control custom-switch"><input @click="isNotChck(item,$event)" :value="item.id" type="checkbox" :id="'user-capa-'+item.id" class="custom-control-input"> <label :for="'user-capa-'+item.id" class="custom-control-label">{{item.name}}</label></div>
+                                            <div class="form-group">
+                                                <label>Assign Capabilities</label>
+                                                <div v-for="item in hotelsCapa" class="custom-control custom-switch"><input :checked="true" @click="isChck(item,$event)" :value="item.id" type="checkbox" :id="'user-capa-'+item.id" class="custom-control-input"> <label :for="'user-capa-'+item.id" class="custom-control-label">{{item.name}}</label></div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2 text-center align-self-center">
-                            <button @click="addCap" :disabled="isAvailEmpty" type="button" class="btn btn-outline-primary btn-flat"><i class="fas fa-arrow-left  fa-2x"></i></button><br /><br />
-                            <button @click="removeCap" type="button" class="btn btn-outline-primary btn-flat"><i class="fas fa-arrow-right fa-2x"></i></button>
-                        </div>
-                        <div class="col-md-5 text-center">
-                            <div class="card set-h-500">
-                                <div class="card-header">
-                                    <h6>Available capabilities</h6>
-                                </div>
-                                <div class="card-body">
+                                <hr>
+                                    <!--Unassign capability-->
                                     <div class="row text-left">
                                         <div class="col-12">
-                                            <div v-for="item in hotels" class="custom-control custom-switch"><input :checked="false" @click="isChck(item,$event)" :value="item.id" type="checkbox" :id="'capa-'+item.id" class="custom-control-input"> <label :for="'capa-'+item.id" class="custom-control-label">{{item.name}}</label></div>
+                                            <div class="form-group">
+                                                <label>Unassign Capabilities</label>
+                                                <div v-for="item in hotels" class="custom-control custom-switch"><input :checked="false" @click="isChck(item,$event)" :value="item.id" type="checkbox" :id="'user-capa-'+item.id" class="custom-control-input"> <label :for="'user-capa-'+item.id" class="custom-control-label">{{item.name}}</label></div>
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -98,13 +90,11 @@
             return {
                 fullPage: true,
                 isLoading: false,
+                rePick: false,
                 hotelOwners: [],
                 receps: [],
                 hotels: [],
                 hotelsCapa: [],
-                tempArrLeft: [],
-                tempArrRight: [],
-                isAvailEmpty: false,
                 recepName: 'No name',
                 form: new form({
                   recep: '',
@@ -114,69 +104,51 @@
             }
         },
         methods: {
-            isNotChck(item, event) {
-                if(event.target.checked) {
-                    this.tempArrRight.push({id:item.id,name:item.name});            
-                }else{
-                    this.tempArrRight.splice(this.tempArrRight.indexOf(item),1); 
-                }
-            },
             isChck(item, event) {
                 if(event.target.checked) {
-                    this.tempArrLeft.push({id:item.id,name:item.name});
+                    this.hotels.splice(this.hotels.indexOf(item),1);
+                    this.form.assignHotel.push({id:item.id,name:item.name});
+                    this.recepCap('add');
                 }else{
-                     this.tempArrLeft.splice(this.tempArrLeft.indexOf(item),1);
+                   // this.hotelsCapa.splice(this.hotelsCapa.indexOf(item),1);
+                    this.form.assignHotel.splice(this.form.assignHotel.indexOf(item),1);
+                    this.recepCap('remove');
                 }
             },
             recepCap(action) {
-                if(this.$gate.superAdmin()) {
+                if(this.$gate.superAdmin()) { 
                     this.isLoading = true;
                     let self = this;
                     this.form.post('/api/recep-capability/'+action).then(function (response) {
-                        
+                        self.loadUserCap();
+                        self.isLoading = false;
                         toast.fire({
                             type: 'success',
                             title: 'User created successfully'
                         });
-                        self.loadUserCap();
-                        self.loadHotels();
-                        self.isLoading = false;
                     })
                     .catch(function (error) {
+                        self.isLoading = false;
                         toast.fire({
                             type: 'error',
                             title: 'Something went wrong!'
                         });
-                        self.isLoading = false;
                     });
                 }
             },
-            addCap() {
-                this.form.assignHotel = this.tempArrLeft;
-                this.recepCap('add'); 
-            },
-            removeCap() {
-                this.form.assignHotel = this.tempArrRight;
-                this.recepCap('remove'); 
-            },
             selectRecep() {
-                this.tempArrLeft = [];
-                this.tempArrRight = [];
-                this.form.assignHotel = [];
+                this.rePick = true;
                 let self = this
                 this.receps.forEach(function(item, index){
                     if(self.form.recep==item.id) {
                         self.recepName = item.name;
+                        self.loadUserCap();
                     }
                 });
-                this.loadUserCap(this.receps);
-                this.loadHotels(this.receps);
-
             },
             loadHotels() {
                 if(this.$gate.superAdmin()) {
                     this.hotels = [];
-                    this.isLoading = true;
                     let self = this;
                     axios.get('/api/hotels/'+this.form.hotelOwner+'/'+this.form.recep+'/0')
                     .then(
@@ -184,15 +156,20 @@
                             response.data.forEach(function(item, index){
                                 self.hotels.push({id:item.id,name:item.name});
                             });
-                            self.isLoading = false;
+                            if(self.rePick) {
+                                self.isLoading = false;
+                                self.rePick = false;
+                            }
                         }
                     );
                 }
             },
             loadUserCap() {
                 if(this.$gate.superAdmin()) {
+                    if(this.rePick) {
+                        this.isLoading = true;
+                    }
                     this.hotelsCapa = [];
-                    this.isLoading = true;
                     let self = this;
                     axios.get('/api/hotels/'+this.form.hotelOwner+'/'+this.form.recep+'/1')
                     .then(
@@ -200,13 +177,16 @@
                             response.data.forEach(function(item, index){
                                 self.hotelsCapa.push({id:item.id,name:item.name});
                             });
-                            self.isLoading = false;
+                            self.form.assignHotel = self.hotelsCapa;
+                            self.loadHotels();
                         }
                     );
                 }
             },
             ifChangehotelOwner() {
                 if(this.$gate.superAdmin()) {
+                    this.hotels = [];
+                    this.hotelsCapa = [];
                     this.isLoading = true;
                     let self = this
                     axios.get('/api/hotel-receptionist/'+this.form.hotelOwner)
@@ -231,7 +211,9 @@
             }
         },
         created() {
+            this.isLoading = true;
             this.loadOwner();
+            this.isLoading = false;
             console.log('Component mounted.')
         }
     }

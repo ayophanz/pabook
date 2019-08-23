@@ -16940,14 +16940,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -16958,13 +16950,11 @@ __webpack_require__.r(__webpack_exports__);
     return {
       fullPage: true,
       isLoading: false,
+      rePick: false,
       hotelOwners: [],
       receps: [],
       hotels: [],
       hotelsCapa: [],
-      tempArrLeft: [],
-      tempArrRight: [],
-      isAvailEmpty: false,
       recepName: 'No name',
       form: new form({
         recep: '',
@@ -16974,24 +16964,18 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    isNotChck: function isNotChck(item, event) {
-      if (event.target.checked) {
-        this.tempArrRight.push({
-          id: item.id,
-          name: item.name
-        });
-      } else {
-        this.tempArrRight.splice(this.tempArrRight.indexOf(item), 1);
-      }
-    },
     isChck: function isChck(item, event) {
       if (event.target.checked) {
-        this.tempArrLeft.push({
+        this.hotels.splice(this.hotels.indexOf(item), 1);
+        this.form.assignHotel.push({
           id: item.id,
           name: item.name
         });
+        this.recepCap('add');
       } else {
-        this.tempArrLeft.splice(this.tempArrLeft.indexOf(item), 1);
+        // this.hotelsCapa.splice(this.hotelsCapa.indexOf(item),1);
+        this.form.assignHotel.splice(this.form.assignHotel.indexOf(item), 1);
+        this.recepCap('remove');
       }
     },
     recepCap: function recepCap(action) {
@@ -16999,47 +16983,34 @@ __webpack_require__.r(__webpack_exports__);
         this.isLoading = true;
         var self = this;
         this.form.post('/api/recep-capability/' + action).then(function (response) {
+          self.loadUserCap();
+          self.isLoading = false;
           toast.fire({
             type: 'success',
             title: 'User created successfully'
           });
-          self.loadUserCap();
-          self.loadHotels();
-          self.isLoading = false;
         })["catch"](function (error) {
+          self.isLoading = false;
           toast.fire({
             type: 'error',
             title: 'Something went wrong!'
           });
-          self.isLoading = false;
         });
       }
     },
-    addCap: function addCap() {
-      this.form.assignHotel = this.tempArrLeft;
-      this.recepCap('add');
-    },
-    removeCap: function removeCap() {
-      this.form.assignHotel = this.tempArrRight;
-      this.recepCap('remove');
-    },
     selectRecep: function selectRecep() {
-      this.tempArrLeft = [];
-      this.tempArrRight = [];
-      this.form.assignHotel = [];
+      this.rePick = true;
       var self = this;
       this.receps.forEach(function (item, index) {
         if (self.form.recep == item.id) {
           self.recepName = item.name;
+          self.loadUserCap();
         }
       });
-      this.loadUserCap(this.receps);
-      this.loadHotels(this.receps);
     },
     loadHotels: function loadHotels() {
       if (this.$gate.superAdmin()) {
         this.hotels = [];
-        this.isLoading = true;
         var self = this;
         axios.get('/api/hotels/' + this.form.hotelOwner + '/' + this.form.recep + '/0').then(function (response) {
           response.data.forEach(function (item, index) {
@@ -17048,14 +17019,21 @@ __webpack_require__.r(__webpack_exports__);
               name: item.name
             });
           });
-          self.isLoading = false;
+
+          if (self.rePick) {
+            self.isLoading = false;
+            self.rePick = false;
+          }
         });
       }
     },
     loadUserCap: function loadUserCap() {
       if (this.$gate.superAdmin()) {
+        if (this.rePick) {
+          this.isLoading = true;
+        }
+
         this.hotelsCapa = [];
-        this.isLoading = true;
         var self = this;
         axios.get('/api/hotels/' + this.form.hotelOwner + '/' + this.form.recep + '/1').then(function (response) {
           response.data.forEach(function (item, index) {
@@ -17064,12 +17042,15 @@ __webpack_require__.r(__webpack_exports__);
               name: item.name
             });
           });
-          self.isLoading = false;
+          self.form.assignHotel = self.hotelsCapa;
+          self.loadHotels();
         });
       }
     },
     ifChangehotelOwner: function ifChangehotelOwner() {
       if (this.$gate.superAdmin()) {
+        this.hotels = [];
+        this.hotelsCapa = [];
         this.isLoading = true;
         var self = this;
         axios.get('/api/hotel-receptionist/' + this.form.hotelOwner).then(function (response) {
@@ -17088,7 +17069,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
+    this.isLoading = true;
     this.loadOwner();
+    this.isLoading = false;
     console.log('Component mounted.');
   }
 });
@@ -80633,105 +80616,100 @@ var render = function() {
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             _c("div", { staticClass: "container" }, [
-              _c(
-                "div",
-                { staticClass: "row justify-content-center set-mb-100" },
-                [
-                  _c("div", { staticClass: "col-md-5" }, [
-                    _c(
-                      "div",
-                      { staticClass: "form-group" },
-                      [
-                        _vm._m(0),
-                        _vm._v(" "),
-                        _c(
-                          "select",
-                          {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.form.hotelOwner,
-                                expression: "form.hotelOwner"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            class: {
-                              "is-invalid": _vm.form.errors.has("hotelOwner")
-                            },
-                            attrs: { id: "hotelOwner" },
-                            on: {
-                              change: [
-                                function($event) {
-                                  var $$selectedVal = Array.prototype.filter
-                                    .call($event.target.options, function(o) {
-                                      return o.selected
-                                    })
-                                    .map(function(o) {
-                                      var val =
-                                        "_value" in o ? o._value : o.value
-                                      return val
-                                    })
-                                  _vm.$set(
-                                    _vm.form,
-                                    "hotelOwner",
-                                    $event.target.multiple
-                                      ? $$selectedVal
-                                      : $$selectedVal[0]
-                                  )
-                                },
-                                _vm.ifChangehotelOwner
-                              ]
+              _c("div", { staticClass: "row justify-content-center" }, [
+                _c("div", { staticClass: "col-md-6" }, [
+                  _c(
+                    "div",
+                    { staticClass: "form-group" },
+                    [
+                      _vm._m(0),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.hotelOwner,
+                              expression: "form.hotelOwner"
                             }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            "is-invalid": _vm.form.errors.has("hotelOwner")
                           },
-                          _vm._l(_vm.hotelOwners, function(item) {
-                            return _c(
-                              "option",
-                              {
-                                domProps: {
-                                  selected: item.id === _vm.form.hotelOwner,
-                                  value: item.id
-                                }
+                          attrs: { id: "hotelOwner" },
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.form,
+                                  "hotelOwner",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
                               },
-                              [_vm._v(_vm._s(item.email))]
-                            )
-                          }),
-                          0
-                        ),
-                        _vm._v(" "),
-                        _c("has-error", {
-                          attrs: { form: _vm.form, field: "hotelOwner" }
-                        })
-                      ],
-                      1
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-md-5" }, [
-                    _c(
-                      "div",
-                      { staticClass: "form-group" },
-                      [
-                        _vm._m(1),
-                        _vm._v(" "),
-                        _c(
-                          "select",
-                          {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.form.recep,
-                                expression: "form.recep"
+                              _vm.ifChangehotelOwner
+                            ]
+                          }
+                        },
+                        _vm._l(_vm.hotelOwners, function(item) {
+                          return _c(
+                            "option",
+                            {
+                              domProps: {
+                                selected: item.id === _vm.form.hotelOwner,
+                                value: item.id
                               }
-                            ],
-                            staticClass: "form-control",
-                            class: {
-                              "is-invalid": _vm.form.errors.has("recep")
                             },
-                            attrs: { id: "recep" },
-                            on: {
-                              change: function($event) {
+                            [_vm._v(_vm._s(item.email))]
+                          )
+                        }),
+                        0
+                      ),
+                      _vm._v(" "),
+                      _c("has-error", {
+                        attrs: { form: _vm.form, field: "hotelOwner" }
+                      })
+                    ],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-6" }, [
+                  _c(
+                    "div",
+                    { staticClass: "form-group" },
+                    [
+                      _vm._m(1),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.recep,
+                              expression: "form.recep"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: { "is-invalid": _vm.form.errors.has("recep") },
+                          attrs: { id: "recep" },
+                          on: {
+                            change: [
+                              function($event) {
                                 var $$selectedVal = Array.prototype.filter
                                   .call($event.target.options, function(o) {
                                     return o.selected
@@ -80747,62 +80725,37 @@ var render = function() {
                                     ? $$selectedVal
                                     : $$selectedVal[0]
                                 )
-                              }
-                            }
-                          },
-                          _vm._l(_vm.receps, function(item) {
-                            return _c(
-                              "option",
-                              {
-                                domProps: {
-                                  selected: item.id === _vm.form.recep,
-                                  value: item.id
-                                }
                               },
-                              [_vm._v(_vm._s(item.email))]
-                            )
-                          }),
-                          0
-                        ),
-                        _vm._v(" "),
-                        _c("has-error", {
-                          attrs: { form: _vm.form, field: "recep" }
-                        })
-                      ],
-                      1
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-md-2" }, [
-                    _c("div", { staticClass: "form-group" }, [
-                      _c(
-                        "label",
-                        {
-                          staticStyle: { visibility: "hidden" },
-                          attrs: { for: "goBtn" }
+                              _vm.selectRecep
+                            ]
+                          }
                         },
-                        [_vm._v("testdsadsdadsad")]
+                        _vm._l(_vm.receps, function(item) {
+                          return _c(
+                            "option",
+                            {
+                              domProps: {
+                                selected: item.id === _vm.form.recep,
+                                value: item.id
+                              }
+                            },
+                            [_vm._v(_vm._s(item.email))]
+                          )
+                        }),
+                        0
                       ),
                       _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-outline-primary btn-flat",
-                          attrs: { type: "submit", id: "goBtn" },
-                          on: { click: _vm.selectRecep }
-                        },
-                        [
-                          _c("i", { staticClass: "fas fa-search" }),
-                          _vm._v(" Go")
-                        ]
-                      )
-                    ])
-                  ])
-                ]
-              ),
+                      _c("has-error", {
+                        attrs: { form: _vm.form, field: "recep" }
+                      })
+                    ],
+                    1
+                  )
+                ])
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col-md-5 text-center" }, [
+                _c("div", { staticClass: "col-md-12 text-center" }, [
                   _c("div", { staticClass: "card set-h-500" }, [
                     _c("div", { staticClass: "card-header" }, [
                       _c("h6", [
@@ -80813,115 +80766,103 @@ var render = function() {
                     _vm._v(" "),
                     _c("div", { staticClass: "card-body" }, [
                       _c("div", { staticClass: "row text-left" }, [
-                        _c(
-                          "div",
-                          { staticClass: "col-12" },
-                          _vm._l(_vm.hotelsCapa, function(item) {
-                            return _c(
-                              "div",
-                              { staticClass: "custom-control custom-switch" },
-                              [
-                                _c("input", {
-                                  staticClass: "custom-control-input",
-                                  attrs: {
-                                    type: "checkbox",
-                                    id: "user-capa-" + item.id
-                                  },
-                                  domProps: { value: item.id },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.isNotChck(item, $event)
-                                    }
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c(
-                                  "label",
+                        _c("div", { staticClass: "col-12" }, [
+                          _c(
+                            "div",
+                            { staticClass: "form-group" },
+                            [
+                              _c("label", [_vm._v("Assign Capabilities")]),
+                              _vm._v(" "),
+                              _vm._l(_vm.hotelsCapa, function(item) {
+                                return _c(
+                                  "div",
                                   {
-                                    staticClass: "custom-control-label",
-                                    attrs: { for: "user-capa-" + item.id }
+                                    staticClass: "custom-control custom-switch"
                                   },
-                                  [_vm._v(_vm._s(item.name))]
+                                  [
+                                    _c("input", {
+                                      staticClass: "custom-control-input",
+                                      attrs: {
+                                        type: "checkbox",
+                                        id: "user-capa-" + item.id
+                                      },
+                                      domProps: {
+                                        checked: true,
+                                        value: item.id
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.isChck(item, $event)
+                                        }
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "label",
+                                      {
+                                        staticClass: "custom-control-label",
+                                        attrs: { for: "user-capa-" + item.id }
+                                      },
+                                      [_vm._v(_vm._s(item.name))]
+                                    )
+                                  ]
                                 )
-                              ]
-                            )
-                          }),
-                          0
-                        )
-                      ])
-                    ])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "col-md-2 text-center align-self-center" },
-                  [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-outline-primary btn-flat",
-                        attrs: { disabled: _vm.isAvailEmpty, type: "button" },
-                        on: { click: _vm.addCap }
-                      },
-                      [_c("i", { staticClass: "fas fa-arrow-left  fa-2x" })]
-                    ),
-                    _c("br"),
-                    _c("br"),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-outline-primary btn-flat",
-                        attrs: { type: "button" },
-                        on: { click: _vm.removeCap }
-                      },
-                      [_c("i", { staticClass: "fas fa-arrow-right fa-2x" })]
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-md-5 text-center" }, [
-                  _c("div", { staticClass: "card set-h-500" }, [
-                    _vm._m(2),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "card-body" }, [
+                              })
+                            ],
+                            2
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("hr"),
+                      _vm._v(" "),
                       _c("div", { staticClass: "row text-left" }, [
-                        _c(
-                          "div",
-                          { staticClass: "col-12" },
-                          _vm._l(_vm.hotels, function(item) {
-                            return _c(
-                              "div",
-                              { staticClass: "custom-control custom-switch" },
-                              [
-                                _c("input", {
-                                  staticClass: "custom-control-input",
-                                  attrs: {
-                                    type: "checkbox",
-                                    id: "capa-" + item.id
-                                  },
-                                  domProps: { checked: false, value: item.id },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.isChck(item, $event)
-                                    }
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c(
-                                  "label",
+                        _c("div", { staticClass: "col-12" }, [
+                          _c(
+                            "div",
+                            { staticClass: "form-group" },
+                            [
+                              _c("label", [_vm._v("Unassign Capabilities")]),
+                              _vm._v(" "),
+                              _vm._l(_vm.hotels, function(item) {
+                                return _c(
+                                  "div",
                                   {
-                                    staticClass: "custom-control-label",
-                                    attrs: { for: "capa-" + item.id }
+                                    staticClass: "custom-control custom-switch"
                                   },
-                                  [_vm._v(_vm._s(item.name))]
+                                  [
+                                    _c("input", {
+                                      staticClass: "custom-control-input",
+                                      attrs: {
+                                        type: "checkbox",
+                                        id: "user-capa-" + item.id
+                                      },
+                                      domProps: {
+                                        checked: false,
+                                        value: item.id
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.isChck(item, $event)
+                                        }
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "label",
+                                      {
+                                        staticClass: "custom-control-label",
+                                        attrs: { for: "user-capa-" + item.id }
+                                      },
+                                      [_vm._v(_vm._s(item.name))]
+                                    )
+                                  ]
                                 )
-                              ]
-                            )
-                          }),
-                          0
-                        )
+                              })
+                            ],
+                            2
+                          )
+                        ])
                       ])
                     ])
                   ])
@@ -80952,14 +80893,6 @@ var staticRenderFns = [
     return _c("label", { attrs: { for: "recep" } }, [
       _vm._v("Receptionist "),
       _c("span", { staticClass: "required-asterisk" }, [_vm._v("*")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header" }, [
-      _c("h6", [_vm._v("Available capabilities")])
     ])
   }
 ]

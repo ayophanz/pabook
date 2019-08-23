@@ -109,12 +109,8 @@ class UserController extends Controller
     }
 
     public function recapCap(Request $request, $action) {
-       // dd('tet');
-        
-
         $data = [
-                'recep' => 'required|numeric|min:1',
-                'assignHotel' => 'required'
+                'recep' => 'required|numeric|min:1'
                 ];
 
         $hotel_ids = array();
