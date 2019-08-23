@@ -15241,7 +15241,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 
@@ -15251,12 +15250,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      dit: new Date(2019, 0, 1),
+      calendarApi: null,
       monthAppend: [],
       btnGuestAct: '',
-      config: {
-        goToDate: new Date(2019, 0, 1)
-      },
       dataEvent: [],
       calendarPlugins: [_fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_1___default.a, _fullcalendar_interaction__WEBPACK_IMPORTED_MODULE_2__["default"]],
       calendarView: 'dayGridMonth' //listMonth , dayGridMonth
@@ -15264,10 +15260,8 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    filterMonth: function filterMonth() {//let calendarApi = this.$refs.fullCalendar.getApi(); // from the ref="..."
-      // calendarApi.gotoDate('2000-01-01') // call a method on the Calendar object
-      //let calendarApi = this.$refs.fullCalendar.fireMethod('gotoDate', '2019-01-01'); // from the ref="..."
-      // calendarApi.gotoDate('2000-01-01') // call a method on the Calendar object
+    mFilter: function mFilter() {
+      alert('test');
     },
     dateDiff: function dateDiff(dateS, dateE) {
       var start = moment(new Date(dateS), 'M/D/YYYY');
@@ -15345,7 +15339,7 @@ __webpack_require__.r(__webpack_exports__);
       this.monthAppend.forEach(function (item, index) {
         append += '<option value="' + item.value + '">' + item.name + '</option>';
       });
-      $(".fc-header-toolbar .fc-right").prepend('<select class="custom-select-month-header fc-button-primary" style="cursor:pointer;height:2.4em;vertical-align:middle;min-width:100px;">' + append + '</select>');
+      $(".fc-header-toolbar .fc-right").prepend('<select class="mFilter custom-select-month-header fc-button-primary" style="cursor:pointer;height:2.4em;vertical-align:middle;min-width:100px;">' + append + '</select>');
     },
     loadBookings: function loadBookings() {
       if (this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
@@ -15403,14 +15397,16 @@ __webpack_require__.r(__webpack_exports__);
             }
           });
           self.loadingCustomHead();
+          var calendarApi = self.$refs.fullCalendar.getApi();
+          calendarApi.gotoDate('2019-01-01');
         });
       }
     }
   },
   created: function created() {
     this.loadBookings();
-    this.filterMonth();
-  }
+  },
+  mounted: function mounted() {}
 });
 
 /***/ }),
@@ -78016,7 +78012,6 @@ var render = function() {
               _c("FullCalendar", {
                 ref: "fullCalendar",
                 attrs: {
-                  config: _vm.config,
                   defaultView: _vm.calendarView,
                   plugins: _vm.calendarPlugins,
                   events: _vm.dataEvent

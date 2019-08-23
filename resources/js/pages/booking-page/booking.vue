@@ -16,7 +16,6 @@
                     <div class="card-body">
                         <FullCalendar 
                         ref="fullCalendar"
-                        :config="config"
                         :defaultView="calendarView"
                         :plugins="calendarPlugins" 
                         :events="dataEvent"
@@ -40,21 +39,17 @@
         },
         data() {
             return {
-                dit: new Date(2019, 0, 1),
+                calendarApi: null,
                 monthAppend: [],
                 btnGuestAct: '',
-                config: {goToDate: new Date(2019, 0, 1)},
                 dataEvent: [],
                 calendarPlugins: [ dayGridPlugin, interactionPlugin ],
                 calendarView: 'dayGridMonth'//listMonth , dayGridMonth
             }
         },
         methods: {
-            filterMonth() {
-               //let calendarApi = this.$refs.fullCalendar.getApi(); // from the ref="..."
-               // calendarApi.gotoDate('2000-01-01') // call a method on the Calendar object
-              //let calendarApi = this.$refs.fullCalendar.fireMethod('gotoDate', '2019-01-01'); // from the ref="..."
-             // calendarApi.gotoDate('2000-01-01') // call a method on the Calendar object
+            mFilter() {
+                alert('test');
             },
             dateDiff(dateS, dateE) {
                 const start = moment(new Date(dateS), 'M/D/YYYY');
@@ -144,7 +139,7 @@
                 this.monthAppend.forEach(function(item, index){
                     append += '<option value="'+item.value+'">'+item.name+'</option>';
                 });
-                $(".fc-header-toolbar .fc-right").prepend('<select class="custom-select-month-header fc-button-primary" style="cursor:pointer;height:2.4em;vertical-align:middle;min-width:100px;">'+append+'</select>');
+                $(".fc-header-toolbar .fc-right").prepend('<select class="mFilter custom-select-month-header fc-button-primary" style="cursor:pointer;height:2.4em;vertical-align:middle;min-width:100px;">'+append+'</select>');
             },
             loadBookings() {
                 if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
@@ -189,6 +184,8 @@
                                 } 
                             });
                             self.loadingCustomHead();
+                            let calendarApi = self.$refs.fullCalendar.getApi();
+                            calendarApi.gotoDate('2019-01-01');
                         }
                     );
                 }
@@ -196,7 +193,8 @@
         },
         created() {
             this.loadBookings();
-            this.filterMonth();
+        },
+        mounted() {
         }
     }
 </script>
