@@ -24,7 +24,7 @@
             <div class="card-body">
               <div class="row">
                   <div class="col-sm-12">
-                        <table id="table-user" class="table table-bordered table-striped dataTable" role="grid">
+                        <table id="table-rooms" class="table table-bordered table-striped dataTable" role="grid">
                             <thead>
                                 <tr role="row">
                                     <th class="text-center">Id</th>

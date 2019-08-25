@@ -33,6 +33,18 @@
     </form>
 
     <ul class="navbar-nav ml-auto">
+      {{-- <li class="nav-item dropdown booking-noti">
+        <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="true">
+          <i class="fas fa-bell fa-2x"></i>
+          <span class="badge badge-danger navbar-badge">15</span>
+        </a>
+      </li> --}}
+      <li class="nav-item booking-noti">
+        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#">
+          <i class="fas fa-bell fa-2x"></i>
+          <span class="badge badge-danger navbar-badge">15</span>
+        </a>
+      </li>
       <li class="nav-item logout">
         <a class="nav-link" href="{{ route('logout') }}"
             onclick="event.preventDefault();
@@ -212,13 +224,16 @@
       
       <nav class="mt-2">
         <ul class="nav nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="true">
-
+          
+          @if(Gate::check('superAdmin') || Gate::check('hotelOwner'))
           <li class="nav-item has-treeview">
-            <router-link to="/add-user" class="nav-link">
+            <router-link to="/settings" class="nav-link">
               <i class="fas fa-sliders-h nav-icon"></i>
               <p>Settings</p>
             </router-link>
           </li>
+          @endif
+
         </ul>
       </nav>
 

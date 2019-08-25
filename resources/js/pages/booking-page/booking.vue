@@ -14,6 +14,24 @@
                     </div>
 
                     <div class="card-body">
+
+                        <!-- <div class="row">
+                            <div class="col-md-8">
+                                <table id="table-bookings" class="table table-bordered table-striped dataTable" role="grid">
+                                    <thead>
+                                        <tr role="row">
+                                            <th class="text-center">Name</th>
+                                            <th class="text-center">Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> -->
+
+
                         <FullCalendar 
                         ref="fullCalendar"
                         :defaultView="calendarView"
@@ -48,8 +66,14 @@
             }
         },
         methods: {
-            mFilter() {
-                alert('test');
+            jQueryAction() { 
+                $('#mFilter').on('change', ()=>{
+                    this.mFilter($('#mFilter option:selected').val());
+                });
+            },
+            mFilter(month) {
+                let calendarApi = this.$refs.fullCalendar.getApi();
+                calendarApi.gotoDate(new Date(new Date().getFullYear()+'-'+month+'-01'));
             },
             dateDiff(dateS, dateE) {
                 const start = moment(new Date(dateS), 'M/D/YYYY');
@@ -135,11 +159,16 @@
                 }
             },
             loadingCustomHead() {
-                let append = '<option value="0">Filter by month</option>';
+                let append = '';
                 this.monthAppend.forEach(function(item, index){
-                    append += '<option value="'+item.value+'">'+item.name+'</option>';
+                    let selected = '';
+                    if(new Date().getMonth()+1==item.value)
+                        selected = 'selected';
+                    append += '<option '+selected+' value="'+item.value+'">'+item.name+'</option>';
                 });
-                $(".fc-header-toolbar .fc-right").prepend('<select class="mFilter custom-select-month-header fc-button-primary" style="cursor:pointer;height:2.4em;vertical-align:middle;min-width:100px;">'+append+'</select>');
+                $(".fc-header-toolbar .fc-right").prepend('<select id="mFilter" class="custom-select-month-header fc-button-primary" style="cursor:pointer;height:2.4em;vertical-align:middle;min-width:100px;">'+append+'</select>');
+
+                this.jQueryAction();
             },
             loadBookings() {
                 if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
@@ -184,8 +213,6 @@
                                 } 
                             });
                             self.loadingCustomHead();
-                            let calendarApi = self.$refs.fullCalendar.getApi();
-                            calendarApi.gotoDate('2019-01-01');
                         }
                     );
                 }
@@ -193,8 +220,17 @@
         },
         created() {
             this.loadBookings();
-        },
-        mounted() {
+
+            // Echo.join(`chat`)
+            // .here((users) => {
+            //     //
+            // })
+            // .joining((user) => {
+            //     console.log(user.name);
+            // })
+            // .leaving((user) => {
+            //     console.log(user.name);
+            // });
         }
     }
 </script>

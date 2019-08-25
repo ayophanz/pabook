@@ -161,14 +161,38 @@ button.applyBtn:focus, button.applyBtn.focus {
     z-index: 2
 }
 li.nav-item.logout {
-    background-color: #343a40;
+    border: 1px solid #3490dc;
     border-radius: 100px;
-    width: 40px;
+    width: 43px;
     text-align: center;
 }
 li.nav-item.logout a {
-    color: white !important;
+    color: #3490dc !important;
 }
 li.nav-item.logout:hover {
     transform: scale(.9);
+}
+.nav-item.booking-noti {
+    margin-right: 15px !important;
+}
+.booking-noti span {
+    position: absolute;
+    top: 2px;
+    display: inline-table;
+    left: -2px;
+}
+.control-sidebar:after {
+    content: '';
+    position: absolute;
+    left: 145px;
+    top: -6px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #343a40;
+    clear: both;
+}
+.control-sidebar:before {
+    position: relative !important;
 }

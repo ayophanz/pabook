@@ -25,6 +25,11 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 let routes = [
+    
+    /**
+     * Setting
+     */
+    {path: '/settings', component: require('./pages/setting-page/settings.vue').default},
 
     /**
      * Booking
