@@ -72,7 +72,17 @@
         },
         methods: {
             selectedOwner(){
-
+                if(this.$gate.superAdmin()) {
+                    this.isLoading = true;
+                    let self = this
+                    axios.get('/api/config/'+this.form.owner_id)
+                    .then(
+                        function (response) {
+                            self.form.base_currency  = response.data.value;
+                            self.isLoading = false;
+                        }
+                    );
+                }
             },
             currencyCall() {
                 this.currencyName = cc.code(this.form.base_currency).currency;
@@ -89,11 +99,22 @@
                             self.isLoading = false;
                         }
                     );
+                }else if(this.$gate.hotelOwner()) {
+                    this.isLoading = true;
+                    let self = this
+                    axios.get('/api/config')
+                    .then(
+                        function (response) {
+                            self.form.base_currency  = response.data.value;
+                            self.isLoading = false;
+                        }
+                    );
                 }
             },
             register() {
                 if(this.$gate.superAdminOrhotelOwner()) {
                     this.isLoading = true;
+                    let self = this
                     this.form.post('/api/create-config')
                     .then(
                         function (response) {

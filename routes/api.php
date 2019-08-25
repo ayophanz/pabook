@@ -99,6 +99,10 @@ Route::post('/create-book', 'API\BookController@create');
 /**
 * Option
 */
+Route::get('/config/{id}', 'API\OptionController@index');
+
+Route::get('/config', 'API\OptionController@index');
+
 Route::post('/create-config', 'API\OptionController@create');
 
 // Client ID: 1

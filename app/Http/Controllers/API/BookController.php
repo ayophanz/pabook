@@ -32,7 +32,7 @@ class BookController extends Controller
             'room_id'   => 'required|numeric|min:1',
             'total'     => 'required|numeric',
   			    'amount'    => 'required|numeric|greater_than_field:total'
-   		];
+   		]; 
 
    		$customMessages = [
                         'greater_than_field' => 'The amount is not enough.'

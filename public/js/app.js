@@ -16983,7 +16983,16 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    selectedOwner: function selectedOwner() {},
+    selectedOwner: function selectedOwner() {
+      if (this.$gate.superAdmin()) {
+        this.isLoading = true;
+        var self = this;
+        axios.get('/api/config/' + this.form.owner_id).then(function (response) {
+          self.form.base_currency = response.data.value;
+          self.isLoading = false;
+        });
+      }
+    },
     currencyCall: function currencyCall() {
       this.currencyName = currency_codes__WEBPACK_IMPORTED_MODULE_0___default.a.code(this.form.base_currency).currency;
     },
@@ -16991,11 +17000,18 @@ __webpack_require__.r(__webpack_exports__);
       if (this.$gate.superAdmin()) {
         this.isAdmin = true;
         this.isLoading = true;
+        var self = this;
+        axios.get('/api/hotel-owners').then(function (response) {
+          self.owners = response.data;
+          self.isLoading = false;
+        });
+      } else if (this.$gate.hotelOwner()) {
+        this.isLoading = true;
 
         var _self = this;
 
-        axios.get('/api/hotel-owners').then(function (response) {
-          _self.owners = response.data;
+        axios.get('/api/config').then(function (response) {
+          _self.form.base_currency = response.data.value;
           _self.isLoading = false;
         });
       }
@@ -17003,6 +17019,7 @@ __webpack_require__.r(__webpack_exports__);
     register: function register() {
       if (this.$gate.superAdminOrhotelOwner()) {
         this.isLoading = true;
+        var self = this;
         this.form.post('/api/create-config').then(function (response) {
           self.isLoading = false;
           toast.fire({
