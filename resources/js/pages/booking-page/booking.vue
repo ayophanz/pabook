@@ -115,9 +115,12 @@
                        guestAction.close();
                     }));
                     statusName = 'Check Out';
+                }else if(status=='cal-confirm-checkout') {
+                    statusName = 'Check Out';
                 }
                 this.btnGuestAct.prepend(this.createButton(statusName, 'btn-primary', 'fa-sign-out-alt', function() {
-                   guestAction.close();
+                    guestAction.close();
+                    alert('test');
                 }));
                 this.btnGuestAct.prepend(
                     '<div class="details">'
@@ -190,6 +193,8 @@
                                     remain = 'Check Out';
                                     end = moment(new Date(item.dateEnd), 'M/D/YYYY');
                                     diffDays = end.diff(start, 'days');
+                                    if(diffDays < 0)
+                                        statusClass = 'cal-confirm-checkout';
                                 }
 
                                 let base_currency = ((item.room.room_type.room_type_refer.base_currency!=null)? item.room.room_type.room_type_refer.base_currency.value : item.room.room_type.room_type_refer.global_base_currency.value );
@@ -260,6 +265,10 @@
     }
     .cal-checkout {
         background-color: gray!important;
+        border: 1px;
+    }
+    .cal-confirm-checkout {
+        background-color: #e3342f !important;
         border: 1px;
     }
     .fc-day-grid-event .fc-content {

@@ -15333,10 +15333,13 @@ __webpack_require__.r(__webpack_exports__);
           guestAction.close();
         }));
         statusName = 'Check Out';
+      } else if (status == 'cal-confirm-checkout') {
+        statusName = 'Check Out';
       }
 
       this.btnGuestAct.prepend(this.createButton(statusName, 'btn-primary', 'fa-sign-out-alt', function () {
         guestAction.close();
+        alert('test');
       }));
       this.btnGuestAct.prepend('<div class="details">' + 'Date: <span>' + dateS + ' - ' + dateE + '</span><br />' + 'CheckIn Time: <span>2:00pm</span> | CheckOut Time: <span>12:00pm</span><br />' + 'Night Stay: <span>' + night + '</span><br />' + 'Price: <span>' + base_currency + ' ' + price + '</span><br />' + 'Total Price: <span>' + base_currency + ' ' + amount + '</span><br />' + 'Room Id: <span>' + roomId + '</span><br />' + 'Room Name: <span>' + roomName + '</span><br />' + 'Room Type: <span>' + roomType + '</span><br />' + 'Hotel: <span>' + hotel + '</span><br />' + 'Amenities: ' + featuresApp + '<div class="guestInfo">Name: <span>' + name + '</span><br />' + 'Phone: <span>' + phone + '</span><br />' + 'Email: <span>' + email + '</span><br />' + '</div><br />');
     },
@@ -15389,6 +15392,7 @@ __webpack_require__.r(__webpack_exports__);
               remain = 'Check Out';
               end = moment(new Date(item.dateEnd), 'M/D/YYYY');
               diffDays = end.diff(start, 'days');
+              if (diffDays < 0) statusClass = 'cal-confirm-checkout';
             }
 
             var base_currency = item.room.room_type.room_type_refer.base_currency != null ? item.room.room_type.room_type_refer.base_currency.value : item.room.room_type.room_type_refer.global_base_currency.value;
@@ -22735,7 +22739,7 @@ exports.i(__webpack_require__(/*! -!../../../../node_modules/css-loader!@fullcal
 exports.i(__webpack_require__(/*! -!../../../../node_modules/css-loader!@fullcalendar/daygrid/main.css */ "./node_modules/css-loader/index.js!./node_modules/@fullcalendar/daygrid/main.css"), "");
 
 // module
-exports.push([module.i, ".fc-button-primary {\n  background-color: #3490dc !important;\n  border-color: #3490dc !important;\n  border-radius: 0px;\n}\n.fc-button-primary:not(:disabled):active:focus, .fc-button-primary:not(:disabled).fc-button-active:focus {\n  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.2901960784) !important;\n}\n.fc-button-primary:focus {\n  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.2901960784) !important;\n}\n.fc-event, .fc-event-dot {\n  background-color: #3788d8 !important;\n  border-radius: 0px;\n  color: white !important;\n  font-size: 16px;\n  cursor: pointer;\n}\n.cal-checkin {\n  background-color: #28a745 !important;\n  border: 1px;\n}\n.fc-time {\n  display: none;\n}\n.cal-checkout {\n  background-color: gray !important;\n  border: 1px;\n}\n.fc-day-grid-event .fc-content {\n  padding: 0px 5px;\n}\n.details span {\n  font-weight: 700;\n}\n.details {\n  text-align: left;\n  line-height: 1.6;\n}\n.details ul {\n  list-style: none;\n}\n.fc-widget-header {\n  background: #f7f7f7;\n  color: #495057;\n}\n.custom-select-month-header option {\n  background-color: white;\n  color: black;\n}\n.fc-unthemed .fc-divider, .fc-unthemed .fc-popover .fc-header, .fc-unthemed .fc-list-heading td {\n  background: #eee;\n  color: black;\n}\ntr.fc-list-item.cal-book, tr.fc-list-item.cal-book:hover {\n  cursor: pointer;\n  background-color: #3490dc !important;\n  color: white;\n}\ntr.fc-list-item.cal-checkin, tr.fc-list-item.cal-checkin:hover {\n  cursor: pointer;\n  background-color: #28a745 !important;\n  color: white;\n}\n.fc-unthemed .fc-list-item:hover td {\n  background-color: none !important;\n  color: black;\n}\ntd.fc-list-item-time.fc-widget-content {\n  padding: 0px 5px;\n}\ntd.fc-list-item-title.fc-widget-content {\n  padding: 0px 5px;\n}\n#toggle-view {\n  background-color: transparent !important;\n  color: #3490dc;\n  border: 0px;\n}", ""]);
+exports.push([module.i, ".fc-button-primary {\n  background-color: #3490dc !important;\n  border-color: #3490dc !important;\n  border-radius: 0px;\n}\n.fc-button-primary:not(:disabled):active:focus, .fc-button-primary:not(:disabled).fc-button-active:focus {\n  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.2901960784) !important;\n}\n.fc-button-primary:focus {\n  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.2901960784) !important;\n}\n.fc-event, .fc-event-dot {\n  background-color: #3788d8 !important;\n  border-radius: 0px;\n  color: white !important;\n  font-size: 16px;\n  cursor: pointer;\n}\n.cal-checkin {\n  background-color: #28a745 !important;\n  border: 1px;\n}\n.fc-time {\n  display: none;\n}\n.cal-checkout {\n  background-color: gray !important;\n  border: 1px;\n}\n.cal-confirm-checkout {\n  background-color: #e3342f !important;\n  border: 1px;\n}\n.fc-day-grid-event .fc-content {\n  padding: 0px 5px;\n}\n.details span {\n  font-weight: 700;\n}\n.details {\n  text-align: left;\n  line-height: 1.6;\n}\n.details ul {\n  list-style: none;\n}\n.fc-widget-header {\n  background: #f7f7f7;\n  color: #495057;\n}\n.custom-select-month-header option {\n  background-color: white;\n  color: black;\n}\n.fc-unthemed .fc-divider, .fc-unthemed .fc-popover .fc-header, .fc-unthemed .fc-list-heading td {\n  background: #eee;\n  color: black;\n}\ntr.fc-list-item.cal-book, tr.fc-list-item.cal-book:hover {\n  cursor: pointer;\n  background-color: #3490dc !important;\n  color: white;\n}\ntr.fc-list-item.cal-checkin, tr.fc-list-item.cal-checkin:hover {\n  cursor: pointer;\n  background-color: #28a745 !important;\n  color: white;\n}\n.fc-unthemed .fc-list-item:hover td {\n  background-color: none !important;\n  color: black;\n}\ntd.fc-list-item-time.fc-widget-content {\n  padding: 0px 5px;\n}\ntd.fc-list-item-title.fc-widget-content {\n  padding: 0px 5px;\n}\n#toggle-view {\n  background-color: transparent !important;\n  color: #3490dc;\n  border: 0px;\n}", ""]);
 
 // exports
 
