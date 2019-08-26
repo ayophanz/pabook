@@ -68,7 +68,7 @@
                         </div>  
                         <div class="form-group">
                             <label for="price">Price <span class="required-asterisk">*</span></label>
-                            <my-currency-input v-model="form.price"></my-currency-input>
+                            <my-currency-input :baseCurrency="base_currency" v-model="form.price"></my-currency-input>
                             <has-error :form="form" field="price"></has-error>
                         </div>
                         <div class="form-group">
@@ -136,6 +136,7 @@
                 hotels: [],
                 types: [],
                 imageUrl: null,
+                base_currency: 'USD',
                 form: new form({
                     status: 'pending',
                     type: null,
@@ -214,7 +215,7 @@
                     axios.get('/api/room-types/'+self.form.hotel+','+self.roomId)
                     .then(
                         function (response) {
-                            self.types = response.data
+                            self.types = response.data;
                             self.isLoading = false;
                         }
                     );
@@ -287,6 +288,11 @@
                         self.form.name = response.data.name;
                         self.form.description = response.data.description;
                         self.form.price = response.data.price;
+                        if(response.data.room_type.room_type_refer.base_currency!=null) {
+                          self.base_currency = response.data.room_type.room_type_refer.base_currency.value;
+                        }else{
+                          self.base_currency = response.data.room_type.room_type_refer.global_base_currency.value;
+                        }
                         self.form.no_of_room = response.data.total_room;
                         self.tempImage = response.data.image;
                         let url = '../storage/images/upload/roomImages/gallery-'+id+'/';

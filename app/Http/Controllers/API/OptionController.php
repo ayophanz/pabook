@@ -15,9 +15,9 @@ class OptionController extends Controller
    public function index($id=null) {
 
     	if(\Gate::allows('superAdmin') && $id!=null) {
-        	return Option::where('meta_key', 'base_currency')->where('meta_value', $id)->first();
+        	return Option::where('meta_key', 'global_base_currency')->where('meta_value', $id)->first();
         }elseif(\Gate::allows('hotelOwner')) {
-        	return Option::where('meta_key', 'base_currency')->where('meta_value', $this->ownerId())->first();
+        	return Option::where('meta_key', 'global_base_currency')->where('meta_value', $this->ownerId())->first();
         }
    }
 
@@ -28,7 +28,7 @@ class OptionController extends Controller
    		];
 
    		$dataCreate = [
-   			'meta_key' => 'base_currency',
+   			'meta_key' => 'global_base_currency',
    			'meta_value' => $this->ownerId(),
    			'value'   => $request['base_currency']
    		];

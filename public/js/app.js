@@ -14921,7 +14921,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports) {
 
 Vue.component('my-currency-input', {
-  props: ["value"],
+  props: ["value", "baseCurrency"],
   template: "\n        <div>\n            <input type=\"text\" v-model=\"displayValue\" class=\"form-control\" @blur=\"isInputActive = false\" @focus=\"isInputActive = true\"/>\n        </div>",
   data: function data() {
     return {
@@ -14936,7 +14936,7 @@ Vue.component('my-currency-input', {
           return this.value.toString();
         } else {
           // User is not modifying now. Format display value for user interface
-          return "$ " + this.value.toFixed(2).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,");
+          return this.baseCurrency + " " + this.value.toFixed(2).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,");
         }
       },
       set: function set(modifiedValue) {
@@ -15677,6 +15677,8 @@ var country_json_src_country_by_capital_city_json__WEBPACK_IMPORTED_MODULE_0___n
 /* harmony import */ var vue_loading_overlay__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_loading_overlay__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var vue_loading_overlay_dist_vue_loading_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-loading-overlay/dist/vue-loading.css */ "./node_modules/vue-loading-overlay/dist/vue-loading.css");
 /* harmony import */ var vue_loading_overlay_dist_vue_loading_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_loading_overlay_dist_vue_loading_css__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var currency_codes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! currency-codes */ "./node_modules/currency-codes/index.js");
+/* harmony import */ var currency_codes__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(currency_codes__WEBPACK_IMPORTED_MODULE_3__);
 //
 //
 //
@@ -15781,6 +15783,15 @@ var country_json_src_country_by_capital_city_json__WEBPACK_IMPORTED_MODULE_0___n
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -15795,7 +15806,8 @@ var country_json_src_country_by_capital_city_json__WEBPACK_IMPORTED_MODULE_0___n
     }
   },
   components: {
-    Loading: vue_loading_overlay__WEBPACK_IMPORTED_MODULE_1___default.a
+    Loading: vue_loading_overlay__WEBPACK_IMPORTED_MODULE_1___default.a,
+    cc: currency_codes__WEBPACK_IMPORTED_MODULE_3___default.a
   },
   data: function data() {
     return {
@@ -15809,6 +15821,8 @@ var country_json_src_country_by_capital_city_json__WEBPACK_IMPORTED_MODULE_0___n
       buttonText: 'Save',
       countries: [],
       owners: [],
+      currency: [],
+      currencyName: 'you are using global currency',
       form: new form({
         owner: '',
         name: '',
@@ -15819,12 +15833,20 @@ var country_json_src_country_by_capital_city_json__WEBPACK_IMPORTED_MODULE_0___n
         zip_code: '',
         phone_number: '',
         email: '',
+        base_currency: 'use_global',
         image: '',
         changeCover: ''
       })
     };
   },
   methods: {
+    currencyCall: function currencyCall() {
+      if (this.form.base_currency != 'use_global') {
+        this.currencyName = currency_codes__WEBPACK_IMPORTED_MODULE_3___default.a.code(this.form.base_currency).currency;
+      } else {
+        this.currencyName = 'you are using global currency';
+      }
+    },
     resetComponent: function resetComponent() {
       this.buttonText = 'Save';
       this.hotelId = null;
@@ -15925,6 +15947,12 @@ var country_json_src_country_by_capital_city_json__WEBPACK_IMPORTED_MODULE_0___n
           self.form.email = response.data.email;
           self.tempImage = response.data.image;
           self.imageUrl = '../storage/images/upload/hotelImages/' + self.tempImage;
+
+          if (response.data.base_currency != null) {
+            self.form.base_currency = response.data.base_currency.value;
+            self.currencyName = currency_codes__WEBPACK_IMPORTED_MODULE_3___default.a.code(self.form.base_currency).currency;
+          }
+
           self.isLoading = false;
         });
       }
@@ -15932,6 +15960,8 @@ var country_json_src_country_by_capital_city_json__WEBPACK_IMPORTED_MODULE_0___n
   },
   created: function created() {
     this.populateData();
+    this.currency = currency_codes__WEBPACK_IMPORTED_MODULE_3___default.a.codes();
+    this.currency.unshift('use_global');
 
     if (this.$route.params.hotelId) {
       this.hotelId = this.$route.params.hotelId;
@@ -16269,6 +16299,7 @@ __webpack_require__.r(__webpack_exports__);
       hotels: [],
       types: [],
       imageUrl: null,
+      base_currency: 'USD',
       form: new form({
         status: 'pending',
         type: null,
@@ -16412,6 +16443,13 @@ __webpack_require__.r(__webpack_exports__);
           self.form.name = response.data.name;
           self.form.description = response.data.description;
           self.form.price = response.data.price;
+
+          if (response.data.room_type.room_type_refer.base_currency != null) {
+            self.base_currency = response.data.room_type.room_type_refer.base_currency.value;
+          } else {
+            self.base_currency = response.data.room_type.room_type_refer.global_base_currency.value;
+          }
+
           self.form.no_of_room = response.data.total_room;
           self.tempImage = response.data.image;
           var url = '../storage/images/upload/roomImages/gallery-' + id + '/';
@@ -16543,15 +16581,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -16566,7 +16595,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       lang: 'en',
-      curreny: 'USD',
+      base_currency: 'USD',
       fullPage: true,
       isLoading: false,
       rooms: []
@@ -81073,6 +81102,88 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "form-group" },
+                    [
+                      _vm._m(7),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.base_currency,
+                              expression: "form.base_currency"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            "is-invalid": _vm.form.errors.has("base_currency")
+                          },
+                          attrs: { id: "base_currency" },
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.form,
+                                  "base_currency",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              _vm.currencyCall
+                            ]
+                          }
+                        },
+                        _vm._l(_vm.currency, function(item) {
+                          return _c(
+                            "option",
+                            {
+                              domProps: {
+                                selected: item.id === _vm.form.base_currency,
+                                value: item
+                              }
+                            },
+                            [_vm._v(_vm._s(item))]
+                          )
+                        }),
+                        0
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "p",
+                        [
+                          _vm._v(_vm._s(_vm.currencyName) + " "),
+                          _vm.form.base_currency == "use_global"
+                            ? _c(
+                                "router-link",
+                                { attrs: { to: "/settings" } },
+                                [_vm._v("settings")]
+                              )
+                            : _vm._e()
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("has-error", {
+                        attrs: { form: _vm.form, field: "base_currency" }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
                   _vm.hotelId != null
                     ? _c("div", { staticClass: "form-group" }, [
                         _c(
@@ -81107,7 +81218,7 @@ var render = function() {
                     "div",
                     { staticClass: "form-group" },
                     [
-                      _vm._m(7),
+                      _vm._m(8),
                       _vm._v(" "),
                       _c("br"),
                       _vm._v(" "),
@@ -81216,6 +81327,15 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("label", { attrs: { for: "name" } }, [
       _vm._v("Name "),
+      _c("span", { staticClass: "required-asterisk" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "base_currency" } }, [
+      _vm._v("Base currency "),
       _c("span", { staticClass: "required-asterisk" }, [_vm._v("*")])
     ])
   },
@@ -81838,6 +81958,7 @@ var render = function() {
                       _vm._m(3),
                       _vm._v(" "),
                       _c("my-currency-input", {
+                        attrs: { baseCurrency: _vm.base_currency },
                         model: {
                           value: _vm.form.price,
                           callback: function($$v) {
@@ -82146,23 +82267,6 @@ var render = function() {
                           _c(
                             "td",
                             { staticClass: "align-middle text-center" },
-                            [
-                              _c("money-format", {
-                                attrs: {
-                                  value: room.price,
-                                  locale: _vm.lang,
-                                  "currency-code": _vm.curreny,
-                                  "subunit-value": true,
-                                  "hide-subunits": true
-                                }
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "align-middle text-center" },
                             [_vm._v(_vm._s(room.total_room))]
                           ),
                           _vm._v(" "),
@@ -82262,8 +82366,6 @@ var staticRenderFns = [
         _c("th", { staticClass: "text-center" }, [_vm._v("Room Type")]),
         _vm._v(" "),
         _c("th", { staticClass: "text-center" }, [_vm._v("Name")]),
-        _vm._v(" "),
-        _c("th", { staticClass: "text-center" }, [_vm._v("Price")]),
         _vm._v(" "),
         _c("th", { staticClass: "text-center" }, [_vm._v("Total Room")]),
         _vm._v(" "),

@@ -31,7 +31,6 @@
                                     <th class="text-center">Hotel</th>
                                     <th class="text-center">Room Type</th>
                                     <th class="text-center">Name</th>
-                                    <th class="text-center">Price</th>
                                     <th class="text-center">Total Room</th>
                                     <th class="text-center">Status</th>
                                     <th class="text-center">Created At</th>
@@ -46,14 +45,6 @@
                                     <td class="align-middle text-center">{{room.room_type.room_type_refer.name}}</td>
                                     <td class="align-middle text-center">{{room.room_type.name}}</td>
                                     <td class="align-middle text-center">{{room.name}}</td>
-                                    <td class="align-middle text-center">
-                                        <money-format :value="room.price" 
-                                          :locale='lang' 
-                                          :currency-code='curreny' 
-                                          :subunit-value="true" 
-                                          :hide-subunits="true">
-                                        </money-format>
-                                    </td>
                                     <td class="align-middle text-center">{{room.total_room}}</td>
                                     <td class="align-middle text-center">{{room.status}}</td>
                                     <td class="align-middle text-center">{{room.created_at}}</td>
@@ -98,7 +89,7 @@
         data() {
             return {
                 lang: 'en',
-                curreny: 'USD',
+                base_currency: 'USD',
                 fullPage: true,
                 isLoading: false,
                 rooms: []
@@ -114,7 +105,7 @@
                     axios.get('/api/rooms')
                     .then(
                         function (response) {
-                            self.rooms = response.data
+                            self.rooms = response.data;
                         }
                     );
                 }

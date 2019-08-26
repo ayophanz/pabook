@@ -75,7 +75,15 @@
                       <label for="name">Name <span class="required-asterisk">*</span></label>
                       <input v-model="form.name" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }" id="name">
                       <has-error :form="form" field="name"></has-error>
-                    </div> 
+                    </div>
+                    <div class="form-group">
+                      <label for="base_currency">Base currency <span class="required-asterisk">*</span></label>
+                       <select v-model="form.base_currency" @change="currencyCall" class="form-control" :class="{ 'is-invalid': form.errors.has('base_currency') }" id="base_currency">
+                        <option v-for="item in currency" :selected="item.id === form.base_currency" :value="item">{{item}}</option>
+                       </select>
+                       <p>{{currencyName}} <router-link v-if="form.base_currency=='use_global'" to="/settings">settings</router-link></p>
+                      <has-error :form="form" field="base_currency"></has-error>
+                    </div>
                     <div class="form-group" v-if="hotelId != null">
                       <div class="custom-control custom-switch">
                         <input @click="toggleCheck" :checked="isCheckCover" type="checkbox" class="custom-control-input" id="isChangeCover" name="isChangeCover">
@@ -106,6 +114,7 @@
     import countries_list from 'country-json/src/country-by-capital-city.json'
     import Loading from 'vue-loading-overlay'
     import 'vue-loading-overlay/dist/vue-loading.css'
+    import cc from 'currency-codes'
     export default {
         watch: {
             '$route' (to, from) {
@@ -117,7 +126,8 @@
             }
         },
         components: {
-          Loading
+          Loading,
+          cc
         },
         data() {
           return {
@@ -131,6 +141,8 @@
             buttonText: 'Save',
             countries: [],
             owners: [],
+            currency: [],
+            currencyName: 'you are using global currency',
             form: new form({
               owner: '',
               name: '',
@@ -141,12 +153,20 @@
               zip_code: '',
               phone_number: '',
               email: '',
+              base_currency: 'use_global',
               image: '',
               changeCover: ''
             })
           }
         },
         methods: {
+          currencyCall(){
+            if(this.form.base_currency!='use_global') {
+              this.currencyName = cc.code(this.form.base_currency).currency;
+            }else{
+              this.currencyName = 'you are using global currency';
+            }
+          },
           resetComponent() {
              this.buttonText = 'Save';
              this.hotelId = null;
@@ -252,6 +272,10 @@
                     self.form.email = response.data.email;
                     self.tempImage = response.data.image;
                     self.imageUrl = '../storage/images/upload/hotelImages/'+self.tempImage;
+                    if(response.data.base_currency!=null) {
+                      self.form.base_currency = response.data.base_currency.value;
+                      self.currencyName = cc.code(self.form.base_currency).currency;
+                    }
                     self.isLoading = false;
                   }
                 );  
@@ -260,6 +284,8 @@
         },
         created() {
           this.populateData();
+          this.currency = cc.codes();
+          this.currency.unshift('use_global');
           if(this.$route.params.hotelId) {
               this.hotelId = this.$route.params.hotelId;  
               this.hotelDetails(this.hotelId);

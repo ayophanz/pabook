@@ -10,6 +10,7 @@ use App\RoomMeta;
 use App\RoomType;
 use App\Hotel;
 use App\UserMeta;
+use App\Option;
 
 class RoomController extends Controller
 {

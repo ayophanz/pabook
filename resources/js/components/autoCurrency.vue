@@ -1,6 +1,6 @@
 <script>
 Vue.component('my-currency-input', {
-    props: ["value"],
+    props: ["value", "baseCurrency"],
     template: `
         <div>
             <input type="text" v-model="displayValue" class="form-control" @blur="isInputActive = false" @focus="isInputActive = true"/>
@@ -18,7 +18,7 @@ Vue.component('my-currency-input', {
                     return this.value.toString()
                 } else {
                     // User is not modifying now. Format display value for user interface
-                    return "$ " + this.value.toFixed(2).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")
+                    return this.baseCurrency+" " + this.value.toFixed(2).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")
                 }
             },
             set: function(modifiedValue) {

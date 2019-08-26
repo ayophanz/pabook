@@ -20,9 +20,13 @@ class Hotel extends Model
     			];
 
 
-    // protected $with = [];           
+    protected $with = ['baseCurrency', 'globalBaseCurrency'];           
 
-    // public function userRefer() {
-    //     return $this->belongsTo(User::class, 'user_id', 'id'); 
-    // }
+    public function globalBaseCurrency() {
+        return $this->belongsTo(Option::class, 'owner_id', 'meta_value')->where('meta_key', 'global_base_currency');
+    }
+
+    public function baseCurrency(){
+        return $this->belongsTo(Option::class, 'id', 'meta_value')->where('meta_key', 'base_currency');
+    }
 }
