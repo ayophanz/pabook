@@ -15125,12 +15125,13 @@ __webpack_require__.r(__webpack_exports__);
     book: function book(room) {
       var _this = this;
 
+      var base_currency = room.room_type.room_type_refer.base_currency != null ? room.room_type.room_type_refer.base_currency.value : room.room_type.room_type_refer.global_base_currency.value;
       var amenities = '';
       var feature = JSON.parse(room.room_feature.value);
       feature.forEach(function (item, index) {
         amenities += '<li><i class="fas fa-check"></i> ' + item['value'] + '</li>';
       });
-      var details = '<strong>Date: <span>' + moment(this.defaultStartDate).format('MMMM Do YYYY') + ' - ' + moment(this.defaultEndDate).format('MMMM Do YYYY') + '</span><br />CheckIn Time: <span>2:00pm</span> | CheckOut Time: <span>12:00pm</span><br />Night Stay: <span>' + this.night + '</span><br />Price: <span>' + room.price + '</span><br />Total price: <span>' + room.price * this.night + '</span><br />Room Id: <span>' + room.id + '</span><br />Room Name: <span>' + room.name + '</span><br />Room Type: <span>' + room.room_type.name + '</span><br />Hotel: <span>' + room.room_type.room_type_refer.name + '</span><br />Amenities: </strong>';
+      var details = '<strong>Date: <span>' + moment(this.defaultStartDate).format('MMMM Do YYYY') + ' - ' + moment(this.defaultEndDate).format('MMMM Do YYYY') + '</span><br />CheckIn Time: <span>2:00pm</span> | CheckOut Time: <span>12:00pm</span><br />Night Stay: <span>' + this.night + '</span><br />Price: <span>' + base_currency + ' ' + room.price + '</span><br />Total price: <span>' + base_currency + ' ' + room.price * this.night + '</span><br />Room Id: <span>' + room.id + '</span><br />Room Name: <span>' + room.name + '</span><br />Room Type: <span>' + room.room_type.name + '</span><br />Hotel: <span>' + room.room_type.room_type_refer.name + '</span><br />Amenities: </strong>';
       paynow.fire({
         title: '<strong>Details</strong>',
         type: 'info',
@@ -15147,6 +15148,7 @@ __webpack_require__.r(__webpack_exports__);
           _this.$router.push({
             path: '/walk-in-payment',
             query: {
+              currencyy: base_currency,
               roomId: room.id,
               roomType: room.room_type.name,
               roomName: room.name,
@@ -15543,6 +15545,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -15554,7 +15557,6 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       lang: 'en',
-      curreny: 'USD',
       fullPage: true,
       isLoading: false,
       isCheckConsent: false,
@@ -15568,6 +15570,7 @@ __webpack_require__.r(__webpack_exports__);
         phone_no: '',
         consent: false,
         amount: 0,
+        currency: 'USD',
         change: 0,
         total: 0,
         gRequest: '',
@@ -15628,6 +15631,8 @@ __webpack_require__.r(__webpack_exports__);
       this.form.room_id = this.$route.query.roomId;
       this.bookInfo['roomName'] = this.$route.query.roomName;
       this.bookInfo['roomType'] = this.$route.query.roomType;
+      this.form.currency = this.$route.query.currencyy;
+      console.log(this.$route.query.currencyy);
       this.form.dateStart = moment(this.$route.query.dateStay.split('<>')[0]).format('MMMM Do YYYY');
       this.form.dateEnd = moment(this.$route.query.dateStay.split('<>')[1]).format('MMMM Do YYYY');
       var start = moment(new Date(this.$route.query.dateStay.split('<>')[0]), 'M/D/YYYY');
@@ -90243,7 +90248,21 @@ var render = function() {
                         _c("span", [_vm._v("name: " + _vm._s(room.name))]),
                         _c("br"),
                         _vm._v(" "),
-                        _c("span", [_vm._v("price: " + _vm._s(room.price))]),
+                        _c("span", [
+                          _vm._v(
+                            "price: " +
+                              _vm._s(
+                                room.room_type.room_type_refer.base_currency !=
+                                  null
+                                  ? room.room_type.room_type_refer.base_currency
+                                      .value
+                                  : room.room_type.room_type_refer
+                                      .global_base_currency.value
+                              ) +
+                              " " +
+                              _vm._s(room.price)
+                          )
+                        ]),
                         _c("br"),
                         _vm._v(" "),
                         _c("span", [
@@ -90728,21 +90747,15 @@ var render = function() {
                   _c("div", { staticClass: "form-group" }, [
                     _c("label", { attrs: { for: "amount" } }, [
                       _vm._v("Total payment: "),
-                      _c(
-                        "span",
-                        [
-                          _c("money-format", {
-                            attrs: {
-                              value: _vm.form.total,
-                              locale: _vm.lang,
-                              "currency-code": _vm.curreny,
-                              "subunit-value": true,
-                              "hide-subunits": true
-                            }
-                          })
-                        ],
-                        1
-                      )
+                      _c("span", [
+                        _c("p", [
+                          _vm._v(
+                            _vm._s(_vm.form.currency) +
+                              " " +
+                              _vm._s(_vm.form.total)
+                          )
+                        ])
+                      ])
                     ])
                   ]),
                   _vm._v(" "),

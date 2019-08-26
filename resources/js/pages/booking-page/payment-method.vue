@@ -63,12 +63,13 @@
                             <h4>Payment</h4><hr>
                             <div class="form-group">
                                 <label for="amount">Total payment: <span>
-                                <money-format :value="form.total" 
+                                    <p>{{form.currency}} {{form.total}}</p>
+                                <!-- <money-format :value="form.total" 
                                   :locale='lang' 
-                                  :currency-code='curreny' 
+                                  :currency-code='form.currency' 
                                   :subunit-value="true" 
                                   :hide-subunits="true">
-                                </money-format>
+                                </money-format> -->
                                 </span></label>
                             </div>
                             <div class="form-group">
@@ -102,7 +103,6 @@
         data() {
             return {
                 lang: 'en',
-                curreny: 'USD',
                 fullPage: true,
                 isLoading: false,
                 isCheckConsent: false,
@@ -116,6 +116,7 @@
                     phone_no: '',
                     consent: false,
                     amount: 0,
+                    currency: 'USD',
                     change: 0,
                     total: 0,
                     gRequest: '',
@@ -176,6 +177,8 @@
                 this.form.room_id = this.$route.query.roomId;
                 this.bookInfo['roomName'] = this.$route.query.roomName;
                 this.bookInfo['roomType'] = this.$route.query.roomType;
+                this.form.currency = this.$route.query.currencyy;
+                console.log(this.$route.query.currencyy);
                 this.form.dateStart = moment(this.$route.query.dateStay.split('<>')[0]).format('MMMM Do YYYY')
                 this.form.dateEnd = moment(this.$route.query.dateStay.split('<>')[1]).format('MMMM Do YYYY')
                 const start = moment(new Date(this.$route.query.dateStay.split('<>')[0]), 'M/D/YYYY');

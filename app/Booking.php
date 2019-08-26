@@ -14,6 +14,7 @@ class Booking extends Model
     			'dateStart',
     			'dateEnd',
                 'amount',
+                'currency',
                 'user_id',
                 'status'
     			];

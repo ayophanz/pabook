@@ -22,6 +22,7 @@ class CreateBookingsTable extends Migration
             $table->timestamp('dateStart')->nullable();
             $table->timestamp('dateEnd')->nullable();
             $table->float('amount', 8, 2);
+            $table->string('currency')->default('USD');
             $table->bigInteger('user_id')->nullable();
             $table->string('status')->default('active');
             $table->timestamps();
