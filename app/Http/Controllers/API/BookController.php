@@ -31,7 +31,8 @@ class BookController extends Controller
             'dateEnd'   => 'required',
             'room_id'   => 'required|numeric|min:1',
             'total'     => 'required|numeric',
-  			    'amount'    => 'required|numeric|greater_than_field:total'
+  			    'amount'    => 'required|numeric|greater_than_field:total',
+            'currency'  => 'required|string|max:6'
    		]; 
 
    		$customMessages = [
@@ -49,6 +50,7 @@ class BookController extends Controller
    			'dateStart' => $sdate,
    			'dateEnd'   => $edate,
    			'amount'    => $request['amount'],
+        'currency'  => $request['currency'],
         'status'    => $request['btnSubmit']
    		];
 

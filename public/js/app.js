@@ -15297,6 +15297,7 @@ __webpack_require__.r(__webpack_exports__);
       return end.diff(start, 'days');
     },
     generateButton: function generateButton(arg) {
+      var base_currency = arg.event.extendedProps.currencyy;
       var status = arg.event.classNames[0];
       var roomId = arg.event.extendedProps.roomId;
       var roomType = arg.event.extendedProps.roomType;
@@ -15337,7 +15338,7 @@ __webpack_require__.r(__webpack_exports__);
       this.btnGuestAct.prepend(this.createButton(statusName, 'btn-primary', 'fa-sign-out-alt', function () {
         guestAction.close();
       }));
-      this.btnGuestAct.prepend('<div class="details">' + 'Date: <span>' + dateS + ' - ' + dateE + '</span><br />' + 'CheckIn Time: <span>2:00pm</span> | CheckOut Time: <span>12:00pm</span><br />' + 'Night Stay: <span>' + night + '</span><br />' + 'Price: <span>' + price + '</span><br />' + 'Total Price: <span>' + amount + '</span><br />' + 'Room Id: <span>' + roomId + '</span><br />' + 'Room Name: <span>' + roomName + '</span><br />' + 'Room Type: <span>' + roomType + '</span><br />' + 'Hotel: <span>' + hotel + '</span><br />' + 'Amenities: ' + featuresApp + '<div class="guestInfo">Name: <span>' + name + '</span><br />' + 'Phone: <span>' + phone + '</span><br />' + 'Email: <span>' + email + '</span><br />' + '</div><br />');
+      this.btnGuestAct.prepend('<div class="details">' + 'Date: <span>' + dateS + ' - ' + dateE + '</span><br />' + 'CheckIn Time: <span>2:00pm</span> | CheckOut Time: <span>12:00pm</span><br />' + 'Night Stay: <span>' + night + '</span><br />' + 'Price: <span>' + base_currency + ' ' + price + '</span><br />' + 'Total Price: <span>' + base_currency + ' ' + amount + '</span><br />' + 'Room Id: <span>' + roomId + '</span><br />' + 'Room Name: <span>' + roomName + '</span><br />' + 'Room Type: <span>' + roomType + '</span><br />' + 'Hotel: <span>' + hotel + '</span><br />' + 'Amenities: ' + featuresApp + '<div class="guestInfo">Name: <span>' + name + '</span><br />' + 'Phone: <span>' + phone + '</span><br />' + 'Email: <span>' + email + '</span><br />' + '</div><br />');
     },
     createButton: function createButton(text, btnCss, icon, cb) {
       return $('<button class="btn ' + btnCss + ' btn-flat"><i class="fas ' + icon + '"></i> ' + text + '</button>').on('click', cb);
@@ -15390,12 +15391,14 @@ __webpack_require__.r(__webpack_exports__);
               diffDays = end.diff(start, 'days');
             }
 
+            var base_currency = item.room.room_type.room_type_refer.base_currency != null ? item.room.room_type.room_type_refer.base_currency.value : item.room.room_type.room_type_refer.global_base_currency.value;
             self.dataEvent.push({
               title: item.name + ' | ' + diffDays + ' days left to ' + remain,
               start: item.dateStart,
               end: item.dateEnd,
               className: statusClass,
               extendedProps: {
+                currencyy: base_currency,
                 roomId: item.room_id,
                 roomType: item.room.room_type.name,
                 roomName: item.room.name,

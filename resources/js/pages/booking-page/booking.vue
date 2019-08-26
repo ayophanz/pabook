@@ -81,6 +81,7 @@
                 return end.diff(start, 'days');
             },
             generateButton(arg) {
+                let base_currency = arg.event.extendedProps.currencyy;
                 let status = arg.event.classNames[0];
                 let roomId = arg.event.extendedProps.roomId;
                 let roomType = arg.event.extendedProps.roomType;
@@ -123,8 +124,8 @@
                     +'Date: <span>'+dateS+' - '+dateE+'</span><br />'
                     +'CheckIn Time: <span>2:00pm</span> | CheckOut Time: <span>12:00pm</span><br />'
                     +'Night Stay: <span>'+night+'</span><br />'
-                    +'Price: <span>'+price+'</span><br />'
-                    +'Total Price: <span>'+amount+'</span><br />'
+                    +'Price: <span>'+base_currency+' '+price+'</span><br />'
+                    +'Total Price: <span>'+base_currency+' '+amount+'</span><br />'
                     +'Room Id: <span>'+roomId+'</span><br />'
                     +'Room Name: <span>'+roomName+'</span><br />'
                     +'Room Type: <span>'+roomType+'</span><br />'
@@ -191,12 +192,14 @@
                                     diffDays = end.diff(start, 'days');
                                 }
 
+                                let base_currency = ((item.room.room_type.room_type_refer.base_currency!=null)? item.room.room_type.room_type_refer.base_currency.value : item.room.room_type.room_type_refer.global_base_currency.value );
+
                                 self.dataEvent.push({
                                     title:item.name+' | '+diffDays+' days left to '+remain,
                                     start:item.dateStart,
                                     end:item.dateEnd,
                                     className:statusClass,
-                                    extendedProps: {roomId:item.room_id, roomType:item.room.room_type.name, roomName:item.room.name, features:item.room.room_feature.value, amount:item.amount, email:item.email, phone:item.phone_no, dateS:item.dateStart, dateE:item.dateEnd, status:item.status, name:item.name, price:item.room.price, hotel:item.room.room_type.room_type_refer.name}
+                                    extendedProps: {currencyy:base_currency, roomId:item.room_id, roomType:item.room.room_type.name, roomName:item.room.name, features:item.room.room_feature.value, amount:item.amount, email:item.email, phone:item.phone_no, dateS:item.dateStart, dateE:item.dateEnd, status:item.status, name:item.name, price:item.room.price, hotel:item.room.room_type.room_type_refer.name}
                                 });
 
                                 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
