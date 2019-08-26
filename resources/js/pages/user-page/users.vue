@@ -131,6 +131,17 @@
         created() {
             this.loadUsers(); 
             fire.$on('afterCreated',() => {this.loadUsers()});
+
+            Echo.join(`chat`)
+            .here((users) => {
+                //
+            })
+            .joining((user) => {
+                console.log(user.name);
+            })
+            .leaving((user) => {
+                console.log(user.name);
+            });
         }
     }
 </script>
