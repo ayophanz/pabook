@@ -15303,7 +15303,6 @@ __webpack_require__.r(__webpack_exports__);
     updateEventData: function updateEventData(action, eventId) {
       var calendar = this.$refs.fullCalendar.getApi();
       var Event = calendar.getEventById(eventId);
-      console.log(this.dateDiff(Event.start - Event.end));
 
       if (action == '#checkOutCall') {
         Event.setProp('classNames', ['cal-checkout']);
@@ -15358,7 +15357,7 @@ __webpack_require__.r(__webpack_exports__);
         this.btnGuestAct.prepend(this.createButton('Check Out', 'btn-primary', 'fa-sign-out-alt', 'checkOutCall'));
       } else if (status == 'cal-book') {
         this.btnGuestAct.prepend(this.createButton('Cancel this book', 'btn-primary', 'fa-sign-out-alt', 'cancelCall'));
-      } else if (status == 'cal-confirm-checkin') {
+      } else if (status = 'cal-confirm-checkin') {
         this.btnGuestAct.prepend(this.createButton('Confirm Check-in', 'btn-primary', 'fa-sign-out-alt', 'checkInCall'));
       }
 
@@ -15413,23 +15412,27 @@ __webpack_require__.r(__webpack_exports__);
             var remain = 'Check In';
             var start = moment(new Date(), 'M/D/YYYY');
             var end = moment(new Date(item.dateStart), 'M/D/YYYY');
+            var diffDays = end.diff(start, 'days');
             var statusClass = 'cal-book';
 
             if (item.status == 'checkin') {
               statusClass = 'cal-checkin';
-              remain = ' | ' + self.dateDiff(start, end) + ' days left to Check Out';
+              remain = ' | ' + diffDays + ' days left to Check Out';
               end = moment(new Date(item.dateEnd), 'M/D/YYYY');
-              if (self.dateDiff(start, end) < 0) statusClass = 'cal-confirm-checkout';
+              diffDays = end.diff(start, 'days');
+              if (diffDays < 0) statusClass = 'cal-confirm-checkout';
             } else if (item.status == 'checkout') {
               remain = '';
               statusClass = 'cal-checkout';
             } else {
-              //start = moment(new Date(item.dateStart), 'M/D/YYYY');
-              if (self.dateDiff(new Date(), start) <= 0) {
+              end = moment(new Date(item.dateStart), 'M/D/YYYY');
+              diffDays = end.diff(start, 'days');
+
+              if (diffDays <= 0) {
                 statusClass = 'cal-confirm-checkin';
               }
 
-              remain = ' | ' + self.dateDiff(start, end) + ' days left to Check In';
+              remain = ' | ' + diffDays + ' days left to Check In';
             }
 
             var base_currency = item.room.room_type.room_type_refer.base_currency != null ? item.room.room_type.room_type_refer.base_currency.value : item.room.room_type.room_type_refer.global_base_currency.value;
@@ -15461,14 +15464,14 @@ __webpack_require__.r(__webpack_exports__);
             var monthValue = new Date(item.dateStart).getMonth();
             var existData = false;
             self.monthAppend.forEach(function (item, index) {
-              if (item.name == monthNames[monthValue - 1]) {
+              if (item.name == monthNames[monthValue]) {
                 existData = true;
               }
             });
 
             if (existData == false) {
               self.monthAppend.push({
-                name: monthNames[monthValue - 1],
+                name: monthNames[monthValue],
                 value: monthValue
               });
             }
@@ -15479,6 +15482,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
+    Intl.DateTimeFormat().resolvedOptions().timeZone;
     this.loadBookings();
   }
 });

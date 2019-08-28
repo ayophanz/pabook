@@ -86,7 +86,6 @@ export default {
         updateEventData(action, eventId) {
             let calendar = this.$refs.fullCalendar.getApi();
             const Event = calendar.getEventById(eventId);
-            console.log(this.dateDiff(Event.start - Event.end));
             if(action == '#checkOutCall') {
                 Event.setProp('classNames', ['cal-checkout']);
                 Event.setProp('title', Event.title.split('|')[0]);
@@ -138,7 +137,7 @@ export default {
                 this.btnGuestAct.prepend(this.createButton('Check Out', 'btn-primary', 'fa-sign-out-alt', 'checkOutCall'));
             }else if(status == 'cal-book'){
                 this.btnGuestAct.prepend(this.createButton('Cancel this book', 'btn-primary', 'fa-sign-out-alt', 'cancelCall'));
-            }else if(status == 'cal-confirm-checkin') {
+            }else if(status = 'cal-confirm-checkin') {
                 this.btnGuestAct.prepend(this.createButton('Confirm Check-in', 'btn-primary', 'fa-sign-out-alt', 'checkInCall'));
             }
             this.btnGuestAct.prepend(
@@ -198,24 +197,26 @@ export default {
                                 let remain = 'Check In';
                                 const start = moment(new Date(), 'M/D/YYYY');
                                 let end = moment(new Date(item.dateStart), 'M/D/YYYY');
+                                let diffDays = end.diff(start, 'days');
 
                                 let statusClass = 'cal-book';
                                 if (item.status == 'checkin') {
                                     statusClass = 'cal-checkin';
-                                    remain = ' | ' + self.dateDiff(start, end) + ' days left to Check Out';
+                                    remain = ' | ' + diffDays + ' days left to Check Out';
                                     end = moment(new Date(item.dateEnd), 'M/D/YYYY');
-                                    if (self.dateDiff(start, end) < 0)
+                                    diffDays = end.diff(start, 'days');
+                                    if (diffDays < 0)
                                         statusClass = 'cal-confirm-checkout';
                                 }else if(item.status == 'checkout') {
                                     remain = '';
                                     statusClass = 'cal-checkout';
                                 }else{
-                                    //start = moment(new Date(item.dateStart), 'M/D/YYYY');
-                                    if(self.dateDiff(new Date(), start) <= 0) {
+                                    end = moment(new Date(item.dateStart), 'M/D/YYYY');
+                                    diffDays = end.diff(start, 'days');
+                                    if(diffDays <= 0) {
                                         statusClass = 'cal-confirm-checkin';
                                     }
-                                    remain = ' | ' + self.dateDiff(start, end) + ' days left to Check In';
-                                    
+                                    remain = ' | ' + diffDays + ' days left to Check In';
                                 }
 
                                 let base_currency = ((item.room.room_type.room_type_refer.base_currency != null) ? item.room.room_type.room_type_refer.base_currency.value : item.room.room_type.room_type_refer.global_base_currency.value);
@@ -250,13 +251,13 @@ export default {
                                 let monthValue = new Date(item.dateStart).getMonth();
                                 let existData = false;
                                 self.monthAppend.forEach(function(item, index) {
-                                    if (item.name == monthNames[monthValue - 1]) {
+                                    if (item.name == monthNames[monthValue]) {
                                         existData = true;
                                     }
                                 });
                                 if (existData == false) {
                                     self.monthAppend.push({
-                                        name: monthNames[monthValue - 1],
+                                        name: monthNames[monthValue],
                                         value: monthValue
                                     });
                                 }
@@ -268,6 +269,7 @@ export default {
         }
     },
     created() {
+        Intl.DateTimeFormat().resolvedOptions().timeZone;
         this.loadBookings();
     }
 }
