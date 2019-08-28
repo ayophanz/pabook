@@ -59,4 +59,15 @@ class BookController extends Controller
    		if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner') || \Gate::allows('hotel_receptionist')) 
         	return Booking::create($dataCreate);
    }
+
+   public function checkOut($id) {
+    if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner') || \Gate::allows('hotel_receptionist')) 
+      Booking::where('id', $id)->update(['status'=>'checkout']);
+   }
+
+   public function checkIn($id) {
+    if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner') || \Gate::allows('hotel_receptionist')) 
+      Booking::where('id', $id)->update(['status'=>'checkin']);
+   }
+
 }

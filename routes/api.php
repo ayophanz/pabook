@@ -95,6 +95,10 @@ Route::get('/bookings', 'API\BookController@index');
 
 Route::post('/create-book', 'API\BookController@create');
 
+Route::put('/room-check-out/{id}', 'API\BookController@checkOut');
+
+Route::put('/room-check-in/{id}', 'API\BookController@checkIn');
+
 
 /**
 * Option
