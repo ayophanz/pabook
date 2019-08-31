@@ -15613,10 +15613,14 @@ __webpack_require__.r(__webpack_exports__);
             });
 
             if (existData == false) {
-              self.monthAppend.push({
-                name: monthNames[monthValue],
-                value: monthValue + 1
-              });
+              var current_month = new Date().getMonth() + 1;
+
+              if (current_month <= monthValue + 1) {
+                self.monthAppend.push({
+                  name: monthNames[monthValue],
+                  value: monthValue + 1
+                });
+              }
             }
           });
           self.loadingCustomHead();

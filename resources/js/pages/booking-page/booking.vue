@@ -256,10 +256,13 @@ export default {
                                     }
                                 });
                                 if (existData == false) {
-                                    self.monthAppend.push({
-                                        name: monthNames[monthValue],
-                                        value: monthValue+1
-                                    });
+                                    let current_month = new Date().getMonth()+1;
+                                    if(current_month<=(monthValue+1)) {
+                                        self.monthAppend.push({
+                                            name: monthNames[monthValue],
+                                            value: monthValue+1
+                                        });
+                                    }
                                 }
                             });
                             self.loadingCustomHead();
