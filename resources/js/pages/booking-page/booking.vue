@@ -147,7 +147,6 @@ export default {
             return $('<button id="' + eventt + '" class="btn ' + btnCss + ' btn-flat"><i class="fas ' + icon + '"></i> ' + text + '</button>');
         },
         showEvent(arg) {
-            console.log(arg);
             let id = arg.event.extendedProps.bookId;
             let eventId = arg.event.id;
             this.generateButton(arg);
@@ -178,7 +177,7 @@ export default {
             let append = '';
             this.monthAppend.forEach(function(item, index) {
                 let selected = '';
-                if (new Date().getMonth() + 1 == item.value)
+                if (new Date().getMonth() == item.value)
                     selected = 'selected';
                 append += '<option ' + selected + ' value="' + item.value + '">' + item.name + '</option>';
             });
@@ -202,16 +201,17 @@ export default {
                                 let statusClass = 'cal-book';
                                 if (item.status == 'checkin') {
                                     statusClass = 'cal-checkin';
-                                    remain = ' | ' + diffDays + ' days left to Check Out';
-                                    end = moment(new Date(item.dateEnd), 'M/D/YYYY');
-                                    diffDays = end.diff(start, 'days');
-                                    if (diffDays < 0)
+                                    if (diffDays < 0) {
                                         statusClass = 'cal-confirm-checkout';
+                                    }else{
+                                        end = moment(new Date(item.dateEnd), 'M/D/YYYY');
+                                        diffDays = end.diff(start, 'days');
+                                    }
+                                    remain = ' | ' + diffDays + ' days left to Check Out';
                                 }else if(item.status == 'checkout') {
                                     remain = '';
                                     statusClass = 'cal-checkout';
                                 }else{
-                                    end = moment(new Date(item.dateStart), 'M/D/YYYY');
                                     diffDays = end.diff(start, 'days');
                                     if(diffDays <= 0) {
                                         statusClass = 'cal-confirm-checkin';
@@ -258,7 +258,7 @@ export default {
                                 if (existData == false) {
                                     self.monthAppend.push({
                                         name: monthNames[monthValue],
-                                        value: monthValue
+                                        value: monthValue+1
                                     });
                                 }
                             });
@@ -319,6 +319,11 @@ export default {
 
 .cal-confirm-checkout {
     background-color: #e3342f !important;
+    border: 1px;
+}
+
+.cal-confirm-checkin {
+    background-color: #ae29d0 !important;
     border: 1px;
 }
 

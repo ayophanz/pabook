@@ -23,5 +23,17 @@ class Booking extends Model
 
     public function room() {
         return $this->belongsTo(Room::class, 'room_id', 'id'); 
-    }            
+    }
+
+    //public static function boot() {
+
+        //parent::boot();
+
+        // static::created(function($model){
+            
+        //     $adminAndOwner = User::where('role', 'super_admin')->first();
+
+        //     Notification::send($adminAndOwner, new RoomReservation($model));
+        // });
+    //}            
 }

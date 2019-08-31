@@ -118,7 +118,7 @@ export default {
             this.images = [];
         }
     },
-    mounted() {
+    created() {
         fire.$on('resetGallery', this.resetField); 
         fire.$on('uploadImage', this.upload); 
     }

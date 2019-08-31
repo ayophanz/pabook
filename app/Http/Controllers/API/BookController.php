@@ -3,9 +3,14 @@
 namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
+use Illuminate\Notifications\notifiable;
+use Illuminate\Support\Facades\Notification;
 use App\Http\Controllers\Controller;
 use App\Booking;
+use App\User;
+use App\Notifications\RoomReservation;
 use DateTime;
+
 
 class BookController extends Controller
 {
@@ -56,18 +61,32 @@ class BookController extends Controller
 
    		$this->validate($request, $data, $customMessages);
 
-   		if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner') || \Gate::allows('hotel_receptionist')) 
-        	return Booking::create($dataCreate);
+   		if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner') || \Gate::allows('hotel_receptionist')) {
+            $book = Booking::create($dataCreate);
+            if($book) {
+              $adminAndOwner = User::where('role', 'super_admin')->first();
+              Notification::send($adminAndOwner, new RoomReservation($book));
+              return $book;
+            }
+      }
+        	
    }
 
    public function checkOut($id) {
-    if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner') || \Gate::allows('hotel_receptionist')) 
-      Booking::where('id', $id)->update(['status'=>'checkout']);
+      if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner') || \Gate::allows('hotel_receptionist')) 
+        Booking::where('id', $id)->update(['status'=>'checkout']);
    }
 
    public function checkIn($id) {
-    if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner') || \Gate::allows('hotel_receptionist')) 
-      Booking::where('id', $id)->update(['status'=>'checkin']);
+      if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner') || \Gate::allows('hotel_receptionist')) 
+        Booking::where('id', $id)->update(['status'=>'checkin']);
+   }
+
+   public function markAsRead($id=null) {
+    if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner') || \Gate::allows('hotel_receptionist'))
+      if($id!=null)
+        auth()->user()->unreadNotifications->where('id', $id)->markAsRead();
+      return auth()->user()->load('notifications');
    }
 
 }

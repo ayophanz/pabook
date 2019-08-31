@@ -21,6 +21,16 @@ window.form = Form;
 Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
 
+// import VueRouter from 'vue-router'
+// Vue.use(VueRouter)
+
+// import routes from './routes'
+
+// const router = new VueRouter({
+//     mode: 'history',
+//     routes
+// })
+
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
@@ -73,6 +83,7 @@ const router = new VueRouter({
     mode: 'history',
     routes
 })
+
 
 Vue.filter('upWord', function(text){
     return text.toLowerCase()
@@ -137,6 +148,9 @@ window.fire = new Vue();
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+Vue.component('notifycount', require('./components/notifyCount.vue').default);
+Vue.component('notifybar', require('./components/notificationBar.vue').default);
 
 const app = new Vue({
     el: '#app',

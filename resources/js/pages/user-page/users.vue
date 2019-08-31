@@ -134,14 +134,14 @@
 
             Echo.join(`chat`)
             .here((users) => {
-                //
+                console.log('present user', users);
             })
             .joining((user) => {
                 console.log(user.name);
             })
             .leaving((user) => {
                 console.log(user.name);
-            });
+            });    
         }
     }
 </script>

@@ -178,7 +178,6 @@
                 this.bookInfo['roomName'] = this.$route.query.roomName;
                 this.bookInfo['roomType'] = this.$route.query.roomType;
                 this.form.currency = this.$route.query.currencyy;
-                console.log(this.$route.query.currencyy);
                 this.form.dateStart = moment(this.$route.query.dateStay.split('<>')[0]).format('MMMM Do YYYY')
                 this.form.dateEnd = moment(this.$route.query.dateStay.split('<>')[1]).format('MMMM Do YYYY')
                 const start = moment(new Date(this.$route.query.dateStay.split('<>')[0]), 'M/D/YYYY');
