@@ -15003,16 +15003,26 @@ __webpack_require__.r(__webpack_exports__);
     return {
       fullPage: true,
       isLoading: false,
-      allNotifications: []
+      allNotifications: [],
+      unreadNotifications: []
     };
+  },
+  watch: {
+    allNotifications: function allNotifications(val) {
+      this.unreadNotifications = this.allNotifications.filter(function (notification) {
+        return notification.read_at == null;
+      });
+    }
   },
   methods: {
     markAsRead: function markAsRead(notification) {
+      console.log(notification);
+
       if (this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
         this.isLoading = true;
         var self = this;
         axios.put('/api/mark-as-read/' + notification.id).then(function (response) {
-          // mFilter
+          fire.$emit('gotoMonth', new Date(notification.data.newReservation.dateStart.date).getMonth() + 1);
           self.allNotifications = response.data.notifications;
           fire.$emit('loadCounterNotify');
           self.isLoading = false;
@@ -15026,30 +15036,22 @@ __webpack_require__.r(__webpack_exports__);
       }
     }
   },
-  computed: {
-    unreadNotifications: function unreadNotifications() {
-      return this.allNotifications.filter(function (notification) {
-        return notification.read_at == null;
-      });
-    }
-  },
   created: function created() {
     var _this = this;
 
     this.allNotifications = window.user.notifications;
+    console.log(window.user);
+    this.unreadNotifications = this.allNotifications.filter(function (notification) {
+      return notification.read_at == null;
+    });
     Echo["private"]('App.User.' + window.user.id).notification(function (notification) {
       console.log(notification);
 
-      _this.allNotifications.push(notification);
+      _this.allNotifications.unshift(notification.notification);
+
+      fire.$emit('loadCounterNotify');
     });
     fire.$emit('loadCounterNotify');
-    Echo.join('chat').here(function (users) {
-      console.log('present user', users);
-    }).joining(function (user) {
-      console.log(user.name);
-    }).leaving(function (user) {
-      console.log(user.name);
-    });
   }
 });
 
@@ -15429,8 +15431,6 @@ __webpack_require__.r(__webpack_exports__);
           query = axios.put('/api/room-check-out/' + id);
         } else if (action == '#extendCall') {
           query = axios.put('/api/room-extend/' + id);
-        } else if (action == '#addonCall') {
-          query = axios.put('/api/room-add-on/' + id);
         }
 
         query.then(function (response) {
@@ -15499,12 +15499,11 @@ __webpack_require__.r(__webpack_exports__);
       if (status == 'cal-checkin') {
         this.btnGuestAct.prepend(this.createButton('Check Out', 'btn-primary', 'fa-sign-out-alt', 'checkOutCall'));
         this.btnGuestAct.append(this.createButton('Extend Stay', 'btn-primary', 'fa-plus', 'extendCall'));
-        this.btnGuestAct.append(this.createButton('AddOns', 'btn-primary', 'fa-plus-circle', 'addonCall'));
       } else if (status == 'cal-confirm-checkout') {
         this.btnGuestAct.prepend(this.createButton('Check Out', 'btn-primary', 'fa-sign-out-alt', 'checkOutCall'));
       } else if (status == 'cal-book') {
         this.btnGuestAct.prepend(this.createButton('Cancel this book', 'btn-primary', 'fa-sign-out-alt', 'cancelCall'));
-      } else if (status = 'cal-confirm-checkin') {
+      } else if (status == 'cal-confirm-checkin') {
         this.btnGuestAct.prepend(this.createButton('Confirm Check-in', 'btn-primary', 'fa-sign-out-alt', 'checkInCall'));
       }
 
@@ -15525,7 +15524,6 @@ __webpack_require__.r(__webpack_exports__);
         showCloseButton: true,
         showCancelButton: false
       });
-      this.jQueryAction('#addonCall', id, eventId);
       this.jQueryAction('#extendCall', id, eventId);
       this.jQueryAction('#checkOutCall', id, eventId);
       this.jQueryAction('#cancelCall', id, eventId);
@@ -15563,18 +15561,20 @@ __webpack_require__.r(__webpack_exports__);
 
             if (item.status == 'checkin') {
               statusClass = 'cal-checkin';
+              end = moment(new Date(item.dateEnd), 'M/D/YYYY');
+              diffDays = end.diff(start, 'days');
 
               if (diffDays < 0) {
                 statusClass = 'cal-confirm-checkout';
-              } else {
-                end = moment(new Date(item.dateEnd), 'M/D/YYYY');
-                diffDays = end.diff(start, 'days');
               }
 
               remain = ' | ' + diffDays + ' days left to Check Out';
             } else if (item.status == 'checkout') {
               remain = '';
               statusClass = 'cal-checkout';
+            } else if (item.status == 'cancel') {
+              remain = ' | ' + diffDays + ' days past | Cancelled';
+              statusClass = 'cal-cancel';
             } else {
               diffDays = end.diff(start, 'days');
 
@@ -15633,11 +15633,25 @@ __webpack_require__.r(__webpack_exports__);
           self.loadingCustomHead();
         });
       }
+    },
+    bookCancel: function bookCancel() {
+      if (this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+        axios.put('/api/book-cancelled').then(function (response) {
+          console.log('ok');
+        })["catch"](function (error) {
+          console.log(error);
+        });
+      }
     }
   },
   created: function created() {
     Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.bookCancel();
     this.loadBookings();
+    var self = this;
+    fire.$on('gotoMonth', function (month) {
+      self.mFilter(month);
+    });
   }
 });
 
@@ -22967,7 +22981,7 @@ exports.i(__webpack_require__(/*! -!../../../../node_modules/css-loader!@fullcal
 exports.i(__webpack_require__(/*! -!../../../../node_modules/css-loader!@fullcalendar/daygrid/main.css */ "./node_modules/css-loader/index.js!./node_modules/@fullcalendar/daygrid/main.css"), "");
 
 // module
-exports.push([module.i, ".fc-button-primary {\n  background-color: #3490dc !important;\n  border-color: #3490dc !important;\n  border-radius: 0px;\n}\n.fc-button-primary:not(:disabled):active:focus,\n.fc-button-primary:not(:disabled).fc-button-active:focus {\n  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.2901960784) !important;\n}\n.fc-button-primary:focus {\n  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.2901960784) !important;\n}\n.fc-event,\n.fc-event-dot {\n  background-color: #3788d8 !important;\n  border-radius: 0px;\n  color: white !important;\n  font-size: 16px;\n  cursor: pointer;\n}\n.cal-checkin {\n  background-color: #28a745 !important;\n  border: 1px;\n}\n.fc-time {\n  display: none;\n}\n.cal-checkout {\n  background-color: gray !important;\n  border: 1px;\n}\n.cal-confirm-checkout {\n  background-color: #e3342f !important;\n  border: 1px;\n}\n.cal-confirm-checkin {\n  background-color: #ae29d0 !important;\n  border: 1px;\n}\n.fc-day-grid-event .fc-content {\n  padding: 0px 5px;\n}\n.details span {\n  font-weight: 700;\n}\n.details {\n  text-align: left;\n  line-height: 1.6;\n}\n.details ul {\n  list-style: none;\n}\n.fc-widget-header {\n  background: #f7f7f7;\n  color: #495057;\n}\n.custom-select-month-header option {\n  background-color: white;\n  color: black;\n}\n.fc-unthemed .fc-divider,\n.fc-unthemed .fc-popover .fc-header,\n.fc-unthemed .fc-list-heading td {\n  background: #eee;\n  color: black;\n}\ntr.fc-list-item.cal-book,\ntr.fc-list-item.cal-book:hover {\n  cursor: pointer;\n  background-color: #3490dc !important;\n  color: white;\n}\ntr.fc-list-item.cal-checkin,\ntr.fc-list-item.cal-checkin:hover {\n  cursor: pointer;\n  background-color: #28a745 !important;\n  color: white;\n}\n.fc-unthemed .fc-list-item:hover td {\n  background-color: none !important;\n  color: black;\n}\ntd.fc-list-item-time.fc-widget-content {\n  padding: 0px 5px;\n}\ntd.fc-list-item-title.fc-widget-content {\n  padding: 0px 5px;\n}\n#toggle-view {\n  background-color: transparent !important;\n  color: #3490dc;\n  border: 0px;\n}", ""]);
+exports.push([module.i, ".fc-button-primary {\n  background-color: #3490dc !important;\n  border-color: #3490dc !important;\n  border-radius: 0px;\n}\n.fc-button-primary:not(:disabled):active:focus,\n.fc-button-primary:not(:disabled).fc-button-active:focus {\n  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.2901960784) !important;\n}\n.fc-button-primary:focus {\n  box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.2901960784) !important;\n}\n.fc-event,\n.fc-event-dot {\n  background-color: #3788d8 !important;\n  border-radius: 0px;\n  color: white !important;\n  font-size: 16px;\n  cursor: pointer;\n}\n.cal-checkin {\n  background-color: #28a745 !important;\n  border: 1px;\n}\n.fc-time {\n  display: none;\n}\n.cal-checkout {\n  background-color: gray !important;\n  border: 1px;\n}\n.cal-confirm-checkout {\n  background-color: #e3342f !important;\n  border: 1px;\n}\n.cal-confirm-checkin {\n  background-color: #ae29d0 !important;\n  border: 1px;\n}\n.cal-cancel {\n  background-color: #dad7d7 !important;\n  border: 1px;\n  color: black !important;\n  text-decoration: line-through !important;\n  -webkit-text-decoration-color: red !important;\n          text-decoration-color: red !important;\n}\n.fc-day-grid-event .fc-content {\n  padding: 0px 5px;\n}\n.details span {\n  font-weight: 700;\n}\n.details {\n  text-align: left;\n  line-height: 1.6;\n}\n.details ul {\n  list-style: none;\n}\n.fc-widget-header {\n  background: #f7f7f7;\n  color: #495057;\n}\n.custom-select-month-header option {\n  background-color: white;\n  color: black;\n}\n.fc-unthemed .fc-divider,\n.fc-unthemed .fc-popover .fc-header,\n.fc-unthemed .fc-list-heading td {\n  background: #eee;\n  color: black;\n}\ntr.fc-list-item.cal-book,\ntr.fc-list-item.cal-book:hover {\n  cursor: pointer;\n  background-color: #3490dc !important;\n  color: white;\n}\ntr.fc-list-item.cal-checkin,\ntr.fc-list-item.cal-checkin:hover {\n  cursor: pointer;\n  background-color: #28a745 !important;\n  color: white;\n}\n.fc-unthemed .fc-list-item:hover td {\n  background-color: none !important;\n  color: black;\n}\ntd.fc-list-item-time.fc-widget-content {\n  padding: 0px 5px;\n}\ntd.fc-list-item-title.fc-widget-content {\n  padding: 0px 5px;\n}\n#toggle-view {\n  background-color: transparent !important;\n  color: #3490dc;\n  border: 0px;\n}", ""]);
 
 // exports
 

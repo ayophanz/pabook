@@ -196,3 +196,6 @@ li.nav-item.logout:hover {
 .control-sidebar:before {
     position: relative !important;
 }
+
+html.swal2-shown,body.swal2-shown { overflow-y: hidden !important; height: auto!important;}
+

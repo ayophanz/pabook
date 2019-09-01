@@ -8,13 +8,13 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use App\Booking;
+use App\User;
 
 class RoomReservation extends Notification
 {
     use Queueable;
 
     public $book;
-
 
     /**
      * Create a new notification instance.
@@ -74,8 +74,9 @@ class RoomReservation extends Notification
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            'newReservation'=> $this->book,
-            'adminAndOwner' => $notifiable
+            // 'newReservation'=> $this->book,
+            // 'adminAndOwner' => $notifiable
+            'notification'=> $notifiable->notifications()->latest()->first()
         ]);
     }
 

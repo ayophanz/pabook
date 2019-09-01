@@ -95,6 +95,8 @@ Route::get('/bookings', 'API\BookController@index');
 
 Route::post('/create-book', 'API\BookController@create');
 
+Route::put('/book-cancelled', 'API\BookController@autoCancel');
+
 Route::put('/room-check-out/{id}', 'API\BookController@checkOut');
 
 Route::put('/room-check-in/{id}', 'API\BookController@checkIn');

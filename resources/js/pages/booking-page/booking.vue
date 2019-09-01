@@ -62,8 +62,6 @@ export default {
                     query = axios.put('/api/room-check-out/'+id)
                 }else if (action == '#extendCall') {
                     query = axios.put('/api/room-extend/'+id)
-                }else if (action == '#addonCall') {
-                    query = axios.put('/api/room-add-on/'+id)
                 }
                 query.then(
                     function(response) {
@@ -132,12 +130,11 @@ export default {
             if (status == 'cal-checkin') {
                 this.btnGuestAct.prepend(this.createButton('Check Out', 'btn-primary', 'fa-sign-out-alt', 'checkOutCall'));
                 this.btnGuestAct.append(this.createButton('Extend Stay', 'btn-primary', 'fa-plus', 'extendCall'));
-                this.btnGuestAct.append(this.createButton('AddOns', 'btn-primary', 'fa-plus-circle', 'addonCall'));
             } else if (status == 'cal-confirm-checkout') {
                 this.btnGuestAct.prepend(this.createButton('Check Out', 'btn-primary', 'fa-sign-out-alt', 'checkOutCall'));
             }else if(status == 'cal-book'){
                 this.btnGuestAct.prepend(this.createButton('Cancel this book', 'btn-primary', 'fa-sign-out-alt', 'cancelCall'));
-            }else if(status = 'cal-confirm-checkin') {
+            }else if(status == 'cal-confirm-checkin') {
                 this.btnGuestAct.prepend(this.createButton('Confirm Check-in', 'btn-primary', 'fa-sign-out-alt', 'checkInCall'));
             }
             this.btnGuestAct.prepend(
@@ -158,7 +155,6 @@ export default {
                 showCloseButton: true,
                 showCancelButton: false
             })
-            this.jQueryAction('#addonCall',id, eventId);
             this.jQueryAction('#extendCall', id, eventId);
             this.jQueryAction('#checkOutCall', id, eventId);
             this.jQueryAction('#cancelCall', id, eventId);
@@ -201,16 +197,18 @@ export default {
                                 let statusClass = 'cal-book';
                                 if (item.status == 'checkin') {
                                     statusClass = 'cal-checkin';
-                                    if (diffDays < 0) {
+                                    end = moment(new Date(item.dateEnd), 'M/D/YYYY');
+                                    diffDays = end.diff(start, 'days');
+                                    if (diffDays < 0 ) {
                                         statusClass = 'cal-confirm-checkout';
-                                    }else{
-                                        end = moment(new Date(item.dateEnd), 'M/D/YYYY');
-                                        diffDays = end.diff(start, 'days');
                                     }
                                     remain = ' | ' + diffDays + ' days left to Check Out';
                                 }else if(item.status == 'checkout') {
                                     remain = '';
                                     statusClass = 'cal-checkout';
+                                }else if(item.status == 'cancel') {
+                                    remain = ' | ' + diffDays + ' days past | Cancelled';
+                                    statusClass = 'cal-cancel';
                                 }else{
                                     diffDays = end.diff(start, 'days');
                                     if(diffDays <= 0) {
@@ -269,11 +267,29 @@ export default {
                         }
                     );
             }
+        },
+        bookCancel() {
+            if (this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+                axios.put('/api/book-cancelled').then(
+                    function(response) {
+                        console.log('ok');
+                    }
+                ).catch(
+                    function(error) {
+                        console.log(error);
+                    }
+                );
+            }
         }
     },
     created() {
         Intl.DateTimeFormat().resolvedOptions().timeZone;
+        this.bookCancel();
         this.loadBookings();
+        let self = this
+        fire.$on('gotoMonth', (month)=>{
+            self.mFilter(month);
+        });
     }
 }
 </script>
@@ -328,6 +344,14 @@ export default {
 .cal-confirm-checkin {
     background-color: #ae29d0 !important;
     border: 1px;
+}
+
+.cal-cancel {
+    background-color: #dad7d7 !important;
+    border: 1px;
+    color: black !important;
+    text-decoration: line-through !important;
+    text-decoration-color: red !important;
 }
 
 .fc-day-grid-event .fc-content {

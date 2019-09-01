@@ -32,17 +32,26 @@
             return {
                 fullPage: true,
                 isLoading: false,
-                allNotifications: []
+                allNotifications: [],
+                unreadNotifications: []
+            }
+        },
+        watch:{
+            allNotifications(val){
+                this.unreadNotifications =  this.allNotifications.filter(notification => {
+                    return notification.read_at == null;
+                });
             }
         },
         methods: {
             markAsRead(notification) {
+                console.log(notification);
                 if (this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
                     this.isLoading = true;
                     let self = this
                     axios.put('/api/mark-as-read/'+notification.id).then(
                         function(response) {
-                    // mFilter
+                            fire.$emit('gotoMonth', new Date(notification.data.newReservation.dateStart.date).getMonth()+1);
                             self.allNotifications = response.data.notifications;
                             fire.$emit('loadCounterNotify');
                             self.isLoading = false;
@@ -59,31 +68,18 @@
                 }
             }
         },
-        computed: {
-            unreadNotifications() {
-              return this.allNotifications.filter(notification=>{
-                return notification.read_at == null;
-              })
-            }
-        },
         created() {
             this.allNotifications = window.user.notifications;
+            console.log(window.user);
+            this.unreadNotifications =  this.allNotifications.filter(notification => {
+                return notification.read_at == null;
+            });
             Echo.private('App.User.' + window.user.id).notification((notification) => {
                         console.log(notification);
-                        this.allNotifications.push(notification); 
+                        this.allNotifications.unshift(notification.notification); 
+                        fire.$emit('loadCounterNotify');
                         });
             fire.$emit('loadCounterNotify');  
-
-            Echo.join('chat')
-            .here((users) => {
-                console.log('present user', users);
-            })
-            .joining((user) => {
-                console.log(user.name);
-            })
-            .leaving((user) => {
-                console.log(user.name);
-            });
         }
     }
 </script>

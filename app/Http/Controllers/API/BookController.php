@@ -72,6 +72,9 @@ class BookController extends Controller
         	
    }
 
+   public function autoCancel() {
+      return Booking::whereDate('dateEnd', '<=', date('Y-m-d'))->where('status', 'book')->update(['status'=>'cancel']);
+   }
    public function checkOut($id) {
       if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner') || \Gate::allows('hotel_receptionist')) 
         Booking::where('id', $id)->update(['status'=>'checkout']);
