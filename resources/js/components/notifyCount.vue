@@ -2,7 +2,7 @@
     <div id="badge">
       <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#">
         <i class="fas fa-bell fa-2x"></i>
-        <span :class="displayy" class="display-none badge badge-danger navbar-badge">{{unreadNotifications.length}}</span>
+        <span v-if="unreadNotifications.length>0" :class="displayy" class="display-none badge badge-danger navbar-badge">{{unreadNotifications.length}}</span>
       </a>
     </div>
 </template>

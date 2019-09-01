@@ -74,8 +74,6 @@ class RoomReservation extends Notification
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            // 'newReservation'=> $this->book,
-            // 'adminAndOwner' => $notifiable
             'notification'=> $notifiable->notifications()->latest()->first()
         ]);
     }

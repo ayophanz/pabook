@@ -5,6 +5,7 @@ namespace App\Providers;
 use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use App\UserMeta;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -26,6 +27,9 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        /**
+        * Basic roles
+        */
         Gate::define('superAdmin', function($user){
             return $user->role === 'super_admin';
         });
@@ -38,8 +42,14 @@ class AuthServiceProvider extends ServiceProvider
             return $user->role === 'hotel_owner';
         });
 
-        Passport::routes();
 
-        //
+        /**
+        * Permission roles
+        */
+        //Gate::define('AllowedReceptionistHotel', function($user){
+            //return UserMeta::where('meta_key', 'assign_to_hotel');//$user->role === 'hotel_receptionist';
+        //});
+
+        Passport::routes();
     }
 }

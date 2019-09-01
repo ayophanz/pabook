@@ -90497,14 +90497,16 @@ var render = function() {
       [
         _c("i", { staticClass: "fas fa-bell fa-2x" }),
         _vm._v(" "),
-        _c(
-          "span",
-          {
-            staticClass: "display-none badge badge-danger navbar-badge",
-            class: _vm.displayy
-          },
-          [_vm._v(_vm._s(_vm.unreadNotifications.length))]
-        )
+        _vm.unreadNotifications.length > 0
+          ? _c(
+              "span",
+              {
+                staticClass: "display-none badge badge-danger navbar-badge",
+                class: _vm.displayy
+              },
+              [_vm._v(_vm._s(_vm.unreadNotifications.length))]
+            )
+          : _vm._e()
       ]
     )
   ])
