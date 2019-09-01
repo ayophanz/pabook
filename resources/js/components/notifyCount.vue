@@ -37,7 +37,6 @@
       created() {
         fire.$on('loadCounterNotify', this.reloadNotification);
         this.displayy = 'display-inline-table';
-
       }
     }
 </script>

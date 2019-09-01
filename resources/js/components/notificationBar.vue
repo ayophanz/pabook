@@ -68,12 +68,22 @@
         },
         created() {
             this.allNotifications = window.user.notifications;
-            Echo.private('App.User.' + window.user.id)
-                    .notification((notification) => {
+            Echo.private('App.User.' + window.user.id).notification((notification) => {
+                        console.log(notification);
                         this.allNotifications.push(notification); 
-                        fire.$emit('loadCounterNotify');
-                    });
+                        });
             fire.$emit('loadCounterNotify');  
+
+            Echo.join('chat')
+            .here((users) => {
+                console.log('present user', users);
+            })
+            .joining((user) => {
+                console.log(user.name);
+            })
+            .leaving((user) => {
+                console.log(user.name);
+            });
         }
     }
 </script>

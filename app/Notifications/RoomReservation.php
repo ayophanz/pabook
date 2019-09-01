@@ -23,7 +23,6 @@ class RoomReservation extends Notification
      */
     public function __construct(Booking $book)
     {
-        //
         $this->book = $book;
     }
 

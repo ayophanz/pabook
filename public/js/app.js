@@ -15038,11 +15038,18 @@ __webpack_require__.r(__webpack_exports__);
 
     this.allNotifications = window.user.notifications;
     Echo["private"]('App.User.' + window.user.id).notification(function (notification) {
-      _this.allNotifications.push(notification);
+      console.log(notification);
 
-      fire.$emit('loadCounterNotify');
+      _this.allNotifications.push(notification);
     });
     fire.$emit('loadCounterNotify');
+    Echo.join('chat').here(function (users) {
+      console.log('present user', users);
+    }).joining(function (user) {
+      console.log(user.name);
+    }).leaving(function (user) {
+      console.log(user.name);
+    });
   }
 });
 
@@ -18333,13 +18340,6 @@ __webpack_require__.r(__webpack_exports__);
     this.loadUsers();
     fire.$on('afterCreated', function () {
       _this2.loadUsers();
-    });
-    Echo.join("chat").here(function (users) {
-      console.log('present user', users);
-    }).joining(function (user) {
-      console.log(user.name);
-    }).leaving(function (user) {
-      console.log(user.name);
     });
   }
 });
@@ -113149,11 +113149,11 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   cluster: "mt1",
   wsHost: window.location.hostname,
   wsPort: 6001,
-  auth: {
-    headers: {
-      Authorization: 'Bearer ' + 'qrGGChraskfl3MXtcrSXK5afaFehdffW519S5pHX'
-    }
-  },
+  // auth: {
+  //     headers: {
+  //         Authorization: 'Bearer ' + 'qrGGChraskfl3MXtcrSXK5afaFehdffW519S5pHX'
+  //     },
+  // },
   disableStats: true
 });
 
