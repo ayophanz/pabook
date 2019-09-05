@@ -16,11 +16,13 @@ class RoomTypeController extends Controller
    }
 
    public function index($id=null) {
+      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+          return die('not allowed');
+
       if($id) {
         $hotelId = explode(',', $id)[0];
         $roomId  = explode(',', $id)[1];
-        if(\Gate::allows('hotelOwner') || \Gate::allows('superAdmin'))
-           return RoomType::where('hotel_id', $hotelId)->whereNotIn('id', $this->roomTypeIds($hotelId, $roomId))->with('roomTypeRefer')->orderBy('created_at', 'desc')->get();
+        return RoomType::where('hotel_id', $hotelId)->whereNotIn('id', $this->roomTypeIds($hotelId, $roomId))->with('roomTypeRefer')->orderBy('created_at', 'desc')->get();
      
       }else{
         if(\Gate::allows('hotelOwner'))
@@ -32,6 +34,8 @@ class RoomTypeController extends Controller
    }
 
    public function create(Request $request) {
+      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+          return die('not allowed');
       $data = [
               'name' 	=> 'required|string|max:191|unique_name:room_types,name,hotel_id,'.$request['hotel'].',0',
               'hotel' => 'required|numeric|min:1'
@@ -48,19 +52,24 @@ class RoomTypeController extends Controller
 
       $this->validate($request, $data, $customMessages);
       
-      if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner'))
-        return RoomType::create($dataCreate);              
+      return RoomType::create($dataCreate);              
    }
 
    public function show($id) {
-        if(\Gate::allows('hotelOwner'))
-            return RoomType::whereIn('hotel_id', $this->hotel_ids())->where('id', $id)->first();
+      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+          return die('not allowed');
 
-        if(\Gate::allows('superAdmin'))
-            return RoomType::where('id', $id)->first();
+      if(\Gate::allows('hotelOwner'))
+           return RoomType::whereIn('hotel_id', $this->hotel_ids())->where('id', $id)->first();
+
+       if(\Gate::allows('superAdmin'))
+           return RoomType::where('id', $id)->first();
     }
 
    public function update(Request $request, $id) {
+        if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+          return die('not allowed');
+
         $data = [
                 'name'  => 'required|string|max:191|unique_name:room_types,name,hotel_id,'.$request['hotel'].','.$id
                 ];
@@ -83,6 +92,9 @@ class RoomTypeController extends Controller
    }
 
    public function destroy($id) {
+      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+          return die('not allowed');
+
       if(\Gate::allows('hotelOwner'))
           return RoomType::whereIn('hotel_id', $this->hotel_ids())->where('id', $id)->delete();
 
@@ -98,14 +110,14 @@ class RoomTypeController extends Controller
    /**
     *  Get owner hotels ID
     */
-   public function hotel_ids() {
+   private function hotel_ids() {
       return Hotel::select('id')->where('owner_id', auth('api')->user()->id)->get()->toArray();
    }
 
    /**
     *  Get unassigned room types
     */
-   public function roomTypeIds($hotelId, $roomId) {
+   private function roomTypeIds($hotelId, $roomId) {
       $roomType = RoomType::select('id')->where('hotel_id', $hotelId)->get()->toArray();
       foreach ($roomType as $key => $value) {
         unset($roomType[$key]['room_type_refer']);

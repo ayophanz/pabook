@@ -16,7 +16,9 @@ class UserController extends Controller
     }
 
     public function index() {
-        //$this->authorize('superAdmin');
+        if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+          return die('not allowed');
+
         if(\Gate::allows('hotelOwner')) 
             return User::whereIn('id', $this->recep())->where('role', 'hotel_receptionist')->orderBy('created_at', 'desc')->get();
         
@@ -25,7 +27,9 @@ class UserController extends Controller
     }
 
     public function create(Request $request) {
-        //$this->authorize('superAdmin');
+        if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+          return die('not allowed');
+
         $user = null;
         $this->isRecep = (($request['role']=='hotel_receptionist')? true : false );
         $data = [
@@ -69,7 +73,9 @@ class UserController extends Controller
     }
 
     public function show($id) {
-        //$this->authorize('superAdmin');
+        if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+            return die('not allowed');
+
         if(\Gate::allows('hotelOwner')) 
             return User::whereIn('id', $this->recep())->where('id', $id)->where('role', 'hotel_receptionist')->first();
         
@@ -78,10 +84,16 @@ class UserController extends Controller
     }
 
     public function update(Request $request, $id) {
+        if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+            return die('not allowed');
+
         return $this->validateUpdate($request, $id);
     }
 
     public function destroy($id) {
+        if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+            return die('not allowed');
+
         if(\Gate::allows('hotelOwner'))
             return User::whereIn('id', $this->recep())->where('id', $id)->delete();
 
@@ -90,14 +102,23 @@ class UserController extends Controller
     }
 
     public function profile() {
+        if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotel_receptionist'))
+            return die('not allowed');
+
         return auth('api')->user();
     }
 
     public function updateProfile(Request $request) {
+        if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotel_receptionist')) 
+            return die('not allowed');
+
         return $this->validateUpdate($request, auth('api')->user()->id);
     }
 
     public function hotelOwner() {
+        if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+            return die('not allowed');
+
         if(\Gate::allows('superAdmin'))
             return User::select('id', 'email')->where('role', 'hotel_owner')->get();
 
@@ -106,6 +127,9 @@ class UserController extends Controller
     }
 
     public function hotelReceptionist($id=null) {
+        if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+            return die('not allowed');
+
         if(\Gate::allows('superAdmin')) {
             $recep = UserMeta::select('value')->where('meta_key', 'receptionist_id')->where('user_id', $id)->get()->toArray();
             return User::where('role', 'hotel_receptionist')->where('status', 'active')->whereIn('id', $recep)->get();
@@ -115,6 +139,9 @@ class UserController extends Controller
     }
 
     public function recapCap(Request $request, $action) {
+        if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+          return die('not allowed');
+
         $data = [
                 'recep' => 'required|numeric|min:1'
                 ];
@@ -132,17 +159,15 @@ class UserController extends Controller
         
         $this->validate($request, $data);
                 
-        if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner')) {
-            if($action=='add') {
-                $isMetakeyExist = UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->first();
-                if($isMetakeyExist) {
-                    return UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->update($userMeta);
-               }else{
-                    return UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->create($userMeta);
-               }
-            }else{
+        if($action=='add') {
+            $isMetakeyExist = UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->first();
+            if($isMetakeyExist) {
                 return UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->update($userMeta);
-            }
+           }else{
+                return UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->create($userMeta);
+           }
+        }else{
+            return UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->update($userMeta);
         }
     }
 

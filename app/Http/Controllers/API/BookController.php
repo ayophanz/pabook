@@ -23,13 +23,17 @@ class BookController extends Controller
    }
 
    public function index() {
+    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotel_receptionist'))
+      return die('not allowed');
 
-    if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner') || \Gate::allows('hotel_receptionist')) 
-      return Booking::with('room')->get();
+    return Booking::with('room')->get();
 
    }
 
    public function create(Request $request) {
+      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotel_receptionist'))
+        return die('not allowed');
+
    		$data = [
    			    'fullname'  => 'required|string|max:191',
    			    'email'     => 'required|string|email|max:191',
@@ -65,37 +69,46 @@ class BookController extends Controller
 
    		$this->validate($request, $data, $customMessages);
 
-   		if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner') || \Gate::allows('hotel_receptionist')) {
-            $book = Booking::create($dataCreate);
-            if($book) {
-              Notification::send($this->userToNotify($book->room_id), new RoomReservation($book));
-              return $book;
-            }
+      $book = Booking::create($dataCreate);
+      if($book) {
+        Notification::send($this->userToNotify($book->room_id), new RoomReservation($book));
+        return $book;
       }
-        	
+	
    }
 
    public function autoCancel() {
-      if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner') || \Gate::allows('hotel_receptionist')) {
-          return Booking::whereDate('dateEnd', '<=', date('Y-m-d'))->where('status', 'book')->update(['status'=>'cancel']);
-      }
+    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotel_receptionist'))
+      return die('not allowed');
+    
+    return Booking::whereDate('dateEnd', '<=', date('Y-m-d'))->where('status', 'book')->update(['status'=>'cancel']);
+   
    }
 
    public function checkOut($id) {
-      if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner') || \Gate::allows('hotel_receptionist')) 
-        Booking::where('id', $id)->update(['status'=>'checkout']);
+      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotel_receptionist'))
+        return die('not allowed');
+      
+      return Booking::where('id', $id)->update(['status'=>'checkout']);
+    
    }
 
    public function checkIn($id) {
-      if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner') || \Gate::allows('hotel_receptionist')) 
-        Booking::where('id', $id)->update(['status'=>'checkin']);
+      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotel_receptionist'))
+        return die('not allowed');
+   
+      return Booking::where('id', $id)->update(['status'=>'checkin']);
+   
    }
 
    public function markAsRead($id=null) {
-    if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner') || \Gate::allows('hotel_receptionist'))
-      if($id!=null)
-        auth()->user()->unreadNotifications->where('id', $id)->markAsRead();
-      return auth()->user()->load('notifications');
+    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotel_receptionist'))
+        return die('not allowed');
+
+    if($id!=null)
+       auth()->user()->unreadNotifications->where('id', $id)->markAsRead();
+    return auth()->user()->load('notifications');
+
    }
 
 
@@ -107,7 +120,8 @@ class BookController extends Controller
    /**
     *  Users to notify
     */
-    public function userToNotify($id) {
+    private function userToNotify($room_id) {
+      $id = $room_id;
       $room = Room::select('type_id')->where('id', $id)->first();
       $roomType = RoomType::select('hotel_id')->where('id', $room->type_id)->first();
       $hotel = Hotel::select('owner_id')->where('id', $roomType->hotel_id)->first();
@@ -126,7 +140,7 @@ class BookController extends Controller
             } 
           }
       }
-      return User::whereIn('id', $allowed)->get();
+      return User::whereIn('id', $allowed)->orwhere('role', 'super_admin')->get();
     }
 
 }

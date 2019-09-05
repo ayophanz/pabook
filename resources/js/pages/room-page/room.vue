@@ -103,9 +103,9 @@
 </template>
 
 <script>
-    import CurrencyFormatComponent from '../../components/autoCurrency'
-    import RepeaterInputComponent from '../../components/repeaterField'
-    import ImageUploader from '../../components/ImageUploader'
+    import CurrencyFormatComponent from '../../components/autoCurrencyComponent'
+    import RepeaterInputComponent from '../../components/repeaterFieldComponent'
+    import ImageUploader from '../../components/ImageUploaderComponent'
     import Loading from 'vue-loading-overlay'
     import 'vue-loading-overlay/dist/vue-loading.css'
     export default {

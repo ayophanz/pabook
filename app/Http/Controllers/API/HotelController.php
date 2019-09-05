@@ -15,25 +15,26 @@ class HotelController extends Controller
     }
 
     public function index($id=null,$recep=null,$capa=null) {
+        if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+            return die('not allowed');
+
         if($id==null && $recep==null) {
             if(\Gate::allows('superAdmin'))
     		    return Hotel::orderBy('created_at', 'desc')->get();
             if(\Gate::allows('hotelOwner'))
                 return Hotel::where('owner_id',  $this->ownerId())->orderBy('created_at', 'desc')->get(); 
         }else{
-            if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner')) {
-                if($id=='0')
-                    $id = $this->ownerId();
-                $exist_recep = UserMeta::select('value')->where('meta_key', 'assign_to_hotel')->where('user_id', $recep)->get();
-                $exist_recep = json_decode(json_encode($exist_recep),true);
-                $toarr = array();
-                if($exist_recep)
-                    $toarr = explode(',', substr($exist_recep[0]['value'], 1, -1));
-                if($capa=='1') 
-                    return Hotel::whereIn('id', $toarr)->where('owner_id', $id)->orderBy('created_at', 'desc')->get();
-                else
-                    return Hotel::whereNotIn('id', $toarr)->where('owner_id', $id)->orderBy('created_at', 'desc')->get();
-            }
+            if($id=='0')
+                $id = $this->ownerId();
+            $exist_recep = UserMeta::select('value')->where('meta_key', 'assign_to_hotel')->where('user_id', $recep)->get();
+            $exist_recep = json_decode(json_encode($exist_recep),true);
+            $toarr = array();
+            if($exist_recep)
+                $toarr = explode(',', substr($exist_recep[0]['value'], 1, -1));
+            if($capa=='1') 
+                return Hotel::whereIn('id', $toarr)->where('owner_id', $id)->orderBy('created_at', 'desc')->get();
+            else
+                return Hotel::whereNotIn('id', $toarr)->where('owner_id', $id)->orderBy('created_at', 'desc')->get();
         } 	
     }
 
@@ -92,6 +93,9 @@ class HotelController extends Controller
     }
 
     public function show($id) {
+        if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+            return die('not allowed');
+
     	if(\Gate::allows('superAdmin'))
             return Hotel::with('globalBaseCurrency', 'baseCurrency')->where('id', $id)->first();
         if(\Gate::allows('hotelOwner'))
@@ -151,17 +155,19 @@ class HotelController extends Controller
     }
 
     public function destroy($id) {
-    	if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner')) {
-            $hotel = Hotel::where('id', $id)->first();
-            if(\Gate::allows('hotelOwner'))
-                $hotel = Hotel::where('id', $id)->where('owner_id', $this->ownerId())->first();
+    	if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+            return die('not allowed');
+        
+        $hotel = Hotel::where('id', $id)->first();
+        if(\Gate::allows('hotelOwner'))
+            $hotel = Hotel::where('id', $id)->where('owner_id', $this->ownerId())->first();
 
-            if($hotel) {
-                unlink(storage_path('app/public/images/upload/hotelImages/'.$hotel->image));
-                return Hotel::where('id', $id)->delete();
-            }
-            return die('Something went wrong!');
-        } 
+        if($hotel) {
+            unlink(storage_path('app/public/images/upload/hotelImages/'.$hotel->image));
+            return Hotel::where('id', $id)->delete();
+        }
+        return die('Something went wrong!');
+        
     }
 
 
@@ -173,7 +179,7 @@ class HotelController extends Controller
     /**
     *  Owner Id security verification
     */
-    public function ownerId() {
+    private function ownerId() {
         return auth('api')->user()->id;
     }
 
@@ -181,7 +187,7 @@ class HotelController extends Controller
     /**
     *  If does have base currency
     */
-    public function baseCurrencyExist($id, $base_currency) {
+    private function baseCurrencyExist($id, $base_currency) {
         $option = [
                     'meta_key' => 'base_currency',
                     'meta_value' => $id,

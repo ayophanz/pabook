@@ -76,13 +76,28 @@ let routes = [
     {path: '/users', component: require('./pages/user-page/users.vue').default},
     {path: '/add-user', component: require('./pages/user-page/user.vue').default},
     {path: '/edit-user/:userId', component: require('./pages/user-page/user.vue').default},
-    {path: '/users-capability', component: require('./pages/user-page/capability.vue').default}
+    {path: '/users-capability', component: require('./pages/user-page/capability.vue').default},
+
+    /**
+     * 404
+     */
+     {path: '*', component: require('./pages/404.vue').default}
 ]
 
 const router = new VueRouter({
     mode: 'history',
     routes
 })
+
+
+/**
+* Global components
+*/
+Vue.component('notifycount', require('./components/notifyCountComponent.vue').default);
+Vue.component('notifybar', require('./components/notificationBarComponent.vue').default);
+Vue.component('not-found', require('./components/404Component.vue').default);
+
+
 
 
 Vue.filter('upWord', function(text){
@@ -148,9 +163,6 @@ window.fire = new Vue();
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-
-Vue.component('notifycount', require('./components/notifyCount.vue').default);
-Vue.component('notifybar', require('./components/notificationBar.vue').default);
 
 const app = new Vue({
     el: '#app',

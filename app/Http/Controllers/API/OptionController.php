@@ -13,16 +13,22 @@ class OptionController extends Controller
    }
 
    public function index($id=null) {
+      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+          return die('not allowed');
 
-    	if(\Gate::allows('superAdmin') && $id!=null) {
+    	if(\Gate::allows('superAdmin') && $id!=null) 
         	return Option::where('meta_key', 'global_base_currency')->where('meta_value', $id)->first();
-        }elseif(\Gate::allows('hotelOwner')) {
+      
+      if(\Gate::allows('hotelOwner')) 
         	return Option::where('meta_key', 'global_base_currency')->where('meta_value', $this->ownerId())->first();
-        }
+       
    }
 
    public function create(Request $request) {
-   	    $option = null;
+      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+          return die('not allowed');
+
+   	  $option = null;
    		$data = [
    			    'base_currency'  => 'required|string|max:191'
    		];
@@ -59,14 +65,14 @@ class OptionController extends Controller
     /**
     *  Owner Id security verification
     */
-    public function ownerId() {
+    private function ownerId() {
         return auth('api')->user()->id;
     }
 
     /**
     *  Create and update
     */
-    public function createUpdate($id, $dataCreate) {
+    private function createUpdate($id, $dataCreate) {
     	$option = null;
     	$exist = Option::where('meta_key', 'base_currency')->where('meta_value', $id)->first();
 		if(!$exist) {
