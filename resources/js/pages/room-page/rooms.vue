@@ -25,47 +25,62 @@
             <div class="card-body">
               <div class="row">
                   <div class="col-sm-12">
-                        <table id="table-rooms" class="table table-bordered table-striped dataTable" role="grid">
-                            <thead>
-                                <tr role="row">
-                                    <th class="text-center">Id</th>
-                                    <th class="text-center">Hotel</th>
-                                    <th class="text-center">Room Type</th>
-                                    <th class="text-center">Name</th>
-                                    <th class="text-center">Total Room</th>
-                                    <th class="text-center">Status</th>
-                                    <th class="text-center">Created At</th>
-                                    <th class="text-center">Image</th>
-                                    <th class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                <tr v-for="room in rooms" :key="room.id">
-                                    <td class="align-middle text-center">{{room.id}}</td>
-                                    <td class="align-middle text-center">{{room.room_type.room_type_refer.name}}</td>
-                                    <td class="align-middle text-center">{{room.room_type.name}}</td>
-                                    <td class="align-middle text-center">{{room.name}}</td>
-                                    <td class="align-middle text-center">{{room.total_room}}</td>
-                                    <td class="align-middle text-center">{{room.status}}</td>
-                                    <td class="align-middle text-center">{{room.created_at | formatDate}}</td>
-                                    <td class="align-middle text-center">
-                                        <vue-pure-lightbox
-                                            class="image-circle"
-                                            :thumbnail="getImgUrl(room.image, room.id)"
-                                            :images="[
-                                              getImgUrl(room.image, room.id)
-                                            ]"
-                                        ></vue-pure-lightbox>
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <router-link :to="`/edit-room/${room.id}`"  class="btn btn-outline-primary btn-flat"><i class="fa fa-edit"></i> Edit</router-link>&nbsp;&nbsp;
-                                        <a href="#" @click.prevent="selectRoom(room.id)" :data-id="room.id" class="btn btn-outline-danger btn-flat"><i class="fa fa-trash"></i> Delete</a>
-                                    </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
+                    <vue-bootstrap4-table class="tb-hotel-list" :rows="rowData" :columns="columns" :config="config">
+                        <template slot="sort-asc-icon">
+                            <i class="fas fa-sort-up"></i>
+                        </template>
+                        <template slot="sort-desc-icon">
+                            <i class="fas fa-sort-down"></i>
+                        </template>
+                        <template slot="no-sort-icon">
+                            <i class="fas fa-sort"></i>
+                        </template>
+                        <template slot="column_id" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fab fa-slack-hash"></i>
+                        </template>
+                        <template slot="column_hotel" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fas fa-hotel"></i>
+                        </template>
+                        <template slot="column_room" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fas fa-bed"></i>
+                        </template>
+                        <template slot="column_total_room" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fas fa-hashtag"></i>
+                        </template>
+                       <!--  <template slot="column_image" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fas fa-image"></i>
+                        </template>
+                        <template slot="image" slot-scope="props">
+                            <vue-pure-lightbox
+                                class="image-circle"
+                                :thumbnail="getImgUrl(props.row['image'], props.row['id'])"
+                                :images="[
+                                  getImgUrl(props.row['image'], props.row['id'])
+                                ]"
+                            ></vue-pure-lightbox>
+                        </template> -->
+                        <template slot="column_status" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fas fa-shield-alt"></i>
+                        </template>
+                        <template slot="column_created_at" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fas fa-table"></i>
+                        </template>
+                        <template slot="column_actions" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fas fa-external-link-square-alt"></i>
+                        </template>
+                        <template slot="actions" slot-scope="props">
+                            <router-link :to="`/edit-room/${props.cell_value}`"  class="btn btn-outline-primary btn-flat"><i class="fa fa-edit"></i> Edit</router-link>&nbsp;&nbsp;
+                            <a href="#" @click.prevent="selectRoom(props.cell_value)" :data-id="props.cell_value" class="btn btn-outline-danger btn-flat"><i class="fa fa-trash"></i> Delete</a>
+                        </template>
+                    </vue-bootstrap4-table>
                         </div>
                     </div>
                 </div>
@@ -93,7 +108,96 @@
                 base_currency: 'USD',
                 fullPage: true,
                 isLoading: false,
-                rooms: []
+                //rooms: [],
+                rowData:[],
+                columns: [{
+                            label: "Id",
+                            name: "id",
+                            filter: {
+                                type: "simple",
+                                placeholder: "id"
+                            },
+                            sort: true,
+                            slot_name: "id",
+                            row_text_alignment: "text-left",
+                            column_text_alignment: "text-left",
+                            row_classes: "room-row-class-id",
+                        },
+                        {
+                            label: "Hotel",
+                            name: "room_type.room_type_refer.name",
+                            filter: {
+                                type: "simple",
+                                placeholder: "Enter hotel name"
+                            },
+                            sort: true,
+                            slot_name: "hotel",
+                            row_text_alignment: "text-left",
+                            column_text_alignment: "text-left",
+                            row_classes: "room-row-class-hotel",
+                        },
+                        {
+                            label: "Room",
+                            name: "name",
+                            filter: {
+                                type: "simple",
+                                placeholder: "Enter room name"
+                            },
+                            sort: true,
+                            slot_name: "room",
+                            row_text_alignment: "text-left",
+                            column_text_alignment: "text-left",
+                            row_classes: "room-row-class-name",
+                        },
+                        {
+                            label: "Total room",
+                            name: "total_room",
+                            sort: true,
+                            slot_name: "total_room",
+                            row_text_alignment: "text-left",
+                            column_text_alignment: "text-left",
+                            row_classes: "room-row-class-number",
+                        },
+                        // {
+                        //     label: "Image",
+                        //     name: "image",
+                        //     slot_name: "image",
+                        //     row_text_alignment: "text-left",
+                        //     column_text_alignment: "text-left",
+                        // },
+                        {
+                            label: "Status",
+                            name: "status",
+                            sort: true,
+                            slot_name: "status",
+                            row_text_alignment: "text-left",
+                            column_text_alignment: "text-left",
+                        },
+                        {
+                            label: "Created at",
+                            name: "created_at",
+                            sort: true,
+                            slot_name: "created_at",
+                            row_text_alignment: "text-left",
+                            column_text_alignment: "text-left",
+                            row_classes: "room-row-class-date",
+                        },
+                        {
+                            label: "Actions",
+                            name: "id",
+                            sort: false,
+                            slot_name: "actions",
+                            row_text_alignment: "text-center",
+                            column_text_alignment: "text-center",
+                        }
+                ],    
+                config: {
+                    checkbox_rows: false,
+                    rows_selectable: true,
+                    per_page: 10,
+                    show_refresh_button: false,
+                    show_reset_button: false
+                }
             }
         },
         methods: {
@@ -106,7 +210,8 @@
                     axios.get('/api/rooms')
                     .then(
                         function (response) {
-                            self.rooms = response.data;
+                            //self.rooms = response.data;
+                            self.rowData = response.data;
                         }
                     );
                 }
@@ -151,3 +256,20 @@
         }
     }
 </script>
+<style lang='scss'>
+    .room-row-class-id {
+        width: 150px;   
+    }
+    .room-row-class-hotel {
+        width: 200px;
+    }
+    .room-row-class-name {
+        width: 200px;
+    }
+    .room-row-class-number {
+        width: 150px;
+    }
+    .room-row-class-date {
+        width: 160px;
+    }
+</style>

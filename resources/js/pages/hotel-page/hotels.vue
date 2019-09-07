@@ -94,7 +94,7 @@
             return {
                 rowData:[],
                 columns: [{
-                            label: "id",
+                            label: "Id",
                             name: "id",
                             filter: {
                                 type: "simple",
@@ -111,7 +111,7 @@
                             name: "name",
                             filter: {
                                 type: "simple",
-                                placeholder: "Enter first name"
+                                placeholder: "Enter hotel name"
                             },
                             sort: true,
                             slot_name: "name",

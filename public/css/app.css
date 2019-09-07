@@ -16738,3 +16738,8 @@ body.swal2-shown {
   box-shadow: 0 0 0 0.2rem #38c17224 !important;
 }
 
+.lightbox,
+.lightbox__thumbnail {
+  z-index: 2 !important;
+}
+
