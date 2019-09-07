@@ -91,14 +91,14 @@
 </template>
 
 <script>
-    import styles from 'vue-pure-lightbox/dist/VuePureLightbox.css'
-    import VuePureLightbox from 'vue-pure-lightbox'
+    //import styles from 'vue-pure-lightbox/dist/VuePureLightbox.css'
+    //import VuePureLightbox from 'vue-pure-lightbox'
     import Loading from 'vue-loading-overlay'
     import 'vue-loading-overlay/dist/vue-loading.css'
     import MoneyFormat from 'vue-money-format'
     export default {
         components: {
-             VuePureLightbox,
+            // VuePureLightbox,
              Loading,
              MoneyFormat
         },
@@ -196,7 +196,8 @@
                     rows_selectable: true,
                     per_page: 10,
                     show_refresh_button: false,
-                    show_reset_button: false
+                    show_reset_button: false,
+                    highlight_row_hover_color:'rgba(214, 214, 214, 0.26)'
                 }
             }
         },

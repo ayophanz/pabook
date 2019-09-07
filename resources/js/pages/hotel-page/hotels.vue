@@ -169,7 +169,8 @@
                     rows_selectable: true,
                     per_page: 10,
                     show_refresh_button: false,
-                    show_reset_button: false
+                    show_reset_button: false,
+                    highlight_row_hover_color:'rgba(214, 214, 214, 0.26)'
                 },
                 //hotels: '',
                 fullPage: true,

@@ -15,7 +15,42 @@
             <div class="card-body">
               <div class="row">
                   <div class="col-sm-12">
-                        <table id="table-user" class="table table-bordered table-striped dataTable" role="grid">
+                    <vue-bootstrap4-table class="tb-hotel-list" :rows="rowData" :columns="columns" :config="config">
+                    <template slot="sort-asc-icon">
+                            <i class="fas fa-sort-up"></i>
+                        </template>
+                        <template slot="sort-desc-icon">
+                            <i class="fas fa-sort-down"></i>
+                        </template>
+                        <template slot="no-sort-icon">
+                            <i class="fas fa-sort"></i>
+                        </template>
+                        <template slot="column_id" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fab fa-slack-hash"></i>
+                        </template>
+                        <template slot="column_hotel" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fas fa-hotel"></i>
+                        </template>
+                        <template slot="column_room_type" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fas fa-hotel"></i>
+                        </template>
+                        <template slot="column_created_at" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fas fa-table"></i>
+                        </template>
+                        <template slot="column_actions" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fas fa-external-link-square-alt"></i>
+                        </template>
+                        <template slot="actions" slot-scope="props">
+                            <router-link :to="`/edit-room/${props.cell_value}`"  class="btn btn-outline-primary btn-flat"><i class="fa fa-edit"></i> Edit</router-link>&nbsp;&nbsp;
+                            <a href="#" @click.prevent="selectRoom(props.cell_value)" :data-id="props.cell_value" class="btn btn-outline-danger btn-flat"><i class="fa fa-trash"></i> Delete</a>
+                        </template>
+                    </vue-bootstrap4-table>
+                        <!-- <table id="table-user" class="table table-bordered table-striped dataTable" role="grid">
                             <thead>
                                 <tr role="row">
                                     <th>Id</th>
@@ -38,7 +73,7 @@
                                 </tr>
 
                             </tbody>
-                        </table>
+                        </table> -->
                         </div>
                     </div>
                 </div>
@@ -50,7 +85,69 @@
     export default {
         data() {
             return {
-                types: []
+                //types: [],
+                rowData:[],
+                columns: [{
+                            label: "Id",
+                            name: "id",
+                            filter: {
+                                type: "simple",
+                                placeholder: "id"
+                            },
+                            sort: true,
+                            slot_name: "id",
+                            row_text_alignment: "text-left",
+                            column_text_alignment: "text-left",
+                            row_classes: "room-types-row-class-id",
+                        },
+                        {
+                            label: "Hotel name",
+                            name: "room_type_refer.name",
+                            filter: {
+                                type: "simple",
+                                placeholder: "Enter hotel name"
+                            },
+                            sort: true,
+                            slot_name: "hotel",
+                            row_text_alignment: "text-left",
+                            column_text_alignment: "text-left",
+                            row_classes: "room-types-row-class-hotel",
+                        },
+                        {
+                            label: "Room Type",
+                            name: "name",
+                            sort: true,
+                            slot_name: "room_type",
+                            row_text_alignment: "text-left",
+                            column_text_alignment: "text-left",
+                            row_classes: "room-types-row-class-name",
+                        },
+                        {
+                            label: "Created at",
+                            name: "created_at",
+                            sort: true,
+                            slot_name: "created_at",
+                            row_text_alignment: "text-left",
+                            column_text_alignment: "text-left",
+                            row_classes: "room-types-row-class-date",
+                        },
+                        {
+                            label: "Actions",
+                            name: "id",
+                            sort: false,
+                            slot_name: "actions",
+                            row_text_alignment: "text-center",
+                            column_text_alignment: "text-center",
+                        }
+                ],    
+                config: {
+                    checkbox_rows: false,
+                    rows_selectable: true,
+                    per_page: 10,
+                    show_refresh_button: false,
+                    show_reset_button: false,
+                    highlight_row_hover_color:'rgba(214, 214, 214, 0.26)'
+                }
             }
         },
         methods: {
@@ -60,7 +157,8 @@
                     axios.get('/api/room-types')
                     .then(
                         function (response) {
-                            self.types = response.data
+                            //self.types = response.data
+                            self.rowData = response.data
                         }
                     );
                 }
@@ -102,3 +200,11 @@
         }
     }
 </script>
+<style lang="scss">
+    .room-types-row-class-id {
+        width: 150px;
+    }
+    .room-types-row-class-hotel {
+        width: 300px;
+    }
+</style>
