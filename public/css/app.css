@@ -16702,3 +16702,39 @@ body.swal2-shown {
   background-color: #38d39f !important;
 }
 
+/**
+*
+* Button theme
+*/
+
+.btn-outline-primary:hover {
+  color: #fff !important;
+  border-color: #38d39f !important;
+  background: #049a79 !important;
+  background: linear-gradient(90deg, #049a79 0%, #2ac18e 35%, #38d39f 100%) !important;
+}
+
+.btn-primary {
+  border-color: #38d39f !important;
+  background: #049a79 !important;
+  background: linear-gradient(90deg, #049a79 0%, #2ac18e 35%, #38d39f 100%) !important;
+}
+
+.btn-outline-primary {
+  color: #38d39f !important;
+  border-color: #38d39f !important;
+}
+
+.btn-primary:not(:disabled):not(.disabled):active:focus,
+.btn-primary:not(:disabled):not(.disabled).active:focus,
+.show > .btn-primary.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem #38c17224 !important;
+}
+
+.btn-primary:focus,
+.btn-primary.focus,
+.btn-outline-primary:focus,
+.btn-outline-primary.focus {
+  box-shadow: 0 0 0 0.2rem #38c17224 !important;
+}
+

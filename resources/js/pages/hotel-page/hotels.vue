@@ -26,7 +26,50 @@
             <div class="card-body">
               <div class="row">
                   <div class="col-sm-12">
-                        <table id="table-user" class="table table-bordered table-striped dataTable" role="grid">
+                        <vue-bootstrap4-table :rows="rowData" :columns="columns" :config="config">
+                        <template slot="sort-asc-icon">
+                            <i class="fas fa-sort-up"></i>
+                        </template>
+                        <template slot="sort-desc-icon">
+                            <i class="fas fa-sort-down"></i>
+                        </template>
+                        <template slot="no-sort-icon">
+                            <i class="fas fa-sort"></i>
+                        </template>
+                        <template slot="column_id" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fab fa-slack-hash"></i>
+                        </template>
+                        <template slot="column_name" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fas fa-hotel"></i>
+                        </template>
+                        <template slot="column_country" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fas fa-flag"></i>
+                        </template>
+                        <template slot="column_phone" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fas fa-phone"></i>
+                        </template>
+                        <template slot="column_email" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fas fa-at"></i>
+                        </template>
+                        <template slot="column_created_at" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fas fa-table"></i>
+                        </template>
+                        <template slot="column_actions" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fas fa-external-link-square-alt"></i>
+                        </template>
+                        <template slot="actions" slot-scope="props">
+                            <router-link :to="`/edit-hotel/${props.cell_value}`"  class="btn btn-outline-primary btn-flat"><i class="fa fa-edit"></i> Edit</router-link>&nbsp;&nbsp;
+                            <a href="#" @click.prevent="selectHotel(props.cell_value)" :data-id="props.cell_value" class="btn btn-outline-danger btn-flat"><i class="fa fa-trash"></i> Delete</a>
+                        </template>
+                        </vue-bootstrap4-table>
+                        <!-- <table id="table-user" class="table table-bordered table-striped dataTable" role="grid">
                             <thead>
                                 <tr role="row">
                                     <th class="text-center">Id</th>
@@ -64,7 +107,7 @@
                                 </tr>
 
                             </tbody>
-                        </table>
+                        </table> -->
                         </div>
                     </div>
                 </div>
@@ -79,13 +122,92 @@
     import VuePureLightbox from 'vue-pure-lightbox'
     import Loading from 'vue-loading-overlay'
     import 'vue-loading-overlay/dist/vue-loading.css'
+    import VueBootstrap4Table from 'vue-bootstrap4-table'
     export default {
         components:{
             VuePureLightbox,
-            Loading
+            Loading,
+            VueBootstrap4Table
         },
         data() {
             return {
+                rowData:[],
+                columns: [{
+                            label: "id",
+                            name: "id",
+                            filter: {
+                                type: "simple",
+                                placeholder: "id"
+                            },
+                            sort: true,
+                            slot_name: "id",
+                            row_text_alignment: "text-left",
+                            column_text_alignment: "text-left",
+                            row_classes: "booking-row-class-id",
+                        },
+                        {
+                            label: "Name",
+                            name: "name",
+                            filter: {
+                                type: "simple",
+                                placeholder: "Enter first name"
+                            },
+                            sort: true,
+                            slot_name: "name",
+                            row_text_alignment: "text-left",
+                            column_text_alignment: "text-left",
+                            row_classes: "booking-row-class-name",
+                        },
+                        {
+                            label: "Country",
+                            name: "country",
+                            filter: {
+                                type: "simple",
+                                placeholder: "Enter country"
+                            },
+                            slot_name: "country",
+                            row_text_alignment: "text-left",
+                            column_text_alignment: "text-left",
+                            row_classes: "booking-row-class-country",
+                        },
+                        {
+                            label: "Phone Number",
+                            name: "phone_number",
+                            sort: true,
+                            slot_name: "phone",
+                            row_text_alignment: "text-left",
+                            column_text_alignment: "text-left",
+                        },
+                        {
+                            label: "Email",
+                            name: "email",
+                            sort: true,
+                            slot_name: "email",
+                            row_text_alignment: "text-left",
+                            column_text_alignment: "text-left",
+                        },
+                        {
+                            label: "Created at",
+                            name: "created_at",
+                            sort: true,
+                            slot_name: "created_at",
+                            row_text_alignment: "text-left",
+                            column_text_alignment: "text-left",
+                        },
+                        {
+                            label: "Actions",
+                            name: "id",
+                            sort: false,
+                            slot_name: "actions",
+                            row_text_alignment: "text-center",
+                            column_text_alignment: "text-center",
+                        }
+                ],    
+                config: {
+                    checkbox_rows: false,
+                    rows_selectable: true,
+                    per_page: 10
+                },
                 hotels: '',
                 fullPage: true,
                 isLoading: false
@@ -102,6 +224,7 @@
                     .then(
                         function (response) {
                             self.hotels = response.data
+                            self.rowData = response.data
                         }
                     );
                 }
@@ -146,3 +269,12 @@
         }
     }
 </script>
+<style lang='scss'>
+    .booking-row-class-id {
+        width: 150px !important;
+    }
+
+    .booking-row-class-country, .booking-row-class-name {
+        width: 250px;
+    }
+</style>

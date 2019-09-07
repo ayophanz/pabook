@@ -212,3 +212,35 @@ html.swal2-shown,body.swal2-shown { overflow-y: hidden !important; height: auto!
     color: white !important;
     background-color: #38d39f !important;
 }
+
+
+/**
+*
+* Button theme
+*/
+
+.btn-outline-primary:hover {
+    color: #fff !important;
+    border-color: #38d39f !important;
+    background: rgb(4,154,121) !important;
+    background: linear-gradient(90deg, rgba(4,154,121,1) 0%, rgba(42,193,142,1) 35%, rgba(56,211,159,1) 100%) !important;
+}
+
+.btn-primary {
+    border-color: #38d39f !important;
+    background: rgb(4,154,121) !important;
+    background: linear-gradient(90deg, rgba(4,154,121,1) 0%, rgba(42,193,142,1) 35%, rgba(56,211,159,1) 100%) !important;
+}
+
+.btn-outline-primary {
+    color: #38d39f !important;
+    border-color: #38d39f !important;
+}
+
+.btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus, .show > .btn-primary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem #38c17224 !important;
+}
+.btn-primary:focus, .btn-primary.focus, .btn-outline-primary:focus, .btn-outline-primary.focus {
+    box-shadow: 0 0 0 0.2rem #38c17224 !important;
+}
+

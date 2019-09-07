@@ -301,20 +301,20 @@ export default {
 @import '~@fullcalendar/core/main.css';
 @import '~@fullcalendar/daygrid/main.css';
 .fc-button-primary {
-    background-color: #3490dc !important;
-    border-color: #3490dc !important;
-    border-radius: 0px;
+    border-color: #38d39f !important;
+    background-color: rgb(4,154,121) !important;
+    background: linear-gradient(90deg, rgba(4,154,121,1) 0%, rgba(42,193,142,1) 35%, rgba(56,211,159,1) 100%) !important;
 }
 
 .fc-button-primary:not(:disabled):active:focus,
 .fc-button-primary:not(:disabled).fc-button-active:focus {
-    -webkit-box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.2901960784313726) !important;
-    box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.2901960784313726) !important;
+    -webkit-box-shadow: 0 0 0 0.2rem rgba(4,154,121, 0.2901960784313726) !important;
+    box-shadow: 0 0 0 0.2rem rgba(4,154,121, 0.2901960784313726) !important;
 }
 
 .fc-button-primary:focus {
-    -webkit-box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.2901960784313726) !important;
-    box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.2901960784313726) !important;
+    -webkit-box-shadow: 0 0 0 0.2rem rgba(4,154,121, 0.2901960784313726) !important;
+    box-shadow: 0 0 0 0.2rem rgba(4,154,121, 0.2901960784313726) !important;
 }
 
 .fc-event,
