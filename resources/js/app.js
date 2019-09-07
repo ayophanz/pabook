@@ -109,6 +109,7 @@ Vue.component('settings-page-icon', require('./page-icon/settingsComponent.vue')
 Vue.component('profile-page-icon', require('./page-icon/profileComponent.vue').default);
 Vue.component('collection-page-icon', require('./page-icon/collectionComponent.vue').default);
 Vue.component('create-page-icon', require('./page-icon/createComponent.vue').default);
+Vue.component('design-page-icon', require('./page-icon/designComponent.vue').default);
 
 
 Vue.filter('upWord', function(text){

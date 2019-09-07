@@ -69,8 +69,8 @@
                             <i class="fas fa-external-link-square-alt"></i>
                         </template>
                         <template slot="actions" slot-scope="props">
-                            <router-link :to="`/edit-user/${props.cell_value}`"  class="btn btn-outline-primary btn-flat"><i class="fa fa-edit"></i> Edit</router-link>&nbsp;&nbsp;
-                            <a href="#" @click.prevent="selectUser(props.cell_value)" :data-id="props.cell_value" class="btn btn-outline-danger btn-flat"><i class="fa fa-trash"></i> Delete</a>
+                            <router-link :to="`/edit-user/${props.cell_value}`"  class="btn btn-outline-primary btn-flat btn-action"><i class="fa fa-edit"></i> Edit</router-link>
+                            <a href="#" @click.prevent="selectUser(props.cell_value)" :data-id="props.cell_value" class="btn btn-outline-danger btn-flat btn-action"><i class="fa fa-trash"></i> Delete</a>
                         </template>
                     </vue-bootstrap4-table>
                         </div>

@@ -248,3 +248,13 @@ html.swal2-shown,body.swal2-shown { overflow-y: hidden !important; height: auto!
 .lightbox, .lightbox__thumbnail {
     z-index: 2 !important;
 }
+
+button:focus, .fc-button-primary:focus {
+    outline-color: #38c172;
+}
+
+.btn-action {
+    min-width: 90px;
+    margin: 2px;
+    text-align: left;
+}

@@ -9,7 +9,8 @@
         :color="`#38d39f`"
         :active.sync="isLoading" 
         :is-full-page="fullPage">
-       </loading>    
+       </loading>
+       <design-page-icon></design-page-icon>    
         <div class="row justify-content-center">
             <div class="col-12">
                 <div class="card">
