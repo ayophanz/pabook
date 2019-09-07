@@ -26,7 +26,7 @@
             <div class="card-body">
               <div class="row">
                   <div class="col-sm-12">
-                        <vue-bootstrap4-table :rows="rowData" :columns="columns" :config="config">
+                        <vue-bootstrap4-table class="tb-hotel-list" :rows="rowData" :columns="columns" :config="config">
                         <template slot="sort-asc-icon">
                             <i class="fas fa-sort-up"></i>
                         </template>
@@ -69,45 +69,6 @@
                             <a href="#" @click.prevent="selectHotel(props.cell_value)" :data-id="props.cell_value" class="btn btn-outline-danger btn-flat"><i class="fa fa-trash"></i> Delete</a>
                         </template>
                         </vue-bootstrap4-table>
-                        <!-- <table id="table-user" class="table table-bordered table-striped dataTable" role="grid">
-                            <thead>
-                                <tr role="row">
-                                    <th class="text-center">Id</th>
-                                    <th class="text-center">Name</th>
-                                    <th class="text-center">Country</th>
-                                    <th class="text-center">Phone Number</th>
-                                    <th class="text-center">Email</th>
-                                    <th class="text-center">Image</th>
-                                    <th class="text-center">Created At</th>
-                                    <th class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                <tr v-for="hotel in hotels" :key="hotel.id">
-                                    <td class="align-middle text-center">{{hotel.id}}</td>
-                                    <td class="align-middle text-center">{{hotel.name}}</td>
-                                    <td class="align-middle text-center">{{hotel.country}}</td>
-                                    <td class="align-middle text-center">{{hotel.phone_number}}</td>
-                                    <td class="align-middle text-center">{{hotel.email}}</td>
-                                    <td class="align-middle text-center">
-                                        <vue-pure-lightbox
-                                            class="image-circle"
-                                            :thumbnail="getImgUrl(hotel.image)"
-                                            :images="[
-                                              getImgUrl(hotel.image)
-                                            ]"
-                                        ></vue-pure-lightbox>
-                                    </td>
-                                    <td class="align-middle text-center">{{hotel.created_at | formatDate}}</td>
-                                    <td class="align-middle text-center">
-                                        <router-link :to="`/edit-hotel/${hotel.id}`"  class="btn btn-outline-primary btn-flat"><i class="fa fa-edit"></i> Edit</router-link>&nbsp;&nbsp;
-                                        <a href="#" @click.prevent="selectHotel(hotel.id)" :data-id="hotel.id" class="btn btn-outline-danger btn-flat"><i class="fa fa-trash"></i> Delete</a>
-                                    </td>
-                                </tr>
-
-                            </tbody>
-                        </table> -->
                         </div>
                     </div>
                 </div>
@@ -118,14 +79,14 @@
 </template>
 
 <script>
-    import styles from 'vue-pure-lightbox/dist/VuePureLightbox.css'
-    import VuePureLightbox from 'vue-pure-lightbox'
+    // import styles from 'vue-pure-lightbox/dist/VuePureLightbox.css'
+    // import VuePureLightbox from 'vue-pure-lightbox'
     import Loading from 'vue-loading-overlay'
     import 'vue-loading-overlay/dist/vue-loading.css'
     import VueBootstrap4Table from 'vue-bootstrap4-table'
     export default {
         components:{
-            VuePureLightbox,
+            //VuePureLightbox,
             Loading,
             VueBootstrap4Table
         },
@@ -206,9 +167,11 @@
                 config: {
                     checkbox_rows: false,
                     rows_selectable: true,
-                    per_page: 10
+                    per_page: 10,
+                    show_refresh_button: false,
+                    show_reset_button: false
                 },
-                hotels: '',
+                //hotels: '',
                 fullPage: true,
                 isLoading: false
             }
@@ -223,7 +186,7 @@
                     axios.get('/api/hotels')
                     .then(
                         function (response) {
-                            self.hotels = response.data
+                            //self.hotels = response.data
                             self.rowData = response.data
                         }
                     );
@@ -276,5 +239,22 @@
 
     .booking-row-class-country, .booking-row-class-name {
         width: 250px;
+    }
+    .tb-hotel-list .card-header {
+        display: none;
+    }
+    .tb-hotel-list table thead tr:first-child th {
+        border-top: 0px;
+    }
+    .page-item.active .page-link {
+        z-index: 1;
+        color: #fff;
+        background-color: #32cc98;
+        border-color: #38c172;
+    }
+    .page-link:focus {
+        z-index: 2;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem #38c17259;
     }
 </style>
