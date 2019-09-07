@@ -1,81 +1,83 @@
 <template>
-    <div class="row justify-content-center">
-          <loading 
-            :height="128"
-            :width="128"
-            :transition="`fade`"
-            :loader="`dots`"
-            :background-color="`#fff`"
-            :color="`#007bff`"
-            :active.sync="isLoading" 
-            :is-full-page="fullPage">
-           </loading>
-        <div class="col-12">
-            <div class="card">
-          <div class="card-header">
-            <div class="card-tool">
-                <router-link to="/users"><button class="btn btn-outline-primary btn-flat"><i class="fa fa-arrow-left"></i> Back</button></router-link>
-            </div>
-          </div>
+    <div class="container" id="root">
+        <loading 
+        :height="128"
+        :width="128"
+        :transition="`fade`"
+        :loader="`dots`"
+        :background-color="`#fff`"
+        :color="`#38d39f`"
+        :active.sync="isLoading" 
+        :is-full-page="fullPage">
+       </loading>    
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="card">
+              <div class="card-header">
+                <div class="card-tool">
+                    <router-link to="/users"><button class="btn btn-outline-primary btn-flat"><i class="fa fa-arrow-left"></i> Back</button></router-link>
+                </div>
+              </div>
 
-            <div class="card-body">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-md-6" v-if="isAdmin">
-                            <div class="form-group">
-                                <label for="hotelOwner">Hotel Owner <span class="required-asterisk">*</span></label>
-                                <select v-model="form.hotelOwner" @change="ifChangehotelOwner" class="form-control" :class="{ 'is-invalid': form.errors.has('hotelOwner') }" id="hotelOwner">
-                                  <option v-for="item in hotelOwners" :selected="item.id === form.hotelOwner" :value="item.id">{{item.email}}</option>
-                                </select>
-                                <has-error :form="form" field="hotelOwner"></has-error>
-                            </div> 
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-md-6" v-if="isAdmin">
+                                <div class="form-group">
+                                    <label for="hotelOwner">Hotel Owner <span class="required-asterisk">*</span></label>
+                                    <select v-model="form.hotelOwner" @change="ifChangehotelOwner" class="form-control" :class="{ 'is-invalid': form.errors.has('hotelOwner') }" id="hotelOwner">
+                                      <option v-for="item in hotelOwners" :selected="item.id === form.hotelOwner" :value="item.id">{{item.email}}</option>
+                                    </select>
+                                    <has-error :form="form" field="hotelOwner"></has-error>
+                                </div> 
+                            </div>
+                            <div :class="{'col-md-12':  isAdmin==false, 'col-md-6':  isAdmin==true}">
+                                <div class="form-group">
+                                    <label for="recep">Receptionist <span class="required-asterisk">*</span></label>
+                                    <select @change="selectRecep" v-model="form.recep" class="form-control" :class="{ 'is-invalid': form.errors.has('recep') }" id="recep">
+                                      <option v-for="item in receps" :selected="item.id === form.recep" :value="item.id">{{item.email}}</option>
+                                    </select>
+                                    <has-error :form="form" field="recep"></has-error>
+                                </div> 
+                            </div>
                         </div>
-                        <div :class="{'col-md-12':  isAdmin==false, 'col-md-6':  isAdmin==true}">
-                            <div class="form-group">
-                                <label for="recep">Receptionist <span class="required-asterisk">*</span></label>
-                                <select @change="selectRecep" v-model="form.recep" class="form-control" :class="{ 'is-invalid': form.errors.has('recep') }" id="recep">
-                                  <option v-for="item in receps" :selected="item.id === form.recep" :value="item.id">{{item.email}}</option>
-                                </select>
-                                <has-error :form="form" field="recep"></has-error>
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 text-center">
-                            <div class="card set-h-500">
-                                <div class="card-header">
-                                    <h6><strong>{{recepName}}</strong> capabilities</h6>
-                                </div>
-                                <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <div class="card set-h-500">
+                                    <div class="card-header">
+                                        <h6><strong>{{recepName}}</strong> capabilities</h6>
+                                    </div>
+                                    <div class="card-body">
 
-                                     <!--Assign capability-->
-                                    <div class="row text-left">
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <label>Assign Capabilities</label>
-                                                <div v-for="item in hotelsCapa" class="custom-control custom-switch"><input :checked="true" @click="isChck(item,$event)" :value="item.id" type="checkbox" :id="'user-capa-'+item.id" class="custom-control-input"> <label :for="'user-capa-'+item.id" class="custom-control-label">{{item.name}}</label></div>
+                                         <!--Assign capability-->
+                                        <div class="row text-left">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label>Assign Capabilities</label>
+                                                    <div v-for="item in hotelsCapa" class="custom-control custom-switch"><input :checked="true" @click="isChck(item,$event)" :value="item.id" type="checkbox" :id="'user-capa-'+item.id" class="custom-control-input"> <label :for="'user-capa-'+item.id" class="custom-control-label">{{item.name}}</label></div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                <hr>
-                                    <!--Unassign capability-->
-                                    <div class="row text-left">
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <label>Unassign Capabilities</label>
-                                                <div v-for="item in hotels" class="custom-control custom-switch"><input :checked="false" @click="isChck(item,$event)" :value="item.id" type="checkbox" :id="'user-capa-'+item.id" class="custom-control-input"> <label :for="'user-capa-'+item.id" class="custom-control-label">{{item.name}}</label></div>
+                                    <hr>
+                                        <!--Unassign capability-->
+                                        <div class="row text-left">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label>Unassign Capabilities</label>
+                                                    <div v-for="item in hotels" class="custom-control custom-switch"><input :checked="false" @click="isChck(item,$event)" :value="item.id" type="checkbox" :id="'user-capa-'+item.id" class="custom-control-input"> <label :for="'user-capa-'+item.id" class="custom-control-label">{{item.name}}</label></div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+          </div>
         </div>
-      </div>
     </div>
 </template>
 

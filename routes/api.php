@@ -101,6 +101,8 @@ Route::put('/room-check-out/{id}', 'API\BookController@checkOut');
 
 Route::put('/room-check-in/{id}', 'API\BookController@checkIn');
 
+Route::put('/room-book-cancel/{id}', 'API\BookController@bookCancel');
+
 Route::put('/mark-as-read/{id}', 'API\BookController@markAsRead');
 
 Route::get('/mark-as-read', 'API\BookController@markAsRead');

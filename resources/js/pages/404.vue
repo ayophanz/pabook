@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                   <not-found></not-found>
+                   <not-found-page-icon></not-found-page-icon>
             </div>
         </div>
     </div>

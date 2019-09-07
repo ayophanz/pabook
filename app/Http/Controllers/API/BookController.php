@@ -85,6 +85,14 @@ class BookController extends Controller
    
    }
 
+   public function bookCancel($id) {
+    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotel_receptionist'))
+      return die('not allowed');
+    
+    return Booking::where('id', $id)->where('status', 'book')->update(['status'=>'cancel']);
+   
+   }
+
    public function checkOut($id) {
       if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotel_receptionist'))
         return die('not allowed');

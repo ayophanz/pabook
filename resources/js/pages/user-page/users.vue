@@ -6,10 +6,11 @@
         :transition="`fade`"
         :loader="`dots`"
         :background-color="`#fff`"
-        :color="`#007bff`"
+        :color="`#38d39f`"
         :active.sync="isLoading" 
         :is-full-page="fullPage">
       </loading>
+      <result-page-icon></result-page-icon>
         <div class="col-12">
           <div class="card">
             <div class="card-header">

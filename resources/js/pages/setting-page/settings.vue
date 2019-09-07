@@ -6,10 +6,11 @@
             :transition="`fade`"
             :loader="`dots`"
             :background-color="`#fff`"
-            :color="`#007bff`"
+            :color="`#38d39f`"
             :active.sync="isLoading" 
             :is-full-page="fullPage">
         </loading>
+        <settings-page-icon></settings-page-icon>
         <div class="col-md-12">
             <form @submit.prevent="register" role="form">
                 <div class="card">

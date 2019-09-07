@@ -6,10 +6,12 @@
         :transition="`fade`"
         :loader="`dots`"
         :background-color="`#fff`"
-        :color="`#007bff`"
+        :color="`#38d39f`"
         :active.sync="isLoading" 
         :is-full-page="fullPage">
       </loading>
+       <profile-page-icon v-if="userId!=null"></profile-page-icon>
+       <add-user-page-icon v-if="userId==null"></add-user-page-icon>
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">

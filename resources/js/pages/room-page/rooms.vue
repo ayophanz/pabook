@@ -6,10 +6,11 @@
             :transition="`fade`"
             :loader="`dots`"
             :background-color="`#fff`"
-            :color="`#007bff`"
+            :color="`#38d39f`"
             :active.sync="isLoading" 
             :is-full-page="fullPage">
         </loading>
+        <result-page-icon></result-page-icon>
         <div class="col-12">
           <div class="card">
             <div class="card-header">
@@ -47,7 +48,7 @@
                                     <td class="align-middle text-center">{{room.name}}</td>
                                     <td class="align-middle text-center">{{room.total_room}}</td>
                                     <td class="align-middle text-center">{{room.status}}</td>
-                                    <td class="align-middle text-center">{{room.created_at}}</td>
+                                    <td class="align-middle text-center">{{room.created_at | formatDate}}</td>
                                     <td class="align-middle text-center">
                                         <vue-pure-lightbox
                                             class="image-circle"

@@ -1,8 +1,9 @@
 <template>
     <div id="root">
         <div class="row justify-content-center">
+            <booking-page-icon></booking-page-icon>
             <div class="col-md-12">
-                <div class="card">
+                <div class="card mt-5">
                     <div class="card-header">
                         <div class="card-tool">
                             <router-link to="/add-book-entry">
@@ -57,7 +58,7 @@ export default {
                 if (action == '#checkInCall') {
                     query = axios.put('/api/room-check-in/'+id)
                 }else if(action == '#cancelCall') {
-                    query = axios.put('/api/room-cancel/'+id)
+                    query = axios.put('/api/room-book-cancel/'+id)
                 }else if (action == '#checkOutCall') {
                     query = axios.put('/api/room-check-out/'+id)
                 }else if (action == '#extendCall') {
@@ -87,6 +88,9 @@ export default {
             if(action == '#checkOutCall') {
                 Event.setProp('classNames', ['cal-checkout']);
                 Event.setProp('title', Event.title.split('|')[0]);
+            }else if(action == '#cancelCall') {
+                Event.setProp('classNames', ['cal-cancel']);
+                Event.setProp('title', Event.title.split('|')[0]);    
             }else if(action == '#checkInCall') {
                 Event.setProp('classNames', ['cal-checkin']);
                 Event.setProp('title', Event.title.split('|')[0]+ ' | '+this.dateDiff(Event.start - Event.end)+' days left to Check Out');

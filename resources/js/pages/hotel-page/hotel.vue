@@ -6,10 +6,12 @@
         :transition="`fade`"
         :loader="`dots`"
         :background-color="`#fff`"
-        :color="`#007bff`"
+        :color="`#38d39f`"
         :active.sync="isLoading" 
         :is-full-page="fullPage">
       </loading>
+      <collection-page-icon v-if="hotelId!=null"></collection-page-icon>
+      <create-page-icon v-if="hotelId==null"></create-page-icon>
       <form @submit.prevent="register" role="form">
         <div class="row justify-content-center">
             <div class="col-md-9">

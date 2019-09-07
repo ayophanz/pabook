@@ -1,15 +1,17 @@
 <template>
     <div class="row justify-content-center">
+
         <loading 
             :height="128"
             :width="128"
             :transition="`fade`"
             :loader="`dots`"
             :background-color="`#fff`"
-            :color="`#007bff`"
+            :color="`#38d39f`"
             :active.sync="isLoading" 
             :is-full-page="fullPage">
           </loading>
+          <result-page-icon></result-page-icon>
         <div class="col-12">
           <div class="card">
             <div class="card-header">
@@ -29,11 +31,7 @@
                                 <tr role="row">
                                     <th class="text-center">Id</th>
                                     <th class="text-center">Name</th>
-                                    <th class="text-center">Address</th>
-                                    <th class="text-center">City</th>
-                                    <th class="text-center">State / Province</th>
                                     <th class="text-center">Country</th>
-                                    <th class="text-center">Zip Code</th>
                                     <th class="text-center">Phone Number</th>
                                     <th class="text-center">Email</th>
                                     <th class="text-center">Image</th>
@@ -46,11 +44,7 @@
                                 <tr v-for="hotel in hotels" :key="hotel.id">
                                     <td class="align-middle text-center">{{hotel.id}}</td>
                                     <td class="align-middle text-center">{{hotel.name}}</td>
-                                    <td class="align-middle text-center">{{hotel.address}}</td>
-                                    <td class="align-middle text-center">{{hotel.city}}</td>
-                                    <td class="align-middle text-center">{{hotel.state_province}}</td>
                                     <td class="align-middle text-center">{{hotel.country}}</td>
-                                    <td class="align-middle text-center">{{hotel.zip_code}}</td>
                                     <td class="align-middle text-center">{{hotel.phone_number}}</td>
                                     <td class="align-middle text-center">{{hotel.email}}</td>
                                     <td class="align-middle text-center">
@@ -62,7 +56,7 @@
                                             ]"
                                         ></vue-pure-lightbox>
                                     </td>
-                                    <td class="align-middle text-center">{{hotel.created_at}}</td>
+                                    <td class="align-middle text-center">{{hotel.created_at | formatDate}}</td>
                                     <td class="align-middle text-center">
                                         <router-link :to="`/edit-hotel/${hotel.id}`"  class="btn btn-outline-primary btn-flat"><i class="fa fa-edit"></i> Edit</router-link>&nbsp;&nbsp;
                                         <a href="#" @click.prevent="selectHotel(hotel.id)" :data-id="hotel.id" class="btn btn-outline-danger btn-flat"><i class="fa fa-trash"></i> Delete</a>

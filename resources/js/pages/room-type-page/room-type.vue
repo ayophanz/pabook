@@ -6,10 +6,12 @@
         :transition="`fade`"
         :loader="`dots`"
         :background-color="`#fff`"
-        :color="`#007bff`"
+        :color="`#38d39f`"
         :active.sync="isLoading" 
         :is-full-page="fullPage">
       </loading>
+      <collection-page-icon v-if="typeId!=null"></collection-page-icon>
+      <create-page-icon v-if="typeId==null"></create-page-icon>
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
