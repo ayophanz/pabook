@@ -1,9 +1,9 @@
 <aside class="main-sidebar sidebar-light-success elevation-4">
-    <a href="index3.html" class="brand-link navbar-teal">
+    <router-link to="/"class="brand-link navbar-teal">
       <img src="{{asset('/storage/images/icon/laptop.svg')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
            style="opacity: .8">
       <span class="brand-text font-weight-light">AdminLTE 3</span>
-    </a>
+    </router-link>
 
     <div class="sidebar">
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
@@ -11,7 +11,7 @@
           <img src="{{asset('/storage/images/icon/boy.svg')}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">{{ Auth::user()->name }} <span class="caret"></span></a>
+          <router-link to="/profile" class="d-block">{{ Auth::user()->name }} <span class="caret"></span></router-link>
         </div>
       </div>
 

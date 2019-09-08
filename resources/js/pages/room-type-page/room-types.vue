@@ -16,7 +16,7 @@
               <div class="row">
                   <div class="col-sm-12">
                     <vue-bootstrap4-table class="tb-hotel-list" :rows="rowData" :columns="columns" :config="config">
-                    <template slot="sort-asc-icon">
+                        <template slot="sort-asc-icon">
                             <i class="fas fa-sort-up"></i>
                         </template>
                         <template slot="sort-desc-icon">
@@ -46,34 +46,10 @@
                             <i class="fas fa-external-link-square-alt"></i>
                         </template>
                         <template slot="actions" slot-scope="props">
-                            <router-link :to="`/edit-room/${props.cell_value}`"  class="btn btn-outline-primary btn-flat btn-action"><i class="fa fa-edit"></i> Edit</router-link>
-                            <a href="#" @click.prevent="selectRoom(props.cell_value)" :data-id="props.cell_value" class="btn btn-outline-danger btn-flat btn-action"><i class="fa fa-trash"></i> Delete</a>
+                            <router-link :to="`/edit-room-type/${props.cell_value}`"  class="btn btn-outline-primary btn-flat btn-action"><i class="fa fa-edit"></i> Edit</router-link>
+                            <a href="#" @click.prevent="selectType(props.cell_value)" :data-id="props.cell_value" class="btn btn-outline-danger btn-flat btn-action"><i class="fa fa-trash"></i> Delete</a>
                         </template>
                     </vue-bootstrap4-table>
-                        <!-- <table id="table-user" class="table table-bordered table-striped dataTable" role="grid">
-                            <thead>
-                                <tr role="row">
-                                    <th>Id</th>
-                                    <th>Hotel</th>
-                                    <th>Room Type</th>
-                                    <th>Created At</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="type in types" :key="type.id">
-                                    <td>{{type.id}}</td>
-                                    <td>{{type.room_type_refer.name}}</td>
-                                    <td>{{type.name}}</td>
-                                    <td>{{type.created_at | formatDate}}</td>
-                                    <td>
-                                        <router-link :to="`/edit-room-type/${type.id}`"  class="btn btn-outline-primary btn-flat"><i class="fa fa-edit"></i> Edit</router-link>&nbsp;&nbsp;
-                                        <a href="#" @click.prevent="selectType(type.id)" :data-id="type.id" class="btn btn-outline-danger btn-flat"><i class="fa fa-trash"></i> Delete</a>
-                                    </td>
-                                </tr>
-
-                            </tbody>
-                        </table> -->
                         </div>
                     </div>
                 </div>

@@ -70,7 +70,6 @@
         },
         created() {
             this.allNotifications = window.user.notifications;
-            console.log(window.user);
             this.unreadNotifications =  this.allNotifications.filter(notification => {
                 return notification.read_at == null;
             });

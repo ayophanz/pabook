@@ -59,7 +59,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Starter Page</h1>
+            <h1 class="m-0 text-dark">@{{$route.name}}</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -84,7 +84,7 @@
     <div class="float-right d-none d-sm-inline">
       Anything you want
     </div>
-    <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; <?php echo date('Y');?> All rights reserved, Designed & Developed by<a href="https://www.facebook.com/ayophanz" target="_blank"> Jford Ayop</a></strong>
   </footer>
 </div>
 
