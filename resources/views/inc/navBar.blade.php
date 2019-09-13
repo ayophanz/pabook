@@ -1,16 +1,17 @@
 <aside class="main-sidebar sidebar-light-success elevation-4">
     <router-link to="/"class="brand-link navbar-teal">
-      <img src="{{asset('/storage/images/icon/laptop.svg')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-           style="opacity: .8">
-      <span class="brand-text font-weight-light">AdminLTE 3</span>
+      <img src="{{asset('/storage/images/pabook-logo.png')}}" alt="pabook" class="custom-logo"
+           >
+      <!-- <span class="brand-text font-weight-light">pabook</span> -->
     </router-link>
 
     <div class="sidebar">
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{asset('/storage/images/icon/boy.svg')}}" class="img-circle elevation-2" alt="User Image">
+          <default-profile class="img-circle elevation-2" alt="User Image"></default-profile>
+          <!-- <img src="{{asset('/storage/images/icon/boy.svg')}}" class="img-circle elevation-2" alt="User Image"> -->
         </div>
-        <div class="info">
+        <div class="info align-items-center">
           <router-link to="/profile" class="d-block">{{ Auth::user()->name }} <span class="caret"></span></router-link>
         </div>
       </div>

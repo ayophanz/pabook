@@ -42,8 +42,8 @@ img.brand-image {
 }
 
 .router-link-exact-active {
-    color: #fff !important;
-    background-color: rgb(52, 144, 220) !important;
+    color: black !important;
+    background-color: transparent !important;
 }
 
 .sidebar-dark-primary .nav-sidebar>.nav-item>.nav-treeview {
@@ -210,7 +210,6 @@ html.swal2-shown,body.swal2-shown { overflow-y: hidden !important; height: auto!
 
 [class*=sidebar-light] .brand-link {
     color: white !important;
-    background-color: #38d39f !important;
 }
 
 
@@ -257,4 +256,16 @@ button:focus, .fc-button-primary:focus {
     min-width: 90px;
     margin: 2px;
     text-align: left;
+}
+[class*=sidebar-light] .brand-link {
+    background-color: white !important;
+}
+.user-panel .info {
+    display: flex !important;
+}
+
+.custom-logo {
+    max-width: 150px;
+    margin: auto;
+    display: flex;
 }
