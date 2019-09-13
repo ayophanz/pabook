@@ -16692,11 +16692,6 @@ body.swal2-shown {
   background-color: white !important;
 }
 
-.router-link-exact-active {
-  color: #fff !important;
-  background-color: #38d39f !important;
-}
-
 [class*=sidebar-light] .brand-link {
   color: white !important;
 }
