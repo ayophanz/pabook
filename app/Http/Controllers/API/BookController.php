@@ -30,10 +30,10 @@ class BookController extends Controller
       return Booking::with('room')->get();
     
     if(\Gate::allows('hotelOwner')) 
-      return Booking::whereIn('room_id', $this->isRoomAvailable('owner'))->with('room')->get();
+      return Booking::whereIn('room_id', $this->filterBookings('owner'))->with('room')->get();
 
     if(\Gate::allows('hotelReceptionist')) 
-      return Booking::whereIn('room_id', $this->isRoomAvailable('recep'))->with('room')->get();  
+      return Booking::whereIn('room_id', $this->filterBookings('recep'))->with('room')->get();  
       
    }
 
@@ -85,35 +85,45 @@ class BookController extends Controller
    }
 
    public function autoCancel() {
-    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
-      return die('not allowed');
-    
-    return Booking::whereDate('dateEnd', '<=', date('Y-m-d'))->where('status', 'book')->update(['status'=>'cancel']);
-   
+      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
+        return die('not allowed');
+      
+      if(\Gate::allows('hotelOwner')) 
+        return Booking::whereIn('room_id', $this->filterBookings('owner'))->whereDate('dateEnd', '<=', date('Y-m-d'))->where('status', 'book')->update(['status'=>'cancel']);
+      
+      if(\Gate::allows('hotelReceptionist')) 
+        return Booking::whereIn('room_id', $this->filterBookings('recep'))->whereDate('dateEnd', '<=', date('Y-m-d'))->where('status', 'book')->update(['status'=>'cancel']);
+
    }
 
    public function bookCancel($id) {
-    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
-      return die('not allowed');
-    
-    return Booking::where('id', $id)->where('status', 'book')->update(['status'=>'cancel']);
-   
+      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
+        return die('not allowed');
+      
+      if( (\Gate::allows('superAdmin')) || (\Gate::allows('hotelOwner') && $this->validateAction('owner', $id)) || (\Gate::allows('hotelReceptionist') && $this->validateAction('recep', $id)) )
+        return Booking::where('id', $id)->where('status', 'book')->update(['status'=>'cancel']);
+      else
+        return die('this room is not yours');
    }
 
    public function checkOut($id) {
       if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
         return die('not allowed');
       
-      return Booking::where('id', $id)->update(['status'=>'checkout']);
-    
+      if( (\Gate::allows('superAdmin')) || (\Gate::allows('hotelOwner') && $this->validateAction('owner', $id)) || (\Gate::allows('hotelReceptionist') && $this->validateAction('recep', $id)) )
+        return Booking::where('id', $id)->update(['status'=>'checkout']);
+      else
+        return die('this room is not yours');
    }
 
    public function checkIn($id) {
       if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
         return die('not allowed');
-   
-      return Booking::where('id', $id)->update(['status'=>'checkin']);
-   
+
+      if( (\Gate::allows('superAdmin')) || (\Gate::allows('hotelOwner') && $this->validateAction('owner', $id)) || (\Gate::allows('hotelReceptionist') && $this->validateAction('recep', $id)) )
+        return Booking::where('id', $id)->update(['status'=>'checkin']);
+      else
+        return die('this room is not yours');  
    }
 
    public function markAsRead($id=null) {
@@ -159,9 +169,9 @@ class BookController extends Controller
     }
 
    /**
-    *  check for room available
+    *  filter bookings
     */
-    private function isRoomAvailable($userType) {
+    private function filterBookings($userType) {
       $owner = 0;
       if($userType=='recep') 
         $owner = UserMeta::select('user_id')->where('meta_key', 'receptionist_id')->where('value', auth('api')->user()->id)->first()->user_id;
@@ -175,4 +185,16 @@ class BookController extends Controller
       return $room;
     }
 
+    /**
+    *  validate action by user type
+    */
+    private function validateAction($userType, $id) {
+      $book = Booking::select('room_id')->where('id', $id)->first()->room_id;
+      foreach ($this->filterBookings($userType) as  $item) {
+        if($item['id']==$book)
+          return true;
+      }
+      return false;
+    
+    }
 }
