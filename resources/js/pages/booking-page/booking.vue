@@ -300,10 +300,18 @@ export default {
 <style lang='scss'>
 @import '~@fullcalendar/core/main.css';
 @import '~@fullcalendar/daygrid/main.css';
-.fc-button-primary {
+.fc-button-primary, .fc-button-primary:hover {
+    color: #fff !important;
     border-color: #38d39f !important;
-    background-color: rgb(4,154,121) !important;
-    background: linear-gradient(90deg, rgba(4,154,121,1) 0%, rgba(42,193,142,1) 35%, rgba(56,211,159,1) 100%) !important;
+    background: #28a745;
+    background: -webkit-linear-gradient(left, #28a745, #38c172);
+    background: -o-linear-gradient(left, #28a745, #38c172);
+    background: -moz-linear-gradient(left, #28a745, #38c172);
+    background: linear-gradient(left, #28a745, #38c172);
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
 }
 
 .fc-button-primary:not(:disabled):active:focus,

@@ -23,15 +23,22 @@ class BookController extends Controller
    }
 
    public function index() {
-    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotel_receptionist'))
+    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
       return die('not allowed');
+    
+    if(\Gate::allows('superAdmin'))  
+      return Booking::with('room')->get();
+    
+    if(\Gate::allows('hotelOwner')) 
+      return Booking::whereIn('room_id', $this->isRoomAvailable('owner'))->with('room')->get();
 
-    return Booking::with('room')->get();
-
+    if(\Gate::allows('hotelReceptionist')) 
+      return Booking::whereIn('room_id', $this->isRoomAvailable('recep'))->with('room')->get();  
+      
    }
 
    public function create(Request $request) {
-      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotel_receptionist'))
+      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
         return die('not allowed');
 
    		$data = [
@@ -78,7 +85,7 @@ class BookController extends Controller
    }
 
    public function autoCancel() {
-    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotel_receptionist'))
+    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
       return die('not allowed');
     
     return Booking::whereDate('dateEnd', '<=', date('Y-m-d'))->where('status', 'book')->update(['status'=>'cancel']);
@@ -86,7 +93,7 @@ class BookController extends Controller
    }
 
    public function bookCancel($id) {
-    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotel_receptionist'))
+    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
       return die('not allowed');
     
     return Booking::where('id', $id)->where('status', 'book')->update(['status'=>'cancel']);
@@ -94,7 +101,7 @@ class BookController extends Controller
    }
 
    public function checkOut($id) {
-      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotel_receptionist'))
+      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
         return die('not allowed');
       
       return Booking::where('id', $id)->update(['status'=>'checkout']);
@@ -102,7 +109,7 @@ class BookController extends Controller
    }
 
    public function checkIn($id) {
-      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotel_receptionist'))
+      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
         return die('not allowed');
    
       return Booking::where('id', $id)->update(['status'=>'checkin']);
@@ -110,7 +117,7 @@ class BookController extends Controller
    }
 
    public function markAsRead($id=null) {
-    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotel_receptionist'))
+    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
         return die('not allowed');
 
     if($id!=null)
@@ -149,6 +156,23 @@ class BookController extends Controller
           }
       }
       return User::whereIn('id', $allowed)->orwhere('role', 'super_admin')->get();
+    }
+
+   /**
+    *  check for room available
+    */
+    private function isRoomAvailable($userType) {
+      $owner = 0;
+      if($userType=='recep') 
+        $owner = UserMeta::select('user_id')->where('meta_key', 'receptionist_id')->where('value', auth('api')->user()->id)->first()->user_id;
+      
+      if($userType=='owner')
+        $owner = auth('api')->user()->id;
+      
+      $hotel = Hotel::select('id')->where('owner_id', $owner)->get()->toArray();
+      $types = RoomType::select('id')->whereIn('hotel_id', $hotel)->get()->toArray();
+      $room = Room::select('id')->whereIn('id', $types)->get()->toArray();
+      return $room;
     }
 
 }
