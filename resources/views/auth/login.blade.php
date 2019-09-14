@@ -5,11 +5,11 @@
 <div class="limiter">
     <form method="POST" action="{{ route('login') }}">
         @csrf 
-        <div class="container-login100">
+        <div class="container-login100" style="background-image: url('/loginStyle/images/destinations.svg'); background-size: contain; background-repeat: no-repeat;background-position: center;">
             <div class="wrap-login100 p-t-190 p-b-30">
                 <form class="login100-form validate-form">
                     <div class="login100-form-avatar">
-                        <img src="{{ asset('/storage/images/icon/laptop.svg') }}" alt="AVATAR">
+                        <img src="{{asset('/storage/images/pabook.png')}}" alt="pabook">
                     </div>
 
                     <span class="login100-form-title p-t-20 p-b-45">

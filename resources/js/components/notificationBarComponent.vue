@@ -73,11 +73,11 @@
             this.unreadNotifications =  this.allNotifications.filter(notification => {
                 return notification.read_at == null;
             });
-            Echo.private('App.User.' + window.user.id).notification((notification) => {
-                        console.log(notification);
-                        this.allNotifications.unshift(notification.notification); 
-                        fire.$emit('loadCounterNotify');
-                        });
+            // Echo.private('App.User.' + window.user.id).notification((notification) => {
+            //             console.log(notification);
+            //             this.allNotifications.unshift(notification.notification); 
+            //             fire.$emit('loadCounterNotify');
+            //             });
             fire.$emit('loadCounterNotify');  
         }
     }
