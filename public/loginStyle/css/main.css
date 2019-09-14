@@ -184,7 +184,7 @@ iframe {
   top: 0;
   left: 0;
   background-color: white;
-  opacity: 0.9;
+  opacity: 0.3;
 }
 
 .wrap-login100 {
@@ -226,6 +226,8 @@ iframe {
 }
 .login100-form-avatar img {
   width: 100%;
+  border-radius: 100%;
+  background-color: white;
 }
 
 

@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="csrf-token" content="{{csrf_token()}}">
-  <title>AdminLTE 3 | Starter</title>
+  <title>Pabook</title>
 
   <link rel="stylesheet" type="text/css" href="{{asset('/css/app.css')}}">
 

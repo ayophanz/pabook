@@ -49,18 +49,20 @@ class UserController extends Controller
                     ];
         
         $userMeta = ['meta_key' => 'receptionist_id'];
-
-        if($this->isRecep) {
-            $data['assignTo'] = 'required|numeric|min:1';
-            $userMeta['user_id'] = $request['assignTo'];   
-        }else{
-            $userMeta['user_id'] = auth('api')->user()->id;
-        }   
+        
+        if(\Gate::allows('superAdmin')) {
+            if($this->isRecep) {
+                $data['assignTo'] = 'required|numeric|min:1';
+                $userMeta['user_id'] = $request['assignTo'];   
+            }   
+        }
 
     	$this->validate($request, $data);
 
-        if(\Gate::allows('hotelOwner')) 
+        if(\Gate::allows('hotelOwner')) {
+            $userMeta['user_id'] = auth('api')->user()->id;
             $user = User::where('role', 'hotel_receptionist')->create($dataCreate);
+        }
 
         if(\Gate::allows('superAdmin'))
             $user = User::create($dataCreate);

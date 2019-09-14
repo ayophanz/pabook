@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<div id="particles-js"></div>
 <div class="limiter">
     <form method="POST" action="{{ route('login') }}">
         @csrf 
