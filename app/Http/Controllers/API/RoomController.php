@@ -241,7 +241,8 @@ class RoomController extends Controller
         $hotel = Hotel::select('id')->where('owner_id', $user->id)->get()->toArray();
         if(empty($hotel)) {
           $userMeta = UserMeta::select('user_id')->where('value', $user->id)->first();
-          $hotel = Hotel::select('id')->where('owner_id', $userMeta->user_id)->get()->toArray();
+          if(!empty($userMeta))
+            $hotel = Hotel::select('id')->where('owner_id', $userMeta->user_id)->get()->toArray();
         }
 
         $roomType = RoomType::select('id')->whereIn('hotel_id', $hotel)->get()->toArray();
@@ -256,7 +257,7 @@ class RoomController extends Controller
 
     /**
     *  is room available
-    // */
+    */
     // private function isRoomAvailable() {
     //   $room = Room::select('id')->whereIn('type_id', $this->owner())->where('status', 'active')->get()->toArray();
     //   $book = Booking::whereIn('room_id', $room)->get();
