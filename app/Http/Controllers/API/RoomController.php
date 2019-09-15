@@ -254,4 +254,13 @@ class RoomController extends Controller
       }
     }
 
+    /**
+    *  is room available
+    // */
+    // private function isRoomAvailable() {
+    //   $room = Room::select('id')->whereIn('type_id', $this->owner())->where('status', 'active')->get()->toArray();
+    //   $book = Booking::whereIn('room_id', $room)->get();
+    //   return false;
+    // }
+
 }

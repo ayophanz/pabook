@@ -52,7 +52,7 @@
   
   <notifybar></notifybar>
 
-  @include('./inc/navbar')
+  @include('./inc/navBar')
 
   <div class="content-wrapper">
     <div class="content-header">
