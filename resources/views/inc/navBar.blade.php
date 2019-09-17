@@ -164,12 +164,18 @@
           
           @if(Gate::check('superAdmin') || Gate::check('hotelOwner'))
           <li class="nav-item has-treeview">
+            <router-link to="/integration" class="nav-link">
+            <i class="fas fa-plug nav-icon"></i>
+              <p>Integration</p>
+            </router-link>
+          </li>
+          @endif
+          <li class="nav-item has-treeview">
             <router-link to="/settings" class="nav-link">
               <i class="fas fa-sliders-h nav-icon"></i>
               <p>Settings</p>
             </router-link>
           </li>
-          @endif
 
         </ul>
       </nav>

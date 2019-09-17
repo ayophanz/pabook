@@ -36,6 +36,11 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 let routes = [
+
+    /**
+     * Integration
+     */
+    {path: '/integration', name:'Integration', component: require('./pages/integration-page/integration.vue').default},
     
     /**
      * Setting
