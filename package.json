@@ -44,6 +44,7 @@
         "vue-money-format": "^1.1.1",
         "vue-pure-lightbox": "^3.1.0",
         "vue-router": "^3.0.7",
-        "vue2-daterange-picker": "^0.3.0"
+        "vue2-daterange-picker": "^0.3.0",
+        "vuex": "^3.1.2"
     }
 }

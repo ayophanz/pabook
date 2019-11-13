@@ -5,12 +5,10 @@
  */
 
 require('./bootstrap');
-
-//window.Vue = require('vue');
-window.Vue = require('vue/dist/vue.min.js');
+import vue from 'vue'
+window.Vue = vue//require('vue/dist/vue.min.js');
 
 import moment from 'moment'
-
 window.moment = moment
 
 import { Form, HasError, AlertError } from 'vform'
@@ -21,16 +19,6 @@ Vue.prototype.$gate = new Gate(window.user);
 window.form = Form;
 Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
-
-// import VueRouter from 'vue-router'
-// Vue.use(VueRouter)
-
-// import routes from './routes'
-
-// const router = new VueRouter({
-//     mode: 'history',
-//     routes
-// })
 
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
@@ -157,32 +145,17 @@ const paynow = swal.mixin({
   buttonsStyling: false,
 })
 window.paynow = paynow
-
 window.guestAction = swal
-
 window.fire = new Vue();
 
-
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
-
-// const files = require.context('./', true, /\.vue$/i);
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
-
-//Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
 const app = new Vue({
-    el: '#app',
-    router
+  el: '#app',
+  router,
+  created() {
+    /**
+     * Global js
+     */
+  }
 });
+
+

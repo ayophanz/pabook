@@ -26,7 +26,7 @@
                   <div class="form-group">
                     <label for="hotel">Assign To <span class="required-asterisk">*</span></label>
                     <select :disabled="typeId!=null" v-model="form.hotel" class="form-control" :class="{ 'is-invalid': form.errors.has('hotel') }" id="hotel">
-                      <option v-for="item in hotels" :selected="item.id === form.hotel" :value="item.id">{{item.name}}</option>
+                      <option v-for="item in hotels" :selected="item.id === form.hotel" :value="item.id">@{{item.name}}</option>
                     </select>
                     <has-error :form="form" field="role"></has-error>
                   </div>

@@ -304,10 +304,10 @@ export default {
     color: #fff !important;
     border-color: #38d39f !important;
     background: #28a745;
-    background: -webkit-linear-gradient(left, #28a745, #38c172);
-    background: -o-linear-gradient(left, #28a745, #38c172);
-    background: -moz-linear-gradient(left, #28a745, #38c172);
-    background: linear-gradient(left, #28a745, #38c172);
+    background: -webkit-linear-gradient(to left, #28a745, #38c172);
+    background: -o-linear-gradient(to eft, #28a745, #38c172);
+    background: -moz-linear-gradient(to left, #28a745, #38c172);
+    background: linear-gradient(to left, #28a745, #38c172);
     -webkit-transition: all 0.4s;
     -o-transition: all 0.4s;
     -moz-transition: all 0.4s;

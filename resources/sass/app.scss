@@ -12,6 +12,30 @@ $fa-font-path: "../webfonts";
 @import '~@fortawesome/fontawesome-free/scss/solid.scss';
 @import '~@fortawesome/fontawesome-free/scss/brands.scss';
 
+.main-sidebar {
+    max-width: 200px;
+}
+
+.sidebar-mini.sidebar-collapse #logo-with-text, .sidebar-mini.sidebar-open #logo-without-text, .sidebar-mini #logo-without-text {
+    display: none;
+}
+
+.sidebar-mini.sidebar-collapse #logo-without-text {
+    display: block;
+}
+
+.main-sidebar:hover #logo-with-text {
+    display: block;
+}
+
+.main-sidebar:hover #logo-without-text {
+    display: none;
+}
+
+.content-wrapper, .main-footer, .main-header {
+    margin-left: 200px !important;
+}
+
 .set-h-500 {
     height: 500px;
 }
@@ -217,10 +241,10 @@ html.swal2-shown,body.swal2-shown { overflow-y: hidden !important; height: auto!
     color: #fff !important;
     border-color: #38d39f !important;
     background: #28a745;
-    background: -webkit-linear-gradient(left, #28a745, #38c172);
-    background: -o-linear-gradient(left, #28a745, #38c172);
-    background: -moz-linear-gradient(left, #28a745, #38c172);
-    background: linear-gradient(left, #28a745, #38c172);
+    background: -webkit-linear-gradient(toleft, #28a745, #38c172);
+    background: -o-linear-gradient(toleft, #28a745, #38c172);
+    background: -moz-linear-gradient(toleft, #28a745, #38c172);
+    background: linear-gradient(toleft, #28a745, #38c172);
     -webkit-transition: all 0.4s;
     -o-transition: all 0.4s;
     -moz-transition: all 0.4s;
