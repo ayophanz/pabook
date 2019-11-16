@@ -211,7 +211,7 @@ class UserController extends Controller
         if($request['changePass']) {
             $data['password'] = 'required|string|min:6';
             $data['old_password'] = 'required|string|min:6|match_old_password:'.$request['old_password'].','.auth('api')->user()->password; 
-            //$dataUpdate['password'] = Hash::make($request['password']);
+            $dataUpdate['password'] = Hash::make($request['password']);
         }
 
         $this->validate($request,$data, $customMessages);
