@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     private $isRecep = false;
     public function __construct() {
-        $this->middleware('auth:api');
+        $this->middleware(['auth:api', 'verified']);
     }
 
     public function index() {

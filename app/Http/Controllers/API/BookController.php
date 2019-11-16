@@ -19,7 +19,7 @@ use DateTime;
 class BookController extends Controller
 {
     public function __construct() {
-        $this->middleware('auth:api');
+        $this->middleware(['auth:api', 'verified']);
    }
 
    public function index() {

@@ -9,7 +9,7 @@ use App\Option;
 class OptionController extends Controller
 {
     public function __construct() {
-        $this->middleware('auth:api');
+        $this->middleware(['auth:api', 'verified']);
    }
 
    public function index($id=null) {

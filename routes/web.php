@@ -15,8 +15,10 @@
 //     return view('welcome');
 // });
 
-Auth::routes();
+//Auth::routes();
 
 //Route::get('/', 'HomeController@index')->name('name');
+
+Auth::routes(['verify' => true]);
 
 Route::get('/{vue?}', 'HomeController@index')->where('vue', '[\/\w\.-]*');
