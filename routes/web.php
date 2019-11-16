@@ -22,3 +22,4 @@
 Auth::routes(['verify' => true]);
 
 Route::get('/{vue?}', 'HomeController@index')->where('vue', '[\/\w\.-]*');
+
