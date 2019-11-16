@@ -151,7 +151,7 @@
             <router-link to="/profile" class="nav-link">
               <i class="fas fa-user nav-icon"></i>
               <p>
-                Profile
+                Account
               </p>
             </router-link>
           </li> 

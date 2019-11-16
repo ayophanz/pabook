@@ -203,11 +203,18 @@ class UserController extends Controller
                       'role'     => $request['role'],
                       'status'   => $request['status']
                       ]; 
+
+        $customMessages = [
+                        'match_old_password' => 'The :attribute field doesn\'t match the current password.'
+                        ];              
+
         if($request['changePass']) {
             $data['password'] = 'required|string|min:6';
-            $dataUpdate['password'] = Hash::make($request['password']);
+            $data['old_password'] = 'required|string|min:6|match_old_password:'.$request['old_password'].','.auth('api')->user()->password; 
+            //$dataUpdate['password'] = Hash::make($request['password']);
         }
-        $this->validate($request,$data);
+
+        $this->validate($request,$data, $customMessages);
 
         if(\Gate::allows('hotelOwner'))
             return User::whereIn('id', $this->recep())->where('id', $id)->where('role', 'hotel_receptionist')->update($dataUpdate);

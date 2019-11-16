@@ -66,7 +66,7 @@ let routes = [
     /**
      * User
      */
-    {path: '/profile', name:'Profile', component: require('./pages/user-page/profile.vue').default},
+    {path: '/profile', name:'Account', component: require('./pages/user-page/profile.vue').default},
     {path: '/users', name:'Users', component: require('./pages/user-page/users.vue').default},
     {path: '/add-user', name:'New User', component: require('./pages/user-page/user.vue').default},
     {path: '/edit-user/:userId', name:'Edit User', component: require('./pages/user-page/user.vue').default},

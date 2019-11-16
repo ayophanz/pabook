@@ -85,12 +85,22 @@
                             </div>
                           </div>
                           <div class="form-group" v-if="isCheckPass == true">
+                            <label for="password">Old Password <span class="required-asterisk">*</span></label>
+                            <div class="input-group">
+                                <input v-model="form.old_password" type="password" class="form-control" :class="{ 'is-invalid': form.errors.has('old_password') }" id="old_password" name="old_password">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <a href="#" @click.prevent="showHide('#old_password', '.call-old-password')"><i class="call-old-password fa fa-eye"></i></a>
+                                    </span>          
+                                </div>
+                                <has-error :form="form" field="old_password"></has-error>
+                            </div>
                             <label for="password">Password <span class="required-asterisk">*</span></label>
                             <div class="input-group">
                                 <input v-model="form.password" type="password" class="form-control" :class="{ 'is-invalid': form.errors.has('password') }" id="password" name="password">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
-                                        <a href="#" @click.prevent="showHide"><i class="call-password fa fa-eye"></i></a>
+                                        <a href="#" @click.prevent="showHide('#password', '.call-password')"><i class="call-password fa fa-eye"></i></a>
                                     </span>          
                                 </div>
                                 <has-error :form="form" field="password"></has-error>
@@ -128,6 +138,7 @@
                   email: '',
                   role: '',
                   status: '',
+                  old_password: '',
                   password: '',
                   changePass: ''
                 }),
@@ -142,9 +153,9 @@
                 else
                   this.isCheckPass = true;
             },
-            showHide () {
-                var pwd = $("#password");
-                var fa = $(".call-password");
+            showHide (id, icon) {
+                var pwd = $(id);
+                var fa = $(icon);
                 if(pwd.attr('type') === 'password') {
                   pwd.attr('type', 'text');
                   fa.removeClass('fa-eye');

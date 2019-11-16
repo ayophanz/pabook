@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 use DB;
 
 class AppServiceProvider extends ServiceProvider
@@ -60,6 +61,11 @@ class AppServiceProvider extends ServiceProvider
 
         Validator::replacer('greater_than_field', function($message, $attribute, $rule, $parameters) {
           return str_replace(':field', $parameters[0], $message);
+        });
+
+        Validator::extend('match_old_password', function ($attribute, $value, $parameters) {
+            list($field_password, $current_password) = $parameters;
+            return Hash::check($field_password, $current_password) ? true : false;
         });
 
     }
