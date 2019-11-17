@@ -19,7 +19,8 @@
 
 //Route::get('/', 'HomeController@index')->name('name');
 
-Auth::routes(['verify' => true]);
+Auth::routes(['verify' => true, 'reset' => true]);
+
+Route::get('/resend-email-verification', 'HomeController@ResendVerification');
 
 Route::get('/{vue?}', 'HomeController@index')->where('vue', '[\/\w\.-]*');
-

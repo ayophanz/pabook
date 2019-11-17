@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Notifications\EmailVerificationForNewRegistered;
+use Auth;
+use Redirect;
 
 class HomeController extends Controller
 {
@@ -13,7 +16,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['auth', 'verified']);
+        $this->middleware(['auth']);
     }
 
     /**
@@ -24,5 +27,10 @@ class HomeController extends Controller
     public function index()
     {
         return view('index');
+    }
+
+    public function ResendVerification() {
+        Auth::user()->notify(new EmailVerificationForNewRegistered());
+        return Redirect::back();
     }
 }
