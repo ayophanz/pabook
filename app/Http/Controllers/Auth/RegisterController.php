@@ -77,7 +77,6 @@ class RegisterController extends Controller
 
        $user->notify(new EmailVerificationForNewRegistered());
        return Auth::guard()->login($user);
-       //return $user;
     }
 
     /**
