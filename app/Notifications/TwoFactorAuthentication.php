@@ -60,9 +60,9 @@ class TwoFactorAuthentication extends Notification
 
         return (new MailMessage)
             ->subject(Lang::get(config('app.name').' | Two Factor Authentication'))
-            ->line(Lang::get('Please Copy and Paste the token to '.config('app.name')))
+            ->line(Lang::get('You are receiving this email because our system trying to ensure that you are the owner.'))
             ->action(Lang::get('Your Token: '.$this->VerifyCode),  '#')
-            ->line(Lang::get('If you did not create an account, no further action is required.'))
+            ->line(Lang::get('Please copy the token and paste to '.config('app.name').' token field.'))
             ->greeting(Lang::get('Hello! '.$ToName.', '));
 
     }

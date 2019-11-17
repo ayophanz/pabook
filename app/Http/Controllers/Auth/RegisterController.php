@@ -41,7 +41,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('guest', ['except'=>'ResendVerification']);
     }
 
     /**
@@ -95,4 +95,10 @@ class RegisterController extends Controller
         return $this->registered($request, $user)
             ?: redirect($this->redirectPath());
     }
+
+    public function ResendVerification() {
+        Auth::user()->notify(new EmailVerificationForNewRegistered());
+        return back();
+    }
+
 }
