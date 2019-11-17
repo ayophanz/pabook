@@ -21,6 +21,12 @@
 
 Auth::routes(['verify' => true, 'reset' => true]);
 
-Route::get('/resend-email-verification', 'HomeController@ResendVerification');
+Route::get('/resend-email-verification', 'Auth\RegisterController@ResendVerification');
+
+Route::get('/2fa', 'Auth\TwoFactorController@show2faForm');
+
+Route::post('/2fa', 'Auth\TwoFactorController@verifyToken');
+
+Route::get('/resend-2fa', 'Auth\TwoFactorController@ResendVerifyToken');
 
 Route::get('/{vue?}', 'HomeController@index')->where('vue', '[\/\w\.-]*');

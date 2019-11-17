@@ -11,7 +11,7 @@ use App\Option;
 class HotelController extends Controller
 {
     public function __construct() {
-        $this->middleware(['auth:api', 'verified']);
+        $this->middleware(['auth:api', 'verified', 'two_factor_auth']);
     }
 
     public function index($id=null,$recep=null,$capa=null) {
