@@ -18,6 +18,7 @@
 
 {{-- Action Button --}}
 @isset($actionText)
+@if($actionUrl!='#')
 <?php
     switch ($level) {
         case 'success':
@@ -31,6 +32,13 @@
 @component('mail::button', ['url' => $actionUrl, 'color' => $color])
 {{ $actionText }}
 @endcomponent
+@endif
+@endisset
+
+@isset($actionText)
+@if($actionUrl=='#')
+{{ $actionText }}
+@endif
 @endisset
 
 {{-- Outro Lines --}}
@@ -50,6 +58,7 @@
 {{-- Subcopy --}}
 @isset($actionText)
 @slot('subcopy')
+@if($actionUrl!='#')
 @lang(
     "If you’re having trouble clicking the \":actionText\" button, copy and paste the URL below\n".
     'into your web browser: [:actionURL](:actionURL)',
@@ -58,6 +67,10 @@
         'actionURL' => $actionUrl,
     ]
 )
+@endif
+@if($actionUrl=='#')
+@lang('This is to protect our customer and keep account safe as possible. Thank you')
+@endif
 @endslot
 @endisset
 @endcomponent
