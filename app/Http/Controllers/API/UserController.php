@@ -104,14 +104,14 @@ class UserController extends Controller
     }
 
     public function profile() {
-        if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotel_receptionist'))
+        if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
             return die('not allowed');
 
         return auth('api')->user();
     }
 
     public function updateProfile(Request $request) {
-        if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotel_receptionist')) 
+        if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist')) 
             return die('not allowed');
 
         return $this->validateUpdate($request, auth('api')->user()->id);
