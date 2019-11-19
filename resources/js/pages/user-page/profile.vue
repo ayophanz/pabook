@@ -52,7 +52,7 @@
                             <has-error :form="form" field="fullname"></has-error>
                           </div>  
                           <div class="form-group">
-                            <label for="email">Email address <span class="required-asterisk">*</span></label>
+                            <label for="email">Email address <span class="required-asterisk">* ( Note: changing email require email verification. )</span></label>
                             <input v-model="form.email" type="email" class="form-control" :class="{ 'is-invalid': form.errors.has('email') }" id="email" placeholder="Enter email">
                             <has-error :form="form" field="email"></has-error>
                           </div>
@@ -171,7 +171,9 @@
                 let self = this
                 this.form.changePass = this.isCheckPass
                 this.form.put('/api/update-profile')
-                .then(function (response) {  
+                .then(function (response) {
+                    if(response.data=='refresh') 
+                      window.location.reload();
                     self.isLoading = false;
                     toast.fire({
                       type: 'success',

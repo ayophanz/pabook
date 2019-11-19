@@ -55,13 +55,13 @@
                      </select>
                     <has-error :form="form" field="status"></has-error>
                   </div>
-                  <div class="form-group" v-if="userId != null">
+                  <!-- <div class="form-group" v-if="userId != null">
                     <div class="custom-control custom-switch">
                       <input @click="toggleCheck" :checked="isCheckPass" type="checkbox" class="custom-control-input" id="isChangePass" name="isChangePass">
                       <label class="custom-control-label" for="isChangePass">Change password</label>
                     </div>
-                  </div>
-                  <div class="form-group" v-if="isCheckPass == true || userId == null">
+                  </div> -->
+                  <!-- <div class="form-group" v-if="isCheckPass == true || userId == null">
                     <label for="password">Password <span class="required-asterisk">*</span></label>
                     <div class="input-group">
                         <input v-model="form.password" type="password" class="form-control" :class="{ 'is-invalid': form.errors.has('password') }" id="password" name="password">
@@ -72,7 +72,7 @@
                         </div>
                         <has-error :form="form" field="password"></has-error>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
 
                 <div class="card-footer">
@@ -130,12 +130,12 @@
             this.userId = null;
             this.form.reset();
           },
-          toggleCheck () {
-            if(this.isCheckPass)
-              this.isCheckPass = false;
-            else
-              this.isCheckPass = true;
-          },
+          // toggleCheck () {
+          //   if(this.isCheckPass)
+          //     this.isCheckPass = false;
+          //   else
+          //     this.isCheckPass = true;
+          // },
           register () {
             if(this.$gate.superAdminOrhotelOwner()) {
               this.isLoading = true;

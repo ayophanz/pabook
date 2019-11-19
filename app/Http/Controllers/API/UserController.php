@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use App\Notifications\EmailVerificationForNewRegistered;
 use App\User;
 use App\UserMeta;
 
@@ -36,8 +37,7 @@ class UserController extends Controller
                 'fullname' => 'required|string|max:191',
                 'email'    => 'required|string|email|max:191|unique:users',
                 'role'     => 'required|string|max:191',
-                'status'   => 'required|string|max:191',
-                'password' => 'required|string|min:6'
+                'status'   => 'required|string|max:191'
                 ];
         
         $dataCreate = [
@@ -45,7 +45,7 @@ class UserController extends Controller
                     'email'    => $request['email'],
                     'role'     => $request['role'],
                     'status'   => $request['status'],
-                    'password' => Hash::make($request['password'])
+                    'password' => Hash::make('pabook@123')
                     ];
         
         $userMeta = ['meta_key' => 'receptionist_id'];
@@ -214,12 +214,35 @@ class UserController extends Controller
             $dataUpdate['password'] = Hash::make($request['password']);
         }
 
-        $this->validate($request,$data, $customMessages);
+        $emailChange = false;
+        if($id==auth('api')->user()->id) {
+            if($request['email']!=auth('api')->user()->email) {
+                $dataUpdate['email_verified_at'] = null;
+                $emailChange = true;
+            }
+        }else{
+            if($request['email']!=User::where('id', $id)->first()->email) {
+                $dataUpdate['email_verified_at'] = null;
+                $emailChange = true;
+            }
+        }
 
-        if(\Gate::allows('hotelOwner'))
-            return User::whereIn('id', $this->recep())->where('id', $id)->where('role', 'hotel_receptionist')->update($dataUpdate);
-        if(\Gate::allows('superAdmin'))
-            return User::where('id', $id)->update($dataUpdate);
+        $this->validate($request, $data, $customMessages);
+
+        // if(\Gate::allows('hotelOwner')) 
+        //     return User::whereIn('id', $this->recep())->orWhere('id', $id)->where('role', 'hotel_receptionist')->update($dataUpdate);
+        // if(\Gate::allows('superAdmin'))
+        $user = User::where('id', $id)->update($dataUpdate); 
+        if($emailChange) {
+            if($id==auth('api')->user()->id) {
+                auth('api')->user()->refresh();
+                auth('api')->user()->notify(new EmailVerificationForNewRegistered());
+            }else{
+                User::where('id', $id)->first()->notify(new EmailVerificationForNewRegistered());
+            }
+            return 'refresh';
+        }
+        return $user;
     }
 
 }
