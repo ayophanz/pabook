@@ -105,6 +105,7 @@ Vue.component('collection-page-icon', require('./page-icon/collectionComponent.v
 Vue.component('create-page-icon', require('./page-icon/createComponent.vue').default);
 Vue.component('design-page-icon', require('./page-icon/designComponent.vue').default);
 Vue.component('default-profile', require('./page-icon/defaultProfileComponent.vue').default);
+Vue.component('integrate', require('./page-icon/IntegrateComponent.vue').default);
 
 Vue.filter('upWord', function(text){
     return text.toLowerCase()

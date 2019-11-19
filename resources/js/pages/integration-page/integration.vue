@@ -1,6 +1,7 @@
 <template>
     <div class="container">
         <div class="row justify-content-center">
+            <integrate></integrate>
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header p-2">

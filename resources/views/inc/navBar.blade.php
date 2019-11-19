@@ -121,6 +121,8 @@
           </li>
           @endif
 
+          <div class="user-panel mt-1 pb-1 mb-1 d-flex"> </div>
+
           @if(Gate::check('superAdmin') || Gate::check('hotelOwner'))
           <li class="nav-item has-treeview {{Request::is('users', 'add-user', 'edit-user/*')?'menu-open':''}}">
             <a href="#" class="nav-link">
@@ -154,7 +156,19 @@
                 Account
               </p>
             </router-link>
+          </li>
+          
+          @if(Gate::check('superAdmin') || Gate::check('hotelOwner'))
+          <li class="nav-item">
+            <router-link to="/profile" class="nav-link">
+              <i class="fas fa-tags nav-icon"></i>
+              <p>
+                Subscription
+              </p>
+            </router-link>
           </li> 
+          @endif
+
         </ul>
       </nav>
       <div class="user-panel mt-1 pb-1 mb-1 d-flex"> </div>

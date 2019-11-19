@@ -93,7 +93,7 @@
                       </div>
                     </div>
                    <div class="form-group">
-                      <label for="image">Cover Photo <span class="required-asterisk">*</span></label>
+                      <label for="image">Hotel Logo <span class="required-asterisk">*</span></label>
                       </br>
                       <input v-if="isCheckCover == true || hotelId == null" type="file" @change="updateCover" :class="{ 'is-invalid': form.errors.has('image') }" name="image">
                       <has-error :form="form" field="image"></has-error>

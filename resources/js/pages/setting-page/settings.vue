@@ -10,13 +10,15 @@
             :active.sync="isLoading" 
             :is-full-page="fullPage">
         </loading>
-        <settings-page-icon></settings-page-icon>
-        <div class="col-md-12">
+        <div class="col-md-8">
+             <div class="col-md-12 text-center">
+            <settings-page-icon></settings-page-icon>
+             </div>
             <form @submit.prevent="register" role="form">
                 <div class="card">
                     <div class="card-body">
-                        <div v-if="isAdmin" class="row justify-content-center">
-                            <div class="col-md-6">
+                        <div v-if="isAdmin" class="row">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="owner_id">Hotel Owner <span class="required-asterisk">*</span></label>
                                     <select v-model="form.owner_id" @change="selectedOwner" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('owner_id') }" id="owner_id">
@@ -27,7 +29,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="base_currency">Base currency (global) <span class="required-asterisk">*</span></label>
                                     <select v-model="form.base_currency" @change="currencyCall" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('base_currency') }" id="base_currency">
