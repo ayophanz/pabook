@@ -51,7 +51,8 @@ class HotelController extends Controller
                 'phone_number'   => 'required|string|max:191',
                 'email'          => 'required|string|email|max:191|unique:hotels',
                 'image'          => 'required|image64:jpeg,jpg,png',
-                'base_currency'  => 'required|string|max:191'
+                'base_currency'  => 'required|string|max:191',
+                'proofFile'      => 'required|base64:zip'
                 ];
         
         $dataCreate = [
@@ -87,7 +88,10 @@ class HotelController extends Controller
 			->save(public_path('storage/images/upload/hotelImages/').$image);
 
 			 Hotel::where('id', $hotel->id)->update(['image'=>$image]);
-		}
+        }
+        
+        if($request->proofFile) 
+            $this->uploadFile($request->proofFile, "/ImportantFiles", $hotel->id.'_'.$hotel->name);
 
 		return ( ($hotel!=null)? $hotel : die('Something went wrong!') );
     }
@@ -203,6 +207,35 @@ class HotelController extends Controller
              if($base_currency!='use_global')
                 Option::create($option);
         }
+    }
+
+
+    /**
+    *  File upload
+    */
+    private function uploadFile($base64_file, $path, $name) {
+        $file = $base64_file;
+        $check_base64 = strrpos($file, "base64");
+        if($check_base64 > 0) {
+            $explode = explode(",", $file);
+            $decode_file = base64_decode($explode[1]);
+            $file_extension = $this->uf_get_base64_file_extension($explode[0]);
+            $filename = $name.$file_extension;
+            Storage::disk('public')->put($path."/".$filename, $file, "public");
+            $url = Storage::url($path."/".$filename);
+            return $url;
+        }else{
+            return $file;
+        }
+    }
+
+    private function uf_get_base64_file_extension($base64_raw_file) {
+        $mime = str_replace(";base64", '', $type);
+        $mime = str_replace("data", '', $mime);
+        $extension_arr = [
+            "application/zip" => "zip"
+        ];
+        return $extension_arr[$mime];
     }
 
 }
