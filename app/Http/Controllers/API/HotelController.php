@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Hotel;
 use App\UserMeta;
 use App\Option;
+use Storage;
 
 class HotelController extends Controller
 {
@@ -50,10 +51,14 @@ class HotelController extends Controller
                 'country'        => 'required|string|max:191',
                 'phone_number'   => 'required|string|max:191',
                 'email'          => 'required|string|email|max:191|unique:hotels',
-                'image'          => 'required|image64:jpeg,jpg,png',
+                'image'          => 'required|max:307200|image64:jpeg,jpg,png',
                 'base_currency'  => 'required|string|max:191',
-                'proofFile'      => 'required|base64:zip'
+                'proofFile'      => 'required|max:5242880|image64:x-zip-compressed,zip'
                 ];
+        
+        $customMessages = [
+                    'proofFile.image64' => 'The :attribute field is invalid, zip file only.'
+                    ];          
         
         $dataCreate = [
                     'name'           => $request['name'],
@@ -74,7 +79,7 @@ class HotelController extends Controller
         if(\Gate::allows('hotelOwner'))
             $dataCreate['owner_id'] =  $this->ownerId();
 
-        $this->validate($request, $data);
+        $this->validate($request, $data, $customMessages);
 
         $hotel = Hotel::create($dataCreate);
 
@@ -220,8 +225,8 @@ class HotelController extends Controller
             $explode = explode(",", $file);
             $decode_file = base64_decode($explode[1]);
             $file_extension = $this->uf_get_base64_file_extension($explode[0]);
-            $filename = $name.$file_extension;
-            Storage::disk('public')->put($path."/".$filename, $file, "public");
+            $filename = $name.'.'.$file_extension ;
+            Storage::disk('public')->put($path."/".$filename, $decode_file, "public");
             $url = Storage::url($path."/".$filename);
             return $url;
         }else{
@@ -230,10 +235,11 @@ class HotelController extends Controller
     }
 
     private function uf_get_base64_file_extension($base64_raw_file) {
-        $mime = str_replace(";base64", '', $type);
-        $mime = str_replace("data", '', $mime);
+        $mime = str_replace(";base64", '', $base64_raw_file);
+        $mime = str_replace("data:", '', $mime);
         $extension_arr = [
-            "application/zip" => "zip"
+            "application/zip" => "zip",
+            "application/x-zip-compressed" => "zip"
         ];
         return $extension_arr[$mime];
     }

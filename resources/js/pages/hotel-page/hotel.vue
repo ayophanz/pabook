@@ -12,7 +12,7 @@
       </loading>
       <collection-page-icon v-if="hotelId!=null"></collection-page-icon>
       <create-page-icon v-if="hotelId==null"></create-page-icon>
-      <form @submit.prevent="register" role="form">
+      <form @submit.prevent="register" role="form" enctype="multipart/form-data">
         <div class="row justify-content-center">
             <div class="col-md-9">
                 <div class="card">
@@ -61,9 +61,9 @@
                     <has-error :form="form" field="zip_code"></has-error>
                   </div>
                   <div class="form-group">
-                      <label for="proofFile"> Please provide any proof of document that you own the hotel and it is legal <span class="required-asterisk">* ( Note: zip file )</span></label>
+                      <label for="proofFile"> Please provide any proof of document that you own the hotel and it is legal <span class="required-asterisk">* ( Note: zip your file )</span></label>
                       </br>
-                      <input type="file" :class="{ 'is-invalid': form.errors.has('proofFile') }" name="proofFile">
+                      <input type="file" @change="updateProofDocx" :class="{ 'is-invalid': form.errors.has('proofFile') }" name="proofFile">
                       <has-error :form="form" field="proofFile"></has-error>
                    </div> 
                 </div>
@@ -233,16 +233,34 @@
           updateCover(e) {
             let file = e.target.files[0];
             let reader = new FileReader();
-            if(file['size'] < 300000) {
+            if(file['size'] < 307200) {
               reader.onloadend = (file) => {
                 this.imageUrl = reader.result;
                 this.form.image = reader.result;
+                console.log(reader.result);
               }
+              console.log(file);
               reader.readAsDataURL(file);
             }else{
               toast.fire({
                 type: 'error',
-                title: 'You are uploading large file, Please upload only less than 300kb file.'
+                title: 'You are uploading large file of image, Please upload only less than 300KB file.'
+              })
+            }
+          },
+          updateProofDocx(e) {
+            let file = e.target.files[0];
+            let reader = new FileReader();
+            if(file['size'] < 5242880) {
+              reader.onloadend = (file) => {
+                this.form.proofFile = reader.result;
+                console.log(reader.result);
+              }              
+              reader.readAsDataURL(file);
+            }else{
+              toast.fire({
+                type: 'error',
+                title: 'You are uploading large file of zip, Please upload only less than 5MB file.'
               })
             }
           },
