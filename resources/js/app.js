@@ -85,6 +85,11 @@ const router = new VueRouter({
 
 
 /**
+* Temporary Holder components
+*/
+Vue.component('temporaryhold', require('./components/temporaryHoldComponent.vue').default);
+
+/**
 * Global components
 */
 Vue.component('notifycount', require('./components/notifyCountComponent.vue').default);

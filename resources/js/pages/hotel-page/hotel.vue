@@ -11,8 +11,9 @@
         :is-full-page="fullPage">
       </loading>
       <collection-page-icon v-if="hotelId!=null"></collection-page-icon>
+      <temporary-hold v-if="isVerified=='verifying'" title="Warning" msg="We are verifying your documents it takes 2-3 days please be patient, as soon as the verification is complete we will notify you. Thank you" others="no"></temporary-hold>
       <create-page-icon v-if="hotelId==null"></create-page-icon>
-      <form @submit.prevent="register" role="form" enctype="multipart/form-data">
+      <form v-if="isVerified=='verified'"  @submit.prevent="register" role="form" enctype="multipart/form-data">
         <div class="row justify-content-center">
             <div class="col-md-9">
                 <div class="card">
@@ -150,6 +151,7 @@
             countries: [],
             owners: [],
             currency: [],
+            isVerified: false,
             currencyName: 'you are using global currency',
             form: new form({
               owner: '',
@@ -299,6 +301,7 @@
                     self.form.email = response.data.email;
                     self.tempImage = response.data.image;
                     self.imageUrl = '../storage/images/upload/hotelImages/'+self.tempImage;
+                    self.isVerified = response.data.status;
                     if(response.data.base_currency!=null) {
                       self.form.base_currency = response.data.base_currency.value;
                       self.currencyName = cc.code(self.form.base_currency).currency;
