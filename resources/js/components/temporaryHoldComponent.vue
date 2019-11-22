@@ -6,15 +6,21 @@ Vue.component('temporary-hold', {
                 <div class="row justify-content-center">
                     <div class="col-md-8">
                         <div class="card">
-                            <div class="card-header">{{title}}</div>
+                            <div class="card-header">{{dataValue.title}}</div>
                             <div class="card-body">
-                               {{msg}}
+                               ID: {{dataValue.hotel_id}} , Hotel: {{dataValue.hotel_name}}
+                               <br />
+                               <br />
+                               {{dataValue.msg}}
+                               <br />
+                               <br />
+                               <a href="#" v-if="dataValue.link!='#'" >Click here to send email verification</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             `,
-  props: ['title', 'msg', 'others']
+  props: ['dataValue']
 });
 </script>

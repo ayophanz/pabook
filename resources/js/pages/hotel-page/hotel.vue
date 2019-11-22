@@ -10,10 +10,11 @@
         :active.sync="isLoading" 
         :is-full-page="fullPage">
       </loading>
-      <collection-page-icon v-if="hotelId!=null"></collection-page-icon>
-      <temporary-hold v-if="isVerified=='verifying'" title="Warning" msg="We are verifying your documents it takes 2-3 days please be patient, as soon as the verification is complete we will notify you. Thank you" others="no"></temporary-hold>
-      <create-page-icon v-if="hotelId==null"></create-page-icon>
-      <form v-if="isVerified=='verified'"  @submit.prevent="register" role="form" enctype="multipart/form-data">
+      <verification v-if="isVerified=='verifying' || isVerified=='email_verifying'"></verification>
+      <temporary-hold v-if="isVerified=='verifying' || isVerified=='email_verifying'" v-bind:dataValue="verificationValue"></temporary-hold>
+      <collection-page-icon v-if="hotelId!=null && isVerified=='verified'"></collection-page-icon>
+      <create-page-icon v-if="hotelId==null && isVerified=='verified'"></create-page-icon>
+      <form v-if="isVerified=='verified' || hotelId==null"  @submit.prevent="register" role="form" enctype="multipart/form-data">
         <div class="row justify-content-center">
             <div class="col-md-9">
                 <div class="card">
@@ -152,6 +153,7 @@
             owners: [],
             currency: [],
             isVerified: false,
+            verificationValue: [],
             currencyName: 'you are using global currency',
             form: new form({
               owner: '',
@@ -171,6 +173,20 @@
           }
         },
         methods: {
+          verificationData(status, hotel_name, hotel_id) {
+            this.verificationValue['hotel_id'] = hotel_id;
+            this.verificationValue['hotel_name'] = hotel_name;
+            this.verificationValue['title'] = 'Warning';
+            if(status=='verifying') {
+              this.verificationValue['msg'] = 'We are verifying your documents it takes 2-3 days please be patient, as soon as the verification is complete we will notify you. Thank you';
+              this.verificationValue['link'] = '#';
+              this.verificationValue['link_title'] = '#';
+            }else if(status=='email_verifying') {
+              this.verificationValue['msg'] = 'Please confirm the email you registered on this hotel for final verification. Thank you';
+              this.verificationValue['link'] = 'google.com';
+              this.verificationValue['link_title'] = 'Click here to send email verification';
+            }
+          },
           currencyCall(){
             if(this.form.base_currency!='use_global') {
               this.currencyName = cc.code(this.form.base_currency).currency;
@@ -302,6 +318,7 @@
                     self.tempImage = response.data.image;
                     self.imageUrl = '../storage/images/upload/hotelImages/'+self.tempImage;
                     self.isVerified = response.data.status;
+                    self.verificationData(self.isVerified, self.form.name, response.data.id);
                     if(response.data.base_currency!=null) {
                       self.form.base_currency = response.data.base_currency.value;
                       self.currencyName = cc.code(self.form.base_currency).currency;
