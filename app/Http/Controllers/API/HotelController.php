@@ -9,6 +9,7 @@ use App\UserMeta;
 use App\Option;
 use Storage;
 
+
 class HotelController extends Controller
 {
     public function __construct() {
@@ -104,7 +105,7 @@ class HotelController extends Controller
     public function show($id) {
         if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
             return die('not allowed');
-
+            
     	if(\Gate::allows('superAdmin'))
             return Hotel::with('globalBaseCurrency', 'baseCurrency')->where('id', $id)->first();
         if(\Gate::allows('hotelOwner'))
@@ -176,9 +177,7 @@ class HotelController extends Controller
             return Hotel::where('id', $id)->delete();
         }
         return die('Something went wrong!');
-        
     }
-
 
     /**
     *  Extra function

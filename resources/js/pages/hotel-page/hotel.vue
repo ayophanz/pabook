@@ -10,10 +10,10 @@
         :active.sync="isLoading" 
         :is-full-page="fullPage">
       </loading>
-      <verification v-if="isVerified=='verifying' || isVerified=='email_verifying'"></verification>
-      <temporary-hold v-if="isVerified=='verifying' || isVerified=='email_verifying'" v-bind:dataValue="verificationValue"></temporary-hold>
+      <verification v-if="(isVerified=='verifying' || isVerified=='email_verifying') && hotelId!=null"></verification>
+      <temporary-hold v-if="(isVerified=='verifying' || isVerified=='email_verifying') && hotelId!=null" v-bind:dataValue="verificationValue"></temporary-hold>
       <collection-page-icon v-if="hotelId!=null && isVerified=='verified'"></collection-page-icon>
-      <create-page-icon v-if="hotelId==null && isVerified=='verified'"></create-page-icon>
+      <create-page-icon v-if="hotelId==null"></create-page-icon>
       <form v-if="isVerified=='verified' || hotelId==null"  @submit.prevent="register" role="form" enctype="multipart/form-data">
         <div class="row justify-content-center">
             <div class="col-md-9">
@@ -176,14 +176,14 @@
           verificationData(status, hotel_name, hotel_id) {
             this.verificationValue['hotel_id'] = hotel_id;
             this.verificationValue['hotel_name'] = hotel_name;
-            this.verificationValue['title'] = 'Warning';
+            this.verificationValue['title'] = 'Information';
             if(status=='verifying') {
               this.verificationValue['msg'] = 'We are verifying your documents it takes 2-3 days please be patient, as soon as the verification is complete we will notify you. Thank you';
               this.verificationValue['link'] = '#';
               this.verificationValue['link_title'] = '#';
             }else if(status=='email_verifying') {
-              this.verificationValue['msg'] = 'Please confirm the email you registered on this hotel for final verification. Thank you';
-              this.verificationValue['link'] = 'google.com';
+              this.verificationValue['msg'] = 'Congratz! we verified your docs, please confirm the email you registered on this hotel for final verification. Thank you';
+              this.verificationValue['link'] = '/hotel-email-verification';
               this.verificationValue['link_title'] = 'Click here to send email verification';
             }
           },

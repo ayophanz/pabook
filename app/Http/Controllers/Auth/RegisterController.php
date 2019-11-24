@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Notifications\EmailVerificationForNewRegistered;
+use App\Notifications\HotelEmailVerification;
 use Auth;
 
 class RegisterController extends Controller
@@ -41,7 +42,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except'=>'ResendVerification']);
+        $this->middleware('guest', ['except'=> ['ResendVerification','HotelEmailVerification']]);
     }
 
     /**
@@ -98,6 +99,25 @@ class RegisterController extends Controller
     public function ResendVerification() {
         Auth::user()->notify(new EmailVerificationForNewRegistered());
         return back();
+    }
+
+    public function HotelEmailVerification() {
+        $token = $this->str_random(6);
+        Auth::user()->notify(new HotelEmailVerification($token));
+        return back();
+    }
+
+    /**
+    *  generate random token
+    */
+    function str_random($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 
 }

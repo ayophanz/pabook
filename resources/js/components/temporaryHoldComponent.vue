@@ -8,13 +8,14 @@ Vue.component('temporary-hold', {
                         <div class="card">
                             <div class="card-header">{{dataValue.title}}</div>
                             <div class="card-body">
-                               ID: {{dataValue.hotel_id}} , Hotel: {{dataValue.hotel_name}}
+                               <strong>ID: {{dataValue.hotel_id}}</strong><br />
+                               <strong>Hotel: {{dataValue.hotel_name}}</strong>
                                <br />
                                <br />
                                {{dataValue.msg}}
                                <br />
                                <br />
-                               <a href="#" v-if="dataValue.link!='#'" >Click here to send email verification</a>
+                               <a v-if="dataValue.link!='#'" v-bind:href="dataValue.link"> {{dataValue.link_title}}</a>
                             </div>
                         </div>
                     </div>
