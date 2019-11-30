@@ -15,13 +15,52 @@ Vue.component('temporary-hold', {
                                {{dataValue.msg}}
                                <br />
                                <br />
-                               <a v-if="dataValue.link!='#'" v-bind:href="dataValue.link"> {{dataValue.link_title}}</a>
+                               <form v-if="dataValue.verify_token_link!='#'" @submit.prevent="verify" role="form">
+                                    <div class="row justify-content-center">
+                                            <div class="col-md-4">
+                                                <div class="form-group"><br />
+                                                    <input id="hotelVerifyToken" type="text" v-model="form.hotelVerifyToken" class="form-control" :class="{ 'is-invalid': form.errors.has('hotelVerifyToken') }" name="hotelVerifyToken">
+                                                    <has-error :form="form" field="hotelVerifyToken"></has-error>
+                                                </div> 
+                                            </div>
+                                            <div class="col-md-4"><br />
+                                                <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat">Verify now</button>
+                                            </div>
+                                    </div>
+                               </form><br /><br />
+                               <a v-if="dataValue.link!='#'" v-bind:href="dataValue.link+dataValue.hotel_id"> {{dataValue.link_title}}</a> and paste above field.
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             `,
-  props: ['dataValue']
+  props: ['dataValue'],
+  data() {
+    return {
+        form: new form({
+              hotelId: null,
+              hotelVerifyToken: ''
+          })
+    }
+  },
+  methods: {
+      verify() {
+          console.log(this.form);
+        this.form.get('/verify-hotel-token/'+this.form.hotelId+'/'+this.form.hotelVerifyToken).then(function (response) { 
+            window.location.reload();
+        }).catch(function (error) {
+            console.log(error); 
+            toast.fire({
+                type: 'error',
+                title: 'Something went wrong!'
+            })
+
+        });
+      }
+  },
+  mounted() {
+    this.form.hotelId = this.dataValue.hotel_id;
+  }
 });
 </script>

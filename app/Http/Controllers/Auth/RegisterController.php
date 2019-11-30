@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\Hotel;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -42,7 +43,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except'=> ['ResendVerification','HotelEmailVerification']]);
+        $this->middleware('guest', ['except'=> ['ResendVerification','HotelEmailVerification','VerifyHotelEmail']]);
     }
 
     /**
@@ -101,9 +102,20 @@ class RegisterController extends Controller
         return back();
     }
 
-    public function HotelEmailVerification() {
+    public function VerifyHotelEmail($id, $token) {
+        hotel::where('id', $id)
+        ->where('verify_token', $token)
+        ->where('status', 'email_verifying')
+        ->update(['status'=>'verified']);
+        return back();
+    }
+
+    public function HotelEmailVerification($id) {
         $token = $this->str_random(6);
         Auth::user()->notify(new HotelEmailVerification($token));
+        hotel::where('id', $id)
+        ->where('status', 'email_verifying')
+        ->update(['verify_token'=>$token]);
         return back();
     }
 

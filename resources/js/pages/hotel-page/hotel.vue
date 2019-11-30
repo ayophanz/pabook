@@ -67,7 +67,7 @@
                       </br>
                       <input type="file" @change="updateProofDocx" :class="{ 'is-invalid': form.errors.has('proofFile') }" name="proofFile">
                       <has-error :form="form" field="proofFile"></has-error>
-                   </div> 
+                  </div> 
                 </div>
             </div>
           </div>
@@ -181,9 +181,11 @@
               this.verificationValue['msg'] = 'We are verifying your documents it takes 2-3 days please be patient, as soon as the verification is complete we will notify you. Thank you';
               this.verificationValue['link'] = '#';
               this.verificationValue['link_title'] = '#';
+              this.verificationValue['verify_token_link'] = '#';
             }else if(status=='email_verifying') {
               this.verificationValue['msg'] = 'Congratz! we verified your docs, please confirm the email you registered on this hotel for final verification. Thank you';
-              this.verificationValue['link'] = '/hotel-email-verification';
+              this.verificationValue['link'] = '/hotel-email-verification/';
+              this.verificationValue['verify_token_link'] = '/verify-hotel-token';
               this.verificationValue['link_title'] = 'Click here to send email verification';
             }
           },

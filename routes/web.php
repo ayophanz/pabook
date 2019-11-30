@@ -23,7 +23,9 @@ Auth::routes(['verify' => true, 'reset' => true]);
 
 Route::get('/resend-email-verification', 'Auth\RegisterController@ResendVerification');
 
-Route::get('/hotel-email-verification', 'Auth\RegisterController@HotelEmailVerification');
+Route::get('/hotel-email-verification/{id}', 'Auth\RegisterController@HotelEmailVerification');
+
+Route::get('/verify-hotel-token/{id}/{token}', 'Auth\RegisterController@VerifyHotelEmail');
 
 Route::get('/2fa', 'Auth\TwoFactorController@show2faForm');
 

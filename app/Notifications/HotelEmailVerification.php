@@ -58,9 +58,9 @@ class HotelEmailVerification extends Notification
 
         return (new MailMessage)
             ->subject(Lang::get(config('app.name').' | Hotel Email Verification'))
-            ->line(Lang::get('You are receiving this email because your in final phase of verification.'))
+            ->line(Lang::get('You are receiving this email because your in final phase of hotel verification.'))
             ->action(Lang::get('Your Token: '.$this->VerifyCode),  '#')
-            ->line(Lang::get('Please copy the token and paste to '.config('app.name').' token field.'))
+            ->line(Lang::get('Please copy the token and paste to '.config('app.name').' hotel token field.'))
             ->greeting(Lang::get('Hello! '.$ToName.', '));
     }
 }
