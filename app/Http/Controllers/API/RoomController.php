@@ -238,11 +238,11 @@ class RoomController extends Controller
     private function owner($roomType=0) {
       $user = auth('api')->user();
       if($roomType==0) {
-        $hotel = Hotel::select('id')->where('owner_id', $user->id)->get()->toArray();
+        $hotel = Hotel::select('id')->where('status', 'verified')->where('owner_id', $user->id)->get()->toArray();
         if(empty($hotel)) {
           $userMeta = UserMeta::select('user_id')->where('value', $user->id)->first();
           if(!empty($userMeta))
-            $hotel = Hotel::select('id')->where('owner_id', $userMeta->user_id)->get()->toArray();
+            $hotel = Hotel::select('id')->where('status', 'verified')->where('owner_id', $userMeta->user_id)->get()->toArray();
         }
 
         $roomType = RoomType::select('id')->whereIn('hotel_id', $hotel)->get()->toArray();

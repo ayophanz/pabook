@@ -205,7 +205,10 @@
                     axios.get('/api/hotels')
                     .then(
                         function (response) {
-                            self.hotels = response.data
+                          response.data.forEach(item => {
+                            if(item.status=='verified')
+                              self.hotels.push(item);
+                          });
                         }
                     );
                 }

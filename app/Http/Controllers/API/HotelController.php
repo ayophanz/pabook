@@ -34,9 +34,9 @@ class HotelController extends Controller
             if($exist_recep)
                 $toarr = explode(',', substr($exist_recep[0]['value'], 1, -1));
             if($capa=='1') 
-                return Hotel::whereIn('id', $toarr)->where('owner_id', $id)->orderBy('created_at', 'desc')->get();
+                return Hotel::where('status', 'verified')->whereIn('id', $toarr)->where('owner_id', $id)->orderBy('created_at', 'desc')->get();
             else
-                return Hotel::whereNotIn('id', $toarr)->where('owner_id', $id)->orderBy('created_at', 'desc')->get();
+                return Hotel::where('status', 'verified')->whereNotIn('id', $toarr)->where('owner_id', $id)->orderBy('created_at', 'desc')->get();
         } 	
     }
 

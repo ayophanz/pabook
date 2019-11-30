@@ -16,7 +16,8 @@ class Hotel extends Model
     			'zip_code',
     			'phone_number',
     			'email',
-    			'image'
+				'image',
+				'status'
     			];
 
 
