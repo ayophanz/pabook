@@ -62,7 +62,7 @@
                     <input v-model="form.zip_code" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('zip_code') }" id="zip_code">
                     <has-error :form="form" field="zip_code"></has-error>
                   </div>
-                  <div class="form-group">
+                  <div v-if="hotelId==null" class="form-group">
                       <label for="proofFile"> Please provide any proof of document that you own the hotel and it is legal <span class="required-asterisk">* ( Note: zip your file )</span></label>
                       </br>
                       <input type="file" @change="updateProofDocx" :class="{ 'is-invalid': form.errors.has('proofFile') }" name="proofFile">
