@@ -20,12 +20,6 @@ class TwoFactorVerification
         if ($user->two_factor_expiry > \Carbon\Carbon::now()) {
             return $next($request);
         }
-
-        if ($request->user() || (!$request->user() instanceof MustVerifyEmail && $request->user()->hasVerifiedEmail())) { 
-            $request->user()->two_factor_token = $this->str_random(10);
-            $request->user()->save();
-            $request->user()->notify(new TwoFactorAuthentication($request->user()->two_factor_token)); 
-        }
         return redirect('/2fa');
     }
 
