@@ -32,10 +32,11 @@
                       </div>
                       <div class="form-group">
                         <label for="type">Type <span class="required-asterisk">*</span></label>
-                        <select v-model="form.type" class="form-control" :class="{ 'is-invalid': form.errors.has('type') }" id="type">
+                        <select v-if="types!=''" v-model="form.type" class="form-control" :class="{ 'is-invalid': form.errors.has('type') }" id="type">
                           <option v-for="item in types" :selected="item.id === form.type" :value="item.id">{{item.name}}</option>
                         </select>
                         <has-error :form="form" field="type"></has-error>
+                        <p v-if="types==''">This hotel doesn't have any room type available, <router-link to="/add-room-type">click here to add.</router-link></p>
                       </div>    
                       <div class="form-group">
                         <label for="description">Description </label>

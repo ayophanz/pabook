@@ -111,7 +111,7 @@ class RoomTypeController extends Controller
     *  Get owner hotels ID
     */
    private function hotel_ids() {
-      return Hotel::select('id')->where('owner_id', auth('api')->user()->id)->get()->toArray();
+      return Hotel::where('owner_id', auth('api')->user()->id)->pluck('id')->toArray();
    }
 
    /**
