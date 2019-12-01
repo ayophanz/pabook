@@ -132,7 +132,7 @@
                             row_classes: "booking-row-class-country",
                         },
                         {
-                            label: "Phone Number",
+                            label: "Phone No.",
                             name: "phone_number",
                             sort: true,
                             slot_name: "phone",
