@@ -71,7 +71,7 @@
 
   <footer class="main-footer">
     <div class="float-right d-none d-sm-inline">
-      Anything you want
+      Pabook
     </div>
     <strong>Copyright &copy; <?php echo date('Y');?> All rights reserved, Designed & Developed by<a href="https://www.facebook.com/ayophanz" target="_blank"> Jford Ayop</a></strong>
   </footer>

@@ -258,4 +258,7 @@
         outline: 0;
         box-shadow: 0 0 0 0.2rem #38c17259;
     }
+    .table thead tr:first-child th {
+        display: none;
+    }
 </style>

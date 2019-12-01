@@ -35,7 +35,7 @@
                                 <!-- Body content -->
                                 <tr>
                                     <td class="content-cell">
-                                        @include('vendor.mail.html.emailIcon');
+                                        @include('vendor.mail.html.emailIcon')
                                         {{ Illuminate\Mail\Markdown::parse($slot) }}
 
                                         {{ $subcopy ?? '' }}

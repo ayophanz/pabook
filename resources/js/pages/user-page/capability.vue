@@ -49,27 +49,30 @@
                                         <h6><strong>{{recepName}}</strong> capabilities</h6>
                                     </div>
                                     <div class="card-body">
-
-                                         <!--Assign capability-->
-                                        <div class="row text-left">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label>Assign Capabilities</label>
-                                                    <div v-for="item in hotelsCapa" class="custom-control custom-switch"><input :checked="true" @click="isChck(item,$event)" :value="item.id" type="checkbox" :id="'user-capa-'+item.id" class="custom-control-input"> <label :for="'user-capa-'+item.id" class="custom-control-label">{{item.name}}</label></div>
+                                        <div class="row capability-container">
+                                            <div class="col-md-6 left-column">
+                                                <!--Assign capability-->
+                                                <div class="row text-left">
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label>Assign Capabilities</label>
+                                                            <div v-for="item in hotelsCapa" class="custom-control custom-switch"><input :checked="true" @click="isChck(item,$event)" :value="item.id" type="checkbox" :id="'user-capa-'+item.id" class="custom-control-input"> <label :for="'user-capa-'+item.id" class="custom-control-label">{{item.name}}</label></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 right-column">
+                                                <!--Unassign capability-->
+                                                <div class="row text-left">
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label>Unassign Capabilities</label>
+                                                            <div v-for="item in hotels" class="custom-control custom-switch"><input :checked="false" @click="isChck(item,$event)" :value="item.id" type="checkbox" :id="'user-capa-'+item.id" class="custom-control-input"> <label :for="'user-capa-'+item.id" class="custom-control-label">{{item.name}}</label></div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    <hr>
-                                        <!--Unassign capability-->
-                                        <div class="row text-left">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label>Unassign Capabilities</label>
-                                                    <div v-for="item in hotels" class="custom-control custom-switch"><input :checked="false" @click="isChck(item,$event)" :value="item.id" type="checkbox" :id="'user-capa-'+item.id" class="custom-control-input"> <label :for="'user-capa-'+item.id" class="custom-control-label">{{item.name}}</label></div>
-                                                </div>
-                                            </div>
-                                        </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -234,5 +237,19 @@
     }
 </script>
 <style lang='scss'>
-
+    .capability-container {
+        height: 100%;
+    }
+    .row.capability-container .right-column {
+        border-left: 0.02px solid #e7e7e7;
+    }
+    .row.capability-container .left-column {
+        border-right: 0.02px solid #e7e7e7;
+    }
+    .capability-container .form-group {
+        text-align: center;
+    }
+    .custom-switch {
+        text-align: left;
+    }
 </style>
