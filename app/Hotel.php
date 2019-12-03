@@ -19,7 +19,8 @@ class Hotel extends Model
 				'image',
 				'status',
 				'check_in',
-				'check-out'
+				'check-out',
+				'website'
     			];
 
 

@@ -78,6 +78,11 @@
                     <input v-model="form.phone_number" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('phone_number') }" id="phone_number" placeholder="ex. 09121232331, 754-3010">
                     <has-error :form="form" field="phone_number"></has-error>
                   </div>
+                  <div class="form-group">
+                    <label for="website">Official website</label>
+                    <input v-model="form.website" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('website') }" id="website" placeholder="ex. https://www.site.com">
+                    <has-error :form="form" field="website"></has-error>
+                  </div>
                   <div v-if="hotelId==null" class="form-group">
                       <label for="proofFile"> Please provide any proof of document that you own the hotel and it is legal <span class="required-asterisk">* ( Note: zip your file )</span></label>
                       </br>
@@ -190,6 +195,7 @@
               proofFile: '',
               check_in: '',
               check_out: '',
+              website: '',
             })
           }
         },
@@ -340,6 +346,7 @@
                     self.form.email = response.data.email;
                     self.form.check_in = response.data.check_in;
                     self.form.check_out = response.data.check_out;
+                    self.form.website = response.data.website;
                     self.tempImage = response.data.image;
                     self.imageUrl = '../storage/images/upload/hotelImages/'+self.tempImage;
                     self.isVerified = response.data.status;

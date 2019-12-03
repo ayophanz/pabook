@@ -73,7 +73,8 @@ class HotelController extends Controller
                     'phone_number'   => $request['phone_number'],
                     'email'          => $request['email'],
                     'check_in'       => $request['check_in'],
-                    'check_out'      => $request['check_out']
+                    'check_out'      => $request['check_out'],
+                    'website'      => $request['website']
                     ];
 
         if(\Gate::allows('superAdmin')) {
@@ -142,7 +143,8 @@ class HotelController extends Controller
                       'phone_number'   => $request['phone_number'],
                       'email'          => $request['email'],
                       'check_in'       => $request['check_in'],
-                      'check_out'      => $request['check_out']
+                      'check_out'      => $request['check_out'],
+                      'website'      => $request['website']
                       ]; 
 
         if($request['changeCover']) 
