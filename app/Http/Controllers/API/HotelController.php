@@ -54,7 +54,9 @@ class HotelController extends Controller
                 'email'          => 'required|string|email|max:191|unique:hotels',
                 'image'          => 'required|max:307200|image64:jpeg,jpg,png',
                 'base_currency'  => 'required|string|max:191',
-                'proofFile'      => 'required|max:5242880|image64:x-zip-compressed,zip'
+                'proofFile'      => 'required|max:5242880|image64:x-zip-compressed,zip',
+                'check_in'       => 'required',
+                'check_out'      => 'required'
                 ];
         
         $customMessages = [
@@ -69,7 +71,9 @@ class HotelController extends Controller
                     'country'        => $request['country'],
                     'zip_code'       => $request['zip_code'],
                     'phone_number'   => $request['phone_number'],
-                    'email'          => $request['email']
+                    'email'          => $request['email'],
+                    'check_in'       => $request['check_in'],
+                    'check_out'      => $request['check_out']
                     ];
 
         if(\Gate::allows('superAdmin')) {
@@ -123,7 +127,9 @@ class HotelController extends Controller
                 'country'        => 'required|string|max:191',
                 'phone_number'   => 'required|string|max:191',
                 'email'          => 'required|string|email|max:191|unique:hotels,email,'.$id,
-                'base_currency'  => 'required|string|max:191'
+                'base_currency'  => 'required|string|max:191',
+                'check_in'       => 'required',
+                'check_out'      => 'required'
                 ];
 
         $dataUpdate = [
@@ -134,7 +140,9 @@ class HotelController extends Controller
                       'country'        => $request['country'],
                       'zip_code'       => $request['zip_code'],
                       'phone_number'   => $request['phone_number'],
-                      'email'          => $request['email']
+                      'email'          => $request['email'],
+                      'check_in'       => $request['check_in'],
+                      'check_out'      => $request['check_out']
                       ]; 
 
         if($request['changeCover']) 

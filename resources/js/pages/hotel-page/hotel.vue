@@ -26,31 +26,6 @@
 
                 <div class="card-body"> 
                   <div class="form-group">
-                    <label for="phone_number">Phone number / Tele. number <span class="required-asterisk">*</span></label>
-                    <input v-model="form.phone_number" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('phone_number') }" id="phone_number" placeholder="ex. 09121232331, 754-3010">
-                    <has-error :form="form" field="phone_number"></has-error>
-                  </div>
-                  <div class="form-group">
-                    <label for="email">Email <span class="required-asterisk">*</span></label>
-                    <input v-model="form.email" type="email" class="form-control" :class="{ 'is-invalid': form.errors.has('email') }" id="email">
-                    <has-error :form="form" field="email"></has-error>
-                  </div>
-                  <div class="form-group">
-                    <label for="address">Address <span class="required-asterisk">*</span></label>
-                    <input v-model="form.address" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('address') }" id="address" >
-                    <has-error :form="form" field="address"></has-error>
-                  </div>
-                  <div class="form-group">
-                    <label for="address">City <span class="required-asterisk">*</span></label>
-                    <input v-model="form.city" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('city') }" id="city">
-                    <has-error :form="form" field="city"></has-error>
-                  </div>
-                  <div class="form-group">
-                    <label for="state_province">State / Province</label>
-                    <input v-model="form.state_province" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('state_province') }" id="state_province" >
-                    <has-error :form="form" field="state_province"></has-error>
-                  </div>
-                  <div class="form-group">
                     <label for="country">Country <span class="required-asterisk">*</span></label>
                      <select v-model="form.country" class="form-control" :class="{ 'is-invalid': form.errors.has('country') }" id="country">
                       <option v-for="item in countries" :selected="item === form.country" :value="item">{{item}}</option>
@@ -61,6 +36,44 @@
                     <label for="zip_code">Zip code</label>
                     <input v-model="form.zip_code" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('zip_code') }" id="zip_code">
                     <has-error :form="form" field="zip_code"></has-error>
+                  </div>
+                  <div class="form-group">
+                    <label for="state_province">State / Province</label>
+                    <input v-model="form.state_province" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('state_province') }" id="state_province" >
+                    <has-error :form="form" field="state_province"></has-error>
+                  </div>
+                  <div class="form-group">
+                    <label for="address">City <span class="required-asterisk">*</span></label>
+                    <input v-model="form.city" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('city') }" id="city">
+                    <has-error :form="form" field="city"></has-error>
+                  </div>
+                  <div class="form-group">
+                    <label for="address">Street Address <span class="required-asterisk">*</span></label>
+                    <input v-model="form.address" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('address') }" id="address" >
+                    <has-error :form="form" field="address"></has-error>
+                  </div>
+                  <div class="form-group">
+                    <label for="email">Email <span class="required-asterisk">*</span></label>
+                    <input v-model="form.email" type="email" class="form-control" :class="{ 'is-invalid': form.errors.has('email') }" id="email">
+                    <has-error :form="form" field="email"></has-error>
+                  </div>
+                  <div class="form-group">
+                    <label for="phone_number">Phone number / Tele. number <span class="required-asterisk">*</span></label>
+                    <input v-model="form.phone_number" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('phone_number') }" id="phone_number" placeholder="ex. 09121232331, 754-3010">
+                    <has-error :form="form" field="phone_number"></has-error>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                          <label for="check_in">Check-in <span class="required-asterisk">*</span></label>
+                          <vue-timepicker v-model="form.check_in" format="hh:mm A" :class="{ 'is-invalid': form.errors.has('check_in') }" id="check_in"></vue-timepicker>
+                          <has-error :form="form" field="check_in"></has-error>
+                          &nbsp;&nbsp;
+                          <label for="check_out">Check-out <span class="required-asterisk">*</span></label>
+                          <vue-timepicker v-model="form.check_out" format="hh:mm A" :class="{ 'is-invalid': form.errors.has('check_in') }" id="check_in"></vue-timepicker>
+                          <has-error :form="form" field="check_out"></has-error>
+                        </div>
+                    </div>
                   </div>
                   <div v-if="hotelId==null" class="form-group">
                       <label for="proofFile"> Please provide any proof of document that you own the hotel and it is legal <span class="required-asterisk">* ( Note: zip your file )</span></label>
@@ -85,20 +98,6 @@
                       <label for="name">Name <span class="required-asterisk">*</span></label>
                       <input v-model="form.name" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }" id="name">
                       <has-error :form="form" field="name"></has-error>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-6">
-                          <div class="form-group">
-                            <label for="owner">Check-in <span class="required-asterisk">*</span></label>
-                            <vue-timepicker format="hh:mm A"></vue-timepicker>
-                          </div>
-                      </div>
-                      <div class="col-md-6">
-                          <div class="form-group">
-                            <label for="owner">Check-out <span class="required-asterisk">*</span></label>
-                            <vue-timepicker format="hh:mm A"></vue-timepicker>
-                          </div>
-                      </div>
                     </div>
                     <div class="form-group">
                       <label for="base_currency">Base currency <span class="required-asterisk">*</span></label>
@@ -186,6 +185,8 @@
               image: '',
               changeCover: '',
               proofFile: '',
+              check_in: '',
+              check_out: '',
             })
           }
         },
@@ -334,6 +335,8 @@
                     self.form.zip_code = response.data.zip_code;
                     self.form.phone_number = response.data.phone_number;
                     self.form.email = response.data.email;
+                    self.form.check_in = response.data.check_in;
+                    self.form.check_out = response.data.check_out;
                     self.tempImage = response.data.image;
                     self.imageUrl = '../storage/images/upload/hotelImages/'+self.tempImage;
                     self.isVerified = response.data.status;

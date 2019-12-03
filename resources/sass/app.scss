@@ -327,3 +327,7 @@ button:focus, .fc-button-primary:focus {
 .sidebar:hover {
     overflow: auto;
 }
+
+.vue__time-picker .dropdown ul li:not([disabled]).active, .vue__time-picker .dropdown ul li:not([disabled]).active:focus, .vue__time-picker .dropdown ul li:not([disabled]).active:hover {
+    background: #38c172 !important;
+}
