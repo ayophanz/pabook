@@ -261,4 +261,7 @@
     .table thead tr:first-child th {
         display: none;
     }
+    ul.pagination div:last-child {
+        display: none;
+    }
 </style>

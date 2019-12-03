@@ -86,6 +86,20 @@
                       <input v-model="form.name" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }" id="name">
                       <has-error :form="form" field="name"></has-error>
                     </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="owner">Check-in <span class="required-asterisk">*</span></label>
+                            <vue-timepicker format="hh:mm A"></vue-timepicker>
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="owner">Check-out <span class="required-asterisk">*</span></label>
+                            <vue-timepicker format="hh:mm A"></vue-timepicker>
+                          </div>
+                      </div>
+                    </div>
                     <div class="form-group">
                       <label for="base_currency">Base currency <span class="required-asterisk">*</span></label>
                        <select v-model="form.base_currency" @change="currencyCall" class="form-control" :class="{ 'is-invalid': form.errors.has('base_currency') }" id="base_currency">
@@ -125,6 +139,8 @@
     import Loading from 'vue-loading-overlay'
     import 'vue-loading-overlay/dist/vue-loading.css'
     import cc from 'currency-codes'
+    import VueTimepicker from 'vue2-timepicker'
+    import 'vue2-timepicker/dist/VueTimepicker.css'
     export default {
         watch: {
             '$route' (to, from) {
@@ -137,7 +153,8 @@
         },
         components: {
           Loading,
-          cc
+          cc,
+          VueTimepicker
         },
         data() {
           return {
