@@ -52,6 +52,22 @@
                     <input v-model="form.address" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('address') }" id="address" >
                     <has-error :form="form" field="address"></has-error>
                   </div>
+                  <div class="row">
+                    <div class="col-auto">
+                        <div class="form-group">
+                          <label for="check_in">Check-in <span class="required-asterisk">*</span></label>
+                          <vue-timepicker v-model="form.check_in" format="hh:mm A" :class="{ 'is-invalid': form.errors.has('check_in') }" id="check_in"></vue-timepicker>
+                          <has-error :form="form" field="check_in"></has-error>
+                        </div>  
+                    </div>
+                    <div class="col-auto">
+                        <div class="form-group">
+                          <label for="check_out">Check-out <span class="required-asterisk">*</span></label>
+                          <vue-timepicker v-model="form.check_out" format="hh:mm A" :class="{ 'is-invalid': form.errors.has('check_in') }" id="check_in"></vue-timepicker>
+                          <has-error :form="form" field="check_out"></has-error>
+                        </div>
+                    </div>
+                  </div>
                   <div class="form-group">
                     <label for="email">Email <span class="required-asterisk">*</span></label>
                     <input v-model="form.email" type="email" class="form-control" :class="{ 'is-invalid': form.errors.has('email') }" id="email">
@@ -61,19 +77,6 @@
                     <label for="phone_number">Phone number / Tele. number <span class="required-asterisk">*</span></label>
                     <input v-model="form.phone_number" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('phone_number') }" id="phone_number" placeholder="ex. 09121232331, 754-3010">
                     <has-error :form="form" field="phone_number"></has-error>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                          <label for="check_in">Check-in <span class="required-asterisk">*</span></label>
-                          <vue-timepicker v-model="form.check_in" format="hh:mm A" :class="{ 'is-invalid': form.errors.has('check_in') }" id="check_in"></vue-timepicker>
-                          <has-error :form="form" field="check_in"></has-error>
-                          &nbsp;&nbsp;
-                          <label for="check_out">Check-out <span class="required-asterisk">*</span></label>
-                          <vue-timepicker v-model="form.check_out" format="hh:mm A" :class="{ 'is-invalid': form.errors.has('check_in') }" id="check_in"></vue-timepicker>
-                          <has-error :form="form" field="check_out"></has-error>
-                        </div>
-                    </div>
                   </div>
                   <div v-if="hotelId==null" class="form-group">
                       <label for="proofFile"> Please provide any proof of document that you own the hotel and it is legal <span class="required-asterisk">* ( Note: zip your file )</span></label>
