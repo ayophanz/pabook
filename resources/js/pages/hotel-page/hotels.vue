@@ -56,11 +56,11 @@
                             {{props.column.label}}&nbsp;
                             <i class="fas fa-table"></i>
                         </template>
-                        <template slot="column_actions" slot-scope="props">
+                        <template slot="column_status" slot-scope="props">
                             {{props.column.label}}&nbsp;
                             <i class="fas fa-external-link-square-alt"></i>
                         </template>
-                        <template slot="column_status" slot-scope="props">
+                        <template slot="column_actions" slot-scope="props">
                             {{props.column.label}}&nbsp;
                             <i class="fas fa-external-link-square-alt"></i>
                         </template>
@@ -136,14 +136,6 @@
                             column_text_alignment: "text-left",
                         },
                         {
-                            label: "Created at",
-                            name: "created_at",
-                            sort: true,
-                            slot_name: "created_at",
-                            row_text_alignment: "text-left",
-                            column_text_alignment: "text-left",
-                        },
-                        {
                             label: "Status",
                             name: "status",
                             filter: {
@@ -171,6 +163,14 @@
                             },
                             sort: true,
                             slot_name: "status",
+                            row_text_alignment: "text-left",
+                            column_text_alignment: "text-left",
+                        },
+                        {
+                            label: "Created at",
+                            name: "created_at",
+                            sort: true,
+                            slot_name: "created_at",
                             row_text_alignment: "text-left",
                             column_text_alignment: "text-left",
                         },
