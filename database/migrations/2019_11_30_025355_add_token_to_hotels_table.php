@@ -14,7 +14,7 @@ class AddTokenToHotelsTable extends Migration
     public function up()
     {
         Schema::table('hotels', function (Blueprint $table) {
-            $table->string('verify_token');
+            $table->string('verify_token')->nullable();
         });
     }
 

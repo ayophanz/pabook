@@ -44,10 +44,6 @@
                             {{props.column.label}}&nbsp;
                             <i class="fas fa-hotel"></i>
                         </template>
-                        <template slot="column_country" slot-scope="props">
-                            {{props.column.label}}&nbsp;
-                            <i class="fas fa-flag"></i>
-                        </template>
                         <template slot="column_phone" slot-scope="props">
                             {{props.column.label}}&nbsp;
                             <i class="fas fa-phone"></i>
@@ -61,6 +57,10 @@
                             <i class="fas fa-table"></i>
                         </template>
                         <template slot="column_actions" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fas fa-external-link-square-alt"></i>
+                        </template>
+                        <template slot="column_status" slot-scope="props">
                             {{props.column.label}}&nbsp;
                             <i class="fas fa-external-link-square-alt"></i>
                         </template>
@@ -79,8 +79,8 @@
 </template>
 
 <script>
-    // import styles from 'vue-pure-lightbox/dist/VuePureLightbox.css'
-    // import VuePureLightbox from 'vue-pure-lightbox'
+    import styles from 'vue-pure-lightbox/dist/VuePureLightbox.css'
+    import VuePureLightbox from 'vue-pure-lightbox'
     import Loading from 'vue-loading-overlay'
     import 'vue-loading-overlay/dist/vue-loading.css'
     import VueBootstrap4Table from 'vue-bootstrap4-table'
@@ -120,18 +120,6 @@
                             row_classes: "booking-row-class-name",
                         },
                         {
-                            label: "Country",
-                            name: "country",
-                            filter: {
-                                type: "simple",
-                                placeholder: "Enter country"
-                            },
-                            slot_name: "country",
-                            row_text_alignment: "text-left",
-                            column_text_alignment: "text-left",
-                            row_classes: "booking-row-class-country",
-                        },
-                        {
                             label: "Phone No.",
                             name: "phone_number",
                             sort: true,
@@ -152,6 +140,37 @@
                             name: "created_at",
                             sort: true,
                             slot_name: "created_at",
+                            row_text_alignment: "text-left",
+                            column_text_alignment: "text-left",
+                        },
+                        {
+                            label: "Status",
+                            name: "status",
+                            filter: {
+                                type: "select",
+                                placeholder: "Filter status",
+                                mode: "multi",
+                                options:[
+                                {
+                                    "name" : "Document verifying",
+                                    "value" : "verifying"
+                                },
+                                {
+                                    "name" : "Email verifying",
+                                    "value" : "email_verifiying"
+                                },
+                                {
+                                    "name" : "Verified",
+                                    "value" : "verified"
+                                }
+                                ],
+                                select_all_checkbox : {
+                                    visibility: true,
+                                    text: "Select all items"
+                                },
+                            },
+                            sort: true,
+                            slot_name: "status",
                             row_text_alignment: "text-left",
                             column_text_alignment: "text-left",
                         },

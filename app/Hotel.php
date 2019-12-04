@@ -20,7 +20,8 @@ class Hotel extends Model
 				'status',
 				'check_in',
 				'check-out',
-				'website'
+				'website',
+				'verify_token'
     			];
 
 

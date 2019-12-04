@@ -74,7 +74,7 @@ class HotelController extends Controller
                     'email'          => $request['email'],
                     'check_in'       => $request['check_in'],
                     'check_out'      => $request['check_out'],
-                    'website'      => $request['website']
+                    'website'        => $request['website']
                     ];
 
         if(\Gate::allows('superAdmin')) {

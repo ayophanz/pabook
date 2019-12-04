@@ -28,7 +28,7 @@ Vue.component('temporary-hold', {
                                             </div>
                                     </div>
                                </form><br /><br />
-                               <a v-if="dataValue.link!='#'" v-bind:href="dataValue.link+dataValue.hotel_id"> {{dataValue.link_title}}</a> and paste above field.
+                               <p v-if="dataValue.link!='#'"><a v-bind:href="dataValue.link+dataValue.hotel_id"> {{dataValue.link_title}}</a> and paste above field.</p>
                             </div>
                         </div>
                     </div>
