@@ -331,3 +331,13 @@ button:focus, .fc-button-primary:focus {
 .vue__time-picker .dropdown ul li:not([disabled]).active, .vue__time-picker .dropdown ul li:not([disabled]).active:focus, .vue__time-picker .dropdown ul li:not([disabled]).active:hover {
     background: #38c172 !important;
 }
+
+.btn-secondary {
+    color: #343a40 !important;
+    background-color: #f8f9fa !important;
+    border-color: #ced4da !important;
+}
+
+.btn-secondary:focus, .btn-secondary.focus {
+    box-shadow: 0 0 0 0.2rem rgb(222, 222, 222) !important;
+}

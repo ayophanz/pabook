@@ -60,6 +60,9 @@
                             {{props.column.label}}&nbsp;
                             <i class="fas fa-external-link-square-alt"></i>
                         </template>
+                        <template slot="status" slot-scope="props">
+                            {{(props.cell_value=='verifying')? 'docx verifying': (props.cell_value=='email_verifying')? 'confirm email': props.cell_value}}&nbsp;
+                        </template>
                         <template slot="column_actions" slot-scope="props">
                             {{props.column.label}}&nbsp;
                             <i class="fas fa-external-link-square-alt"></i>

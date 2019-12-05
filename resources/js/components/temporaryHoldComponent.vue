@@ -26,8 +26,17 @@ Vue.component('temporary-hold', {
                                             <div class="col-md-4"><br />
                                                 <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat">Verify now</button>
                                             </div>
-                                    </div>
-                               </form><br /><br />
+                                    </div><br /><br />
+                               </form>
+
+                               <form v-if="dataValue.download_action!='#'" @submit.prevent="verify" role="form">
+                                    <div class="row justify-content-center">
+                                            <div class="col-md-12 text-center">
+                                                <a v-bind:href="dataValue.download_link" target="_blank">{{dataValue.download_action}}</a><br /><br />
+                                                <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat">Approve Now</button>
+                                            </div>
+                                    </div><br /><br />
+                               </form>
                                <p v-if="dataValue.link!='#'"><a v-bind:href="dataValue.link+dataValue.hotel_id"> {{dataValue.link_title}}</a> and paste above field.</p>
                             </div>
                         </div>

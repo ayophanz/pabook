@@ -16830,3 +16830,14 @@ button:focus,
   background: #38c172 !important;
 }
 
+.btn-secondary {
+  color: #343a40 !important;
+  background-color: #f8f9fa !important;
+  border-color: #ced4da !important;
+}
+
+.btn-secondary:focus,
+.btn-secondary.focus {
+  box-shadow: 0 0 0 0.2rem #dedede !important;
+}
+

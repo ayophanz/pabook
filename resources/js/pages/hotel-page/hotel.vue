@@ -204,7 +204,13 @@
             this.verificationValue['hotel_id'] = hotel_id;
             this.verificationValue['hotel_name'] = hotel_name;
             this.verificationValue['title'] = 'Information';
+            this.verificationValue['download_action'] = '#';
+            this.verificationValue['download_link'] = '#';
             if(status=='verifying') {
+              if(this.$gate.superAdmin()) {
+                this.verificationValue['download_action'] = 'Download prof docx';
+                this.verificationValue['download_link'] = 'https://www.google.com';
+              }
               this.verificationValue['msg'] = 'We are verifying your documents it takes 2-3 days please be patient, as soon as the verification is complete we will notify you. Thank you';
               this.verificationValue['link'] = '#';
               this.verificationValue['link_title'] = '#';
