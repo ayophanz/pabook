@@ -37,6 +37,7 @@
         "laravel-echo": "^1.5.4",
         "moment": "^2.24.0",
         "pusher-js": "^5.0.0",
+        "serialize-javascript": "^2.1.1",
         "sweetalert2": "^8.13.4",
         "vform": "^1.0.1",
         "vue-bootstrap4-table": "^1.1.10",
