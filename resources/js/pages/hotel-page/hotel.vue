@@ -24,7 +24,7 @@
                 </div>
               </div>
 
-                <div class="card-body"> 
+                <div class="card-body">
                   <div class="form-group">
                     <label for="country">Country <span class="required-asterisk">*</span></label>
                      <select v-model="form.country" class="form-control" :class="{ 'is-invalid': form.errors.has('country') }" id="country">
@@ -179,6 +179,7 @@
             isVerified: false,
             verificationValue: [],
             currencyName: 'you are using global currency',
+            downloadUrl: '',
             form: new form({
               owner: '',
               name: '',
@@ -206,10 +207,12 @@
             this.verificationValue['title'] = 'Information';
             this.verificationValue['download_action'] = '#';
             this.verificationValue['download_link'] = '#';
+            this.verificationValue['download_filename'] = '#';
             if(status=='verifying') {
               if(this.$gate.superAdmin()) {
                 this.verificationValue['download_action'] = 'Download prof docx';
-                this.verificationValue['download_link'] = 'https://www.google.com';
+                this.verificationValue['download_link'] = this.downloadUrl;
+                this.verificationValue['download_filename'] = this.hotelId+'_'+this.form.name;
               }
               this.verificationValue['msg'] = 'We are verifying your documents it takes 2-3 days please be patient, as soon as the verification is complete we will notify you. Thank you';
               this.verificationValue['link'] = '#';
@@ -355,6 +358,7 @@
                     self.form.website = response.data.website;
                     self.tempImage = response.data.image;
                     self.imageUrl = '../storage/images/upload/hotelImages/'+self.tempImage;
+                    self.downloadUrl='../storage/ImportantFiles/'+response.data.id+'.zip';
                     self.isVerified = response.data.status;
                     self.verificationData(self.isVerified, self.form.name, response.data.id);
                     if(response.data.base_currency!=null) {

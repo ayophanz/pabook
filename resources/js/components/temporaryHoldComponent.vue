@@ -32,7 +32,7 @@ Vue.component('temporary-hold', {
                                <form v-if="dataValue.download_action!='#'" @submit.prevent="verify" role="form">
                                     <div class="row justify-content-center">
                                             <div class="col-md-12 text-center">
-                                                <a v-bind:href="dataValue.download_link" target="_blank">{{dataValue.download_action}}</a><br /><br />
+                                                <a v-bind:href="dataValue.download_link" v-bind:download="dataValue.download_filename" target="_blank">{{dataValue.download_action}}</a><br /><br />
                                                 <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat">Approve Now</button>
                                             </div>
                                     </div><br /><br />
