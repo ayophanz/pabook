@@ -33,7 +33,7 @@ Vue.component('temporary-hold', {
                                     <div class="row justify-content-center">
                                             <div class="col-md-12 text-center">
                                                 <a v-bind:href="dataValue.download_link" v-bind:download="dataValue.download_filename" target="_blank">{{dataValue.download_action}}</a><br /><br />
-                                                <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat">Approve Now</button>
+                                                <a href="#" @click.prevent="onApprove(dataValue.hotel_id)" class="btn btn-outline-primary btn-flat btn-action"><i class="fas fa-thumbs-up"></i> Approve now</a>
                                             </div>
                                     </div><br /><br />
                                </form>
@@ -66,6 +66,32 @@ Vue.component('temporary-hold', {
             })
 
         });
+      },
+      onApprove($id) {
+            approve.fire({
+                title: 'Are you sure?',
+                text: "You were going to approve this hotel",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, approve it!',
+                cancelButtonText: 'No, cancel! ',
+                focusCancel: true,
+                reverseButtons: true
+            }).then((result) => {
+                if(result.value) {
+                    if(this.$gate.superAdmin()) {
+                        this.form.put('/api/approve-hotel') .then(
+                            function (response) {
+                                toast.fire({
+                                    type: 'success',
+                                    title: 'This hotel is ready for booking.'
+                                })
+                                setTimeout(function() { location.reload(); }, 3000);
+                            }
+                        );
+                    }
+                }
+            })
       }
   },
   mounted() {

@@ -136,6 +136,14 @@ const toast = swal.mixin({
 });
 window.toast = toast
 
+const approve = swal.mixin({
+  customClass: {
+    confirmButton: 'btn btn-outline-primary btn-flat',
+    cancelButton: 'btn btn-outline-secondary btn-flat'
+  },
+  buttonsStyling: false,
+})
+window.approve = approve
 const sure = swal.mixin({
   customClass: {
     confirmButton: 'btn btn-outline-danger btn-flat',
@@ -144,7 +152,6 @@ const sure = swal.mixin({
   buttonsStyling: false,
 })
 window.sure = sure
-
 const paynow = swal.mixin({
   customClass: {
     confirmButton: 'btn btn-outline-primary btn-flat',

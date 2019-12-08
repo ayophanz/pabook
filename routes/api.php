@@ -55,6 +55,8 @@ Route::put('/update-hotel/{id}', 'API\HotelController@update');
 
 Route::delete('/delete-hotel/{id}', 'API\HotelController@destroy');
 
+Route::put('/approve-hotel', 'API\HotelController@approveHotel');
+
 
 /**
 * Room Type

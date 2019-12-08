@@ -174,6 +174,10 @@ class HotelController extends Controller
             return Hotel::where('id', $id)->where('owner_id', $this->ownerId())->update($dataUpdate);
     }
 
+    public function approveHotel(Request $request) {
+        return (\Gate::allows('superAdmin'))? Hotel::where('id', $request['hotelId'])->update(['status'=>'email_verifying']) : 'error';
+    }
+
     public function destroy($id) {
     	if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
             return die('not allowed');
