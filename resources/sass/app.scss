@@ -354,3 +354,8 @@ button:focus, .fc-button-primary:focus {
  :-ms-input-placeholder {  
     font-style: italic; 
  }
+
+ .nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+ }

@@ -79,9 +79,19 @@
                             <has-error :form="form" field="price"></has-error>
                         </div>
                         <div class="form-group">
-                            <label for="no_of_room">No. of unit <span class="required-asterisk">*</span></label>
-                            <input v-model="form.no_of_room" type="number" class="form-control" :class="{ 'is-invalid': form.errors.has('no_of_room') }" id="name">
-                            <has-error :form="form" field="no_of_room"></has-error>
+                          <div class="container">
+                            <div class="row">
+                              <div class="col nopadding">
+                                <label for="no_of_room">No. of unit <span class="required-asterisk">*</span></label>
+                                <input v-model="form.no_of_room" type="number" class="form-control" :class="{ 'is-invalid': form.errors.has('no_of_room') }" id="no_of_room">
+                                <has-error :form="form" field="no_of_room"></has-error>
+                              </div>
+                              <div class="col nopadding">
+                                <label for="no_of_room_available">No. of unit available</label>
+                                <p class="form-control" id="no_of_room_available">3</p>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                         <div class="form-group" v-if="roomId != null">
                           <div class="custom-control custom-switch">
