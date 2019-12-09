@@ -44,8 +44,12 @@
                         <has-error :form="form" field="description"></has-error>
                       </div>
                       <div class="form-group">
-                        <label for="feature">Amenities </label>
-                        <repeater-input :dataValue="form.featureData" ref="repeaterUpdate" @dataFeature="form.featureData = $event"></repeater-input>
+                        <label for="feature">Fixed amenities </label>
+                        <repeater-input :repeaterType="`single`" :dataValue="form.featureData" ref="repeaterUpdate" @dataFeature="form.featureData = $event"></repeater-input>
+                      </div>
+                      <div class="form-group">
+                        <label for="feature_optional">Optional amenities </label>
+                        <repeater-input :repeaterType="`double`" :dataValue="form.featureOptionalData" ref="repeaterOptionalUpdate" @dataFeature="form.featureOptionalData = $event"></repeater-input>
                       </div>
                       <div class="form-group">
                         <label for="feature">Gallery </label>
@@ -151,6 +155,7 @@
                     hotel: 0,
                     changeFeature: '',
                     featureData: [{}],
+                    featureOptionalData: [{}],
                     gallery: []
                 })
             }

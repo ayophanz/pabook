@@ -17610,3 +17610,19 @@ button:focus,
   box-shadow: 0 0 0 0.2rem #dedede !important;
 }
 
+::-webkit-input-placeholder {
+  font-style: italic;
+}
+
+:-moz-placeholder {
+  font-style: italic;
+}
+
+::-moz-placeholder {
+  font-style: italic;
+}
+
+:-ms-input-placeholder {
+  font-style: italic;
+}
+

@@ -84,7 +84,7 @@
                     <has-error :form="form" field="website"></has-error>
                   </div>
                   <div v-if="hotelId==null" class="form-group">
-                      <label for="proofFile"> Please provide any proof of document that you own the hotel and it is legal <span class="required-asterisk">* ( Note: zip your file )</span></label>
+                      <label for="proofFile">Please provide any proof of document that you own the hotel and it is legal <span class="required-asterisk">* ( Note: zip your file )</span></label>
                       </br>
                       <input type="file" @change="updateProofDocx" :class="{ 'is-invalid': form.errors.has('proofFile') }" name="proofFile">
                       <has-error :form="form" field="proofFile"></has-error>
@@ -103,7 +103,7 @@
                       <has-error :form="form" field="owner"></has-error>
                     </div>
                     <div class="form-group">
-                      <label for="name">Name <span class="required-asterisk">*</span></label>
+                      <label for="name">Hotel name <span class="required-asterisk">*</span></label>
                       <input v-model="form.name" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }" id="name">
                       <has-error :form="form" field="name"></has-error>
                     </div>
@@ -118,7 +118,7 @@
                     <div class="form-group" v-if="hotelId != null">
                       <div class="custom-control custom-switch">
                         <input @click="toggleCheck" :checked="isCheckCover" type="checkbox" class="custom-control-input" id="isChangeCover" name="isChangeCover">
-                        <label class="custom-control-label" for="isChangeCover">Change cover photo</label>
+                        <label class="custom-control-label" for="isChangeCover">Change logo</label>
                       </div>
                     </div>
                    <div class="form-group">
