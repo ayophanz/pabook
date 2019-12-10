@@ -164,8 +164,8 @@
                     image: '',
                     hotel: 0,
                     changeFeature: '',
-                    featureData: [{}],
-                    featureOptionalData: [{}],
+                    featureData: null,
+                    featureOptionalData: null,
                     gallery: []
                 })
             }
@@ -319,18 +319,26 @@
                         let url = '../storage/images/upload/roomImages/gallery-'+id+'/';
                         self.imageUrl = url+self.tempImage;
                         self.form.hotel = response.data.room_type.hotel_id;
-                        self.form.featureData = JSON.parse(response.data.room_feature.value);
-                        self.$refs.repeaterUpdate.fields = self.form.featureData;
-                        let images = JSON.parse(response.data.room_gallery.value);
-                        images.forEach(item => {
-                            self.getBase64Image(url+item[1]['filename'], function(base64image){
-                                 self.$refs.uploaderUpdate.images.push('data:image/jpeg;base64,'+base64image);
-                            });
-                            self.$refs.uploaderUpdate.files.push({
-                                'name':item[1]['filename'],
-                                'size':item[0]['filesize']
-                            });
-                        });
+                        try{
+                          self.form.featureData = JSON.parse(response.data.room_feature.value);
+                          self.$refs.repeaterUpdate.fields = self.form.featureData;
+                        }catch(err) {}
+                        try{
+                          self.form.featureOptionalData = JSON.parse(response.data.room_feature_optional.value);
+                          self.$refs.repeaterOptionalUpdate.fields = self.form.featureOptionalData;
+                        }catch(err) {}
+                        try{
+                          let images = JSON.parse(response.data.room_gallery.value);
+                          images.forEach(item => {
+                              self.getBase64Image(url+item[1]['filename'], function(base64image){
+                                  self.$refs.uploaderUpdate.images.push('data:image/jpeg;base64,'+base64image);
+                              });
+                              self.$refs.uploaderUpdate.files.push({
+                                  'name':item[1]['filename'],
+                                  'size':item[0]['filesize']
+                              });
+                          });
+                        }catch(err) {}
                         self.ifChange();
                         if(self.form.status=='active')
                           self.isCheckStatus = true;

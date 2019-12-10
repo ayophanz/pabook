@@ -11,6 +11,7 @@ use App\RoomType;
 use App\Hotel;
 use App\UserMeta;
 use App\Option;
+use Exception;
 
 class RoomController extends Controller
 {
@@ -67,18 +68,12 @@ class RoomController extends Controller
         $image = $this->featureImage($request->image, $room->id, $room->name, 'create');
         
   			Room::where('id', $room->id)->update(['image'=>$image]);
-  	  }	
-
-      $featureDataTemp = array_filter($request->featureData, function($v) { return !is_null($v['value']); });
-      if($featureDataTemp) {
-        $dataMetaCreate = [
-                          'room_id'  => $room->id,
-                          'meta_key' => 'room_feature',
-                          'value'    => json_encode($featureDataTemp)
-                          ];
-        if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner'))                  
-          RoomMeta::create($dataMetaCreate);
-      }
+      }	
+      
+      try{
+        $this->amenities('room_feature', $request->featureData, $room->id);
+        $this->amenities('room_feature_optional', $request->featureOptionalData, $room->id);
+      }catch(Exception $e){}
 
       if($request->gallery) {
 
@@ -99,7 +94,7 @@ class RoomController extends Controller
       if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
           return die('not allowed');
 
-      return Room::where('id', $id)->with('roomFeature', 'roomType')->first();
+      return Room::where('id', $id)->with('roomFeature', 'roomFeatureOptional', 'roomType')->first();
    }
 
    public function availableRooms($start=null, $end=null) {
@@ -154,12 +149,10 @@ class RoomController extends Controller
         Room::where('id', $id)->update(['image'=>$image]);
       }
 
-      $featureDataTemp = array_filter($request->featureData, function($v) { return !is_null($v['value']); });
-      if($featureDataTemp) {
-        $dataMetaUpdate = ['value' => json_encode($featureDataTemp)];
-
-        RoomMeta::where('room_id', $id)->where('meta_key', 'room_feature')->update($dataMetaUpdate);
-      }
+      try{
+        $this->updateAmenities('room_feature', $request->featureData, $id);
+        $this->updateAmenities('room_feature_optional', $request->featureOptionalData, $id);
+      }catch(Exception $e){}
 
       if($request->gallery) {
 
@@ -253,6 +246,46 @@ class RoomController extends Controller
       }else{
         //
       }
+    }
+
+
+    /**
+    *  create amenities
+    */
+    private function amenities($type, $featureData, $room_id) {
+        $featureDataTemp = array_filter($featureData, function($v) { return !is_null($v['value']); });
+        if($featureDataTemp) {
+          $dataMetaCreate = [
+                            'room_id'  => $room_id,
+                            'meta_key' => $type,
+                            'value'    => json_encode($featureDataTemp)
+                            ];
+          if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner'))                  
+            RoomMeta::create($dataMetaCreate);
+        }
+    }
+
+
+    /**
+    *  update amenities
+    */
+    private function updateAmenities($type, $featureData, $room_id) {
+        $featureDataTemp = array_filter($featureData, function($v) { return !is_null($v['value']); });
+        if($featureDataTemp) {
+          $dataMetaUpdate = ['value' => json_encode($featureDataTemp)];
+          if(RoomMeta::where('room_id', $room_id)->where('meta_key', $type)->get()) {
+            if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner'))
+              RoomMeta::where('room_id', $room_id)->where('meta_key', $type)->update($dataMetaUpdate);
+          }else{
+            $dataMetaCreate = [
+              'room_id'  => $room_id,
+              'meta_key' => $type,
+              'value' => json_encode($featureDataTemp)
+            ];
+            if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner'))
+              RoomMeta::create($dataMetaCreate);
+          }
+        }
     }
 
     /**

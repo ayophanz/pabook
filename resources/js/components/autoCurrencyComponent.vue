@@ -1,10 +1,10 @@
 <script>
 Vue.component('my-currency-input', {
-    props: ["value", "baseCurrency"],
     template: `
         <div>
             <input type="text" v-model="displayValue" class="form-control" @blur="isInputActive = false" @focus="isInputActive = true"/>
         </div>`,
+    props: ["value", "baseCurrency"],    
     data: function() {
         return {
             isInputActive: false
