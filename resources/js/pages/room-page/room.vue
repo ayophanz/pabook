@@ -39,7 +39,7 @@
                         <p v-if="types==''">This hotel doesn't have any room type available, <router-link to="/add-room-type">click here to add.</router-link></p>
                       </div>    
                       <div class="form-group">
-                        <label for="description">Description </label>
+                        <label for="description">Short description </label>
                         <textarea v-model="form.description" rows="6" class="form-control" :class="{ 'is-invalid': form.errors.has('description') }" id="description"></textarea>
                         <has-error :form="form" field="description"></has-error>
                       </div>
@@ -164,8 +164,8 @@
                     image: '',
                     hotel: 0,
                     changeFeature: '',
-                    featureData: null,
-                    featureOptionalData: null,
+                    featureData: [],
+                    featureOptionalData: [],
                     gallery: []
                 })
             }

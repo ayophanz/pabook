@@ -70,10 +70,8 @@ class RoomController extends Controller
   			Room::where('id', $room->id)->update(['image'=>$image]);
       }	
       
-      try{
-        $this->amenities('room_feature', $request->featureData, $room->id);
-        $this->amenities('room_feature_optional', $request->featureOptionalData, $room->id);
-      }catch(Exception $e){}
+      try{$this->amenities('room_feature', $request->featureData, $room->id);}catch(Exception $e){}
+      try{$this->amenities('room_feature_optional', $request->featureOptionalData, $room->id);}catch(Exception $e){}
 
       if($request->gallery) {
 
@@ -149,10 +147,8 @@ class RoomController extends Controller
         Room::where('id', $id)->update(['image'=>$image]);
       }
 
-      try{
-        $this->updateAmenities('room_feature', $request->featureData, $id);
-        $this->updateAmenities('room_feature_optional', $request->featureOptionalData, $id);
-      }catch(Exception $e){}
+     // try{$this->updateAmenities('room_feature', $request->featureData, $id);}catch(Exception $e){}
+      try{$this->updateAmenities('room_feature_optional', $request->featureOptionalData, $id);}catch(Exception $e){}
 
       if($request->gallery) {
 
@@ -273,7 +269,7 @@ class RoomController extends Controller
         $featureDataTemp = array_filter($featureData, function($v) { return !is_null($v['value']); });
         if($featureDataTemp) {
           $dataMetaUpdate = ['value' => json_encode($featureDataTemp)];
-          if(RoomMeta::where('room_id', $room_id)->where('meta_key', $type)->get()) {
+          if(RoomMeta::where('room_id', $room_id)->where('meta_key', $type)->get()->count()) {
             if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner'))
               RoomMeta::where('room_id', $room_id)->where('meta_key', $type)->update($dataMetaUpdate);
           }else{
