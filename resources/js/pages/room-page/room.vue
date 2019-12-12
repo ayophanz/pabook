@@ -92,7 +92,7 @@
                               </div>
                               <div v-if="form.no_of_room > 0" class="col-md-12 nopadding">
                                 <label for="no_of_room">Rooms no.</label>
-                                <multiselect :max="parseInt(form.no_of_room)" v-model="rooms_no" tag-placeholder="Add this as new room no." label="name" track-by="code" :options="rooms_options" :multiple="true" :taggable="true" @tag="addRoomNo"></multiselect>
+                                <multiselect :max="parseInt(form.no_of_room)" v-model="rooms_no" tag-placeholder="Add this as new room no." label="name" track-by="code" :options="form.rooms_options" :multiple="true" :taggable="true" @tag="addRoomNo"></multiselect>
                               </div>
                             </div>
                           </div>
@@ -160,7 +160,6 @@
                 imageUrl: null,
                 base_currency: 'USD',
                 rooms_no: [],
-                rooms_options: [],
                 form: new form({
                     status: 'pending',
                     type: null,
@@ -173,7 +172,8 @@
                     changeFeature: '',
                     featureData: null,
                     featureOptionalData: [{value:'', price:0}],
-                    gallery: []
+                    gallery: [],
+                    rooms_options: []
                 })
             }
         },
@@ -183,7 +183,7 @@
                 name: newRoomNo,
                 code: newRoomNo.substring(0, 2) + Math.floor((Math.random() * 10000000))
               }
-              this.rooms_options.push(roomNo)
+              this.form.rooms_options.push(roomNo)
               this.rooms_no.push(roomNo)
             },
             resetComponent() {
