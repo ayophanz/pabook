@@ -21,7 +21,6 @@ Vue.component('repeater-input', {
   },
   methods: {
     AddField() {
-      this.$emit('dataFeature', this.fields);
       if(this.type=='single') {
         this.fields.push({ value: '' });
       }
@@ -39,6 +38,7 @@ Vue.component('repeater-input', {
   mounted() {
     this.fields = Vue.util.extend([{}], this.dataValue);
     this.type =  this.repeaterType;
+    this.$emit('dataFeature', this.fields);
     fire.$on('reset', this.resetField); 
   }
 });

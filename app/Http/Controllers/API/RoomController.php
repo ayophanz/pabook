@@ -147,7 +147,7 @@ class RoomController extends Controller
         Room::where('id', $id)->update(['image'=>$image]);
       }
 
-     // try{$this->updateAmenities('room_feature', $request->featureData, $id);}catch(Exception $e){}
+      try{$this->updateAmenities('room_feature', $request->featureData, $id);}catch(Exception $e){}
       try{$this->updateAmenities('room_feature_optional', $request->featureOptionalData, $id);}catch(Exception $e){}
 
       if($request->gallery) {
@@ -195,8 +195,7 @@ class RoomController extends Controller
           $fileExist = public_path().'/storage/images/upload/roomImages/gallery-'.$id.'/'.$image;
           if($action=='update' && File::exists($fileExist))
             unlink(storage_path('app/public/images/upload/roomImages/gallery-'.$id.'/'.$image));
-          \Image::make($subArr['2']['image'])
-          ->save(public_path('storage/images/upload/roomImages/gallery-'.$id.'/').$image); 
+          \Image::make($subArr['2']['image'])->save(public_path('storage/images/upload/roomImages/gallery-'.$id.'/').$image); 
           unset($subArr['2']);
           $file[$key] = $subArr;  
       }
@@ -249,7 +248,7 @@ class RoomController extends Controller
     *  create amenities
     */
     private function amenities($type, $featureData, $room_id) {
-        $featureDataTemp = array_filter($featureData, function($v) { return !is_null($v['value']); });
+        $featureDataTemp = $featureData;//array_filter($featureData, function($v) { return !is_null($v['value']); });
         if($featureDataTemp) {
           $dataMetaCreate = [
                             'room_id'  => $room_id,
@@ -266,7 +265,7 @@ class RoomController extends Controller
     *  update amenities
     */
     private function updateAmenities($type, $featureData, $room_id) {
-        $featureDataTemp = array_filter($featureData, function($v) { return !is_null($v['value']); });
+        $featureDataTemp = $featureData;//array_filter($featureData, function($v) { return !is_null($v['value']);  });
         if($featureDataTemp) {
           $dataMetaUpdate = ['value' => json_encode($featureDataTemp)];
           if(RoomMeta::where('room_id', $room_id)->where('meta_key', $type)->get()->count()) {

@@ -249,6 +249,8 @@
                     this.form.changeFeature = this.isCheckCover
                     let self = this
                     let action = null;
+                    this.form.featureData.forEach(function(item, key){ if(item.value=='') self.form.featureData.splice(key, 1); });
+                    this.form.featureOptionalData.forEach(function(item, key){ if(item.value=='') self.form.featureOptionalData.splice(key, 1); });
                     if(this.roomId!=null) 
                         action = this.form.post('/api/update-room/'+this.roomId)
                     else
