@@ -5,7 +5,7 @@ Vue.component('repeater-input', {
             <div>
             <div v-for="(field, key) in fields" style="margin-bottom:4px;" class="input-group input-group">
                   <input type="text" placeholder="name" v-model="field.value" class="form-control">
-                  <my-currency-input v-if="type=='double'" :baseCurrency="'PHP'" v-model="field.price"></my-currency-input>
+                  <my-currency-input v-if="type=='double'" :baseCurrency="currency" v-model="field.price"></my-currency-input>
                   <span class="input-group-append">
                     <button type="button" @click="RemoveField(key)" class="btn btn-outline-danger btn-flat"><i class="fas fa-times-circle"></i></button>
                   </span>
@@ -13,11 +13,12 @@ Vue.component('repeater-input', {
             <button type="button" @click="AddField" class="btn btn-primary btn-flat"><i class="fas fa-plus-circle"></i> Add</button>
             </div>
             `,
-  props: ['dataValue', 'repeaterType'],          
+  props: ['dataValue', 'repeaterType', 'baseCurrency'],          
   data() {
     return {
         fields: [{}],
-        type: ''
+        type: '',
+        currency:'USD'
     }
   },
   methods: {
@@ -39,6 +40,7 @@ Vue.component('repeater-input', {
   mounted() {
     this.fields = Vue.util.extend([{}], this.dataValue);
     this.type =  this.repeaterType;
+    this.currency =  this.baseCurrency;
     this.$emit('dataFeature', this.fields);
     fire.$on('reset', this.resetField); 
   }

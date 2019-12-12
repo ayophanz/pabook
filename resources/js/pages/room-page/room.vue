@@ -49,7 +49,7 @@
                       </div>
                       <div class="form-group">
                         <label for="feature_optional">Optional amenities </label>
-                        <repeater-input :repeaterType="`double`" :dataValue="form.featureOptionalData" ref="repeaterOptionalUpdate" @dataFeature="form.featureOptionalData = $event"></repeater-input>
+                        <repeater-input :repeaterType="`double`" :baseCurrency="base_currency" :dataValue="form.featureOptionalData" ref="repeaterOptionalUpdate" @dataFeature="form.featureOptionalData = $event"></repeater-input>
                       </div>
                       <div class="form-group">
                         <label for="feature">Gallery </label>
@@ -120,7 +120,6 @@
 </template>
 
 <script>
-   // import CurrencyFormatComponent from '../../components/autoCurrencyComponent'
     import RepeaterInputComponent from '../../components/repeaterFieldComponent'
     import ImageUploader from '../../components/ImageUploaderComponent'
     import Loading from 'vue-loading-overlay'
@@ -316,6 +315,7 @@
                         }else{
                           self.base_currency = response.data.room_type.room_type_refer.global_base_currency.value;
                         }
+                        self.$refs.repeaterOptionalUpdate.currency = self.base_currency;
                         self.form.no_of_room = response.data.total_room;
                         self.tempImage = response.data.image;
                         let url = '../storage/images/upload/roomImages/gallery-'+id+'/';
