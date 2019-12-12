@@ -17636,3 +17636,8 @@ button:focus,
   border: 1px solid #ced4da !important;
 }
 
+.multiselect__tag {
+  border-radius: 100px !important;
+  background: #28a745 !important;
+}
+
