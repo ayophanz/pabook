@@ -4,7 +4,7 @@ Vue.component('my-currency-input', {
         <div>
             <input type="text" v-model="displayValue" class="form-control" @blur="isInputActive = false" @focus="isInputActive = true"/>
         </div>`,
-    props: ["value", "baseCurrency"],    
+    props: ["value", "baseCurrency", 'minValue'],    
     data: function() {
         return {
             isInputActive: false
@@ -26,7 +26,7 @@ Vue.component('my-currency-input', {
                 let newValue = parseFloat(modifiedValue.replace(/[^\d\.]/g, ""))
                 // Ensure that it is not NaN
                 if (isNaN(newValue) || newValue==0) {
-                    newValue = 1
+                    newValue = parseInt(this.minValue);
                 }
                 // Note: we cannot set this.value as it is a "prop". It needs to be passed to parent component
                 // $emit the event so that parent component gets it

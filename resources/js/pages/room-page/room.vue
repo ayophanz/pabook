@@ -75,7 +75,7 @@
                         </div>  
                         <div class="form-group">
                             <label for="price">Price <span class="required-asterisk">*</span></label>
-                            <my-currency-input :baseCurrency="base_currency" v-model="form.price"></my-currency-input>
+                            <my-currency-input :baseCurrency="base_currency" :minValue="`1`" v-model="form.price"></my-currency-input>
                             <has-error :form="form" field="price"></has-error>
                         </div>
                         <div class="form-group">
