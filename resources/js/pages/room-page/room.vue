@@ -92,7 +92,7 @@
                               </div>
                               <div v-if="form.no_of_room > 0" class="col-md-12 nopadding">
                                 <label for="no_of_room">Rooms no.</label>
-                                 <v-selectize :options="list_room_no" v-model="room_selected" multiple/>
+                                <multiselect :max="parseInt(form.no_of_room)" v-model="rooms_no" tag-placeholder="Add this as new room no." label="name" track-by="code" :options="rooms_options" :multiple="true" :taggable="true" @tag="addRoomNo"></multiselect>
                               </div>
                             </div>
                           </div>
@@ -124,11 +124,11 @@
 </template>
 
 <script>
-    import VSelectize from '@isneezy/vue-selectize'
     import RepeaterInputComponent from '../../components/repeaterFieldComponent'
     import ImageUploader from '../../components/ImageUploaderComponent'
     import Loading from 'vue-loading-overlay'
     import 'vue-loading-overlay/dist/vue-loading.css'
+    import Multiselect from 'vue-multiselect'
     export default {
         watch: {
             '$route' (to, from) {
@@ -142,7 +142,7 @@
         components: {
             RepeaterInputComponent,
             ImageUploader,
-            VSelectize,
+            Multiselect,
             Loading
         },
         data() {
@@ -159,12 +159,8 @@
                 types: [],
                 imageUrl: null,
                 base_currency: 'USD',
-                list_room_no: [
-                  {name: '101'},
-                  {name: '102'},
-                  {name: '103'}
-                ],
-                room_selected: null,
+                rooms_no: [],
+                rooms_options: [],
                 form: new form({
                     status: 'pending',
                     type: null,
@@ -182,6 +178,14 @@
             }
         },
         methods: {
+            addRoomNo (newRoomNo) {
+              const roomNo = {
+                name: newRoomNo,
+                code: newRoomNo.substring(0, 2) + Math.floor((Math.random() * 10000000))
+              }
+              this.rooms_options.push(roomNo)
+              this.rooms_no.push(roomNo)
+            },
             resetComponent() {
                this.buttonText = 'Save';
                this.roomId = null;

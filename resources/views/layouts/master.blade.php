@@ -8,7 +8,7 @@
   <meta name="csrf-token" content="{{csrf_token()}}">
   <title>Pabook</title>
 
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/css/selectize.default.css">
+  <link rel="stylesheet" href="https://unpkg.com/vue-multiselect@2.1.0/dist/vue-multiselect.min.css">
   <link rel="stylesheet" type="text/css" href="{{asset('/css/app.css')}}">
 
 </head>

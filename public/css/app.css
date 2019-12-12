@@ -17631,3 +17631,8 @@ button:focus,
   margin: 0 !important;
 }
 
+.multiselect__tags {
+  border-radius: 0px !important;
+  border: 1px solid #ced4da !important;
+}
+
