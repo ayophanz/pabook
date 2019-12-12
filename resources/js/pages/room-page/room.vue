@@ -164,8 +164,8 @@
                     image: '',
                     hotel: 0,
                     changeFeature: '',
-                    featureData: [],
-                    featureOptionalData: [],
+                    featureData: null,
+                    featureOptionalData: null,
                     gallery: []
                 })
             }
