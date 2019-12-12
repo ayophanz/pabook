@@ -248,11 +248,12 @@ class RoomController extends Controller
     *  create amenities
     */
     private function amenities($type, $featureData, $room_id) {
-      if(json_encode($featureData)!='[[]]') {
+        $featureDataTemp = array_filter($featureData, function($v) { return !is_null($v['value']); });
+        if(json_encode($featureDataTemp)!='[[]]') {
           $dataMetaCreate = [
                             'room_id'  => $room_id,
                             'meta_key' => $type,
-                            'value'    => json_encode($featureData)
+                            'value'    => json_encode($featureDataTemp)
                             ];
           if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner'))                  
             RoomMeta::create($dataMetaCreate);
@@ -264,8 +265,9 @@ class RoomController extends Controller
     *  update amenities
     */
     private function updateAmenities($type, $featureData, $room_id) {
-      if(json_encode($featureData)!='[[]]') {
-          $dataMetaUpdate = ['value' => json_encode($featureData)];
+      $featureDataTemp = array_filter($featureData, function($v) { return !is_null($v['value']); });
+      if(json_encode($featureDataTemp)!='[[]]') {
+          $dataMetaUpdate = ['value' => json_encode($featureDataTemp)];
           if(RoomMeta::where('room_id', $room_id)->where('meta_key', $type)->get()->count()) {
             if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner'))
               RoomMeta::where('room_id', $room_id)->where('meta_key', $type)->update($dataMetaUpdate);
@@ -273,7 +275,7 @@ class RoomController extends Controller
             $dataMetaCreate = [
               'room_id'  => $room_id,
               'meta_key' => $type,
-              'value' => json_encode($featureData)
+              'value' => json_encode($featureDataTemp)
             ];
             if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner'))
               RoomMeta::create($dataMetaCreate);
