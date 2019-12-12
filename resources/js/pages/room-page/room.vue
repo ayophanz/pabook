@@ -92,7 +92,16 @@
                               </div>
                               <div v-if="form.no_of_room > 0" class="col-md-12 nopadding">
                                 <label for="no_of_room">Rooms no.</label>
-                                <multiselect :max="parseInt(form.no_of_room)" v-model="rooms_no" tag-placeholder="Add this as new room no." label="name" track-by="code" :options="form.rooms_options" :multiple="true" :taggable="true" @tag="addRoomNo"></multiselect>
+                                <div class="container">
+                                  <div class="row room-status-code">
+                                    <div class="col-md-3">Ready</div>
+                                    <div class="col-md-3">Occupied</div>
+                                    <div class="col-md-3">Reserved</div>
+                                    <div class="col-md-3">Cleaning</div>
+                                  </div>
+                                </div>
+                                <multiselect :class="{ 'is-invalid': form.errors.has('rooms_options') }" :max="parseInt(form.no_of_room)" v-model="form.rooms_no" tag-placeholder="Add this as new room no." label="value" track-by="code" :options="rooms_options" :multiple="true" :taggable="true" @tag="addRoomNo"></multiselect>
+                                <has-error :form="form" field="rooms_no"></has-error>
                               </div>
                             </div>
                           </div>
@@ -159,7 +168,7 @@
                 types: [],
                 imageUrl: null,
                 base_currency: 'USD',
-                rooms_no: [],
+                rooms_options: [],
                 form: new form({
                     status: 'pending',
                     type: null,
@@ -173,18 +182,18 @@
                     featureData: null,
                     featureOptionalData: [{value:'', price:0}],
                     gallery: [],
-                    rooms_options: []
+                    rooms_no: []
                 })
             }
         },
         methods: {
             addRoomNo (newRoomNo) {
               const roomNo = {
-                name: newRoomNo,
+                value: newRoomNo,
                 code: newRoomNo.substring(0, 2) + Math.floor((Math.random() * 10000000))
               }
-              this.form.rooms_options.push(roomNo)
-              this.rooms_no.push(roomNo)
+              this.rooms_options.push(roomNo)
+              this.form.rooms_no.push(roomNo)
             },
             resetComponent() {
                this.buttonText = 'Save';
@@ -345,6 +354,7 @@
                           self.form.featureOptionalData = JSON.parse(response.data.room_feature_optional.value);
                           self.$refs.repeaterOptionalUpdate.fields = self.form.featureOptionalData;
                         }catch(err) {}
+                        self.form.rooms_no = JSON.parse(response.data.room_numbering.value);
                         try{
                           let images = JSON.parse(response.data.room_gallery.value);
                           images.forEach(item => {

@@ -72,6 +72,7 @@ class RoomController extends Controller
       
       try{$this->amenities('room_feature', $request->featureData, $room->id);}catch(Exception $e){}
       try{$this->amenities('room_feature_optional', $request->featureOptionalData, $room->id);}catch(Exception $e){}
+      try{$this->roomsNo('room_numbering',  $request->rooms_no, $room->id);}catch(Exception $e){}
 
       if($request->gallery) {
 
@@ -149,6 +150,7 @@ class RoomController extends Controller
 
       try{$this->updateAmenities('room_feature', $request->featureData, $id);}catch(Exception $e){}
       try{$this->updateAmenities('room_feature_optional', $request->featureOptionalData, $id);}catch(Exception $e){}
+      try{$this->updateRoomsNo('room_numbering', $request->rooms_no, $id);}catch(Exception $e){}
 
       if($request->gallery) {
 
@@ -241,6 +243,46 @@ class RoomController extends Controller
       }else{
         //
       }
+    }
+
+
+    /**
+    *  create rooms no.
+    */
+    private function roomsNo($type, $roomsNoData, $room_id) {
+        $roomsNoDataTemp = array_filter($roomsNoData, function($v) { return !is_null($v['name']); });
+        if(json_encode($roomsNoDataTemp)!='[[]]') {
+          $dataMetaCreate = [
+                            'room_id'  => $room_id,
+                            'meta_key' => $type,
+                            'value'    => json_encode($roomsNoDataTemp)
+                            ];
+          if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner'))                  
+            RoomMeta::create($dataMetaCreate);
+        }
+    }
+
+
+    /**
+    *  update rooms no.
+    */
+    private function updateRoomsNo($type, $roomsNoData, $room_id) {
+      $roomsNoDataTemp = array_filter($roomsNoData, function($v) { return !is_null($v['name']); });
+      if(json_encode($roomsNoDataTemp)!='[[]]') {
+          $dataMetaUpdate = ['value' => json_encode($roomsNoDataTemp)];
+          if(RoomMeta::where('room_id', $room_id)->where('meta_key', $type)->get()->count()) {
+            if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner'))
+              RoomMeta::where('room_id', $room_id)->where('meta_key', $type)->update($dataMetaUpdate);
+          }else{
+            $dataMetaCreate = [
+              'room_id'  => $room_id,
+              'meta_key' => $type,
+              'value' => json_encode($roomsNoDataTemp)
+            ];
+            if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner'))
+              RoomMeta::create($dataMetaCreate);
+          }
+        }
     }
 
 

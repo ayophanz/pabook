@@ -369,3 +369,25 @@ button:focus, .fc-button-primary:focus {
     border-radius: 100px !important;
     background: #28a745 !important;
 }
+
+.row.room-status-code {
+    font-size: 13px;
+    color: white;
+    margin-bottom: 2px;
+}
+
+.row.room-status-code div:first-child {
+    background-color: #28a745;
+}
+
+.row.room-status-code div:nth-child(2) {
+    background-color: #3490dc;
+}
+
+.row.room-status-code div:nth-child(3) {
+    background-color: #6f42c1;
+}
+
+.row.room-status-code div:last-child {
+    background-color: #6c757d;
+}

@@ -16,7 +16,7 @@ class Room extends Model
                 'status'
     			];
 
-    protected $with = ['roomType', 'roomFeature', 'roomFeatureOptional', 'roomGallery'];           
+    protected $with = ['roomType', 'roomFeature', 'roomFeatureOptional', 'roomGallery', 'roomNumbering'];           
 
     public function roomType() {
         return $this->belongsTo(RoomType::class, 'type_id', 'id'); 
@@ -28,6 +28,10 @@ class Room extends Model
 
     public function roomFeatureOptional() {
         return $this->belongsTo(RoomMeta::class, 'id', 'room_id')->where('meta_key', 'room_feature_optional'); 
+    }
+    
+    public function roomNumbering() {
+        return $this->belongsTo(RoomMeta::class, 'id', 'room_id')->where('meta_key', 'room_numbering'); 
     }
 
     public function roomGallery() {
