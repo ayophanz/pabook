@@ -94,6 +94,7 @@ Vue.component('temporaryhold', require('./components/temporaryHoldComponent.vue'
 */
 Vue.component('notifycount', require('./components/notifyCountComponent.vue').default);
 Vue.component('notifybar', require('./components/notificationBarComponent.vue').default);
+Vue.component(require('./components/autoCurrencyComponent'));
 
 /**
 * Page icon components

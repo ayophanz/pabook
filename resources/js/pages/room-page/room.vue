@@ -120,7 +120,7 @@
 </template>
 
 <script>
-    import CurrencyFormatComponent from '../../components/autoCurrencyComponent'
+   // import CurrencyFormatComponent from '../../components/autoCurrencyComponent'
     import RepeaterInputComponent from '../../components/repeaterFieldComponent'
     import ImageUploader from '../../components/ImageUploaderComponent'
     import Loading from 'vue-loading-overlay'
@@ -165,7 +165,7 @@
                     hotel: 0,
                     changeFeature: '',
                     featureData: null,
-                    featureOptionalData: null,
+                    featureOptionalData: [{value:'', price:0}],
                     gallery: []
                 })
             }

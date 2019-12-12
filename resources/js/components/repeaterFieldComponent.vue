@@ -1,10 +1,11 @@
 <script>
+//<input v-if="type=='double'" type="text" placeholder="add-on price" v-model="field.price" class="form-control">
 Vue.component('repeater-input', {
   template: `
             <div>
             <div v-for="(field, key) in fields" style="margin-bottom:4px;" class="input-group input-group">
                   <input type="text" placeholder="name" v-model="field.value" class="form-control">
-                  <input v-if="type=='double'" type="text" placeholder="add-on price" v-model="field.price" class="form-control">
+                  <my-currency-input v-if="type=='double'" :baseCurrency="'PHP'" v-model="field.price"></my-currency-input>
                   <span class="input-group-append">
                     <button type="button" @click="RemoveField(key)" class="btn btn-outline-danger btn-flat"><i class="fas fa-times-circle"></i></button>
                   </span>
@@ -25,7 +26,7 @@ Vue.component('repeater-input', {
         this.fields.push({ value: '' });
       }
       if(this.type=='double') {
-        this.fields.push({ value: '', price: '' });
+        this.fields.push({ value: '', price: 0 });
       }
     },
     RemoveField(key) {
