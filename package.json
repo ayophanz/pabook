@@ -29,6 +29,7 @@
         "@fullcalendar/daygrid": "^4.3.0",
         "@fullcalendar/interaction": "^4.3.0",
         "@fullcalendar/vue": "^4.3.1",
+        "@isneezy/vue-selectize": "^0.4.1",
         "admin-lte": "^3.0.1",
         "country-json": "^1.1.0",
         "currency-codes": "^1.5.1",

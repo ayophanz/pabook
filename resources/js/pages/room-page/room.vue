@@ -90,6 +90,10 @@
                                 <label for="no_of_room_available">No. of unit available</label>
                                 <p class="form-control" id="no_of_room_available">3</p>
                               </div>
+                              <div v-if="form.no_of_room > 0" class="col-md-12 nopadding">
+                                <label for="no_of_room">Rooms no.</label>
+                                 <v-selectize :options="list_room_no" v-model="room_selected" multiple/>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -120,6 +124,7 @@
 </template>
 
 <script>
+    import VSelectize from '@isneezy/vue-selectize'
     import RepeaterInputComponent from '../../components/repeaterFieldComponent'
     import ImageUploader from '../../components/ImageUploaderComponent'
     import Loading from 'vue-loading-overlay'
@@ -137,6 +142,7 @@
         components: {
             RepeaterInputComponent,
             ImageUploader,
+            VSelectize,
             Loading
         },
         data() {
@@ -153,6 +159,12 @@
                 types: [],
                 imageUrl: null,
                 base_currency: 'USD',
+                list_room_no: [
+                  {name: '101'},
+                  {name: '102'},
+                  {name: '103'}
+                ],
+                room_selected: null,
                 form: new form({
                     status: 'pending',
                     type: null,
