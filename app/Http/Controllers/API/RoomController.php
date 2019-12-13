@@ -39,7 +39,7 @@ class RoomController extends Controller
               'name' 	      => 'required|string|max:191|unique_name:rooms,name,type_id,'.$request['type'].',0',
               'type'        => 'required|numeric|min:1',
               'price'       => 'required|min:1|regex:/^\d+(\.\d{1,2})?$/',
-              'no_of_room'  => 'required|numeric|min:1',
+              //'no_of_room'  => 'required|numeric|min:1',
               'hotel'       => 'required|numeric|min:1',
               'image'       => 'required|image64:jpeg,jpg,png',
               'rooms_no'    => 'required|rooms_no_equal_room_total:'.count($request['rooms_no']).','.$request['no_of_room']
@@ -56,7 +56,7 @@ class RoomController extends Controller
                     'type_id'     => $request['type'],
                     'description' => $request['description'],
                     'price'       => $request['price'],
-                    'total_room'  => $request['no_of_room']
+                    //'total_room'  => $request['no_of_room']
                     ];                     
 
       $this->validate($request, $data, $customMessages);
@@ -118,7 +118,7 @@ class RoomController extends Controller
               'name'        => 'required|string|max:191|unique_name:rooms,name,type_id,'.$request['type'].','.$id,
               'type'        => 'required|numeric|min:1',
               'price'       => 'required|min:1|regex:/^\d+(\.\d{1,2})?$/',
-              'no_of_room'  => 'required|numeric|min:1',
+              //'no_of_room'  => 'required|numeric|min:1',
               'hotel'       => 'required|numeric|min:1',
               'rooms_no'    => 'required|rooms_no_equal_room_total:'.count($request['rooms_no']).','.$request['no_of_room']
               ];
@@ -134,7 +134,7 @@ class RoomController extends Controller
                     'type_id'     => $request['type'],
                     'description' => $request['description'],
                     'price'       => $request['price'],
-                    'total_room'  => $request['no_of_room']
+                    //'total_room'  => $request['no_of_room']
                     ];
 
       if($request['changeFeature']) 

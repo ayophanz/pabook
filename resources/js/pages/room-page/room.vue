@@ -83,14 +83,15 @@
                             <div class="row">
                               <div class="col nopadding">
                                 <label for="no_of_room">No. of unit <span class="required-asterisk">*</span></label>
-                                <input v-model="form.no_of_room" type="number" class="form-control" :class="{ 'is-invalid': form.errors.has('no_of_room') }" id="no_of_room">
+                                <!-- <input v-model="form.no_of_room" type="number" class="form-control" :class="{ 'is-invalid': form.errors.has('no_of_room') }" id="no_of_room"> -->
+                                <p class="form-control" id="no_of_room">{{form.rooms_no.length}}</p>
                                 <has-error :form="form" field="no_of_room"></has-error>
                               </div>
                               <div class="col nopadding">
                                 <label for="no_of_room_available">No. of unit available</label>
                                 <p class="form-control" id="no_of_room_available">{{no_unit_avail}}</p>
                               </div>
-                              <div v-if="form.no_of_room > 0" class="col-md-12 nopadding">
+                              <div class="col-md-12 nopadding">
                                 <label for="rooms_no">Rooms no.</label>
                                 <div class="container">
                                   <div class="row room-status-code">
@@ -100,7 +101,7 @@
                                     <div class="col-md-3">Cleaning</div>
                                   </div>
                                 </div>
-                                <multiselect :class="{ 'is-invalid': form.errors.has('rooms_no') }" :max="parseInt(form.no_of_room)" v-model="form.rooms_no" label="value" track-by="code" :options="rooms_options" :multiple="true">
+                                <multiselect @remove="roomsNoOnRemove" @select="roomsNoOnAdd" :class="{ 'is-invalid': form.errors.has('rooms_no') }" v-model="form.rooms_no" label="value" track-by="code" :options="rooms_options" :multiple="true">
                                   <template slot="tag" slot-scope="{ option, remove }"><span :class="option.status" class="multiselect__tag"><span>{{ option.value }}</span><span :class="option.status" class="custom__remove" @click="remove(option)"><i aria-hidden="true" tabindex="1" class="multiselect__tag-icon"></i></span></span></template>
                                   <span slot="noResult">Oops! No results</span>
                                 </multiselect>
@@ -179,7 +180,7 @@
                     name: '',
                     description: '',
                     price: 1,
-                    no_of_room: 1,
+                    //no_of_room: 1,
                     image: '',
                     hotel: 0,
                     changeFeature: '',
@@ -191,14 +192,15 @@
             }
         },
         methods: {
-            addRoomNo (newRoomNo) {
-              const roomNo = {
-                value: newRoomNo,
-                code: newRoomNo.substring(0, 2) + Math.floor((Math.random() * 10000000)),
-                status: 'ready'
-              }
-              this.rooms_options.push(roomNo)
-              this.form.rooms_no.push(roomNo)
+            roomsNoOnAdd(value) {
+              console.log(value);
+              if(value.status=='ready')
+                this.no_unit_avail++;
+              
+            },
+            roomsNoOnRemove(value) {
+              if(value.status=='ready')
+                this.no_unit_avail--;
             },
             resetComponent() {
                this.buttonText = 'Save';
@@ -346,7 +348,7 @@
                           self.base_currency = response.data.room_type.room_type_refer.global_base_currency.value;
                         }
                         self.$refs.repeaterOptionalUpdate.currency = self.base_currency;
-                        self.form.no_of_room = response.data.total_room;
+                        //self.form.no_of_room = response.data.total_room;
                         self.tempImage = response.data.image;
                         let url = '../storage/images/upload/roomImages/gallery-'+id+'/';
                         self.imageUrl = url+self.tempImage;
@@ -360,7 +362,7 @@
                           self.$refs.repeaterOptionalUpdate.fields = self.form.featureOptionalData;
                         }catch(err) {}
                         JSON.parse(response.data.room_type.room_type_refer.hotel_rooms_no).forEach(function(item, key){
-                            if(item.status=='ready') self.no_unit_avail++; 
+                            if(item.status=='ready' && item.assign_id==id) self.no_unit_avail++; 
                             if(item.assign_id=='no') self.rooms_options.push(item);
                             if(item.assign_id==id) self.form.rooms_no.push(item);
                         });
