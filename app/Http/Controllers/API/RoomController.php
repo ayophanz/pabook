@@ -250,7 +250,7 @@ class RoomController extends Controller
     *  create rooms no.
     */
     private function roomsNo($type, $roomsNoData, $room_id) {
-        $roomsNoDataTemp = array_filter($roomsNoData, function($v) { return !is_null($v['name']); });
+        $roomsNoDataTemp = array_filter($roomsNoData, function($v) { return !is_null($v['value']); });
         if(json_encode($roomsNoDataTemp)!='[[]]') {
           $dataMetaCreate = [
                             'room_id'  => $room_id,
@@ -267,7 +267,7 @@ class RoomController extends Controller
     *  update rooms no.
     */
     private function updateRoomsNo($type, $roomsNoData, $room_id) {
-      $roomsNoDataTemp = array_filter($roomsNoData, function($v) { return !is_null($v['name']); });
+      $roomsNoDataTemp = array_filter($roomsNoData, function($v) { return !is_null($v['value']); });
       if(json_encode($roomsNoDataTemp)!='[[]]') {
           $dataMetaUpdate = ['value' => json_encode($roomsNoDataTemp)];
           if(RoomMeta::where('room_id', $room_id)->where('meta_key', $type)->get()->count()) {
