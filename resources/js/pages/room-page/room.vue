@@ -91,7 +91,7 @@
                                 <p class="form-control" id="no_of_room_available">{{no_unit_avail}}</p>
                               </div>
                               <div v-if="form.no_of_room > 0" class="col-md-12 nopadding">
-                                <label for="no_of_room">Rooms no.</label>
+                                <label for="rooms_no">Rooms no.</label>
                                 <div class="container">
                                   <div class="row room-status-code">
                                     <div class="col-md-3">Ready</div>

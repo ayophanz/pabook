@@ -83,6 +83,11 @@
                     <input v-model="form.website" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('website') }" id="website" placeholder="ex. https://www.site.com">
                     <has-error :form="form" field="website"></has-error>
                   </div>
+                  <div class="form-group">
+                    <label for="rooms_no">Rooms no. <span class="required-asterisk">*</span></label>
+                    <multiselect :class="{ 'is-invalid': form.errors.has('rooms_no') }" v-model="form.rooms_no"  placeholder="ex. 101, 102" tag-placeholder="Add this as new room no." label="value" track-by="code" :options="rooms_options" :multiple="true" :taggable="true" @tag="addRoomNo"></multiselect>
+                    <has-error :form="form" field="rooms_no"></has-error>
+                  </div>
                   <div v-if="hotelId==null" class="form-group">
                       <label for="proofFile">Please provide any proof of document that you own the hotel and it is legal <span class="required-asterisk">* ( Note: zip your file )</span></label>
                       </br>
@@ -148,6 +153,7 @@
     import cc from 'currency-codes'
     import VueTimepicker from 'vue2-timepicker'
     import 'vue2-timepicker/dist/VueTimepicker.css'
+    import Multiselect from 'vue-multiselect'
     export default {
         watch: {
             '$route' (to, from) {
@@ -161,7 +167,8 @@
         components: {
           Loading,
           cc,
-          VueTimepicker
+          VueTimepicker,
+          Multiselect
         },
         data() {
           return {
@@ -180,6 +187,7 @@
             verificationValue: [],
             currencyName: 'you are using global currency',
             downloadUrl: '',
+            rooms_options: [],
             form: new form({
               owner: '',
               name: '',
@@ -197,10 +205,21 @@
               check_in: '',
               check_out: '',
               website: '',
+              rooms_no: []
             })
           }
         },
         methods: {
+          addRoomNo (newRoomNo) {
+            const roomNo = {
+              value: newRoomNo,
+              code: newRoomNo.substring(0, 2) + Math.floor((Math.random() * 10000000)),
+              status: 'ready',
+              assign_id: 'no'
+            }
+            this.rooms_options.push(roomNo)
+            this.form.rooms_no.push(roomNo)
+          },
           verificationData(status, hotel_name, hotel_id) {
             this.verificationValue['hotel_id'] = hotel_id;
             this.verificationValue['hotel_name'] = hotel_name;
@@ -360,6 +379,7 @@
                     self.imageUrl = '../storage/images/upload/hotelImages/'+self.tempImage;
                     self.downloadUrl='../storage/ImportantFiles/'+response.data.id+'.zip';
                     self.isVerified = response.data.status;
+                    self.form.rooms_no = (response.data.hotel_rooms_no)? JSON.parse(response.data.hotel_rooms_no):[];
                     self.verificationData(self.isVerified, self.form.name, response.data.id);
                     if(response.data.base_currency!=null) {
                       self.form.base_currency = response.data.base_currency.value;

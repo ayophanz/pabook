@@ -56,7 +56,8 @@ class HotelController extends Controller
                 'base_currency'  => 'required|string|max:191',
                 'proofFile'      => 'required|max:5242880|image64:x-zip-compressed,zip',
                 'check_in'       => 'required',
-                'check_out'      => 'required'
+                'check_out'      => 'required',
+                'rooms_no'       => 'required'
                 ];
         
         $customMessages = [
@@ -74,7 +75,8 @@ class HotelController extends Controller
                     'email'          => $request['email'],
                     'check_in'       => $request['check_in'],
                     'check_out'      => $request['check_out'],
-                    'website'        => $request['website']
+                    'website'        => $request['website'],
+                    'hotel_rooms_no' => $request['rooms_no']
                     ];
 
         if(\Gate::allows('superAdmin')) {
@@ -130,7 +132,8 @@ class HotelController extends Controller
                 'email'          => 'required|string|email|max:191|unique:hotels,email,'.$id,
                 'base_currency'  => 'required|string|max:191',
                 'check_in'       => 'required',
-                'check_out'      => 'required'
+                'check_out'      => 'required',
+                'rooms_no'       => 'required'
                 ];
 
         $dataUpdate = [
@@ -144,7 +147,8 @@ class HotelController extends Controller
                       'email'          => $request['email'],
                       'check_in'       => $request['check_in'],
                       'check_out'      => $request['check_out'],
-                      'website'      => $request['website']
+                      'website'        => $request['website'],
+                      'hotel_rooms_no' => $request['rooms_no']
                       ]; 
 
         if($request['changeCover']) 
@@ -193,10 +197,10 @@ class HotelController extends Controller
         return die('Something went wrong!');
     }
 
+    
     /**
     *  Extra function
     */
-
 
     /**
     *  Owner Id security verification

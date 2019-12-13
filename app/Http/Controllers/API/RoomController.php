@@ -41,13 +41,13 @@ class RoomController extends Controller
               'price'       => 'required|min:1|regex:/^\d+(\.\d{1,2})?$/',
               'no_of_room'  => 'required|numeric|min:1',
               'hotel'       => 'required|numeric|min:1',
-              'image'       => 'required|image64:jpeg,jpg,png'
-              //'rooms_no'    => 'required|same:no_of_room'
+              'image'       => 'required|image64:jpeg,jpg,png',
+              'rooms_no'    => 'required|rooms_no_equal_room_total:'.count($request['rooms_no']).','.$request['no_of_room']
               ];                                
             
       $customMessages = [
-                        'min' => 'The :attribute is required'
-                        //'greater_than_field' => 'The amount is not enough.'
+                        'min' => 'The :attribute is required',
+                        'rooms_no_equal_room_total' => 'The Rooms no. items must equal to "No. of unit".'
                         ];          
 
       $dataCreate = [

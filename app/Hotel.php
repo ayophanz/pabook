@@ -21,7 +21,8 @@ class Hotel extends Model
 				'check_in',
 				'check-out',
 				'website',
-				'verify_token'
+				'verify_token',
+				'hotel_rooms_no'
     			];
 
 
