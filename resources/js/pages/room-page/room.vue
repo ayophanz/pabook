@@ -100,7 +100,7 @@
                                     <div class="col-md-3">Cleaning</div>
                                   </div>
                                 </div>
-                                <multiselect :class="{ 'is-invalid': form.errors.has('rooms_options') }" :max="parseInt(form.no_of_room)" v-model="form.rooms_no" tag-placeholder="Add this as new room no." label="value" track-by="code" :options="rooms_options" :multiple="true" :taggable="true" @tag="addRoomNo">
+                                <multiselect :class="{ 'is-invalid': form.errors.has('rooms_no') }" :max="parseInt(form.no_of_room)" v-model="form.rooms_no" tag-placeholder="Add this as new room no." label="value" track-by="code" :options="rooms_options" :multiple="true" :taggable="true" @tag="addRoomNo">
                                   <template slot="tag" slot-scope="{ option, remove }"><span :class="option.status" class="multiselect__tag"><span>{{ option.value }}</span><span :class="option.status" class="custom__remove" @click="remove(option)"><i aria-hidden="true" tabindex="1" class="multiselect__tag-icon"></i></span></span></template>
                                 </multiselect>
                                 <has-error :form="form" field="rooms_no"></has-error>

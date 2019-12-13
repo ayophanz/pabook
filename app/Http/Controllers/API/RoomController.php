@@ -125,7 +125,7 @@ class RoomController extends Controller
 
       $customMessages = [
                         'unique_name' => 'The :attribute field is already exist in the same room type.',
-                        'rooms_no_equal_room_total' => 'The above items must equal to "No. of unit".'
+                        'rooms_no_equal_room_total' => 'The Rooms no. items must equal to "No. of unit".'
                         ];
                         
       $dataUpdate = [
