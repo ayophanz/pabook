@@ -41,13 +41,13 @@ class RoomController extends Controller
               'price'       => 'required|min:1|regex:/^\d+(\.\d{1,2})?$/',
               //'no_of_room'  => 'required|numeric|min:1',
               'hotel'       => 'required|numeric|min:1',
-              'image'       => 'required|image64:jpeg,jpg,png',
-              'rooms_no'    => 'required|rooms_no_equal_room_total:'.count($request['rooms_no']).','.$request['no_of_room']
+              'image'       => 'required|image64:jpeg,jpg,png'//,
+              //'rooms_no'    => 'required|rooms_no_equal_room_total:'.count($request['rooms_no']).','.$request['no_of_room']
               ];                                
             
       $customMessages = [
-                        'min' => 'The :attribute is required',
-                        'rooms_no_equal_room_total' => 'The Rooms no. items must equal to "No. of unit".'
+                        'min' => 'The :attribute is required'//,
+                        //'rooms_no_equal_room_total' => 'The Rooms no. items must equal to "No. of unit".'
                         ];          
 
       $dataCreate = [
@@ -74,7 +74,7 @@ class RoomController extends Controller
       
       try{$this->amenities('room_feature', $request->featureData, $room->id);}catch(Exception $e){}
       try{$this->amenities('room_feature_optional', $request->featureOptionalData, $room->id);}catch(Exception $e){}
-      try{$this->roomsNo('room_numbering',  $request->rooms_no, $room->id);}catch(Exception $e){}
+      try{$this->roomsNo($request->rooms_no, $room->id, $request->hotel);}catch(Exception $e){}
 
       if($request->gallery) {
 
@@ -119,13 +119,13 @@ class RoomController extends Controller
               'type'        => 'required|numeric|min:1',
               'price'       => 'required|min:1|regex:/^\d+(\.\d{1,2})?$/',
               //'no_of_room'  => 'required|numeric|min:1',
-              'hotel'       => 'required|numeric|min:1',
-              'rooms_no'    => 'required|rooms_no_equal_room_total:'.count($request['rooms_no']).','.$request['no_of_room']
+              'hotel'       => 'required|numeric|min:1'//,
+              //'rooms_no'    => 'required|rooms_no_equal_room_total:'.count($request['rooms_no']).','.$request['no_of_room']
               ];
 
       $customMessages = [
-                        'unique_name' => 'The :attribute field is already exist in the same room type.',
-                        'rooms_no_equal_room_total' => 'The Rooms no. items must equal to "No. of unit".'
+                        'unique_name' => 'The :attribute field is already exist in the same room type.'//,
+                        //'rooms_no_equal_room_total' => 'The Rooms no. items must equal to "No. of unit".'
                         ];
                         
       $dataUpdate = [
@@ -154,7 +154,7 @@ class RoomController extends Controller
 
       try{$this->updateAmenities('room_feature', $request->featureData, $id);}catch(Exception $e){}
       try{$this->updateAmenities('room_feature_optional', $request->featureOptionalData, $id);}catch(Exception $e){}
-      try{$this->updateRoomsNo('room_numbering', $request->rooms_no, $id);}catch(Exception $e){}
+      try{$this->roomsNo($request->rooms_no, $id, $request->hotel);}catch(Exception $e){}
 
       if($request->gallery) {
 
@@ -249,44 +249,25 @@ class RoomController extends Controller
       }
     }
 
-
     /**
     *  create rooms no.
     */
-    private function roomsNo($type, $roomsNoData, $room_id) {
-        $roomsNoDataTemp = array_filter($roomsNoData, function($v) { return !is_null($v['value']); });
-        if(json_encode($roomsNoDataTemp)!='[[]]') {
-          $dataMetaCreate = [
-                            'room_id'  => $room_id,
-                            'meta_key' => $type,
-                            'value'    => json_encode($roomsNoDataTemp)
-                            ];
-          if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner'))                  
-            RoomMeta::create($dataMetaCreate);
-        }
-    }
-
-
-    /**
-    *  update rooms no.
-    */
-    private function updateRoomsNo($type, $roomsNoData, $room_id) {
-      $roomsNoDataTemp = array_filter($roomsNoData, function($v) { return !is_null($v['value']); });
-      if(json_encode($roomsNoDataTemp)!='[[]]') {
-          $dataMetaUpdate = ['value' => json_encode($roomsNoDataTemp)];
-          if(RoomMeta::where('room_id', $room_id)->where('meta_key', $type)->get()->count()) {
-            if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner'))
-              RoomMeta::where('room_id', $room_id)->where('meta_key', $type)->update($dataMetaUpdate);
-          }else{
-            $dataMetaCreate = [
-              'room_id'  => $room_id,
-              'meta_key' => $type,
-              'value' => json_encode($roomsNoDataTemp)
-            ];
-            if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner'))
-              RoomMeta::create($dataMetaCreate);
+    private function roomsNo($roomsNoData, $room_id, $hotel_id) {
+      $hotel = Hotel::where('id', $hotel_id)->first();
+      $newData = json_decode($hotel->hotel_rooms_no, true);
+      foreach($newData as &$val) {
+        if($val['assign_id']==$room_id) $val['assign_id'] = 'no';
+        foreach($roomsNoData as $val2) {
+          if($val['code']==$val2['code']) {
+            $val['status'] = $val2['status'];
+            $val['assign_id'] = $room_id;
+            continue;
           }
         }
+      }
+      $data = ['hotel_rooms_no' => json_encode($newData)];
+      if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner'))
+        Hotel::where('id', $hotel_id)->update($data);
     }
 
 
