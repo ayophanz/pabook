@@ -100,8 +100,9 @@
                                     <div class="col-md-3">Cleaning</div>
                                   </div>
                                 </div>
-                                <multiselect :class="{ 'is-invalid': form.errors.has('rooms_no') }" :max="parseInt(form.no_of_room)" v-model="form.rooms_no" tag-placeholder="Add this as new room no." label="value" track-by="code" :options="rooms_options" :multiple="true" :taggable="true" @tag="addRoomNo">
+                                <multiselect :class="{ 'is-invalid': form.errors.has('rooms_no') }" :max="parseInt(form.no_of_room)" v-model="form.rooms_no" label="value" track-by="code" :options="rooms_options" :multiple="true">
                                   <template slot="tag" slot-scope="{ option, remove }"><span :class="option.status" class="multiselect__tag"><span>{{ option.value }}</span><span :class="option.status" class="custom__remove" @click="remove(option)"><i aria-hidden="true" tabindex="1" class="multiselect__tag-icon"></i></span></span></template>
+                                  <span slot="noResult">Oops! No results</span>
                                 </multiselect>
                                 <has-error :form="form" field="rooms_no"></has-error>
                               </div>
@@ -358,8 +359,11 @@
                           self.form.featureOptionalData = JSON.parse(response.data.room_feature_optional.value);
                           self.$refs.repeaterOptionalUpdate.fields = self.form.featureOptionalData;
                         }catch(err) {}
-                        self.form.rooms_no = JSON.parse(response.data.room_numbering.value);
-                        self.form.rooms_no.forEach(function(item, key){ if(item.status=='ready') self.no_unit_avail++; });
+                        JSON.parse(response.data.room_type.room_type_refer.hotel_rooms_no).forEach(function(item, key){
+                            if(item.status=='ready') self.no_unit_avail++; 
+                            if(item.assign_id=='no') self.rooms_options.push(item);
+                            if(item.assign_id==id) self.form.rooms_no.push(item);
+                        });
                         try{
                           let images = JSON.parse(response.data.room_gallery.value);
                           images.forEach(item => {
