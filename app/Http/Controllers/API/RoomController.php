@@ -88,7 +88,7 @@ class RoomController extends Controller
         RoomMeta::create($dataMetaCreate);                  
       }
 
-	  return ( ($room!=null)? $room : die('Something went wrong!') );
+      return ( ($room!=null)? $room : die('Something went wrong!') );
    }
 
    public function show($id) {
@@ -256,7 +256,7 @@ class RoomController extends Controller
       $hotel = Hotel::where('id', $hotel_id)->first();
       $newData = json_decode($hotel->hotel_rooms_no, true);
       foreach($newData as &$val) {
-        if($val['assign_id']==$room_id) $val['assign_id'] = 'no';
+        if($val['assign_id']==$room_id && ($val['status']=='ready' || $val['status']=='cleaning')) $val['assign_id'] = 'no';
         foreach($roomsNoData as $val2) {
           if($val['code']==$val2['code']) {
             $val['status'] = $val2['status'];

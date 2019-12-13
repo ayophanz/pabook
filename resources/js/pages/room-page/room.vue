@@ -295,7 +295,6 @@
                             fire.$emit('resetGallery');
                             self.imageUrl = null;
                         }
-                        
                         self.isLoading = false;
                         toast.fire({
                           type: 'success',
