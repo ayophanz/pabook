@@ -17663,3 +17663,43 @@ button:focus,
   background-color: #6c757d;
 }
 
+.multiselect__tags-wrap span.occupied {
+  background-color: #3490dc !important;
+}
+
+.multiselect__tags-wrap span.ready {
+  background-color: #28a745 !important;
+}
+
+.multiselect__tags-wrap span.reserved {
+  background-color: #6f42c1 !important;
+}
+
+.multiselect__tags-wrap span.cleaning {
+  background-color: #6c757d !important;
+}
+
+.custom__remove.ready .multiselect__tag-icon:focus,
+.custom__remove.ready .multiselect__tag-icon:hover {
+  background: #369a6e !important;
+}
+
+.custom__remove.occupied .multiselect__tag-icon:focus,
+.custom__remove.occupied .multiselect__tag-icon:hover {
+  background: #1378cc !important;
+}
+
+.custom__remove.reserved .multiselect__tag-icon:focus,
+.custom__remove.reserved .multiselect__tag-icon:hover {
+  background: #6129c7 !important;
+}
+
+.custom__remove.cleaning .multiselect__tag-icon:focus,
+.custom__remove.cleaning .multiselect__tag-icon:hover {
+  background: #5f6367 !important;
+}
+
+.multiselect__tag-icon:after {
+  color: #e4e2e2 !important;
+}
+
