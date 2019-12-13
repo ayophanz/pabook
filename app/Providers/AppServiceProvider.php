@@ -68,5 +68,10 @@ class AppServiceProvider extends ServiceProvider
             return Hash::check($field_password, $current_password) ? true : false;
         });
 
+        Validator::extend('rooms_no_equal_room_total', function ($attribute, $value, $parameters) {
+            list($field_rooms_no, $room_total) = $parameters;
+            return ((int)$room_total == (int)$field_rooms_no) ? true : false;
+        });
+
     }
 }

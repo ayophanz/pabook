@@ -42,10 +42,12 @@ class RoomController extends Controller
               'no_of_room'  => 'required|numeric|min:1',
               'hotel'       => 'required|numeric|min:1',
               'image'       => 'required|image64:jpeg,jpg,png'
+              //'rooms_no'    => 'required|same:no_of_room'
               ];                                
-      
+            
       $customMessages = [
                         'min' => 'The :attribute is required'
+                        //'greater_than_field' => 'The amount is not enough.'
                         ];          
 
       $dataCreate = [
@@ -117,11 +119,13 @@ class RoomController extends Controller
               'type'        => 'required|numeric|min:1',
               'price'       => 'required|min:1|regex:/^\d+(\.\d{1,2})?$/',
               'no_of_room'  => 'required|numeric|min:1',
-              'hotel'       => 'required|numeric|min:1'
+              'hotel'       => 'required|numeric|min:1',
+              'rooms_no'    => 'required|rooms_no_equal_room_total:'.count($request['rooms_no']).','.$request['no_of_room']
               ];
 
       $customMessages = [
-                        'unique_name' => 'The :attribute field is already exist in the same room type.'
+                        'unique_name' => 'The :attribute field is already exist in the same room type.',
+                        'rooms_no_equal_room_total' => 'The above items must equal to "No. of unit".'
                         ];
                         
       $dataUpdate = [
