@@ -18,7 +18,7 @@
             </div>
 
             <button class="btn btn-primary btn-large">Verify</button>
-            <a href="{{url('/resend-2fa')}}">Resend Verification Token</a>
+            <a href="{{url('/resend-2fa')}}">Send Verification Token</a>
           </form>
         </div>
       </div>

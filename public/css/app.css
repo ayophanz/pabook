@@ -17644,7 +17644,7 @@ button:focus,
 .row.room-status-code {
   font-size: 13px;
   color: white;
-  margin-bottom: 2px;
+  margin-bottom: 2px !important;
 }
 
 .row.room-status-code div:first-child {

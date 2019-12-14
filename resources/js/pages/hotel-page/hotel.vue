@@ -85,7 +85,14 @@
                   </div>
                   <div class="form-group">
                     <label for="rooms_no">Rooms no. <span class="required-asterisk">*</span></label>
+                      <div class="row room-status-code nopadding">
+                        <div class="col-md-3">Ready</div>
+                        <div class="col-md-3">Occupied</div>
+                        <div class="col-md-3">Reserved</div>
+                        <div class="col-md-3">Cleaning</div>
+                      </div>
                     <multiselect :class="{ 'is-invalid': form.errors.has('rooms_no') }" v-model="form.rooms_no"  placeholder="ex. 101, 102" tag-placeholder="Add this as new room no." label="value" track-by="code" :options="rooms_options" :multiple="true" :taggable="true" @tag="addRoomNo"></multiselect>
+                    <i>Note: You can only remove the unassign item.</i>
                     <has-error :form="form" field="rooms_no"></has-error>
                   </div>
                   <div v-if="hotelId==null" class="form-group">
