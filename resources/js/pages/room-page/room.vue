@@ -32,7 +32,7 @@
                       </div>
                       <div class="form-group">
                         <label for="type">Type <span class="required-asterisk">*</span></label>
-                        <select v-if="types!=''" v-model="form.type" class="form-control" :class="{ 'is-invalid': form.errors.has('type') }" id="type">
+                        <select v-if="types!=''" @change="ifChangeType($event)" v-model="form.type" class="form-control" :class="{ 'is-invalid': form.errors.has('type') }" id="type">
                           <option v-for="item in types" :selected="item.id === form.type" :value="item.id">{{item.name}}</option>
                         </select>
                         <has-error :form="form" field="type"></has-error>
@@ -274,6 +274,24 @@
                     );
                 }
             },
+            ifChangeType(e){
+              if(this.roomId==null) {
+                this.rooms_options = [];
+                this.form.rooms_no = [];
+                let self = this;
+                axios.get('/api/room-types')
+                .then(
+                    function (response) {
+                        response.data.forEach(function(item, key){
+                          if(item.id==e.target.value) {
+                            self.populateRoomsNo(item.room_type_refer.hotel_rooms_no, self, self.roomId);
+                            return false;
+                          }
+                        });
+                    }
+                );
+              }
+            },
             register() {
                 if(this.$gate.superAdminOrhotelOwner()) {
                     this.isLoading = true;
@@ -295,6 +313,7 @@
                             fire.$emit('reset');
                             fire.$emit('resetGallery');
                             self.imageUrl = null;
+                            self.no_unit_avail = 0;
                         }
                         self.isLoading = false;
                         toast.fire({
