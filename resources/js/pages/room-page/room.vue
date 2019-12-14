@@ -201,7 +201,6 @@
             roomsNoOnRemove(value) {
               if(value.status=='ready')
                 this.no_unit_avail--;
-              this.rooms_options.push(value);  
             },
             resetComponent() {
                this.buttonText = 'Save';
