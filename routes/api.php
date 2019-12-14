@@ -79,6 +79,8 @@ Route::delete('/delete-type/{id}', 'API\RoomTypeController@destroy');
 */
 Route::get('/rooms', 'API\RoomController@index');
 
+Route::get('/specific-rooms/{ids}', 'API\RoomController@specificRooms');
+
 Route::post('/create-room', 'API\RoomController@create');
 
 Route::get('/edit-room/{id}', 'API\RoomController@show');

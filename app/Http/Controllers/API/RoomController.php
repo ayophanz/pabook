@@ -20,14 +20,21 @@ class RoomController extends Controller
    }
 
    public function index() {
-        if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
-            return die('not allowed');
+      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+          return die('not allowed');
 
-        if(\Gate::allows('hotelOwner'))
-          return Room::whereIn('type_id', $this->owner())->with('roomType')->orderBy('created_at', 'desc')->get();
+      if(\Gate::allows('hotelOwner'))
+        return Room::whereIn('type_id', $this->owner())->with('roomType')->orderBy('created_at', 'desc')->get();
 
-        if(\Gate::allows('superAdmin'))
+      if(\Gate::allows('superAdmin'))
 		      return Room::with('roomType')->orderBy('created_at', 'desc')->get();
+   }
+
+   public function specificRooms($ids) {
+      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+        return die('not allowed');
+      $ids = explode(',', $ids);
+      return Room::whereIn('id', $ids)->with('roomType')->orderBy('created_at', 'desc')->get();
    }
 
    public function create(Request $request) {

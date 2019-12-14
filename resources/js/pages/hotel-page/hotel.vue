@@ -63,7 +63,7 @@
                     <div class="col-auto">
                         <div class="form-group">
                           <label for="check_out">Check-out <span class="required-asterisk">*</span></label>
-                          <vue-timepicker v-model="form.check_out" format="hh:mm A" :class="{ 'is-invalid': form.errors.has('check_in') }" id="check_in"></vue-timepicker>
+                          <vue-timepicker v-model="form.check_out" format="hh:mm A" :class="{ 'is-invalid': form.errors.has('check_out') }" id="check_out"></vue-timepicker>
                           <has-error :form="form" field="check_out"></has-error>
                         </div>
                     </div>
@@ -93,7 +93,7 @@
                         <div class="col">Unassign</div>
                       </div>
                     <multiselect :class="{ 'is-invalid': form.errors.has('rooms_no') }" v-model="form.rooms_no"  placeholder="ex. 101, 102" tag-placeholder="Add this as new room no." label="value" track-by="code" :options="rooms_options" :multiple="true" :taggable="true" @tag="addRoomNo">
-                      <template slot="tag" slot-scope="{ option, remove }"><span :class="(option.assign_id=='no')?'unassign':option.status" class="multiselect__tag"><span>{{ option.value }} ({{(option.assign_id=='no')? 'unassign':option.assign_id}})</span><span v-if="option.assign_id=='no'" :class="(option.assign_id=='no')?'unassign':option.status" class="custom__remove" @click="remove(option)"><i aria-hidden="true" tabindex="1" class="multiselect__tag-icon"></i></span></span></template>
+                      <template slot="tag" slot-scope="{ option, remove }"><span :class="(option.assign_id=='no')?'unassign':option.status" class="multiselect__tag"><span>{{ option.value }} ({{(option.assign_id=='no')? 'unassign' : getRoomType(option.assign_id) }})</span><span v-if="option.assign_id=='no'" :class="(option.assign_id=='no')?'unassign':option.status" class="custom__remove" @click="remove(option)"><i aria-hidden="true" tabindex="1" class="multiselect__tag-icon"></i></span></span></template>
                     </multiselect>
                     <i>Note: You can only remove the unassign item.</i>
                     <has-error :form="form" field="rooms_no"></has-error>
@@ -198,6 +198,7 @@
             currencyName: 'you are using global currency',
             downloadUrl: '',
             rooms_options: [],
+            roomTypeName: [],
             form: new form({
               owner: '',
               name: '',
@@ -220,6 +221,21 @@
           }
         },
         methods: {
+          getRoomType(assign_id){
+            return this.roomTypeName.find(o => o.room_id === parseInt(assign_id)).type;
+          },
+          loadRoomType(rooms) {
+            this.roomTypeName = [];
+            var roomIds = rooms.map(function(item){return (item.assign_id!='no')?item.assign_id:0;});
+            roomIds = roomIds.filter(function(elem, index, self) {return index === self.indexOf(elem);})
+            let self = this
+            axios.get('/api/specific-rooms/'+roomIds)
+            .then(function (response) {
+              response.data.forEach(function(item, key){
+                self.roomTypeName.push({'room_id':item.id, 'type':item.room_type.name});
+              });
+            });
+          },
           addRoomNo (newRoomNo) {
             const roomNo = {
               value: newRoomNo,
@@ -396,6 +412,7 @@
                       self.currencyName = cc.code(self.form.base_currency).currency;
                     }
                     self.isLoading = false;
+                    self.loadRoomType(self.form.rooms_no);
                   }
                 );  
             }
