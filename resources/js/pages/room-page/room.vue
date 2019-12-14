@@ -263,8 +263,8 @@
             },
             ifChange() {
                 if(this.$gate.superAdminOrhotelOwner()) {
-                  this.isLoading = true;
-                    let self = this
+                    this.isLoading = true;
+                    let self = this;
                     axios.get('/api/room-types/'+self.form.hotel+','+self.roomId)
                     .then(
                         function (response) {
@@ -333,7 +333,7 @@
             },
             roomDetails(id) {
                 if(this.$gate.superAdminOrhotelOwner()) {
-                  let self = this;
+                  let self = this
                   axios.get('/api/edit-room/'+id)
                     .then(
                       function (response) {
@@ -361,11 +361,7 @@
                           self.form.featureOptionalData = JSON.parse(response.data.room_feature_optional.value);
                           self.$refs.repeaterOptionalUpdate.fields = self.form.featureOptionalData;
                         }catch(err) {}
-                        JSON.parse(response.data.room_type.room_type_refer.hotel_rooms_no).forEach(function(item, key){
-                            if(item.status=='ready' && item.assign_id==id) self.no_unit_avail++; 
-                            if(item.assign_id=='no') self.rooms_options.push(item);
-                            if(item.assign_id==id) self.form.rooms_no.push(item);
-                        });
+                        self.populateRoomsNo(response.data.room_type.room_type_refer.hotel_rooms_no, self, self.roomId);
                         try{
                           let images = JSON.parse(response.data.room_gallery.value);
                           images.forEach(item => {
@@ -387,6 +383,13 @@
                     ); 
                     
                 }
+            },
+            populateRoomsNo(data, self, room_id){
+              JSON.parse(data).forEach(function(item, key){
+                  if(item.status=='ready' && item.assign_id==room_id) self.no_unit_avail++; 
+                  if(item.assign_id=='no') self.rooms_options.push(item);
+                  if(item.assign_id==room_id) self.form.rooms_no.push(item);
+              });
             }
         },
         created() {
