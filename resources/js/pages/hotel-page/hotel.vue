@@ -86,12 +86,15 @@
                   <div class="form-group">
                     <label for="rooms_no">Rooms no. <span class="required-asterisk">*</span></label>
                       <div class="row room-status-code nopadding">
-                        <div class="col-md-3">Ready</div>
-                        <div class="col-md-3">Occupied</div>
-                        <div class="col-md-3">Reserved</div>
-                        <div class="col-md-3">Cleaning</div>
+                        <div class="col">Ready</div>
+                        <div class="col">Occupied</div>
+                        <div class="col">Reserved</div>
+                        <div class="col">Cleaning</div>
+                        <div class="col">Unassign</div>
                       </div>
-                    <multiselect :class="{ 'is-invalid': form.errors.has('rooms_no') }" v-model="form.rooms_no"  placeholder="ex. 101, 102" tag-placeholder="Add this as new room no." label="value" track-by="code" :options="rooms_options" :multiple="true" :taggable="true" @tag="addRoomNo"></multiselect>
+                    <multiselect :class="{ 'is-invalid': form.errors.has('rooms_no') }" v-model="form.rooms_no"  placeholder="ex. 101, 102" tag-placeholder="Add this as new room no." label="value" track-by="code" :options="rooms_options" :multiple="true" :taggable="true" @tag="addRoomNo">
+                      <template slot="tag" slot-scope="{ option, remove }"><span :class="(option.assign_id=='no')?'unassign':option.status" class="multiselect__tag"><span>{{ option.value }} ({{(option.assign_id=='no')? 'unassign':option.assign_id}})</span><span v-if="option.assign_id=='no'" :class="(option.assign_id=='no')?'unassign':option.status" class="custom__remove" @click="remove(option)"><i aria-hidden="true" tabindex="1" class="multiselect__tag-icon"></i></span></span></template>
+                    </multiselect>
                     <i>Note: You can only remove the unassign item.</i>
                     <has-error :form="form" field="rooms_no"></has-error>
                   </div>

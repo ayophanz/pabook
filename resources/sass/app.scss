@@ -388,8 +388,11 @@ button:focus, .fc-button-primary:focus {
     background-color: #6f42c1;
 }
 
-.row.room-status-code div:last-child {
+.row.room-status-code div:nth-child(4) {
     background-color: #6c757d;
+}
+.row.room-status-code div:nth-child(5) {
+    background-color: #0d0d0d;
 }
 
 .multiselect__tags-wrap span.occupied{
@@ -408,6 +411,10 @@ button:focus, .fc-button-primary:focus {
     background-color: #6c757d !important;
 }
 
+.multiselect__tags-wrap span.unassign{
+    background-color: #0d0d0d !important;
+}
+
 .custom__remove.ready .multiselect__tag-icon:focus, .custom__remove.ready .multiselect__tag-icon:hover {
     background: #369a6e !important;
 }
@@ -422,6 +429,10 @@ button:focus, .fc-button-primary:focus {
 
 .custom__remove.cleaning .multiselect__tag-icon:focus, .custom__remove.cleaning .multiselect__tag-icon:hover {
     background: #5f6367 !important;
+}
+
+.custom__remove.unassign .multiselect__tag-icon:focus, .custom__remove.unassign .multiselect__tag-icon:hover {
+    background: #333131 !important;
 }
 
 .multiselect__tag-icon:after {
