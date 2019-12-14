@@ -82,7 +82,7 @@
                           <div class="container">
                             <div class="row">
                               <div class="col nopadding">
-                                <label for="no_of_room">No. of unit <span class="required-asterisk">*</span></label>
+                                <label for="no_of_room">No. of unit </label>
                                 <!-- <input v-model="form.no_of_room" type="number" class="form-control" :class="{ 'is-invalid': form.errors.has('no_of_room') }" id="no_of_room"> -->
                                 <p class="form-control" id="no_of_room">{{form.rooms_no.length}}</p>
                                 <has-error :form="form" field="no_of_room"></has-error>
@@ -102,9 +102,10 @@
                                   </div>
                                 </div>
                                 <multiselect @remove="roomsNoOnRemove" @select="roomsNoOnAdd" :class="{ 'is-invalid': form.errors.has('rooms_no') }" v-model="form.rooms_no" label="value" track-by="code" :options="rooms_options" :multiple="true">
-                                  <template slot="tag" slot-scope="{ option, remove }"><span :class="option.status" class="multiselect__tag"><span>{{ option.value }}</span><span :class="option.status" class="custom__remove" @click="remove(option)"><i aria-hidden="true" tabindex="1" class="multiselect__tag-icon"></i></span></span></template>
+                                  <template slot="tag" slot-scope="{ option, remove }"><span :class="option.status" class="multiselect__tag"><span>{{ option.value }}</span><span v-if="option.status=='ready'" :class="option.status" class="custom__remove" @click="remove(option)"><i aria-hidden="true" tabindex="1" class="multiselect__tag-icon"></i></span></span></template>
                                   <span slot="noResult">Oops! No results</span>
                                 </multiselect>
+                                <i>Note: you can only remove "ready" item.</i>
                                 <has-error :form="form" field="rooms_no"></has-error>
                               </div>
                             </div>
