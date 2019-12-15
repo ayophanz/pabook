@@ -181,7 +181,7 @@
                     name: '',
                     description: '',
                     price: 1,
-                    //no_of_room: 1,
+                    no_of_room: 0,
                     image: '',
                     hotel: 0,
                     changeFeature: '',
@@ -293,6 +293,7 @@
             },
             register() {
                 if(this.$gate.superAdminOrhotelOwner()) {
+                    this.form.no_of_room = this.form.rooms_no.length;
                     this.isLoading = true;
                     fire.$emit('uploadImage');
                     this.form.changeFeature = this.isCheckCover

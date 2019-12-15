@@ -43,7 +43,7 @@
                             {{props.column.label}}&nbsp;
                             <i class="fas fa-hotel"></i>
                         </template>
-                        <template slot="column_room" slot-scope="props">
+                        <template slot="column_room_type" slot-scope="props">
                             {{props.column.label}}&nbsp;
                             <i class="fas fa-bed"></i>
                         </template>
@@ -137,17 +137,17 @@
                             row_classes: "room-row-class-hotel",
                         },
                         {
-                            label: "Room",
-                            name: "name",
+                            label: "Room Type",
+                            name: "room_type.name",
                             filter: {
                                 type: "simple",
-                                placeholder: "Enter room name"
+                                placeholder: "Enter room type"
                             },
                             sort: true,
-                            slot_name: "room",
+                            slot_name: "room_type",
                             row_text_alignment: "text-left",
                             column_text_alignment: "text-left",
-                            row_classes: "room-row-class-name",
+                            row_classes: "room-row-class-name-type",
                         },
                         {
                             label: "Total room",
@@ -264,7 +264,7 @@
     .room-row-class-hotel {
         width: 200px;
     }
-    .room-row-class-name {
+    .room-row-class-name-type {
         width: 200px;
     }
     .room-row-class-number {

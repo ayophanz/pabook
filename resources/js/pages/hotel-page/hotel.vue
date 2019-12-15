@@ -222,7 +222,7 @@
         },
         methods: {
           getRoomType(assign_id){
-            return this.roomTypeName.find(o => o.room_id === parseInt(assign_id)).type;
+            return (this.roomTypeName.length > 0)? this.roomTypeName.find(element => element.room_id === parseInt(assign_id)).type :'error';
           },
           loadRoomType(rooms) {
             this.roomTypeName = [];
