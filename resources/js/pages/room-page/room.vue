@@ -94,6 +94,7 @@
                               <div class="col-md-12 nopadding">
                                 <label for="rooms_no">Rooms no.</label>
                                 <div class="container">
+                                  <div class="row today-status"><div class="col-md-12 text-center"><strong>Today status</strong></div></div>
                                   <div class="row room-status-code">
                                     <div class="col-md-3">Ready</div>
                                     <div class="col-md-3">Occupied</div>

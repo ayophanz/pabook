@@ -438,3 +438,8 @@ button:focus, .fc-button-primary:focus {
 .multiselect__tag-icon:after {
     color: #e4e2e2 !important;
 }
+
+.today-status div {
+    border: 1px solid #ced4da;
+    border-bottom: 0px;
+}

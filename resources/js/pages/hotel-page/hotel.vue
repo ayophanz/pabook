@@ -85,6 +85,7 @@
                   </div>
                   <div class="form-group">
                     <label for="rooms_no">Rooms no. <span class="required-asterisk">*</span></label>
+                      <div class="row today-status nopadding"><div class="col-md-12 text-center"><strong>Today status</strong></div></div>
                       <div class="row room-status-code nopadding">
                         <div class="col">Ready</div>
                         <div class="col">Occupied</div>
