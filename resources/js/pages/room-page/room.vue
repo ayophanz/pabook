@@ -43,14 +43,6 @@
                         <textarea v-model="form.description" rows="6" class="form-control" :class="{ 'is-invalid': form.errors.has('description') }" id="description"></textarea>
                         <has-error :form="form" field="description"></has-error>
                       </div>
-                      <div class="form-group">
-                        <label for="feature">Fixed amenities </label>
-                        <repeater-input :repeaterType="`single`" :dataValue="form.featureData" ref="repeaterUpdate" @dataFeature="form.featureData = $event"></repeater-input>
-                      </div>
-                      <div class="form-group">
-                        <label for="feature_optional">Optional amenities </label>
-                        <repeater-input :repeaterType="`double`" :baseCurrency="base_currency" :dataValue="form.featureOptionalData" ref="repeaterOptionalUpdate" @dataFeature="form.featureOptionalData = $event"></repeater-input>
-                      </div>
                       <div class="row">
                         <div class="col-auto">
                             <div class="form-group">
@@ -67,6 +59,14 @@
                             </div>
                         </div>
                       </div> 
+                      <div class="form-group">
+                        <label for="feature">Fixed amenities </label>
+                        <repeater-input :repeaterType="`single`" :dataValue="form.featureData" ref="repeaterUpdate" @dataFeature="form.featureData = $event"></repeater-input>
+                      </div>
+                      <div class="form-group">
+                        <label for="feature_optional">Optional amenities </label>
+                        <repeater-input :repeaterType="`double`" :baseCurrency="base_currency" :dataValue="form.featureOptionalData" ref="repeaterOptionalUpdate" @dataFeature="form.featureOptionalData = $event"></repeater-input>
+                      </div>
                       <div class="form-group">
                         <label for="feature">Gallery </label>
                         <image-uploader ref="uploaderUpdate" @images="form.gallery = $event"></image-uploader>

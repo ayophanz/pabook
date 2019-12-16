@@ -49,10 +49,10 @@
                 <div class="row justify-content-center">
 
                     <div class="col-md-4" v-for="room in rooms" :key="room.id">
-                        <div class="card card-item">
+                        <div class="card card-item" >
                             <div class="card-body">
                                 <vue-pure-lightbox
-                                    :style="{ 'background-image' : `url(${getImgUrl(room.id, room.image)})` }"
+                                    :style="{'background-image' : `url(${getImgUrl(room.id, room.image)})`}"
                                     class="item-image"
                                     :images="gallery(room.id, room.room_gallery.value)"
                                 ></vue-pure-lightbox>
