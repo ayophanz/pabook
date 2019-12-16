@@ -104,6 +104,10 @@ img.brand-image {
     border-radius: 0px !important;
 }
 
+.custom-switch {
+    display: inline-block;
+}
+
 .custom-switch label {
     cursor: pointer;
 }
@@ -442,4 +446,14 @@ button:focus, .fc-button-primary:focus {
 .today-status div {
     border: 1px solid #ced4da;
     border-bottom: 0px;
+}
+
+#max_adult, #max_child {
+    vertical-align: bottom;
+    border-radius: 0px;
+    width: 8rem;
+}
+
+.number-input__button[data-v-b6f730e2]:hover::after, .number-input__button[data-v-b6f730e2]:hover::before {
+    background-color: #28a745 !important;
 }

@@ -48,13 +48,13 @@ class RoomController extends Controller
               'price'       => 'required|min:1|regex:/^\d+(\.\d{1,2})?$/',
               'no_of_room'  => 'required|numeric|min:0',
               'hotel'       => 'required|numeric|min:1',
-              'image'       => 'required|image64:jpeg,jpg,png'//,
-              //'rooms_no'    => 'required|rooms_no_equal_room_total:'.count($request['rooms_no']).','.$request['no_of_room']
+              'image'       => 'required|image64:jpeg,jpg,png',
+              'max_adult'   => 'required|numeric|min:1',
+              'max_child'   => 'required|numeric|min:1'
               ];                                
             
       $customMessages = [
-                        'min' => 'The :attribute is required'//,
-                        //'rooms_no_equal_room_total' => 'The Rooms no. items must equal to "No. of unit".'
+                        'min' => 'The :attribute is required'
                         ];          
 
       $dataCreate = [
@@ -63,7 +63,9 @@ class RoomController extends Controller
                     'type_id'     => $request['type'],
                     'description' => $request['description'],
                     'price'       => $request['price'],
-                    'total_room'  => $request['no_of_room']
+                    'total_room'  => $request['no_of_room'],
+                    'max_adult'  => $request['max_adult'],
+                    'max_child'  => $request['max_child']
                     ];                     
 
       $this->validate($request, $data, $customMessages);
@@ -126,13 +128,13 @@ class RoomController extends Controller
               'type'        => 'required|numeric|min:1',
               'price'       => 'required|min:1|regex:/^\d+(\.\d{1,2})?$/',
               'no_of_room'  => 'required|numeric|min:0',
-              'hotel'       => 'required|numeric|min:1'//,
-              //'rooms_no'    => 'required|rooms_no_equal_room_total:'.count($request['rooms_no']).','.$request['no_of_room']
+              'hotel'       => 'required|numeric|min:1',
+              'max_adult'   => 'required|numeric|min:1',
+              'max_child'   => 'required|numeric|min:1'
               ];
 
       $customMessages = [
-                        'unique_name' => 'The :attribute field is already exist in the same room type.'//,
-                        //'rooms_no_equal_room_total' => 'The Rooms no. items must equal to "No. of unit".'
+                        'unique_name' => 'The :attribute field is already exist in the same room type.'
                         ];
                         
       $dataUpdate = [
@@ -141,7 +143,9 @@ class RoomController extends Controller
                     'type_id'     => $request['type'],
                     'description' => $request['description'],
                     'price'       => $request['price'],
-                    'total_room'  => $request['no_of_room']
+                    'total_room'  => $request['no_of_room'],
+                    'max_adult'   => $request['max_adult'],
+                    'max_child'   => $request['max_child']
                     ];
 
       if($request['changeFeature']) 
@@ -154,7 +158,7 @@ class RoomController extends Controller
 
       if($request->image && $request['changeFeature']) {
 
-        $image = $this->featureImage($request->image, $room->id, $room->name, 'update');  
+        $image = $this->featureImage($request->image, $id, $request['name'], 'update');  
 
         Room::where('id', $id)->update(['image'=>$image]);
       }

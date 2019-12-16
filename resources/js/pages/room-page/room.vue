@@ -51,6 +51,22 @@
                         <label for="feature_optional">Optional amenities </label>
                         <repeater-input :repeaterType="`double`" :baseCurrency="base_currency" :dataValue="form.featureOptionalData" ref="repeaterOptionalUpdate" @dataFeature="form.featureOptionalData = $event"></repeater-input>
                       </div>
+                      <div class="row">
+                        <div class="col-auto">
+                            <div class="form-group">
+                              <label for="max_adult">Max Adult <span class="required-asterisk">*</span></label>
+                              <number-input v-model="form.max_adult" :class="{ 'is-invalid': form.errors.has('max_adult') }" size="small" :value="1" :min="1" :inputtable="false" inline center controls id="max_adult"></number-input>
+                              <has-error :form="form" field="max_adult"></has-error>
+                            </div>  
+                        </div>
+                        <div class="col-auto">
+                            <div class="form-group">
+                              <label for="max_child">Max Child <span class="required-asterisk">*</span></label>
+                              <number-input v-model="form.max_child" :class="{ 'is-invalid': form.errors.has('max_child') }" size="small" :value="1" :min="1" :inputtable="false" inline center controls id="max_child"></number-input>
+                              <has-error :form="form" field="max_child"></has-error>
+                            </div>
+                        </div>
+                      </div> 
                       <div class="form-group">
                         <label for="feature">Gallery </label>
                         <image-uploader ref="uploaderUpdate" @images="form.gallery = $event"></image-uploader>
@@ -63,6 +79,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="form-group">
+                          <label for="isChangeStatus">Status: </label>
                           <div class="custom-control custom-switch">
                             <input @click="toggleStatus" :checked="isCheckStatus" type="checkbox" class="custom-control-input" id="isChangeStatus" name="isChangeStatus">
                             <label class="custom-control-label" for="isChangeStatus">{{ form.status }}</label>
@@ -144,6 +161,7 @@
     import Loading from 'vue-loading-overlay'
     import 'vue-loading-overlay/dist/vue-loading.css'
     import Multiselect from 'vue-multiselect'
+    import VueNumberInput from '@chenfengyuan/vue-number-input';
     export default {
         watch: {
             '$route' (to, from) {
@@ -158,6 +176,7 @@
             RepeaterInputComponent,
             ImageUploader,
             Multiselect,
+            VueNumberInput,
             Loading
         },
         data() {
@@ -189,7 +208,9 @@
                     featureData: null,
                     featureOptionalData: [{value:'', price:0}],
                     gallery: [],
-                    rooms_no: []
+                    rooms_no: [],
+                    max_child: 1,
+                    max_adult: 1
                 })
             }
         },
@@ -362,6 +383,8 @@
                         self.form.name = response.data.name;
                         self.form.description = response.data.description;
                         self.form.price = response.data.price;
+                        self.form.max_adult = response.data.max_adult;
+                        self.form.max_child = response.data.max_child;
                         if(response.data.room_type.room_type_refer.base_currency!=null) {
                           self.base_currency = response.data.room_type.room_type_refer.base_currency.value;
                         }else{
