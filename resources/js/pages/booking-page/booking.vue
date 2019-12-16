@@ -14,22 +14,27 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <calendar style="height: 800px;"
-                            :calendars="calendarList"
-                            :schedules="scheduleList"
-                            :view="view"
-                            :taskView="taskView"
-                            :scheduleView="scheduleView"
-                            :theme="theme"
-                            :week="week"
-                            :month="month"
-                            :timezones="timezones"
-                            :disableDblClick="disableDblClick"
-                            :isReadOnly="isReadOnly"
-                            :template="template"
-                            :useCreationPopup="useCreationPopup"
-                            :useDetailPopup="useDetailPopup"
-                        />
+                        <div class="row">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-9">
+                                <div id="menu">
+                                    <span id="menu-navi">
+                                        <button type="button" class="btn btn-default btn-sm move-today" data-action="move-today">Today</button>
+                                        <button type="button" class="btn btn-default btn-sm move-day" data-action="move-prev">
+                                            <i class="fas fa-arrow-alt-circle-left" data-action="move-next"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-default btn-sm move-day" data-action="move-next">
+                                            <i class="fas fa-arrow-alt-circle-right" data-action="move-next"></i>
+                                        </button>
+                                    </span>
+                                    <span id="renderRange" class="render-range"></span>
+                                </div>
+                                <calendar style="height: 800px;"
+                                    :view="view"
+                                    :theme="theme"
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -47,77 +52,43 @@ export default {
     },
     data() {
         return {
-            calendarList: [
-                {
-                    id: '0',
-                    name: 'home'
-                },
-                {
-                    id: '1',
-                    name: 'office'
-                }
-            ],
-            scheduleList: [
-                {
-                    id: '1',
-                    calendarId: '1',
-                    title: 'my schedule',
-                    category: 'time',
-                    dueDateClass: '',
-                    start: '2018-10-18T22:30:00+09:00',
-                    end: '2018-10-19T02:30:00+09:00'
-                },
-                {
-                    id: '2',
-                    calendarId: '1',
-                    title: 'second schedule',
-                    category: 'time',
-                    dueDateClass: '',
-                    start: '2018-10-18T17:30:00+09:00',
-                    end: '2018-10-19T17:31:00+09:00'
-                }
-            ],
-            view: 'month',
-            taskView: false,
-            scheduleView: ['time'],
+            view:'month',
             theme: {
-                'month.dayname.height': '30px',
-                'month.dayname.borderLeft': '1px solid #ff0000',
-                'month.dayname.textAlign': 'center',
-                'week.today.color': '#333',
-                'week.daygridLeft.width': '100px',
-                'week.timegridLeft.width': '100px'
-            },
-            week: {
-                narrowWeekend: true,
-                showTimezoneCollapseButton: true,
-                timezonesCollapsed: false
-            },
-            month: {
-                visibleWeeksCount: 6,
-                startDayOfWeek: 1
-            },
-            timezones: [{
-                timezoneOffset: 540,
-                displayLabel: 'GMT+09:00',
-                tooltip: 'Seoul'
-            }, {
-                timezoneOffset: -420,
-                displayLabel: 'GMT-08:00',
-                tooltip: 'Los Angeles'
-            }],
-            disableDblClick: true,
-            isReadOnly: false,
-            template: {
-                milestone: function(schedule) {
-                    return `<span style="color:red;">${schedule.title}</span>`;
-                },
-                milestoneTitle: function() {
-                    return 'MILESTONE';
-                },
-            },
-            useCreationPopup: true,
-            useDetailPopup: false,
+                // month header 'dayname'
+                'month.dayname.height': '42px',
+                'month.dayname.borderLeft': 'none',
+                'month.dayname.paddingLeft': '8px',
+                'month.dayname.paddingRight': '0',
+                'month.dayname.fontSize': '13px',
+                'month.dayname.backgroundColor': 'inherit',
+                'month.dayname.fontWeight': 'normal',
+                'month.dayname.textAlign': 'left',
+
+                // month day grid cell 'day'
+                'month.holidayExceptThisMonth.color': '#f3acac',
+                'month.dayExceptThisMonth.color': '#bbb',
+                'month.weekend.backgroundColor': '#fafafa',
+                'month.day.fontSize': '16px',
+
+                // month schedule style
+                'month.schedule.borderRadius': '5px',
+                'month.schedule.height': '18px',
+                'month.schedule.marginTop': '2px',
+                'month.schedule.marginLeft': '10px',
+                'month.schedule.marginRight': '10px',
+
+                // month more view
+                'month.moreView.boxShadow': 'none',
+                'month.moreView.paddingBottom': '0',
+                'month.moreView.border': '1px solid #9a935a',
+                'month.moreView.backgroundColor': '#f9f3c6',
+                'month.moreViewTitle.height': '28px',
+                'month.moreViewTitle.marginBottom': '0',
+                'month.moreViewTitle.backgroundColor': '#f4f4f4',
+                'month.moreViewTitle.borderBottom': '1px solid #ddd',
+                'month.moreViewTitle.padding': '0 10px',
+                'month.moreViewList.padding': '10px'
+            }
         }
     }
 }
