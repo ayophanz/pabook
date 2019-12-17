@@ -457,3 +457,20 @@ button:focus, .fc-button-primary:focus {
 .number-input__button[data-v-b6f730e2]:hover::after, .number-input__button[data-v-b6f730e2]:hover::before {
     background-color: #28a745 !important;
 }
+
+#calendar-menu {
+    margin-bottom: 5px;
+}
+
+.tui-full-calendar-month-week-item .tui-full-calendar-today .tui-full-calendar-weekday-grid-date-decorator {
+    background:#38d39f !important;
+}
+
+.btn-default.hover, .btn-default:active, .btn-default:hover {
+    background-color: #fff !important;
+    color:#38d39f !important;
+}
+
+.menuSelectedView {
+    border: 1px solid #dfdfdf;
+}

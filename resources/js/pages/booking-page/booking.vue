@@ -17,20 +17,19 @@
                         <div class="row">
                             <div class="col-md-3"></div>
                             <div class="col-md-9">
-                                <div id="menu">
-                                    <span id="menu-navi">
+                                <div id="calendar-menu">
+                                    <select v-model="selectedView" class="menuSelectedView">
+                                        <option v-for="(options, index) in viewModeOptions" :value="options.value" :key="index">{{options.title}}</option>
+                                    </select>
+                                    <span id="menu-navi" @click="onClickNavi($event)">
                                         <button type="button" class="btn btn-default btn-sm move-today" data-action="move-today">Today</button>
-                                        <button type="button" class="btn btn-default btn-sm move-day" data-action="move-prev">
-                                            <i class="fas fa-arrow-alt-circle-left" data-action="move-next"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-default btn-sm move-day" data-action="move-next">
-                                            <i class="fas fa-arrow-alt-circle-right" data-action="move-next"></i>
-                                        </button>
+                                        <button type="button" class="btn btn-default btn-sm move-day" data-action="move-prev"><i class="fas fa-chevron-left" data-action="move-prev"></i></button>
+                                        <button type="button" class="btn btn-default btn-sm move-day" data-action="move-next"><i class="fas fa-chevron-right" data-action="move-next"></i></button>
                                     </span>
-                                    <span id="renderRange" class="render-range"></span>
+                                    <span class="render-range">{{dateRange}}</span>
                                 </div>
-                                <calendar style="height: 800px;"
-                                    :view="view"
+                                <calendar ref="mycalendar" style="height: 800px;"
+                                    :view="selectedView"
                                     :theme="theme"
                                 />
                             </div>
@@ -52,7 +51,22 @@ export default {
     },
     data() {
         return {
-            view:'month',
+            viewModeOptions: [
+                {
+                title: 'Monthly',
+                value: 'month'
+                },
+                {
+                title: 'Weekly',
+                value: 'week'
+                },
+                {
+                title: 'Daily',
+                value: 'day'
+                }
+            ],
+            dateRange: '',
+            selectedView: 'month',
             theme: {
                 // month header 'dayname'
                 'month.dayname.height': '42px',
@@ -90,6 +104,53 @@ export default {
                 'month.moreViewList.padding': '10px'
             }
         }
+    },
+    methods: {
+        init() {
+            this.setRenderRangeText();
+        },
+        onClickNavi(event) {
+            if (event.target.tagName === 'BUTTON') {
+                const {target} = event;
+                let action = target.dataset ? target.dataset.action : target.getAttribute('data-action');
+                action = action.replace('move-', '');
+                this.$refs.mycalendar.invoke(action);
+                this.setRenderRangeText();
+            }
+        },
+        setRenderRangeText() {
+            const {invoke} = this.$refs.mycalendar;
+            const view = invoke('getViewName');
+            const calDate = invoke('getDate');
+            const rangeStart = invoke('getDateRangeStart');
+            const rangeEnd = invoke('getDateRangeEnd');
+            let year = calDate.getFullYear();
+            let month = calDate.getMonth() + 1;
+            let date = calDate.getDate();
+            let dateRangeText = '';
+            let endMonth, endDate, start, end;
+            switch (view) {
+                case 'month':
+                dateRangeText = `${year}-${month}`;
+                break;
+                case 'week':
+                year = rangeStart.getFullYear();
+                month = rangeStart.getMonth() + 1;
+                date = rangeStart.getDate();
+                endMonth = rangeEnd.getMonth() + 1;
+                endDate = rangeEnd.getDate();
+                start = `${year}-${month}-${date}`;
+                end = `${endMonth}-${endDate}`;
+                dateRangeText = `${start} ~ ${end}`;
+                break;
+                default:
+                dateRangeText = `${year}-${month}-${date}`;
+            }
+            this.dateRange = dateRangeText;
+        }
+    },
+    mounted() {
+        this.init();
     }
 }
 </script>
