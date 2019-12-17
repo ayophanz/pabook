@@ -22,16 +22,15 @@
 
                     <div class="card-body">
                         <div class="row justify-content-center">
-                            <div class="col-md-4">
-                                Select Date:
-                                <date-range-picker
+                            <div class="col-md-4 text-center">
+                                <date-range-picker 
                                         ref="picker"
                                         :opens="direction"
                                         :minDate="minDate"
                                         :locale-data="{ firstDay: 1, format: 'MMMM Do YYYY' }"
-                                        v-model="dateRange",
-                                        :time-picker="false",
-                                        :ranges="false",
+                                        v-model="dateRange"
+                                        :time-picker="false"
+                                        :ranges="false"
                                         @update="updateValues">
                                     <div slot="input" slot-scope="picker" style="min-width: 350px;">
                                         {{ defaultStartDate=picker.startDate | formatDate }} - {{ defaultEndDate=picker.endDate | formatDate }}

@@ -15,7 +15,8 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-3"></div>
+                            <div class="col-md-3">
+                            </div>
                             <div class="col-md-9">
                                 <div id="calendar-menu">
                                     <select v-model="selectedView" class="menuSelectedView">
@@ -52,6 +53,10 @@ export default {
     data() {
         return {
             viewModeOptions: [
+                {
+                title: 'Select view',
+                value: 'month'
+                },
                 {
                 title: 'Monthly',
                 value: 'month'
@@ -103,6 +108,12 @@ export default {
                 'month.moreViewTitle.padding': '0 10px',
                 'month.moreViewList.padding': '10px'
             }
+        }
+    },
+    watch: {
+        selectedView(newValue) {
+            this.$refs.mycalendar.invoke('changeView', newValue, true);
+            this.setRenderRangeText();
         }
     },
     methods: {
