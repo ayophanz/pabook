@@ -119,11 +119,13 @@ export default {
         },
         selectedMonth(newValue) {
             this.$refs.mycalendar.invoke('setDate', newValue, true);
-            this.setRenderRangeText();
+            this.dateRange = `${newValue.getFullYear()}-${(newValue.getMonth()+1)}`;
+            //this.setRenderRangeText();
         }
     },
     methods: {
         init() {
+            this.selectedMonth = new Date();
             this.setRenderRangeText();
             //this.$refs.mycalendar.usageStatistics = false;
         },
@@ -168,6 +170,7 @@ export default {
                 dateRangeText = `${year}-${month}-${date}`;
             }
             this.dateRange = dateRangeText;
+            this.selectedMonth = new Date(`${year}-${month}`);
         }
     },
     mounted() {
