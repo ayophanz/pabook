@@ -16,6 +16,9 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-3">
+                                <div class="form-group">
+                                    <datepicker v-model="selectedMonth" @selected="monthSelected" :format="`MMM yyyy`" wrapper-class="monthPicker-wrapper" :minimumView="'month'" :maximumView="'month'" placeholder="Please select month" input-class="form-control"></datepicker>
+                                </div>
                             </div>
                             <div class="col-md-9">
                                 <div id="calendar-menu">
@@ -43,20 +46,19 @@
 </template>
 <script>
 import 'tui-calendar/dist/tui-calendar.css'
-import { Calendar } from '@toast-ui/vue-calendar';
-import 'tui-date-picker/dist/tui-date-picker.css';
+import { Calendar } from '@toast-ui/vue-calendar'
+import 'tui-date-picker/dist/tui-date-picker.css'
+import Datepicker from 'vuejs-datepicker'
 export default {
     name: 'myCalendar',
     components: {
-        Calendar
+        Calendar,
+        Datepicker
     },
     data() {
         return {
+            selectedMonth: '',
             viewModeOptions: [
-                {
-                title: 'Select view',
-                value: 'month'
-                },
                 {
                 title: 'Monthly',
                 value: 'month'
@@ -114,11 +116,19 @@ export default {
         selectedView(newValue) {
             this.$refs.mycalendar.invoke('changeView', newValue, true);
             this.setRenderRangeText();
+        },
+        selectedMonth(newValue) {
+            this.$refs.mycalendar.invoke('setDate', newValue, true);
+            this.setRenderRangeText();
         }
     },
     methods: {
         init() {
             this.setRenderRangeText();
+            //this.$refs.mycalendar.usageStatistics = false;
+        },
+        monthSelected() {
+            //console.log('test');
         },
         onClickNavi(event) {
             if (event.target.tagName === 'BUTTON') {

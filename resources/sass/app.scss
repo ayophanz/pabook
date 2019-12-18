@@ -474,3 +474,15 @@ button:focus, .fc-button-primary:focus {
 .menuSelectedView {
     border: 1px solid #dfdfdf;
 }
+
+.monthPicker-wrapper .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).day:hover, 
+.monthPicker-wrapper .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).month:hover, 
+.monthPicker-wrapper .vdp-datepicker__calendar .cell:not(.blank):not(.disabled).year:hover {
+    border: 1px solid #32be8f;
+}
+
+.monthPicker-wrapper .vdp-datepicker__calendar .cell.selected:hover,
+.monthPicker-wrapper .vdp-datepicker__calendar .cell.selected {
+    background:#32be8f !important;
+    color:white !important;
+}
