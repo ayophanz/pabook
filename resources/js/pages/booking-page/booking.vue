@@ -19,6 +19,16 @@
                                 <div class="form-group">
                                     <datepicker v-model="selectedMonth" @selected="monthSelected" :format="`MMM yyyy`" wrapper-class="monthPicker-wrapper" :minimumView="'month'" :maximumView="'month'" placeholder="Please select month" input-class="form-control"></datepicker>
                                 </div>
+                                <div class="form-group">
+                                    <select v-model="hotel" @change="RoomType" class="form-control" id="hotel">
+                                        <option v-for="item in hotels" :selected="item.id === hotel" :value="item.id">{{item.name}}</option>
+                                    </select>
+                                </div>
+                                <div v-if="hotel!=''" class="form-group">
+                                    <select v-model="roomType" class="form-control" id="type">
+                                        <option v-for="item in types" :selected="item.id === roomType" :value="item.id">{{item.name}}</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-md-9">
                                 <div id="calendar-menu">
@@ -57,6 +67,10 @@ export default {
     },
     data() {
         return {
+            types: [],
+            roomType: '',
+            hotel: '',
+            hotels: [],
             selectedMonth: '',
             viewModeOptions: [
                 {
@@ -127,10 +141,33 @@ export default {
         init() {
             this.selectedMonth = new Date();
             this.setRenderRangeText();
+            this.loadHotels();
             //this.$refs.mycalendar.usageStatistics = false;
         },
         monthSelected() {
             //console.log('test');
+        },
+        RoomType(){
+            if(this.$gate.superAdminOrhotelOwner()) {
+                let self = this;
+                axios.get('/api/room-types/').then(
+                    function (response) {
+                        self.types = response.data;
+                    }
+                );
+            }
+        },
+        loadHotels() {
+            if(this.$gate.superAdminOrhotelOwner()) {
+                let self = this
+                axios.get('/api/hotels')
+                .then(function (response) {
+                        response.data.forEach(item => {
+                            if(item.status=='verified') self.hotels.push(item);
+                        });
+                    }
+                );
+            }
         },
         onClickNavi(event) {
             if (event.target.tagName === 'BUTTON') {
