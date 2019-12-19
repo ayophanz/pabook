@@ -17,17 +17,14 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <datepicker v-model="selectedMonth" @selected="monthSelected" :format="`MMM yyyy`" wrapper-class="monthPicker-wrapper" :minimumView="'month'" :maximumView="'month'" placeholder="Please select month" input-class="form-control"></datepicker>
-                                </div>
-                                <div class="form-group">
-                                    <select v-model="hotel" @change="RoomType" class="form-control" id="hotel">
-                                        <option v-for="item in hotels" :selected="item.id === hotel" :value="item.id">{{item.name}}</option>
-                                    </select>
-                                </div>
-                                <div v-if="hotel!=''" class="form-group">
-                                    <select v-model="roomType" class="form-control" id="type">
-                                        <option v-for="item in types" :selected="item.id === roomType" :value="item.id">{{item.name}}</option>
-                                    </select>
+                                    <HotelDatePicker 
+                                    @check-in-changed="checkInDate"
+                                    @check-out-changed="checkOutDate"
+                                    format="YYYY MMM. DD"
+                                    :startDate="new Date(new Date().getFullYear(), new Date().getMonth(), 1)"
+                                    :minNights="1"
+                                    :maxNights="30"
+                                    />
                                 </div>
                             </div>
                             <div class="col-md-9">
@@ -58,20 +55,15 @@
 import 'tui-calendar/dist/tui-calendar.css'
 import { Calendar } from '@toast-ui/vue-calendar'
 import 'tui-date-picker/dist/tui-date-picker.css'
-import Datepicker from 'vuejs-datepicker'
+import HotelDatePicker from 'vue-hotel-datepicker'
 export default {
     name: 'myCalendar',
     components: {
         Calendar,
-        Datepicker
+        HotelDatePicker
     },
     data() {
         return {
-            types: [],
-            roomType: '',
-            hotel: '',
-            hotels: [],
-            selectedMonth: '',
             viewModeOptions: [
                 {
                 title: 'Monthly',
@@ -127,47 +119,25 @@ export default {
         }
     },
     watch: {
-        selectedView(newValue) {
-            this.$refs.mycalendar.invoke('changeView', newValue, true);
+        selectedView(e) {
+            this.$refs.mycalendar.invoke('changeView', e, true);
             this.setRenderRangeText();
-        },
-        selectedMonth(newValue) {
-            this.$refs.mycalendar.invoke('setDate', newValue, true);
-            this.dateRange = `${newValue.getFullYear()}-${(newValue.getMonth()+1)}`;
-            //this.setRenderRangeText();
         }
     },
     methods: {
         init() {
             this.selectedMonth = new Date();
             this.setRenderRangeText();
-            this.loadHotels();
             //this.$refs.mycalendar.usageStatistics = false;
         },
-        monthSelected() {
-            //console.log('test');
-        },
-        RoomType(){
-            if(this.$gate.superAdminOrhotelOwner()) {
-                let self = this;
-                axios.get('/api/room-types/').then(
-                    function (response) {
-                        self.types = response.data;
-                    }
-                );
+        checkInDate(e) {
+            if(e!=null) {
+              this.$refs.mycalendar.invoke('setDate', e, true);
+              this.dateRange = `${e.getFullYear()}-${(e.getMonth()+1)}`;
             }
         },
-        loadHotels() {
-            if(this.$gate.superAdminOrhotelOwner()) {
-                let self = this
-                axios.get('/api/hotels')
-                .then(function (response) {
-                        response.data.forEach(item => {
-                            if(item.status=='verified') self.hotels.push(item);
-                        });
-                    }
-                );
-            }
+        checkOutDate(e) {
+            console.log(e);
         },
         onClickNavi(event) {
             if (event.target.tagName === 'BUTTON') {
@@ -207,7 +177,6 @@ export default {
                 dateRangeText = `${year}-${month}-${date}`;
             }
             this.dateRange = dateRangeText;
-            this.selectedMonth = new Date(`${year}-${month}`);
         }
     },
     mounted() {
