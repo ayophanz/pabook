@@ -26,6 +26,18 @@
                                     :maxNights="30"
                                     />
                                 </div>
+                                <div class="form-group">
+                                    <select @change="isHotelChange" class="form-control" id="hotel">
+                                        <option selected value="null">Please select hotel</option>
+                                        <option v-for="item in hotels" :value="item.id">{{item.name}}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" id="roomType">
+                                        <option selected value="null">Please select room type</option>
+                                        <option v-for="item in roomTypes" :value="item.id">{{item.name}}</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-md-9">
                                 <div id="calendar-menu">
@@ -64,6 +76,9 @@ export default {
     },
     data() {
         return {
+            hotels:[],
+            hotel: '',
+            roomTypes:[],
             viewModeOptions: [
                 {
                 title: 'Monthly',
@@ -128,7 +143,33 @@ export default {
         init() {
             this.selectedMonth = new Date();
             this.setRenderRangeText();
+            this.loadHotels();
             //this.$refs.mycalendar.usageStatistics = false;
+        },
+        isHotelChange(){
+            if(this.$gate.superAdminOrhotelOwner()) {
+                let self = this;
+                axios.get('/api/room-types/'+self.hotel)
+                .then(
+                    function (response) {
+                        self.roomTypes = response.data;
+                    }
+                );
+            }
+        },
+        loadHotels() {
+            if(this.$gate.superAdminOrhotelOwner()) {
+                let self = this
+                axios.get('/api/hotels')
+                .then(
+                    function (response) {
+                        response.data.forEach(item => {
+                        if(item.status=='verified')
+                            self.hotels.push(item);
+                        });
+                    }
+                );
+            }
         },
         checkInDate(e) {
             if(e!=null) {
