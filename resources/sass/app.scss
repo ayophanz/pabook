@@ -486,3 +486,7 @@ button:focus, .fc-button-primary:focus {
     background:#32be8f !important;
     color:white !important;
 }
+
+.select2-container .select2-selection--single {
+    height: auto !important;
+}

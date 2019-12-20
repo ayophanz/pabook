@@ -22,8 +22,12 @@ class RoomTypeController extends Controller
       if($id) {
         $hotelId = explode(',', $id)[0];
         $roomId  = explode(',', $id)[1];
-        return RoomType::where('hotel_id', $hotelId)->whereNotIn('id', $this->roomTypeIds($hotelId, $roomId))->with('roomTypeRefer')->orderBy('created_at', 'desc')->get();
-     
+        if($roomId=='0') 
+          return RoomType::where('hotel_id', $hotelId)->orderBy('created_at', 'desc')->get();
+        else
+          return RoomType::where('hotel_id', $hotelId)->whereNotIn('id', $this->roomTypeIds($hotelId, $roomId))->with('roomTypeRefer')->orderBy('created_at', 'desc')->get();
+        
+
       }else{
         if(\Gate::allows('hotelOwner'))
            return RoomType::whereIn('hotel_id', $this->hotel_ids())->with('roomTypeRefer')->orderBy('created_at', 'desc')->get(); 

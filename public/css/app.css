@@ -17804,3 +17804,7 @@ button:focus,
   color: white !important;
 }
 
+.select2-container .select2-selection--single {
+  height: auto !important;
+}
+

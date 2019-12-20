@@ -27,16 +27,10 @@
                                     />
                                 </div>
                                 <div class="form-group">
-                                    <select @change="isHotelChange" class="form-control" id="hotel">
-                                        <option selected value="null">Please select hotel</option>
-                                        <option v-for="item in hotels" :value="item.id">{{item.name}}</option>
-                                    </select>
+                                    <Select2 v-model="hotel" :options="hotels" :settings="{ placeholder: 'Please select hotel', containerCssClass:'form-control' }" @change="isHotelChange" />
                                 </div>
                                 <div class="form-group">
-                                    <select class="form-control" id="roomType">
-                                        <option selected value="null">Please select room type</option>
-                                        <option v-for="item in roomTypes" :value="item.id">{{item.name}}</option>
-                                    </select>
+                                    <Select2 v-model="roomType" :options="roomTypes" :settings="{ placeholder: 'Please select room type', containerCssClass:'form-control' }" @change="isRoomType" />
                                 </div>
                             </div>
                             <div class="col-md-9">
@@ -68,17 +62,20 @@ import 'tui-calendar/dist/tui-calendar.css'
 import { Calendar } from '@toast-ui/vue-calendar'
 import 'tui-date-picker/dist/tui-date-picker.css'
 import HotelDatePicker from 'vue-hotel-datepicker'
+import Select2 from 'v-select2-component';
 export default {
     name: 'myCalendar',
     components: {
         Calendar,
-        HotelDatePicker
+        HotelDatePicker,
+        Select2
     },
     data() {
         return {
             hotels:[],
             hotel: '',
             roomTypes:[],
+            roomType:'',
             viewModeOptions: [
                 {
                 title: 'Monthly',
@@ -146,29 +143,32 @@ export default {
             this.loadHotels();
             //this.$refs.mycalendar.usageStatistics = false;
         },
+        isRoomType() {
+
+        },
         isHotelChange(){
             if(this.$gate.superAdminOrhotelOwner()) {
+                this.roomTypes = [];
                 let self = this;
-                axios.get('/api/room-types/'+self.hotel)
-                .then(
+                axios.get('/api/room-types/'+self.hotel+',0').then(
                     function (response) {
-                        self.roomTypes = response.data;
-                    }
-                );
+                        response.data.forEach(item => {
+                            console.log(item);
+                            self.roomTypes.push({id:item.id, text:item.name});
+                        });
+                    });
             }
         },
         loadHotels() {
             if(this.$gate.superAdminOrhotelOwner()) {
                 let self = this
-                axios.get('/api/hotels')
-                .then(
+                axios.get('/api/hotels').then(
                     function (response) {
                         response.data.forEach(item => {
                         if(item.status=='verified')
-                            self.hotels.push(item);
+                            self.hotels.push({id:item.id, text:item.name});
                         });
-                    }
-                );
+                    });
             }
         },
         checkInDate(e) {
