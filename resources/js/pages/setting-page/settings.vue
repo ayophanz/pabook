@@ -20,11 +20,11 @@
                         <div v-if="isAdmin" class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="owner_id">Hotel Owner <span class="required-asterisk">*</span></label>
-                                    <select v-model="form.owner_id" @change="selectedOwner" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('owner_id') }" id="owner_id">
-                                      <option v-for="item in owners" :selected="item.id === form.owner_id" :value="item.id">{{item.email}}</option>
+                                    <label for="user_id">Hotel Owner <span class="required-asterisk">*</span></label>
+                                    <select v-model="form.user_id" @change="selectedOwner" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('user_id') }" id="user_id">
+                                      <option v-for="item in owners" :selected="item.id === form.user_id" :value="item.id">{{item.email}}</option>
                                     </select>
-                                    <has-error :form="form" field="owner_id"></has-error>
+                                    <has-error :form="form" field="user_id"></has-error>
                                 </div>
                             </div>
                         </div>
@@ -69,7 +69,7 @@
                 owners: [],
                 form: new form({
                     base_currency: '',
-                    owner_id: null
+                    user_id: null
                 })
             }
         },
@@ -78,7 +78,7 @@
                 if(this.$gate.superAdmin()) {
                     this.isLoading = true;
                     let self = this
-                    axios.get('/api/config/'+this.form.owner_id)
+                    axios.get('/api/config/'+this.form.user_id)
                     .then(
                         function (response) {
                             self.form.base_currency  = response.data.value;

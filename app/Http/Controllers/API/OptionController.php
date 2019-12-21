@@ -40,14 +40,14 @@ class OptionController extends Controller
    		];
 
    		if(\Gate::allows('superAdmin')) {
-   			$data['owner_id'] = 'required|numeric|min:1';
-   			$dataCreate['meta_value'] = $request['owner_id'];
+   			$data['user_id'] = 'required|numeric|min:1';
+   			$dataCreate['meta_value'] = $request['user_id'];
    		}
 
    		$this->validate($request, $data);
 
    		if(\Gate::allows('superAdmin')) {
-   			$option = $this->createUpdate($request['owner_id'], $dataCreate);
+   			$option = $this->createUpdate($request['user_id'], $dataCreate);
    		}elseif(\Gate::allows('hotelOwner')) {
    			$option = $this->createUpdate($this->ownerId(), $dataCreate);
    		}

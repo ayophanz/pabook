@@ -24,7 +24,7 @@ class RoomController extends Controller
           return die('not allowed');
 
       if(\Gate::allows('hotelOwner'))
-        return Room::whereIn('type_id', $this->owner())->with('roomType')->orderBy('created_at', 'desc')->get();
+        return Room::whereIn('room_type_id', $this->owner())->with('roomType')->orderBy('created_at', 'desc')->get();
 
       if(\Gate::allows('superAdmin'))
 		      return Room::with('roomType')->orderBy('created_at', 'desc')->get();
@@ -43,14 +43,14 @@ class RoomController extends Controller
    	  
       $room = null;
    	  $data = [
-              'name' 	      => 'required|string|max:191|unique_name:rooms,name,type_id,'.$request['type'].',0',
+              'name' 	      => 'required|string|max:191|unique_name:rooms,name,room_type_id,'.$request['type'].',0',
               'type'        => 'required|numeric|min:1',
               'price'       => 'required|min:1|regex:/^\d+(\.\d{1,2})?$/',
               'no_of_room'  => 'required|numeric|min:0',
               'hotel'       => 'required|numeric|min:1',
               'image'       => 'required|image64:jpeg,jpg,png',
               'max_adult'   => 'required|numeric|min:1',
-              'max_child'   => 'required|numeric|min:1'
+              'max_child'   => 'required|numeric|min:0'
               ];                                
             
       $customMessages = [
@@ -58,14 +58,14 @@ class RoomController extends Controller
                         ];          
 
       $dataCreate = [
-                    'status'      => $request['status'],
-                    'name'        => $request['name'],
-                    'type_id'     => $request['type'],
-                    'description' => $request['description'],
-                    'price'       => $request['price'],
-                    'total_room'  => $request['no_of_room'],
-                    'max_adult'  => $request['max_adult'],
-                    'max_child'  => $request['max_child']
+                    'status'       => $request['status'],
+                    'name'         => $request['name'],
+                    'room_type_id' => $request['type'],
+                    'description'  => $request['description'],
+                    'price'        => $request['price'],
+                    'total_room'   => $request['no_of_room'],
+                    'max_adult'    => $request['max_adult'],
+                    'max_child'    => $request['max_child']
                     ];                     
 
       $this->validate($request, $data, $customMessages);
@@ -112,7 +112,7 @@ class RoomController extends Controller
         return die('not allowed');
 
       if(\Gate::allows('hotelOwner') || \Gate::allows('hotelReceptionist')) 
-        return Room::with('roomType', 'roomGallery')->whereIn('type_id', $this->owner())->where('status', 'active')->get();
+        return Room::with('roomType', 'roomGallery')->whereIn('room_type_id', $this->owner())->where('status', 'active')->get();
 
       if(\Gate::allows('superAdmin')) 
         return Room::with('roomType', 'roomGallery')->where('status', 'active')->get();
@@ -124,13 +124,13 @@ class RoomController extends Controller
 
       $room=null;
       $data = [
-              'name'        => 'required|string|max:191|unique_name:rooms,name,type_id,'.$request['type'].','.$id,
+              'name'        => 'required|string|max:191|unique_name:rooms,name,room_type_id,'.$request['type'].','.$id,
               'type'        => 'required|numeric|min:1',
               'price'       => 'required|min:1|regex:/^\d+(\.\d{1,2})?$/',
               'no_of_room'  => 'required|numeric|min:0',
               'hotel'       => 'required|numeric|min:1',
               'max_adult'   => 'required|numeric|min:1',
-              'max_child'   => 'required|numeric|min:1'
+              'max_child'   => 'required|numeric|min:0'
               ];
 
       $customMessages = [
@@ -138,14 +138,14 @@ class RoomController extends Controller
                         ];
                         
       $dataUpdate = [
-                    'status'      => $request['status'],
-                    'name'        => $request['name'],
-                    'type_id'     => $request['type'],
-                    'description' => $request['description'],
-                    'price'       => $request['price'],
-                    'total_room'  => $request['no_of_room'],
-                    'max_adult'   => $request['max_adult'],
-                    'max_child'   => $request['max_child']
+                    'status'       => $request['status'],
+                    'name'         => $request['name'],
+                    'room_type_id' => $request['type'],
+                    'description'  => $request['description'],
+                    'price'        => $request['price'],
+                    'total_room'   => $request['no_of_room'],
+                    'max_adult'    => $request['max_adult'],
+                    'max_child'    => $request['max_child']
                     ];
 
       if($request['changeFeature']) 
@@ -243,16 +243,16 @@ class RoomController extends Controller
     private function owner($roomType=0) {
       $user = auth('api')->user();
       if($roomType==0) {
-        $hotel = Hotel::select('id')->where('status', 'verified')->where('owner_id', $user->id)->pluck('id')->toArray();
+        $hotel = Hotel::select('id')->where('status', 'verified')->where('user_id', $user->id)->pluck('id')->toArray();
         if(empty($hotel)) {
           $userMeta = UserMeta::select('user_id')->where('value', $user->id)->first();
           if(!empty($userMeta))
-            $hotel = Hotel::select('id')->where('status', 'verified')->where('owner_id', $userMeta->user_id)->pluck('id')->toArray();
+            $hotel = Hotel::select('id')->where('status', 'verified')->where('user_id', $userMeta->user_id)->pluck('id')->toArray();
         }
 
         $roomType = RoomType::select('id')->whereIn('hotel_id', $hotel)->pluck('id')->toArray();
         foreach ($roomType as $key => $value) {
-          unset($roomType[$key]['room_type_refer']);
+          unset($roomType[$key]['room_type_hotel']);
         }
         return $roomType;
       }else{
@@ -265,7 +265,7 @@ class RoomController extends Controller
     */
     private function roomsNo($roomsNoData, $room_id, $hotel_id) {
       $hotel = Hotel::where('id', $hotel_id)->first();
-      $newData = json_decode($hotel->hotel_rooms_no, true);
+      $newData = json_decode($hotel->hotel_rooms_no, true); 
       foreach($newData as &$val) {
         if($val['assign_id']==$room_id && $val['status']=='ready') $val['assign_id'] = 'no';
         foreach($roomsNoData as $val2) {
@@ -325,7 +325,7 @@ class RoomController extends Controller
     *  is room available
     */
     // private function isRoomAvailable() {
-    //   $room = Room::select('id')->whereIn('type_id', $this->owner())->where('status', 'active')->get()->toArray();
+    //   $room = Room::select('id')->whereIn('room_type_id', $this->owner())->where('status', 'active')->get()->toArray();
     //   $book = Booking::whereIn('room_id', $room)->get();
     //   return false;
     // }

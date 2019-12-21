@@ -17808,3 +17808,14 @@ button:focus,
   height: auto !important;
 }
 
+.select2-container--default .select2-selection--single {
+  border: 1px solid #d7d9e2 !important;
+  border-radius: 0px !important;
+}
+
+.uploader .file-input label[data-v-7c72103f],
+.uploader .file-input input[data-v-7c72103f] {
+  box-shadow: 2px 2px 4px 0px #969696 !important;
+  background: #28a745 !important;
+}
+

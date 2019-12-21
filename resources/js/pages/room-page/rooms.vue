@@ -125,7 +125,7 @@
                         },
                         {
                             label: "Hotel",
-                            name: "room_type.room_type_refer.name",
+                            name: "room_type.room_type_hotel.name",
                             filter: {
                                 type: "simple",
                                 placeholder: "Enter hotel name"

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Room extends Model
 {
 	protected $fillable = [
-                'type_id',
+                'room_type_id',
     			'name', 
     			'description', 
     			'price',
@@ -16,10 +16,11 @@ class Room extends Model
                 'status'
     			];
 
-    protected $with = ['roomType', 'roomFeature', 'roomFeatureOptional', 'roomGallery', 'roomNumbering'];           
+    protected $with = ['roomType', 'roomFeature', 'roomFeatureOptional', 'roomGallery', 'roomNumbering'];//rermove this if unnecessary      
+                
 
     public function roomType() {
-        return $this->belongsTo(RoomType::class, 'type_id', 'id'); 
+        return $this->belongsTo(RoomType::class, 'room_type_id', 'id'); 
     }
 
     public function roomFeature() {

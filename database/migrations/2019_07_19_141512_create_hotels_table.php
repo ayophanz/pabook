@@ -15,7 +15,8 @@ class CreateHotelsTable extends Migration
     {
         Schema::create('hotels', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('owner_id');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->string('name');
             $table->string('address');
             $table->string('city');
@@ -23,8 +24,14 @@ class CreateHotelsTable extends Migration
             $table->string('country');
             $table->string('zip_code');
             $table->string('phone_number');
-            $table->string('email');
-            $table->string('image')->nullable();     
+            $table->string('email')->unique();
+            $table->string('image')->nullable();
+            $table->string('status')->default('verifying');
+            $table->string('verify_token')->nullable();  
+            $table->longText('hotel_rooms_no');   
+            $table->string('website')->nullable();
+            $table->string('check_in')->nullable();
+            $table->string('check_out')->nullable();
             $table->timestamps();
         });
     }

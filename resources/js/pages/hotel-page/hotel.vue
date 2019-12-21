@@ -27,9 +27,7 @@
                 <div class="card-body">
                   <div class="form-group">
                     <label for="country">Country <span class="required-asterisk">*</span></label>
-                     <select v-model="form.country" class="form-control" :class="{ 'is-invalid': form.errors.has('country') }" id="country">
-                      <option v-for="item in countries" :selected="item === form.country" :value="item">{{item}}</option>
-                     </select>
+                    <Select2  id="country" v-model="form.country" :options="countries" v-bind:settings="{ placeholder: 'Please select country', containerCssClass: 'form-control'  } " />
                     <has-error :form="form" field="country"></has-error>
                   </div>
                   <div class="form-group">
@@ -125,9 +123,7 @@
                     </div>
                     <div class="form-group">
                       <label for="base_currency">Base currency <span class="required-asterisk">*</span></label>
-                       <select v-model="form.base_currency" @change="currencyCall" class="form-control" :class="{ 'is-invalid': form.errors.has('base_currency') }" id="base_currency">
-                        <option v-for="item in currency" :selected="item.id === form.base_currency" :value="item">{{item}}</option>
-                       </select>
+                      <Select2  @change="currencyCall" id="base_currency" v-model="form.base_currency" :options="currency" v-bind:settings="{ placeholder: 'Please select currency', containerCssClass: 'form-control'  } " />
                        <p>{{currencyName}} <router-link v-if="form.base_currency=='use_global'" to="/settings">settings</router-link></p>
                       <has-error :form="form" field="base_currency"></has-error>
                     </div>
@@ -165,6 +161,7 @@
     import VueTimepicker from 'vue2-timepicker'
     import 'vue2-timepicker/dist/VueTimepicker.css'
     import Multiselect from 'vue-multiselect'
+    import Select2 from 'v-select2-component';
     export default {
         watch: {
             '$route' (to, from) {
@@ -179,7 +176,8 @@
           Loading,
           cc,
           VueTimepicker,
-          Multiselect
+          Multiselect,
+          Select2
         },
         data() {
           return {
@@ -254,21 +252,28 @@
             this.verificationValue['download_action'] = '#';
             this.verificationValue['download_link'] = '#';
             this.verificationValue['download_filename'] = '#';
+            this.verificationValue['visible_only'] = 'user';
             if(status=='verifying') {
-              if(this.$gate.superAdmin()) {
-                this.verificationValue['download_action'] = 'Download prof docx';
-                this.verificationValue['download_link'] = this.downloadUrl;
-                this.verificationValue['download_filename'] = this.hotelId+'_'+this.form.name;
-              }
               this.verificationValue['msg'] = 'We are verifying your documents it takes 2-3 days please be patient, as soon as the verification is complete we will notify you. Thank you';
               this.verificationValue['link'] = '#';
               this.verificationValue['link_title'] = '#';
               this.verificationValue['verify_token_link'] = '#';
+              if(this.$gate.superAdmin()) {
+                this.verificationValue['download_action'] = 'Download prof docx';
+                this.verificationValue['download_link'] = this.downloadUrl;
+                this.verificationValue['download_filename'] = this.hotelId+'_'+this.form.name;
+                this.verificationValue['visible_only'] = 'admin';
+                this.verificationValue['msg'] = 'Please take action on this request.';
+              }
             }else if(status=='email_verifying') {
               this.verificationValue['msg'] = 'Congratz! we verified your docs, please confirm the email you registered on this hotel for final verification. Thank you';
               this.verificationValue['link'] = '/hotel-email-verification/';
               this.verificationValue['verify_token_link'] = '/verify-hotel-token';
               this.verificationValue['link_title'] = 'Click here to send email verification';
+              if(this.$gate.superAdmin()) {
+                this.verificationValue['visible_only'] = 'admin';
+                this.verificationValue['msg'] = 'Waiting to confirm the verification code.';
+              }
             }
           },
           currencyCall(){
@@ -369,7 +374,7 @@
           populateData() {
             let self = this;
             countries_list.forEach(function(item) {
-              self.countries.push(item.country);
+              self.countries.push({id:item.country, text:item.country});
             });
             if(this.$gate.superAdmin()) {
               this.isAdmin = true;
@@ -390,7 +395,7 @@
               axios.get('/api/edit-hotel/'+id)
                 .then(
                   function (response) {
-                    self.form.owner = response.data.owner_id;
+                    self.form.owner = response.data.user_id;
                     self.form.name = response.data.name;
                     self.form.address = response.data.address;
                     self.form.city = response.data.city;
@@ -421,7 +426,11 @@
         },
         created() {
           this.populateData();
-          this.currency = cc.codes();
+          //this.currency = cc.codes();
+          let self = this
+          cc.codes().forEach(function(item, key){
+            self.currency.push({id:item, text:item});
+          });
           this.currency.unshift('use_global');
           if(this.$route.params.hotelId) {
               this.hotelId = this.$route.params.hotelId;  

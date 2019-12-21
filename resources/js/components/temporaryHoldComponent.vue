@@ -12,32 +12,37 @@ Vue.component('temporary-hold', {
                                <strong>Hotel: {{dataValue.hotel_name}}</strong>
                                <br />
                                <br />
-                               {{dataValue.msg}}
-                               <br />
-                               <br />
-                               <form v-if="dataValue.verify_token_link!='#'" @submit.prevent="verify" role="form">
-                                    <div class="row justify-content-center">
-                                            <div class="col-md-4">
-                                                <div class="form-group"><br />
-                                                    <input id="hotelVerifyToken" type="text" v-model="form.hotelVerifyToken" class="form-control" :class="{ 'is-invalid': form.errors.has('hotelVerifyToken') }" name="hotelVerifyToken">
-                                                    <has-error :form="form" field="hotelVerifyToken"></has-error>
-                                                </div> 
-                                            </div>
-                                            <div class="col-md-4"><br />
-                                                <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat">Verify now</button>
-                                            </div>
-                                    </div><br /><br />
-                               </form>
-
-                               <form v-if="dataValue.download_action!='#'" @submit.prevent="verify" role="form">
-                                    <div class="row justify-content-center">
-                                            <div class="col-md-12 text-center">
-                                                <a v-bind:href="dataValue.download_link" v-bind:download="dataValue.download_filename" target="_blank">{{dataValue.download_action}}</a><br /><br />
-                                                <a href="#" @click.prevent="onApprove(dataValue.hotel_id)" class="btn btn-outline-primary btn-flat btn-action"><i class="fas fa-thumbs-up"></i> Approve now</a>
-                                            </div>
-                                    </div><br /><br />
-                               </form>
-                               <p v-if="dataValue.link!='#'"><a v-bind:href="dataValue.link+dataValue.hotel_id"> {{dataValue.link_title}}</a> and paste above field.</p>
+                               <div v-if="dataValue.visible_only=='user'">
+                                {{dataValue.msg}}
+                                <br />
+                                <br />
+                                <form v-if="dataValue.verify_token_link!='#'" @submit.prevent="verify" role="form">
+                                        <div class="row justify-content-center">
+                                                <div class="col-md-4">
+                                                    <div class="form-group"><br />
+                                                        <input id="hotelVerifyToken" type="text" v-model="form.hotelVerifyToken" class="form-control" :class="{ 'is-invalid': form.errors.has('hotelVerifyToken') }" name="hotelVerifyToken">
+                                                        <has-error :form="form" field="hotelVerifyToken"></has-error>
+                                                    </div> 
+                                                </div>
+                                                <div class="col-md-4"><br />
+                                                    <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat">Verify now</button>
+                                                </div>
+                                        </div><br /><br />
+                                </form>
+                                <p v-if="dataValue.link!='#'"><a v-bind:href="dataValue.link+dataValue.hotel_id"> {{dataValue.link_title}}</a> and paste above field.</p>
+                               </div>
+                               
+                               <div <div v-if="dataValue.visible_only=='admin'">
+                                <p class="text-center">{{dataValue.msg}}</p>
+                                <form v-if="dataValue.download_action!='#'" @submit.prevent="verify" role="form">
+                                        <div class="row justify-content-center">
+                                                <div class="col-md-12 text-center">
+                                                    <a v-bind:href="dataValue.download_link" v-bind:download="dataValue.download_filename" target="_blank">{{dataValue.download_action}}</a><br /><br />
+                                                    <a href="#" @click.prevent="onApprove(dataValue.hotel_id)" class="btn btn-outline-primary btn-flat btn-action"><i class="fas fa-thumbs-up"></i> Approve now</a>
+                                                </div>
+                                        </div><br /><br />
+                                </form>
+                               </div>
                             </div>
                         </div>
                     </div>

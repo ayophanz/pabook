@@ -27,10 +27,24 @@
                                     />
                                 </div>
                                 <div class="form-group">
-                                    <Select2 v-model="hotel" :options="hotels" :settings="{ placeholder: 'Please select hotel', containerCssClass:'form-control' }" @change="isHotelChange" />
+                                    <label for="hotel">Hotel</label>
+                                    <Select2 id="hotel" v-model="hotel" :options="hotels" :settings="{ placeholder: 'Please select hotel', containerCssClass:'form-control' }" @change="isHotelChange" />
                                 </div>
                                 <div class="form-group">
-                                    <Select2 v-model="roomType" :options="roomTypes" :settings="{ placeholder: 'Please select room type', containerCssClass:'form-control' }" @change="isRoomType" />
+                                    <label for="roomType">Room</label>
+                                    <Select2 id="roomType" v-model="roomType" :options="roomTypes" :settings="{ placeholder: 'Please select room type', containerCssClass:'form-control' }" @change="isRoomType" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="manyRoom">No. of room</label>
+                                    <Select2 id="manyRoom" v-model="manyRoom" :options="(roomType!='' ? manyRooms:[])" :settings="{ placeholder: 'Please select how many rooms', containerCssClass:'form-control' }" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="manyAdult">No. of adult</label>
+                                    <Select2 id="manyAdult" v-model="manyAdult" :options="(manyRoom!='' ? manyAdults:[])" :settings="{ placeholder: 'Please select how many adult(s)', containerCssClass:'form-control' }" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="manyChild">No. of child</label>
+                                    <Select2 id="manyChild" v-model="manyChild" :options="(manyAdult!='' ? manyChilds:[])" :settings="{ placeholder: 'Please select how many child(s)', containerCssClass:'form-control' }" />
                                 </div>
                             </div>
                             <div class="col-md-9">
@@ -76,6 +90,22 @@ export default {
             hotel: '',
             roomTypes:[],
             roomType:'',
+            manyRooms: [],
+            manyRoom:'',
+            totalRooms: [],
+            manyAdults:[
+                {id:'1',text:'1'},{id:'2',text:'2'},{id:'3',text:'3'},
+                {id:'4',text:'4'},{id:'5',text:'5'},{id:'6',text:'6'},
+                {id:'7',text:'7'},{id:'8',text:'8'},{id:'9',text:'9'}
+            ],
+            manyAdult: '',
+            manyChilds:[
+                {id:'0', text:'0'},{id:'1',text:'1'},{id:'2',text:'2'},
+                {id:'3',text:'3'},{id:'4',text:'4'},{id:'5',text:'5'},
+                {id:'6',text:'6'},{id:'7',text:'7'},{id:'8',text:'8'},
+                {id:'9',text:'9'}
+            ],
+            manyChild: '',
             viewModeOptions: [
                 {
                 title: 'Monthly',
@@ -144,17 +174,24 @@ export default {
             //this.$refs.mycalendar.usageStatistics = false;
         },
         isRoomType() {
-
+            this.manyRooms = [];
+            if (this.totalRooms.length > 0) {
+                var max = this.totalRooms.find(e => parseInt(e.id) === parseInt(this.roomType)).total;
+                for(var i=1;i<=max;i++){
+                    this.manyRooms.push({id:i,text:i});
+                }
+            }
         },
         isHotelChange(){
             if(this.$gate.superAdminOrhotelOwner()) {
                 this.roomTypes = [];
                 let self = this;
-                axios.get('/api/room-types/'+self.hotel+',0').then(
+                axios.get('/api/room-types/'+this.hotel+',0').then(
                     function (response) {
                         response.data.forEach(item => {
-                            console.log(item);
                             self.roomTypes.push({id:item.id, text:item.name});
+                            self.totalRooms.push({id:item.id, total:'5', available:'none'});
+                            console.log(item.room_type_rooms);
                         });
                     });
             }

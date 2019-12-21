@@ -57,7 +57,7 @@
                                 ></vue-pure-lightbox>
                                 <div class="room-details">
                                     <span>name: {{room.name}}</span><br />
-                                    <span>price: {{ ((room.room_type.room_type_refer.base_currency!=null)? room.room_type.room_type_refer.base_currency.value : room.room_type.room_type_refer.global_base_currency.value ) }} {{room.price}}</span><br />
+                                    <span>price: {{ ((room.room_type.room_type_hotel.base_currency!=null)? room.room_type.room_type_hotel.base_currency.value : room.room_type.room_type_hotel.global_base_currency.value ) }} {{room.price}}</span><br />
                                     <span>type: {{room.room_type.name}}</span><br />
                                 </div>
                             </div>
@@ -105,13 +105,13 @@
         },
         methods: {
             book(room) {
-                let base_currency = ((room.room_type.room_type_refer.base_currency!=null)? room.room_type.room_type_refer.base_currency.value : room.room_type.room_type_refer.global_base_currency.value );
+                let base_currency = ((room.room_type.room_type_hotel.base_currency!=null)? room.room_type.room_type_hotel.base_currency.value : room.room_type.room_type_hotel.global_base_currency.value );
                 let amenities = '';
                 let feature = JSON.parse(room.room_feature.value); 
                  feature.forEach(function(item, index){
                       amenities += '<li><i class="fas fa-check"></i> '+item['value']+'</li>';
                  });
-                let details = '<strong>Date: <span>'+moment(this.defaultStartDate).format('MMMM Do YYYY')+' - '+moment(this.defaultEndDate).format('MMMM Do YYYY')+'</span><br />CheckIn Time: <span>2:00pm</span> | CheckOut Time: <span>12:00pm</span><br />Night Stay: <span>'+this.night+'</span><br />Price: <span>'+base_currency+' '+room.price+'</span><br />Total price: <span>'+base_currency+' '+(room.price*this.night)+'</span><br />Room Id: <span>'+room.id+'</span><br />Room Name: <span>'+room.name+'</span><br />Room Type: <span>'+room.room_type.name+'</span><br />Hotel: <span>'+room.room_type.room_type_refer.name+'</span><br />Amenities: </strong>';
+                let details = '<strong>Date: <span>'+moment(this.defaultStartDate).format('MMMM Do YYYY')+' - '+moment(this.defaultEndDate).format('MMMM Do YYYY')+'</span><br />CheckIn Time: <span>2:00pm</span> | CheckOut Time: <span>12:00pm</span><br />Night Stay: <span>'+this.night+'</span><br />Price: <span>'+base_currency+' '+room.price+'</span><br />Total price: <span>'+base_currency+' '+(room.price*this.night)+'</span><br />Room Id: <span>'+room.id+'</span><br />Room Name: <span>'+room.name+'</span><br />Room Type: <span>'+room.room_type.name+'</span><br />Hotel: <span>'+room.room_type.room_type_hotel.name+'</span><br />Amenities: </strong>';
                 paynow.fire({
                   title: '<strong>Details</strong>',
                   type: 'info',

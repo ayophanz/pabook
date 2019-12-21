@@ -147,10 +147,10 @@ class BookController extends Controller
     */
     private function userToNotify($room_id) {
       $id = $room_id;
-      $room = Room::select('type_id')->where('id', $id)->first();
-      $roomType = RoomType::select('hotel_id')->where('id', $room->type_id)->first();
-      $hotel = Hotel::select('owner_id')->where('id', $roomType->hotel_id)->first();
-      $owner = User::select('id')->where('id', $hotel->owner_id)->first();
+      $room = Room::select('room_type_id')->where('id', $id)->first();
+      $roomType = RoomType::select('hotel_id')->where('id', $room->room_type_id)->first();
+      $hotel = Hotel::select('user_id')->where('id', $roomType->hotel_id)->first();
+      $owner = User::select('id')->where('id', $hotel->user_id)->first();
       $recep = UserMeta::select('value')->where('meta_key', 'receptionist_id')->where('user_id', $owner->id)->get()->toArray();
       $permission = UserMeta::select('value', 'user_id')->where('meta_key', 'assign_to_hotel')->whereIn('user_id', $recep)->get();
 
@@ -179,7 +179,7 @@ class BookController extends Controller
       if($userType=='owner')
         $owner = auth('api')->user()->id;
       
-      $hotel = Hotel::select('id')->where('owner_id', $owner)->get()->toArray();
+      $hotel = Hotel::select('id')->where('user_id', $owner)->get()->toArray();
       $types = RoomType::select('id')->whereIn('hotel_id', $hotel)->get()->toArray();
       $room = Room::select('id')->whereIn('id', $types)->get()->toArray();
       return $room;

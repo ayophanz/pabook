@@ -8,13 +8,16 @@ class RoomType extends Model
 {
     protected $fillable = [
                 'hotel_id',
-    			'name'
+                'name'
     			];
+     
+    protected $with = ['roomTypeHotel', 'roomTypeRooms'];//rermove this if unnecessary    
 
-
-    protected $with = ['roomTypeRefer'];           
-
-    public function roomTypeRefer() {
+    public function roomTypeHotel() {
         return $this->belongsTo(Hotel::class, 'hotel_id', 'id'); 
+    }
+
+    public function roomTypeRooms() {
+        return $this->hasMany(Room::class, 'id', 'room_type_id');
     }
 }

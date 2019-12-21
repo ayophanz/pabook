@@ -24,19 +24,19 @@ class HotelController extends Controller
             if(\Gate::allows('superAdmin'))
     		    return Hotel::orderBy('created_at', 'desc')->get();
             if(\Gate::allows('hotelOwner'))
-                return Hotel::where('owner_id',  $this->ownerId())->orderBy('created_at', 'desc')->get(); 
+                return Hotel::where('user_id',  $this->ownerId())->orderBy('created_at', 'desc')->get(); 
         }else{
             if($id=='0')
                 $id = $this->ownerId();
             $exist_recep = UserMeta::select('value')->where('meta_key', 'assign_to_hotel')->where('user_id', $recep)->get();
-            $exist_recep = json_decode(json_encode($exist_recep),true);
+            $exist_recep = json_decode(json_encode($exist_recep),true); 
             $toarr = array();
             if($exist_recep)
                 $toarr = explode(',', substr($exist_recep[0]['value'], 1, -1));
             if($capa=='1') 
-                return Hotel::where('status', 'verified')->whereIn('id', $toarr)->where('owner_id', $id)->orderBy('created_at', 'desc')->get();
+                return Hotel::where('status', 'verified')->whereIn('id', $toarr)->where('user_id', $id)->orderBy('created_at', 'desc')->get();
             else
-                return Hotel::where('status', 'verified')->whereNotIn('id', $toarr)->where('owner_id', $id)->orderBy('created_at', 'desc')->get();
+                return Hotel::where('status', 'verified')->whereNotIn('id', $toarr)->where('user_id', $id)->orderBy('created_at', 'desc')->get();
         } 	
     }
 
@@ -76,16 +76,16 @@ class HotelController extends Controller
                     'check_in'       => $request['check_in'],
                     'check_out'      => $request['check_out'],
                     'website'        => $request['website'],
-                    'hotel_rooms_no' => $request['rooms_no']
-                    ];
+                    'hotel_rooms_no' => json_encode($request['rooms_no'])
+                    ];            
 
         if(\Gate::allows('superAdmin')) {
             $data['owner'] = 'required|numeric|min:1';
-            $dataCreate['owner_id'] = $request['owner'];
+            $dataCreate['user_id'] = (int)$request['owner'];
         }
 
         if(\Gate::allows('hotelOwner'))
-            $dataCreate['owner_id'] =  $this->ownerId();
+            $dataCreate['user_id'] =  (int)$this->ownerId();
 
         $this->validate($request, $data, $customMessages);
 
@@ -116,7 +116,7 @@ class HotelController extends Controller
     	if(\Gate::allows('superAdmin'))
             return Hotel::with('globalBaseCurrency', 'baseCurrency')->where('id', $id)->first();
         if(\Gate::allows('hotelOwner'))
-            return Hotel::with('globalBaseCurrency', 'baseCurrency')->where('id', $id)->where('owner_id', $this->ownerId())->first();
+            return Hotel::with('globalBaseCurrency', 'baseCurrency')->where('id', $id)->where('user_id', $this->ownerId())->first();
     }
 
     public function update(Request $request, $id) {
@@ -156,7 +156,7 @@ class HotelController extends Controller
 
         if(\Gate::allows('superAdmin')) {
             $data['owner'] = 'required|numeric|min:1';
-            $dataUpdate['owner_id'] = $request['owner'];
+            $dataUpdate['user_id'] = $request['owner'];
         }
 
         $this->validate($request,$data);
@@ -175,7 +175,7 @@ class HotelController extends Controller
         if(\Gate::allows('superAdmin'))
             return Hotel::where('id', $id)->update($dataUpdate);
         if(\Gate::allows('hotelOwner'))
-            return Hotel::where('id', $id)->where('owner_id', $this->ownerId())->update($dataUpdate);
+            return Hotel::where('id', $id)->where('user_id', $this->ownerId())->update($dataUpdate);
     }
 
     public function approveHotel(Request $request) {
@@ -188,7 +188,7 @@ class HotelController extends Controller
         
         $hotel = Hotel::where('id', $id)->first();
         if(\Gate::allows('hotelOwner'))
-            $hotel = Hotel::where('id', $id)->where('owner_id', $this->ownerId())->first();
+            $hotel = Hotel::where('id', $id)->where('user_id', $this->ownerId())->first();
 
         if($hotel) {
             unlink(storage_path('app/public/images/upload/hotelImages/'.$hotel->image));

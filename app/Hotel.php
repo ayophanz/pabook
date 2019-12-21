@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hotel extends Model
 {
+
     protected $fillable = [
-                'owner_id',
+                'user_id',
     			'name', 
     			'address', 
     			'city',
@@ -26,10 +27,10 @@ class Hotel extends Model
     			];
 
 
-    protected $with = ['baseCurrency', 'globalBaseCurrency'];           
+    protected $with = ['baseCurrency', 'globalBaseCurrency'];//rermove this if unnecessary                  
 
     public function globalBaseCurrency() {
-        return $this->belongsTo(Option::class, 'owner_id', 'meta_value')->where('meta_key', 'global_base_currency');
+        return $this->belongsTo(Option::class, 'user_id', 'meta_value')->where('meta_key', 'global_base_currency');
     }
 
     public function baseCurrency(){

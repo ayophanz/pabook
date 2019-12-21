@@ -221,7 +221,7 @@ export default {
                                     remain = ' | ' + diffDays + ' days left to Check In';
                                 }
 
-                                let base_currency = ((item.room.room_type.room_type_refer.base_currency != null) ? item.room.room_type.room_type_refer.base_currency.value : item.room.room_type.room_type_refer.global_base_currency.value);
+                                let base_currency = ((item.room.room_type.room_type_hotel.base_currency != null) ? item.room.room_type.room_type_hotel.base_currency.value : item.room.room_type.room_type_hotel.global_base_currency.value);
 
                                 self.dataEvent.push({
                                     title: item.name + remain,
@@ -244,7 +244,7 @@ export default {
                                         status: item.status,
                                         name: item.name,
                                         price: item.room.price,
-                                        hotel: item.room.room_type.room_type_refer.name
+                                        hotel: item.room.room_type.room_type_hotel.name
                                     }
                                 });
 

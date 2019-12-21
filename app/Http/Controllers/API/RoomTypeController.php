@@ -23,17 +23,17 @@ class RoomTypeController extends Controller
         $hotelId = explode(',', $id)[0];
         $roomId  = explode(',', $id)[1];
         if($roomId=='0') 
-          return RoomType::where('hotel_id', $hotelId)->orderBy('created_at', 'desc')->get();
+          return RoomType::where('hotel_id', $hotelId)->with('roomTypeRooms')->orderBy('created_at', 'desc')->get();
         else
-          return RoomType::where('hotel_id', $hotelId)->whereNotIn('id', $this->roomTypeIds($hotelId, $roomId))->with('roomTypeRefer')->orderBy('created_at', 'desc')->get();
+          return RoomType::where('hotel_id', $hotelId)->whereNotIn('id', $this->roomTypeIds($hotelId, $roomId))->with('roomTypeHotel')->orderBy('created_at', 'desc')->get();
         
 
       }else{
         if(\Gate::allows('hotelOwner'))
-           return RoomType::whereIn('hotel_id', $this->hotel_ids())->with('roomTypeRefer')->orderBy('created_at', 'desc')->get(); 
+           return RoomType::whereIn('hotel_id', $this->hotel_ids())->with('roomTypeHotel')->orderBy('created_at', 'desc')->get(); 
         
         if(\Gate::allows('superAdmin'))
-           return RoomType::with('roomTypeRefer')->orderBy('created_at', 'desc')->get();  
+           return RoomType::with('roomTypeHotel')->orderBy('created_at', 'desc')->get();  
      }
    }
 
@@ -115,7 +115,7 @@ class RoomTypeController extends Controller
     *  Get owner hotels ID
     */
    private function hotel_ids() {
-      return Hotel::where('owner_id', auth('api')->user()->id)->pluck('id')->toArray();
+      return Hotel::where('user_id', auth('api')->user()->id)->pluck('id')->toArray();
    }
 
    /**
@@ -124,12 +124,12 @@ class RoomTypeController extends Controller
    private function roomTypeIds($hotelId, $roomId) {
       $roomType = RoomType::select('id')->where('hotel_id', $hotelId)->get()->toArray();
       foreach ($roomType as $key => $value) {
-        unset($roomType[$key]['room_type_refer']);
+        unset($roomType[$key]['room_type_hotel']);
       }
       
-      $rooms = Room::select('type_id')->whereIn('type_id', $roomType)->get()->toArray();
+      $rooms = Room::select('room_type_id')->whereIn('room_type_id', $roomType)->get()->toArray();
       if($roomId!=null) 
-        $rooms = Room::select('type_id')->where('id', '!=', $roomId)->whereIn('type_id', $roomType)->get()->toArray();
+        $rooms = Room::select('room_type_id')->where('id', '!=', $roomId)->whereIn('room_type_id', $roomType)->get()->toArray();
 
       foreach ($rooms as $key => $value) {
         unset($rooms[$key]['room_type']);

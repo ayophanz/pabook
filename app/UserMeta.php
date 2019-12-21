@@ -13,7 +13,7 @@ class UserMeta extends Model
     			];
 
 
-    // protected $with = ['userRefer'];           
+    // protected $with = ['userRefer'];//rermove this if unnecessary                  
 
     // public function userRefer() {
     //     return $this->belongsTo(User::class, 'user_id', 'id'); 

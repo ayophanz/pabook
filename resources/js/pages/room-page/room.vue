@@ -25,16 +25,12 @@
                     <div class="card-body">
                       <div class="form-group">
                         <label for="hotel">Hotel <span class="required-asterisk">*</span></label>
-                        <select v-model="form.hotel" @change="ifChange" class="form-control" :class="{ 'is-invalid': form.errors.has('hotel') }" id="hotel">
-                          <option v-for="item in hotels" :selected="item.id === form.hotel" :value="item.id">{{item.name}}</option>
-                        </select>
+                        <Select2 id="hotel" v-model="form.hotel" :options="hotels" :settings="{ placeholder: 'Please select hotel', containerCssClass:'form-control' }" @change="ifChange" />
                         <has-error :form="form" field="hotel"></has-error>
                       </div>
                       <div class="form-group">
                         <label for="type">Type <span class="required-asterisk">*</span></label>
-                        <select v-if="types!=''" @change="ifChangeType($event)" v-model="form.type" class="form-control" :class="{ 'is-invalid': form.errors.has('type') }" id="type">
-                          <option v-for="item in types" :selected="item.id === form.type" :value="item.id">{{item.name}}</option>
-                        </select>
+                        <Select2 v-if="types!=''" id="type" v-model="form.type" :options="types" :settings="{ placeholder: 'Please select room type', containerCssClass:'form-control' }" @change="ifChangeType($event)" />
                         <has-error :form="form" field="type"></has-error>
                         <p v-if="types==''">This hotel doesn't have any room type available, <router-link to="/add-room-type">click here to add.</router-link></p>
                       </div>    
@@ -54,7 +50,7 @@
                         <div class="col-auto">
                             <div class="form-group">
                               <label for="max_child">Max Child <span class="required-asterisk">*</span></label>
-                              <number-input v-model="form.max_child" :class="{ 'is-invalid': form.errors.has('max_child') }" size="small" :value="1" :min="1" :inputtable="false" inline center controls id="max_child"></number-input>
+                              <number-input v-model="form.max_child" :class="{ 'is-invalid': form.errors.has('max_child') }" size="small" :value="0" :min="0" :inputtable="false" inline center controls id="max_child"></number-input>
                               <has-error :form="form" field="max_child"></has-error>
                             </div>
                         </div>
@@ -162,6 +158,7 @@
     import 'vue-loading-overlay/dist/vue-loading.css'
     import Multiselect from 'vue-multiselect'
     import VueNumberInput from '@chenfengyuan/vue-number-input';
+    import Select2 from 'v-select2-component';
     export default {
         watch: {
             '$route' (to, from) {
@@ -176,6 +173,7 @@
             RepeaterInputComponent,
             ImageUploader,
             Multiselect,
+            Select2,
             VueNumberInput,
             Loading
         },
@@ -210,7 +208,7 @@
                     gallery: [],
                     rooms_no: [],
                     max_child: 1,
-                    max_adult: 1
+                    max_adult: 0
                 })
             }
         },
@@ -276,7 +274,7 @@
                         function (response) {
                           response.data.forEach(item => {
                             if(item.status=='verified')
-                              self.hotels.push(item);
+                              self.hotels.push({id:item.id, text:item.name});
                           });
                         }
                     );
@@ -289,7 +287,9 @@
                     axios.get('/api/room-types/'+self.form.hotel+','+self.roomId)
                     .then(
                         function (response) {
-                            self.types = response.data;
+                             response.data.forEach(function(item, key){
+                               self.types.push({id:item.id, text:item.name});
+                             });
                             self.isLoading = false;
                         }
                     );
@@ -305,7 +305,7 @@
                     function (response) {
                         response.data.forEach(function(item, key){
                           if(item.id==e.target.value) {
-                            self.populateRoomsNo(item.room_type_refer.hotel_rooms_no, self, self.roomId);
+                            self.populateRoomsNo(item.room_type_hotel.hotel_rooms_no, self, self.roomId);
                             return false;
                           }
                         });
@@ -379,16 +379,16 @@
                     .then(
                       function (response) {
                         self.form.status = response.data.status;
-                        self.form.type = response.data.type_id;
+                        self.form.type = response.data.room_type_id;
                         self.form.name = response.data.name;
                         self.form.description = response.data.description;
                         self.form.price = response.data.price;
-                        self.form.max_adult = response.data.max_adult;
-                        self.form.max_child = response.data.max_child;
-                        if(response.data.room_type.room_type_refer.base_currency!=null) {
-                          self.base_currency = response.data.room_type.room_type_refer.base_currency.value;
+                        self.form.max_adult = parseInt(response.data.max_adult);
+                        self.form.max_child = parseInt(response.data.max_child);
+                        if(response.data.room_type.room_type_hotel.base_currency!=null) {
+                          self.base_currency = response.data.room_type.room_type_hotel.base_currency.value;
                         }else{
-                          self.base_currency = response.data.room_type.room_type_refer.global_base_currency.value;
+                          self.base_currency = response.data.room_type.room_type_hotel.global_base_currency.value;
                         }
                         self.$refs.repeaterOptionalUpdate.currency = self.base_currency;
                         //self.form.no_of_room = response.data.total_room;
@@ -404,7 +404,7 @@
                           self.form.featureOptionalData = JSON.parse(response.data.room_feature_optional.value);
                           self.$refs.repeaterOptionalUpdate.fields = self.form.featureOptionalData;
                         }catch(err) {}
-                        self.populateRoomsNo(response.data.room_type.room_type_refer.hotel_rooms_no, self, self.roomId);
+                        self.populateRoomsNo(response.data.room_type.room_type_hotel.hotel_rooms_no, self, self.roomId);
                         try{
                           let images = JSON.parse(response.data.room_gallery.value);
                           images.forEach(item => {
