@@ -25,9 +25,7 @@
                 <div class="card-body">
                   <div class="form-group">
                     <label for="hotel">Assign To <span class="required-asterisk">*</span></label>
-                    <select :disabled="typeId!=null" v-model="form.hotel" class="form-control" :class="{ 'is-invalid': form.errors.has('hotel') }" id="hotel">
-                      <option v-for="item in hotels" :selected="item.id === form.hotel" :value="item.id">{{item.name}}</option>
-                    </select>
+                    <Select2 :disabled="typeId!=null" id="hotel" v-model="form.hotel" :options="hotels" :settings="{ placeholder: 'Please select hotel', containerCssClass:'form-control' }" />
                     <has-error :form="form" field="role"></has-error>
                   </div>
                   <div class="form-group">
@@ -49,6 +47,7 @@
 <script>
     import Loading from 'vue-loading-overlay'
     import 'vue-loading-overlay/dist/vue-loading.css'
+    import Select2 from 'v-select2-component';
     export default {
       watch: {
             '$route' (to, from) {
@@ -60,6 +59,7 @@
             }
         },
         components: {
+            Select2,
             Loading
         },
         data() {
@@ -119,7 +119,7 @@
                         function (response) {
                             response.data.forEach(item => {
                             if(item.status=='verified')
-                              self.hotels.push(item);
+                              self.hotels.push({id:item.id, text:item.name});
                           });
                         }
                     );
