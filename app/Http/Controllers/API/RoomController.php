@@ -64,8 +64,8 @@ class RoomController extends Controller
                     'description'  => $request['description'],
                     'price'        => $request['price'],
                     'total_room'   => $request['no_of_room'],
-                    'max_adult'    => $request['max_adult'],
-                    'max_child'    => $request['max_child']
+                    'max_adult'    => (int)$request['max_adult'],
+                    'max_child'    => (int)$request['max_child']
                     ];                     
 
       $this->validate($request, $data, $customMessages);
@@ -144,8 +144,8 @@ class RoomController extends Controller
                     'description'  => $request['description'],
                     'price'        => $request['price'],
                     'total_room'   => $request['no_of_room'],
-                    'max_adult'    => $request['max_adult'],
-                    'max_child'    => $request['max_child']
+                    'max_adult'    => (int)$request['max_adult'],
+                    'max_child'    => (int)$request['max_child']
                     ];
 
       if($request['changeFeature']) 

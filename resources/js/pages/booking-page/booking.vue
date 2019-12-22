@@ -190,9 +190,10 @@ export default {
                     function (response) {
                         response.data.forEach(item => {
                             self.roomTypes.push({id:item.id, text:item.name});
-                            self.totalRooms.push({id:item.id, total:'5', available:'none'});
+                            self.totalRooms.push({id:item.id, total:item.room_type_rooms.total_room, available:'none'});
                             console.log(item.room_type_rooms);
                         });
+                        console.log(self.totalRooms);
                     });
             }
         },

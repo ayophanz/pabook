@@ -26,8 +26,6 @@ class RoomTypeController extends Controller
           return RoomType::where('hotel_id', $hotelId)->with('roomTypeRooms')->orderBy('created_at', 'desc')->get();
         else
           return RoomType::where('hotel_id', $hotelId)->whereNotIn('id', $this->roomTypeIds($hotelId, $roomId))->with('roomTypeHotel')->orderBy('created_at', 'desc')->get();
-        
-
       }else{
         if(\Gate::allows('hotelOwner'))
            return RoomType::whereIn('hotel_id', $this->hotel_ids())->with('roomTypeHotel')->orderBy('created_at', 'desc')->get(); 
