@@ -184,16 +184,15 @@ export default {
         },
         isHotelChange(){
             if(this.$gate.superAdminOrhotelOwner()) {
-                this.roomTypes = [];
                 let self = this;
                 axios.get('/api/room-types/'+this.hotel+',0').then(
                     function (response) {
-                        response.data.forEach(item => {
-                            self.roomTypes.push({id:item.id, text:item.name});
-                            self.totalRooms.push({id:item.id, total:item.room_type_rooms.total_room, available:'none'});
-                            console.log(item.room_type_rooms);
+                        response.data.forEach(function(item, key) {
+                            if(item.room_type_rooms!='') {
+                                self.roomTypes.push({id:item.id, text:item.name});
+                                self.totalRooms.push({id:item.id, total:item.room_type_rooms[0].total_room, available:'none'});
+                            }
                         });
-                        console.log(self.totalRooms);
                     });
             }
         },
