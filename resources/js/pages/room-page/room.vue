@@ -31,7 +31,7 @@
                       <div class="form-group">
                         <label for="type">Type <span class="required-asterisk">*</span></label>
                         <Select2 v-if="types!=''" id="type" v-model="form.type" :options="types" :settings="{ placeholder: 'Please select room type', containerCssClass:'form-control' }" @change="ifChangeType($event)" />
-                        <has-error :form="form" field="type"></has-error>
+                        <has-error v-if="types!=''" :form="form" field="type"></has-error>
                         <p v-if="types==''">This hotel doesn't have any room type available, <router-link to="/add-room-type">click here to add.</router-link></p>
                       </div>    
                       <div class="form-group">
