@@ -184,6 +184,8 @@ export default {
         },
         isHotelChange(){
             if(this.$gate.superAdminOrhotelOwner()) {
+                this.totalRooms = [];
+                this.roomTypes = [];
                 let self = this;
                 axios.get('/api/room-types/'+this.hotel+',0').then(
                     function (response) {
