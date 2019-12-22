@@ -207,8 +207,8 @@
                     featureOptionalData: [{value:'', price:0}],
                     gallery: [],
                     rooms_no: [],
-                    max_child: 1,
-                    max_adult: 0
+                    max_child: 0,
+                    max_adult: 1
                 })
             }
         },
@@ -290,6 +290,7 @@
                              response.data.forEach(function(item, key){
                                self.types.push({id:item.id, text:item.name});
                              });
+                            self.base_currency = response.data[0].room_type_hotel.base_currency.value;
                             self.isLoading = false;
                         }
                     );
