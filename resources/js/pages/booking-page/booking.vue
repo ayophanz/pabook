@@ -88,7 +88,7 @@
                                          </div>
                                     </div>
                                 </div>
-                                <div class="form-group text-center mt-3">
+                                <div class="form-group text-center mt-4">
                                     <button type="submit" class="btn btn-outline-primary btn-flat"><i class="fas fa-concierge-bell"></i> Book Room</button>
                                 </div>
                             </div>
@@ -144,6 +144,8 @@ export default {
             manyChilds:[],
             manyChild: '',
             totalChilds:[],
+            fixed_amenities: [],
+            optional_amenities: [],
             viewModeOptions: [
                 {
                 title: 'Monthly',
