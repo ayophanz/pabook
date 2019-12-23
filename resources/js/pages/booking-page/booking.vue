@@ -217,22 +217,18 @@ export default {
             this.manyRooms = [];
             this.roomTypes = [];
         },
+        generatList(param1, param2) {
+            param1 = [];
+            if (param2.length > 0) {
+                var max = param2.find(e => parseInt(e.id) === parseInt(this.roomType)).total;
+                for(var i=1;i<=max;i++) param1.push({id:i,text:i});
+            }
+            return param1;
+        },
         isRoomType() {
-            this.manyRooms = [];
-            if (this.totalRooms.length > 0) {
-                var max = this.totalRooms.find(e => parseInt(e.id) === parseInt(this.roomType)).total;
-                for(var i=1;i<=max;i++) this.manyRooms.push({id:i,text:i});
-            }
-            this.manyAdults = [];
-            if(this.totalAdults.length > 0) {
-                var max = this.totalAdults.find(e => parseInt(e.id) === parseInt(this.roomType)).total;
-                for(var i=1;i<=max;i++) this.manyAdults.push({id:i,text:i});
-            }
-            this.manyChilds = [];
-            if(this.totalChilds.length > 0) {
-                var max = this.totalChilds.find(e => parseInt(e.id) === parseInt(this.roomType)).total;
-                for(var i=1;i<=max;i++) this.manyChilds.push({id:i,text:i});
-            }
+            this.manyRooms = this.generatList(this.manyRooms, this.totalRooms);
+            this.manyAdults = this.generatList(this.manyAdults, this.totalAdults);
+            this.manyChilds = this.generatList(this.manyChilds, this.totalChilds);
         },
         isHotelChange(){
             if(this.$gate.superAdminOrhotelOwner()) {
