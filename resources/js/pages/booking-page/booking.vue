@@ -93,19 +93,12 @@ export default {
             manyRooms: [],
             manyRoom:'',
             totalRooms: [],
-            manyAdults:[
-                {id:'1',text:'1'},{id:'2',text:'2'},{id:'3',text:'3'},
-                {id:'4',text:'4'},{id:'5',text:'5'},{id:'6',text:'6'},
-                {id:'7',text:'7'},{id:'8',text:'8'},{id:'9',text:'9'}
-            ],
+            manyAdults:[],
             manyAdult: '',
-            manyChilds:[
-                {id:'0', text:'0'},{id:'1',text:'1'},{id:'2',text:'2'},
-                {id:'3',text:'3'},{id:'4',text:'4'},{id:'5',text:'5'},
-                {id:'6',text:'6'},{id:'7',text:'7'},{id:'8',text:'8'},
-                {id:'9',text:'9'}
-            ],
+            totalAdults:[],
+            manyChilds:[],
             manyChild: '',
+            totalChilds:[],
             viewModeOptions: [
                 {
                 title: 'Monthly',
@@ -173,27 +166,41 @@ export default {
             this.loadHotels();
             //this.$refs.mycalendar.usageStatistics = false;
         },
+        resetList(){
+            this.manyAdults = [];
+            this.manyChilds = [];
+            this.manyRooms = [];
+            this.roomTypes = [];
+        },
         isRoomType() {
             this.manyRooms = [];
             if (this.totalRooms.length > 0) {
                 var max = this.totalRooms.find(e => parseInt(e.id) === parseInt(this.roomType)).total;
-                for(var i=1;i<=max;i++){
-                    this.manyRooms.push({id:i,text:i});
-                }
+                for(var i=1;i<=max;i++) this.manyRooms.push({id:i,text:i});
+            }
+            this.manyAdults = [];
+            if(this.totalAdults.length > 0) {
+                var max = this.totalAdults.find(e => parseInt(e.id) === parseInt(this.roomType)).total;
+                for(var i=1;i<=max;i++) this.manyAdults.push({id:i,text:i});
+            }
+            this.manyChilds = [];
+            if(this.totalChilds.length > 0) {
+                var max = this.totalChilds.find(e => parseInt(e.id) === parseInt(this.roomType)).total;
+                for(var i=1;i<=max;i++) this.manyChilds.push({id:i,text:i});
             }
         },
         isHotelChange(){
             if(this.$gate.superAdminOrhotelOwner()) {
-                this.totalRooms = [];
-                this.roomTypes = [];
+                this.resetList();
                 let self = this;
                 axios.get('/api/room-types/'+this.hotel+',0').then(
                     function (response) {
                         response.data.forEach(function(item, key) {
-                             console.log(item);
                             if(item.room_type_rooms!='') {
                                 self.roomTypes.push({id:item.id, text:item.name});
                                 self.totalRooms.push({id:item.id, total:item.room_type_rooms[0].total_room, available:'none'});
+                                self.totalAdults.push({id:item.id, total:item.room_type_rooms[0].max_adult});
+                                self.totalChilds.push({id:item.id, total:item.room_type_rooms[0].max_child});
                             }
                         });
                     });

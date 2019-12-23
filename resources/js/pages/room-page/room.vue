@@ -283,6 +283,7 @@
             ifChange() {
                 if(this.$gate.superAdminOrhotelOwner()) {
                     this.isLoading = true;
+                    this.types = [];
                     let self = this;
                     axios.get('/api/room-types/'+self.form.hotel+','+self.roomId)
                     .then(
