@@ -52,7 +52,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <h5>Total Rooms</h5>
-                                                    <span>10</span>
+                                                    <span>{{manyRooms.length}}</span>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <h5>Available Rooms</h5>
