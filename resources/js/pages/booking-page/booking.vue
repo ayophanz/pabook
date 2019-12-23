@@ -47,7 +47,7 @@
                                     <Select2 id="manyChild" v-model="manyChild" :options="(manyAdult!='' ? manyChilds:[])" :settings="{ placeholder: 'Please select how many child(s)', containerCssClass:'form-control' }" />
                                 </div>
                                 <div class="row justify-content-center">
-                                    <div class="col-md-5">
+                                    <div class="col-md-6">
                                         <div class="container book-rooms-quantity">
                                             <div class="row">
                                                 <div class="col-md-12">
@@ -65,7 +65,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-7">
+                                    <div class="col-md-6">
                                          <div class="container book-rooms-quantity">
                                              <div class="row">
                                                  <div class="col-md-12">
