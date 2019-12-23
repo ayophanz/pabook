@@ -47,7 +47,7 @@
                                     <Select2 id="manyChild" v-model="manyChild" :options="(manyAdult!='' ? manyChilds:[])" :settings="{ placeholder: 'Please select how many child(s)', containerCssClass:'form-control' }" />
                                 </div>
                                 <div class="row justify-content-center">
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         <div class="container book-rooms-quantity">
                                             <div class="row">
                                                 <div class="col-md-12">
@@ -65,7 +65,28 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6"></div>
+                                    <div class="col-md-7">
+                                         <div class="container book-rooms-quantity">
+                                             <div class="row">
+                                                 <div class="col-md-12">
+                                                     <h5>Fixed amenities</h5>
+                                                     <ul>
+                                                         <li>test1</li>
+                                                         <li>test2</li>
+                                                         <li>test3</li>
+                                                     </ul>
+                                                 </div>
+                                                 <div class="col-md-12">
+                                                     <h5>Optional amenities</h5>
+                                                     <ul>
+                                                         <li>test1</li>
+                                                         <li>test2</li>
+                                                         <li>test3</li>
+                                                     </ul>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                    </div>
                                 </div>
                                 <div class="form-group text-center mt-3">
                                     <button type="submit" class="btn btn-outline-primary btn-flat"><i class="fas fa-concierge-bell"></i> Book Room</button>
@@ -192,7 +213,7 @@ export default {
         },
         resetList(){
             this.manyAdults = [];
-            this.manyChilds = [];
+            this.manyChilds = [{id:0, text:'0'}];
             this.manyRooms = [];
             this.roomTypes = [];
         },
@@ -249,7 +270,7 @@ export default {
             }
         },
         checkOutDate(e) {
-            console.log(e);
+
         },
         onClickNavi(event) {
             if (event.target.tagName === 'BUTTON') {

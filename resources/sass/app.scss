@@ -504,6 +504,9 @@ button:focus, .fc-button-primary:focus {
 .book-rooms-quantity {
     border: 1px solid #e5e5e5;
     padding: 20px 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 15.8rem;
 }
 
 .book-rooms-quantity h5 {
@@ -516,3 +519,9 @@ button:focus, .fc-button-primary:focus {
     font-size: 18px;
     font-family: cursive;
 }
+
+.book-rooms-quantity ul {
+    list-style: circle;
+    padding: 0px 0px 0px 15px;
+}
+
