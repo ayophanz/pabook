@@ -16,7 +16,7 @@ class Room extends Model
                 'status'
     			];
 
-    //protected $with = ['roomType', 'roomFeature', 'roomFeatureOptional', 'roomGallery', 'roomNumbering'];//rermove this if unnecessary      
+    protected $with = ['roomType', 'roomFeature', 'roomFeatureOptional', 'roomGallery', 'roomNumbering'];//rermove this if unnecessary      
                 
 
     public function roomType() {

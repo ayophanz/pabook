@@ -190,6 +190,7 @@ export default {
                 axios.get('/api/room-types/'+this.hotel+',0').then(
                     function (response) {
                         response.data.forEach(function(item, key) {
+                             console.log(item);
                             if(item.room_type_rooms!='') {
                                 self.roomTypes.push({id:item.id, text:item.name});
                                 self.totalRooms.push({id:item.id, total:item.room_type_rooms[0].total_room, available:'none'});
@@ -204,8 +205,8 @@ export default {
                 axios.get('/api/hotels').then(
                     function (response) {
                         response.data.forEach(item => {
-                        if(item.status=='verified')
-                            self.hotels.push({id:item.id, text:item.name});
+                            if(item.status=='verified')
+                                self.hotels.push({id:item.id, text:item.name});
                         });
                     });
             }
