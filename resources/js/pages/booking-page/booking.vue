@@ -229,6 +229,7 @@ export default {
             this.manyRooms = this.generatList(this.manyRooms, this.totalRooms);
             this.manyAdults = this.generatList(this.manyAdults, this.totalAdults);
             this.manyChilds = this.generatList(this.manyChilds, this.totalChilds);
+            this.manyChilds.unshift({id:0, text:'0'});
         },
         isHotelChange(){
             if(this.$gate.superAdminOrhotelOwner()) {
