@@ -46,6 +46,30 @@
                                     <label for="manyChild">No. of child</label>
                                     <Select2 id="manyChild" v-model="manyChild" :options="(manyAdult!='' ? manyChilds:[])" :settings="{ placeholder: 'Please select how many child(s)', containerCssClass:'form-control' }" />
                                 </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-md-6">
+                                        <div class="container book-rooms-quantity">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <h5>Total Rooms</h5>
+                                                    <span>10</span>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <h5>Available Rooms</h5>
+                                                    <span>6</span>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <h5>Booked Rooms</h5>
+                                                    <span>2</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6"></div>
+                                </div>
+                                <div class="form-group text-center mt-3">
+                                    <button type="submit" class="btn btn-outline-primary btn-flat"><i class="fas fa-concierge-bell"></i> Book Room</button>
+                                </div>
                             </div>
                             <div class="col-md-9">
                                 <div id="calendar-menu">

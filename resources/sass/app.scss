@@ -500,3 +500,19 @@ button:focus, .fc-button-primary:focus {
     box-shadow: 2px 2px 4px 0px #969696 !important;
     background: #28a745 !important;
 }
+
+.book-rooms-quantity {
+    border: 1px solid #e5e5e5;
+    padding: 20px 10px;
+}
+
+.book-rooms-quantity h5 {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 10px 0px;
+}
+
+.book-rooms-quantity span {
+    font-size: 18px;
+    font-family: cursive;
+}
