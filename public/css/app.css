@@ -17844,3 +17844,7 @@ button:focus,
   padding: 0px 0px 0px 15px;
 }
 
+.tui-full-calendar-month-week-item .tui-full-calendar-weekday-schedule {
+  border-radius: 0px !important;
+}
+

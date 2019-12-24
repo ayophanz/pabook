@@ -107,6 +107,8 @@
                                 <calendar ref="mycalendar" style="height: 800px;"
                                     :view="selectedView"
                                     :theme="theme"
+                                    :calendars="calendarList"
+                                    :schedules="scheduleList"
                                 />
                             </div>
                         </div>
@@ -146,6 +148,40 @@ export default {
             totalChilds:[],
             fixed_amenities: [],
             optional_amenities: [],
+            calendarList: [
+                {
+                    id: '0',
+                    name: 'reserved'
+                },
+                {
+                    id: '1',
+                    name: 'occupied',
+                    color: 'white',
+                    bgColor: '#3490dc',
+                    borderColor: '#3490dc',
+                    dragBgColor: '#9e5fff'
+                }
+            ],
+            scheduleList: [
+                {
+                    id: '1',
+                    calendarId: '1',
+                    title: 'my schedule',
+                    category: 'time',
+                    dueDateClass: '',
+                    start: '2019-12-18T22:30:00+09:00',
+                    end: '2019-12-19T02:30:00+09:00'
+                },
+                {
+                    id: '2',
+                    calendarId: '1',
+                    title: 'second schedule',
+                    category: 'time',
+                    dueDateClass: '',
+                    start: '2019-12-18T17:30:00+09:00',
+                    end: '2019-12-19T17:31:00+09:00'
+                }
+            ],
             viewModeOptions: [
                 {
                 title: 'Monthly',
