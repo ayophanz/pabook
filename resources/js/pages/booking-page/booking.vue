@@ -31,12 +31,12 @@
                                     <Select2 id="hotel" v-model="hotel" :options="hotels" :settings="{ placeholder: 'Please select hotel', containerCssClass:'form-control' }" @change="isHotelChange" />
                                 </div>
                                 <div class="form-group">
-                                    <label for="roomType">Room</label>
-                                    <Select2 id="roomType" v-model="roomType" :options="roomTypes" :settings="{ placeholder: 'Please select room type', containerCssClass:'form-control' }" @change="isRoomType" />
+                                    <label for="roomWithRoomType">Room</label>
+                                    <Select2 id="roomWithRoomType" v-model="roomWithRoomType" :options=" roomWithRoomTypes" :settings="{ placeholder: 'Please select room', containerCssClass:'form-control' }" @change="isRoomWithRoomType" />
                                 </div>
                                 <div class="form-group">
                                     <label for="manyRoom">No. of room</label>
-                                    <Select2 id="manyRoom" v-model="manyRoom" :options="(roomType!='' ? manyRooms:[])" :settings="{ placeholder: 'Please select how many rooms', containerCssClass:'form-control' }" />
+                                    <Select2 id="manyRoom" v-model="manyRoom" :options="(roomWithRoomType!='' ? manyRooms:[])" :settings="{ placeholder: 'Please select how many rooms', containerCssClass:'form-control' }" />
                                 </div>
                                 <div class="form-group">
                                     <label for="manyAdult">No. of adult</label>
@@ -133,8 +133,8 @@ export default {
         return {
             hotels:[],
             hotel: '',
-            roomTypes:[],
-            roomType:'',
+            roomWithRoomTypes:[],
+            roomWithRoomType:'',
             manyRooms: [],
             manyRoom:'',
             totalRooms: [],
@@ -217,17 +217,17 @@ export default {
             this.manyAdults = [];
             this.manyChilds = [{id:0, text:'0'}];
             this.manyRooms = [];
-            this.roomTypes = [];
+            this.roomWithRoomTypes = [];
         },
         generatList(param1, param2) {
             param1 = [];
             if (param2.length > 0) {
-                var max = param2.find(e => parseInt(e.id) === parseInt(this.roomType)).total;
+                var max = param2.find(e => parseInt(e.id) === parseInt(this.roomWithRoomType)).total;
                 for(var i=1;i<=max;i++) param1.push({id:i,text:i});
             }
             return param1;
         },
-        isRoomType() {
+        isRoomWithRoomType() {
             this.manyRooms = this.generatList(this.manyRooms, this.totalRooms);
             this.manyAdults = this.generatList(this.manyAdults, this.totalAdults);
             this.manyChilds = this.generatList(this.manyChilds, this.totalChilds);
@@ -241,10 +241,12 @@ export default {
                     function (response) {
                         response.data.forEach(function(item, key) {
                             if(item.room_type_rooms!='') {
-                                self.roomTypes.push({id:item.id, text:item.name});
-                                self.totalRooms.push({id:item.id, total:item.room_type_rooms[0].total_room, available:'none'});
-                                self.totalAdults.push({id:item.id, total:item.room_type_rooms[0].max_adult});
-                                self.totalChilds.push({id:item.id, total:item.room_type_rooms[0].max_child});
+                                item.room_type_rooms.forEach(function(item2, key2){
+                                    self. roomWithRoomTypes.push({id:item2.id, text:item2.name+' - '+item.name});
+                                    self.totalRooms.push({id:item2.id, total:item2.total_room, available:'none'});
+                                    self.totalAdults.push({id:item2.id, total:item2.max_adult});
+                                    self.totalChilds.push({id:item2.id, total:item2.max_child});
+                                });
                             }
                         });
                     });

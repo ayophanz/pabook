@@ -43,6 +43,10 @@
                             {{props.column.label}}&nbsp;
                             <i class="fas fa-hotel"></i>
                         </template>
+                        <template slot="column_room" slot-scope="props">
+                            {{props.column.label}}&nbsp;
+                            <i class="fas fa-door-closed"></i>
+                        </template>
                         <template slot="column_room_type" slot-scope="props">
                             {{props.column.label}}&nbsp;
                             <i class="fas fa-bed"></i>
@@ -51,19 +55,6 @@
                             {{props.column.label}}&nbsp;
                             <i class="fas fa-hashtag"></i>
                         </template>
-                       <!--  <template slot="column_image" slot-scope="props">
-                            {{props.column.label}}&nbsp;
-                            <i class="fas fa-image"></i>
-                        </template>
-                        <template slot="image" slot-scope="props">
-                            <vue-pure-lightbox
-                                class="image-circle"
-                                :thumbnail="getImgUrl(props.row['image'], props.row['id'])"
-                                :images="[
-                                  getImgUrl(props.row['image'], props.row['id'])
-                                ]"
-                            ></vue-pure-lightbox>
-                        </template> -->
                         <template slot="column_status" slot-scope="props">
                             {{props.column.label}}&nbsp;
                             <i class="fas fa-shield-alt"></i>
@@ -135,6 +126,19 @@
                             row_text_alignment: "text-left",
                             column_text_alignment: "text-left",
                             row_classes: "room-row-class-hotel",
+                        },
+                        {
+                            label: "Room",
+                            name: "name",
+                            filter: {
+                                type: "simple",
+                                placeholder: "Enter room name"
+                            },
+                            sort: true,
+                            slot_name: "room",
+                            row_text_alignment: "text-left",
+                            column_text_alignment: "text-left",
+                            row_classes: "room-row-class-room",
                         },
                         {
                             label: "Room Type",
@@ -261,7 +265,7 @@
     .room-row-class-id {
         width: 150px;   
     }
-    .room-row-class-hotel {
+    .room-row-class-hotel, .room-row-class-room {
         width: 200px;
     }
     .room-row-class-name-type {
