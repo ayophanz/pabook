@@ -112,7 +112,7 @@ class RoomTypeController extends Controller
     if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
       return die('not allowed');
 
-    return RoomType::where('hotel_id', $id)->whereNotIn('id', $this->roomTypeIds($id, $roomId))->with('roomTypeHotel')->orderBy('created_at', 'desc')->get();
+    return RoomType::where('hotel_id', $id)->with('roomTypeHotel')->orderBy('created_at', 'desc')->get();
    }
 
 

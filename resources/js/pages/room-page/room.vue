@@ -83,7 +83,7 @@
                         </div>
                         <div class="form-group">
                             <label for="name">Name <span class="required-asterisk">*</span></label>
-                            <input v-model="form.name" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }" id="name">
+                            <input v-model="form.name" type="text" placeholder="ex. double bed, single bed" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }" id="name">
                             <has-error :form="form" field="name"></has-error>
                         </div>  
                         <div class="form-group">
@@ -286,8 +286,8 @@
                     this.types = [];
                     let self = this;
                     console.log(this.form.hotel+' | '+this.roomId);
-                    var url = '/api/hotel-with-room-types/'+this.form.hotel;
-                    if(this.roomId!=null) url = '/api/room-with-room-types/'+this.form.hotel+'/'+this.roomId;
+                    var url = '/api/room-with-room-types/'+this.form.hotel+'/'+this.roomId;
+                    if(this.roomId==null) url = '/api/hotel-with-room-types/'+this.form.hotel;
                     axios.get(url)
                     .then(
                         function (response) {

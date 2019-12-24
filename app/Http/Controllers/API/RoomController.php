@@ -47,7 +47,8 @@ class RoomController extends Controller
               ];                                
             
       $customMessages = [
-                        'min' => 'The :attribute is required'
+                        'min' => 'The :attribute is required.',
+                        'unique_name' => 'The :attribute field is already exist in the same room type.'
                         ];          
 
       $dataCreate = [
@@ -127,7 +128,8 @@ class RoomController extends Controller
               ];
 
       $customMessages = [
-                        'unique_name' => 'The :attribute field is already exist in the same room type.'
+                        'min' => 'The :attribute is required.',
+                        'unique_name' => 'The :attribute field is already exist in the same room type.',
                         ];
                         
       $dataUpdate = [
