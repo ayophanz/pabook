@@ -285,13 +285,16 @@
                     this.isLoading = true;
                     this.types = [];
                     let self = this;
-                    axios.get('/api/room-types/'+self.form.hotel+','+self.roomId)
+                    console.log(this.form.hotel+' | '+this.roomId);
+                    var url = '/api/hotel-with-room-types/'+this.form.hotel;
+                    if(this.roomId!=null) url = '/api/room-with-room-types/'+this.form.hotel+'/'+this.roomId;
+                    axios.get(url)
                     .then(
                         function (response) {
                              response.data.forEach(function(item, key){
                                self.types.push({id:item.id, text:item.name});
+                               self.base_currency = item.room_type_hotel.base_currency.value;
                              });
-                            self.base_currency = response.data[0].room_type_hotel.base_currency.value;
                             self.isLoading = false;
                         }
                     );
@@ -347,8 +350,6 @@
 
                     })
                     .catch(function (error) {
-                        console.log(error); 
-
                         self.isLoading = false;
                         toast.fire({
                           type: 'error',

@@ -237,7 +237,7 @@ export default {
             if(this.$gate.superAdminOrhotelOwner()) {
                 this.resetList();
                 let self = this;
-                axios.get('/api/room-types/'+this.hotel+',0').then(
+                axios.get('/api/hotel-with-room-types/'+this.hotel).then(
                     function (response) {
                         response.data.forEach(function(item, key) {
                             if(item.room_type_rooms!='') {

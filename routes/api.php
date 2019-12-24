@@ -63,7 +63,9 @@ Route::put('/approve-hotel', 'API\HotelController@approveHotel');
 */
 Route::get('/room-types', 'API\RoomTypeController@index');
 
-Route::get('/room-types/{id}', 'API\RoomTypeController@index');
+Route::get('/room-with-room-types/{id}/{roomId}', 'API\RoomTypeController@roomRoomTypes');
+
+Route::get('/hotel-with-room-types/{hotelId}', 'API\RoomTypeController@bookingRoomTypes');
 
 Route::post('/create-room-type', 'API\RoomTypeController@create');
 

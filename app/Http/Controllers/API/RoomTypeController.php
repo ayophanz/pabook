@@ -15,24 +15,16 @@ class RoomTypeController extends Controller
         $this->middleware(['auth:api', 'verified', 'two_factor_auth']);
    }
 
-   public function index($id=null) {
+   public function index() {
       if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
           return die('not allowed');
 
-      if($id) {
-        $hotelId = explode(',', $id)[0];
-        $roomId  = explode(',', $id)[1];
-        if($roomId=='0') 
-          return RoomType::where('hotel_id', $hotelId)->with('roomTypeRooms')->orderBy('created_at', 'desc')->get();
-        else
-          return RoomType::where('hotel_id', $hotelId)->whereNotIn('id', $this->roomTypeIds($hotelId, $roomId))->with('roomTypeHotel')->orderBy('created_at', 'desc')->get();
-      }else{
-        if(\Gate::allows('hotelOwner'))
-           return RoomType::whereIn('hotel_id', $this->hotel_ids())->with('roomTypeHotel')->orderBy('created_at', 'desc')->get(); 
-        
-        if(\Gate::allows('superAdmin'))
-           return RoomType::with('roomTypeHotel')->orderBy('created_at', 'desc')->get();  
-     }
+      if(\Gate::allows('hotelOwner'))
+          return RoomType::whereIn('hotel_id', $this->hotel_ids())->with('roomTypeHotel')->orderBy('created_at', 'desc')->get(); 
+      
+      if(\Gate::allows('superAdmin'))
+          return RoomType::with('roomTypeHotel')->orderBy('created_at', 'desc')->get();  
+     
    }
 
    public function create(Request $request) {
@@ -102,6 +94,25 @@ class RoomTypeController extends Controller
 
       if(\Gate::allows('superAdmin')) 
          return RoomType::where('id', $id)->delete();
+   }
+
+
+   /**
+    *  Custom query
+    */
+
+   public function bookingRoomTypes($hotelId) {
+    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+      return die('not allowed');
+
+    return RoomType::where('hotel_id', $hotelId)->with('roomTypeRooms')->orderBy('created_at', 'desc')->get();  
+   }
+
+   public function roomRoomTypes($id, $roomId) {
+    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
+      return die('not allowed');
+
+    return RoomType::where('hotel_id', $id)->whereNotIn('id', $this->roomTypeIds($id, $roomId))->with('roomTypeHotel')->orderBy('created_at', 'desc')->get();
    }
 
 
