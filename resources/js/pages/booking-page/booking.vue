@@ -71,13 +71,13 @@
                                                  <div class="col-md-12">
                                                      <h5>Fixed amenities</h5>
                                                      <ul>
-                                                         <li v-for="item in fixedAmenities">{{item.value}}</li>
+                                                         <li v-for="item in fixedAmenities">{{item}}</li>
                                                      </ul>
                                                  </div>
                                                  <div class="col-md-12">
                                                      <h5>Optional amenities</h5>
                                                      <ul>
-                                                          <li v-for="item in optionalAmenities">{{item.value}}</li>
+                                                          <li v-for="item in optionalAmenities">{{item}}</li>
                                                      </ul>
                                                  </div>
                                              </div>
