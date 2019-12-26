@@ -71,17 +71,13 @@
                                                  <div class="col-md-12">
                                                      <h5>Fixed amenities</h5>
                                                      <ul>
-                                                         <li>test1</li>
-                                                         <li>test2</li>
-                                                         <li>test3</li>
+                                                         <li v-for="item in fixedAmenities">{{item.value}}</li>
                                                      </ul>
                                                  </div>
                                                  <div class="col-md-12">
                                                      <h5>Optional amenities</h5>
                                                      <ul>
-                                                         <li>test1</li>
-                                                         <li>test2</li>
-                                                         <li>test3</li>
+                                                          <li v-for="item in optionalAmenities">{{item.value}}</li>
                                                      </ul>
                                                  </div>
                                              </div>
@@ -133,6 +129,8 @@ export default {
     },
     data() {
         return {
+            checkInD: '',
+            checkOutD: '',
             hotels:[],
             hotel: '',
             roomWithRoomTypes:[],
@@ -146,8 +144,10 @@ export default {
             manyChilds:[],
             manyChild: '',
             totalChilds:[],
-            fixed_amenities: [],
-            optional_amenities: [],
+            tempFixedAmenities: [],
+            tempOptionalAmenities: [],
+            fixedAmenities: [],
+            optionalAmenities: [],
             calendarList: [
                 {
                     id: '0',
@@ -251,23 +251,31 @@ export default {
         },
         resetList(){
             this.manyAdults = [];
-            this.manyChilds = [{id:0, text:'0'}];
+            this.manyChilds = [];
             this.manyRooms = [];
             this.roomWithRoomTypes = [];
         },
-        generatList(param1, param2) {
-            param1 = [];
-            if (param2.length > 0) {
-                var max = param2.find(e => parseInt(e.id) === parseInt(this.roomWithRoomType)).total;
-                for(var i=1;i<=max;i++) param1.push({id:i,text:i});
-            }
-            return param1;
+        generateList(param, kind) {
+            var tempParam = [];
+            if (param.length > 0) {
+                var tempList = param.find(e => parseInt(e.id) === parseInt(this.roomWithRoomType)).value;
+                if(kind=='value') {
+                    tempList.forEach(function(item, key){
+                        tempParam.push(item.value);
+                    });
+                }
+                if(kind=='total') for(var i=1;i<=parseInt(tempList);i++) tempParam.push({id:i, text:i});
+            } 
+            
+            return tempParam;
         },
         isRoomWithRoomType() {
-            this.manyRooms = this.generatList(this.manyRooms, this.totalRooms);
-            this.manyAdults = this.generatList(this.manyAdults, this.totalAdults);
-            this.manyChilds = this.generatList(this.manyChilds, this.totalChilds);
+            this.manyRooms = this.generateList(this.totalRooms, 'total');
+            this.manyAdults = this.generateList(this.totalAdults, 'total');
+            this.manyChilds = this.generateList(this.totalChilds, 'total');
             this.manyChilds.unshift({id:0, text:'0'});
+            this.fixedAmenities = this.generateList(this.tempOptionalAmenities, 'value');
+            this.optionalAmenities = this.generateList(this.tempFixedAmenities, 'value');
         },
         isHotelChange(){
             if(this.$gate.superAdminOrhotelOwner()) {
@@ -279,9 +287,11 @@ export default {
                             if(item.room_type_rooms!='') {
                                 item.room_type_rooms.forEach(function(item2, key2){
                                     self. roomWithRoomTypes.push({id:item2.id, text:item2.name+' - '+item.name});
-                                    self.totalRooms.push({id:item2.id, total:item2.total_room, available:'none'});
-                                    self.totalAdults.push({id:item2.id, total:item2.max_adult});
-                                    self.totalChilds.push({id:item2.id, total:item2.max_child});
+                                    self.totalRooms.push({id:item2.id, value:item2.total_room, available:'none'});
+                                    self.totalAdults.push({id:item2.id, value:item2.max_adult});
+                                    self.totalChilds.push({id:item2.id, value:item2.max_child});
+                                    self.tempOptionalAmenities.push({id:item2.id, value:JSON.parse(item2.room_feature_optional.value)}); //= JSON.parse(item2.room_feature_optional.value);
+                                    self.tempFixedAmenities.push({id:item2.id, value:JSON.parse(item2.room_feature.value)}); //= JSON.parse(item2.room_feature.value);
                                 });
                             }
                         });
@@ -302,12 +312,15 @@ export default {
         },
         checkInDate(e) {
             if(e!=null) {
+              this.checkInD = e;
               this.$refs.mycalendar.invoke('setDate', e, true);
               this.dateRange = `${e.getFullYear()}-${(e.getMonth()+1)}`;
             }
         },
         checkOutDate(e) {
-
+            if(e!=null) {
+              this.checkInD = e;
+            }
         },
         onClickNavi(event) {
             if (event.target.tagName === 'BUTTON') {
