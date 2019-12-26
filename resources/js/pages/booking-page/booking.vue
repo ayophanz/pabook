@@ -39,11 +39,11 @@
                                     <Select2 id="manyRoom" v-model="manyRoom" :options="(roomWithRoomType!='' ? manyRooms:[])" :settings="{ placeholder: 'Please select how many rooms', containerCssClass:'form-control' }" />
                                 </div>
                                 <div class="form-group">
-                                    <label for="manyAdult">No. of adult</label>
+                                    <label for="manyAdult">No. of adult (per room)</label>
                                     <Select2 id="manyAdult" v-model="manyAdult" :options="(manyRoom!='' ? manyAdults:[])" :settings="{ placeholder: 'Please select how many adult(s)', containerCssClass:'form-control' }" />
                                 </div>
                                 <div class="form-group">
-                                    <label for="manyChild">No. of child</label>
+                                    <label for="manyChild">No. of child (per room)</label>
                                     <Select2 id="manyChild" v-model="manyChild" :options="(manyAdult!='' ? manyChilds:[])" :settings="{ placeholder: 'Please select how many child(s)', containerCssClass:'form-control' }" />
                                 </div>
                                 <div class="row justify-content-center">
@@ -216,7 +216,6 @@ export default {
                 'month.day.fontSize': '16px',
 
                 // month schedule style
-                'month.schedule.borderRadius': '5px',
                 'month.schedule.height': '18px',
                 'month.schedule.marginTop': '2px',
                 'month.schedule.marginLeft': '10px',
