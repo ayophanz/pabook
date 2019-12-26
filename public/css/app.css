@@ -17825,6 +17825,7 @@ button:focus,
   overflow-y: auto;
   overflow-x: hidden;
   max-height: 14.3rem;
+  min-height: 14.3rem;
 }
 
 .book-rooms-quantity h5 {

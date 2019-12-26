@@ -21,7 +21,7 @@
                                     @check-in-changed="checkInDate"
                                     @check-out-changed="checkOutDate"
                                     format="YYYY MMM. DD"
-                                    :startDate="new Date(new Date().getFullYear(), new Date().getMonth(), 1)"
+                                    :startDate="new Date()"
                                     :minNights="1"
                                     :maxNights="30"
                                     />
