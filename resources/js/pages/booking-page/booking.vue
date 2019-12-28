@@ -32,19 +32,19 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="roomWithRoomType">Room</label>
-                                    <Select2 id="roomWithRoomType" v-model="roomWithRoomType" :options=" roomWithRoomTypes" :settings="{ placeholder: 'Please select room', containerCssClass:'form-control' }" @change="isRoomWithRoomType" />
+                                    <Select2 id="roomWithRoomType" v-model="form.roomWithRoomType" :options=" roomWithRoomTypes" :settings="{ placeholder: 'Please select room', containerCssClass:'form-control' }" @change="isRoomWithRoomType" />
                                 </div>
                                 <div class="form-group">
                                     <label for="manyRoom">No. of room</label>
-                                    <Select2 id="manyRoom" v-model="manyRoom" :options="(roomWithRoomType!='' ? manyRooms:[])" :settings="{ placeholder: 'Please select how many rooms', containerCssClass:'form-control' }" />
+                                    <Select2 id="manyRoom" v-model="form.manyRoom" :options="(form.roomWithRoomType!='' ? manyRooms:[])" :settings="{ placeholder: 'Please select how many rooms', containerCssClass:'form-control' }" />
                                 </div>
                                 <div class="form-group">
-                                    <label for="manyAdult">No. of adult (per room)</label>
-                                    <Select2 id="manyAdult" v-model="manyAdult" :options="(manyRoom!='' ? manyAdults:[])" :settings="{ placeholder: 'Please select how many adult(s)', containerCssClass:'form-control' }" />
+                                    <label for="manyAdult">No. of adult</label>
+                                    <Select2 id="manyAdult" v-model="form.manyAdult" :options="(form.manyRoom!='' ? manyAdults:[])" :settings="{ placeholder: 'Please select how many adult(s)', containerCssClass:'form-control' }" />
                                 </div>
                                 <div class="form-group">
-                                    <label for="manyChild">No. of child (per room)</label>
-                                    <Select2 id="manyChild" v-model="manyChild" :options="(manyAdult!='' ? manyChilds:[])" :settings="{ placeholder: 'Please select how many child(s)', containerCssClass:'form-control' }" />
+                                    <label for="manyChild">No. of child</label>
+                                    <Select2 id="manyChild" v-model="form.manyChild" :options="(form.manyAdult!='' ? manyChilds:[])" :settings="{ placeholder: 'Please select how many child(s)', containerCssClass:'form-control' }" />
                                 </div>
                                 <div class="row justify-content-center">
                                     <div class="col-md-6">
@@ -85,7 +85,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group text-center mt-4">
-                                    <button type="submit" class="btn btn-outline-primary btn-flat"><i class="fas fa-concierge-bell"></i> Book Room</button>
+                                    <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat"><i class="fas fa-concierge-bell"></i> Book Room</button>
                                 </div>
                             </div>
                             <div class="col-md-9">
@@ -94,9 +94,9 @@
                                         <option v-for="(options, index) in viewModeOptions" :value="options.value" :key="index">{{options.title}}</option>
                                     </select>
                                     <span id="menu-navi" @click="onClickNavi($event)">
-                                        <button type="button" class="btn btn-default btn-sm move-today" data-action="move-today">Today</button>
+                                        <!-- <button type="button" class="btn btn-default btn-sm move-today" data-action="move-today">Today</button> -->
                                         <button type="button" class="btn btn-default btn-sm move-day" data-action="move-prev"><i class="fas fa-chevron-left" data-action="move-prev"></i></button>
-                                        <button type="button" class="btn btn-default btn-sm move-day" data-action="move-next"><i class="fas fa-chevron-right" data-action="move-next"></i></button>
+                                        <button v-if="compareDate" type="button" class="btn btn-default btn-sm move-day" data-action="move-next"><i class="fas fa-chevron-right" data-action="move-next"></i></button>
                                     </span>
                                     <span class="render-range">{{dateRange}}</span>
                                 </div>
@@ -129,25 +129,27 @@ export default {
     },
     data() {
         return {
-            checkInD: '',
-            checkOutD: '',
             hotels:[],
             hotel: '',
             roomWithRoomTypes:[],
-            roomWithRoomType:'',
             manyRooms: [],
-            manyRoom:'',
             totalRooms: [],
             manyAdults:[],
-            manyAdult: '',
             totalAdults:[],
             manyChilds:[],
-            manyChild: '',
             totalChilds:[],
             tempFixedAmenities: [],
             tempOptionalAmenities: [],
             fixedAmenities: [],
             optionalAmenities: [],
+            form: new form({
+                checkInD: '',
+                checkOutD: '',
+                manyAdult: '',
+                manyChild: '',
+                manyRoom:'',
+                roomWithRoomType:''
+            }),
             calendarList: [
                 {
                     id: '0',
@@ -248,6 +250,9 @@ export default {
             this.loadHotels();
             //this.$refs.mycalendar.usageStatistics = false;
         },
+        compareDate() {
+            return Date.parse(new Date(this.form.checkOutD.getFullYear()+'-'+this.form.checkOutD.getMonth()+1)) > Date.parse(new Date(this.dateRange));
+        },
         resetList(){
             this.manyAdults = [];
             this.manyChilds = [];
@@ -257,7 +262,7 @@ export default {
         generateList(param, kind) {
             var tempParam = [];
             if (param.length > 0) {
-                var tempList = param.find(e => parseInt(e.id) === parseInt(this.roomWithRoomType)).value;
+                var tempList = param.find(e => parseInt(e.id) === parseInt(this.form.roomWithRoomType)).value;
                 if(kind=='value') {
                     tempList.forEach(function(item, key){
                         tempParam.push(item.value);
@@ -285,7 +290,7 @@ export default {
                         response.data.forEach(function(item, key) {
                             if(item.room_type_rooms!='') {
                                 item.room_type_rooms.forEach(function(item2, key2){
-                                    self. roomWithRoomTypes.push({id:item2.id, text:item2.name+' - '+item.name});
+                                    self.roomWithRoomTypes.push({id:item2.id, text:item2.name+' - '+item.name});
                                     self.totalRooms.push({id:item2.id, value:item2.total_room, available:'none'});
                                     self.totalAdults.push({id:item2.id, value:item2.max_adult});
                                     self.totalChilds.push({id:item2.id, value:item2.max_child});
@@ -311,14 +316,14 @@ export default {
         },
         checkInDate(e) {
             if(e!=null) {
-              this.checkInD = e;
+              this.form.checkInD = e;
               this.$refs.mycalendar.invoke('setDate', e, true);
               this.dateRange = `${e.getFullYear()}-${(e.getMonth()+1)}`;
             }
         },
         checkOutDate(e) {
             if(e!=null) {
-              this.checkInD = e;
+              this.form.checkOutD = e;
             }
         },
         onClickNavi(event) {
@@ -343,20 +348,20 @@ export default {
             let endMonth, endDate, start, end;
             switch (view) {
                 case 'month':
-                dateRangeText = `${year}-${month}`;
-                break;
+                    dateRangeText = `${year}-${month}`;
+                    break;
                 case 'week':
-                year = rangeStart.getFullYear();
-                month = rangeStart.getMonth() + 1;
-                date = rangeStart.getDate();
-                endMonth = rangeEnd.getMonth() + 1;
-                endDate = rangeEnd.getDate();
-                start = `${year}-${month}-${date}`;
-                end = `${endMonth}-${endDate}`;
-                dateRangeText = `${start} ~ ${end}`;
-                break;
+                    year = rangeStart.getFullYear();
+                    month = rangeStart.getMonth() + 1;
+                    date = rangeStart.getDate();
+                    endMonth = rangeEnd.getMonth() + 1;
+                    endDate = rangeEnd.getDate();
+                    start = `${year}-${month}-${date}`;
+                    end = `${endMonth}-${endDate}`;
+                    dateRangeText = `${start} ~ ${end}`;
+                    break;
                 default:
-                dateRangeText = `${year}-${month}-${date}`;
+                    dateRangeText = `${year}-${month}-${date}`;
             }
             this.dateRange = dateRangeText;
         }
