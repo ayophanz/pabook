@@ -96,7 +96,7 @@
                                     <span id="menu-navi" @click="onClickNavi($event)">
                                         <!-- <button type="button" class="btn btn-default btn-sm move-today" data-action="move-today">Today</button> -->
                                         <button type="button" class="btn btn-default btn-sm move-day" data-action="move-prev"><i class="fas fa-chevron-left" data-action="move-prev"></i></button>
-                                        <button v-if="compareDate" type="button" class="btn btn-default btn-sm move-day" data-action="move-next"><i class="fas fa-chevron-right" data-action="move-next"></i></button>
+                                        <button :disabled="disNext" type="button" class="btn btn-default btn-sm move-day" data-action="move-next"><i class="fas fa-chevron-right" data-action="move-next"></i></button>
                                     </span>
                                     <span class="render-range">{{dateRange}}</span>
                                 </div>
@@ -142,6 +142,8 @@ export default {
             tempOptionalAmenities: [],
             fixedAmenities: [],
             optionalAmenities: [],
+            disNext: false,
+            disPrev: false,
             form: new form({
                 checkInD: '',
                 checkOutD: '',
@@ -251,7 +253,12 @@ export default {
             //this.$refs.mycalendar.usageStatistics = false;
         },
         compareDate() {
-            return Date.parse(new Date(this.form.checkOutD.getFullYear()+'-'+this.form.checkOutD.getMonth()+1)) > Date.parse(new Date(this.dateRange));
+            if(Date.parse(new Date(this.form.checkOutD.getFullYear()+'-'+this.form.checkOutD.getMonth()+1)) > Date.parse(new Date(this.dateRange))) {
+                this.disNext = false;
+            }else{
+                this.disNext = true;
+            }
+
         },
         resetList(){
             this.manyAdults = [];
@@ -324,6 +331,7 @@ export default {
         checkOutDate(e) {
             if(e!=null) {
               this.form.checkOutD = e;
+              this.compareDate();
             }
         },
         onClickNavi(event) {
