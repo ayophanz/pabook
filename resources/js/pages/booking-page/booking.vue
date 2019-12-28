@@ -97,8 +97,9 @@
                                     </select>
                                     <span id="menu-navi" @click="onClickNavi($event)">
                                         <!-- <button type="button" class="btn btn-default btn-sm move-today" data-action="move-today">Today</button> -->
-                                        <button :disabled="disPrev" type="button" class="btn btn-default btn-sm move-day" data-action="move-prev"><i class="fas fa-chevron-left" data-action="move-prev"></i></button>
-                                        <button :disabled="disNext" type="button" class="btn btn-default btn-sm move-day" data-action="move-next"><i class="fas fa-chevron-right" data-action="move-next"></i></button>
+                                        &nbsp;<button v-if="disPrev==false" :disabled="disPrev" type="button" class="btn btn-outline-primary btn-flat move-day" data-action="move-prev"><i class="fas fa-chevron-left" data-action="move-prev"></i> Prev</button>
+                                        &nbsp;<button v-if="disNext==false" :disabled="disNext" type="button" class="btn btn-outline-primary btn-flat move-day" data-action="move-next">Next <i class="fas fa-chevron-right" data-action="move-next"></i></button>
+                                        &nbsp;
                                     </span>
                                     <span class="render-range">{{dateRange}}</span>
                                 </div>
@@ -255,6 +256,8 @@ export default {
             //this.$refs.mycalendar.usageStatistics = false;
         },
         pickerClose(){
+            this.disPrev = true;
+            this.disNext = true;
             this.$refs.mycalendar.invoke('setDate', new Date(), true);
             this.setRenderRangeText();
         },
