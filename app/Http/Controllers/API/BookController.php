@@ -42,46 +42,42 @@ class BookController extends Controller
         return die('not allowed');
 
    		$data = [
-   			    'fullname'  => 'required|string|max:191',
-   			    'email'     => 'required|string|email|max:191',
-            'phone_no'  => 'required',
-            'consent'   => 'accepted',
-            'total'     => 'required',
-            'dateStart' => 'required',
-            'dateEnd'   => 'required',
-            'room_id'   => 'required|numeric|min:1',
-            'total'     => 'required|numeric',
-  			    'amount'    => 'required|numeric|greater_than_field:total',
-            'currency'  => 'required|string|max:6'
+            'hotel'  => 'required',
+            'checkInD'  => 'required',
+            'checkOutD' => 'required',
+            'manyAdult' => 'required',
+            'manyChild' => 'required',
+            'manyRoom'  => 'required',
+            'roomWithRoomType'  => 'required'
    		]; 
 
    		$customMessages = [
-                        'greater_than_field' => 'The amount is not enough.'
+                        'hotel.required' => 'The hotel is required.',
+                        'checkInD.required' => 'The check-in or check-out date is required.',
+                        'checkOutD.required' => 'The check-in or check-out date is required.',
+                        'manyAdult.required' => 'The number of adult is required.',
+                        'manyChild.required' => 'The number of child is required.',
+                        'manyRoom.required' => 'The number of how many room is required.',
+                        'roomWithRoomType.required' => 'The room is required.'
                         ];
 
-      $sdate = new \DateTime($request['dateStart']);
-      $edate = new \DateTime($request['dateEnd']);   
+      $this->validate($request, $data, $customMessages);
+       
+      return [
+                'checkInD'  => $request['checkInD'],
+                'checkOutD' => $request['checkOutD'],
+                'manyAdult' => $request['manyAdult'],
+                'manyChild' => $request['manyChild'],
+                'manyRoom'  => $request['manyRoom'],
+                'roomWithRoomType'  => $request['roomWithRoomType'],
+              ];
 
-   		$dataCreate = [
-   			'room_id'   => $request['room_id'],
-   			'name'      => $request['fullname'],
-   			'email'     => $request['email'],
-   			'phone_no'  => $request['phone_no'],
-   			'dateStart' => $sdate,
-   			'dateEnd'   => $edate,
-   			'amount'    => $request['amount'],
-        'currency'  => $request['currency'],
-        'status'    => $request['btnSubmit']
-   		];
-
-   		$this->validate($request, $data, $customMessages);
-
-      $book = Booking::create($dataCreate);
-      if($book) {
-        Notification::send($this->userToNotify($book->room_id), new RoomReservation($book));
-        return $book;
-      }
-	
+      // $book = Booking::create($dataCreate);
+      // if($book) {
+      //   Notification::send($this->userToNotify($book->room_id), new RoomReservation($book));
+      //   return $book;
+      // }
+      
    }
 
    public function autoCancel() {
