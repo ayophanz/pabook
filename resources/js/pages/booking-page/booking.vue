@@ -95,7 +95,7 @@
                                     </select>
                                     <span id="menu-navi" @click="onClickNavi($event)">
                                         <!-- <button type="button" class="btn btn-default btn-sm move-today" data-action="move-today">Today</button> -->
-                                        <button type="button" class="btn btn-default btn-sm move-day" data-action="move-prev"><i class="fas fa-chevron-left" data-action="move-prev"></i></button>
+                                        <button :disabled="disPrev" type="button" class="btn btn-default btn-sm move-day" data-action="move-prev"><i class="fas fa-chevron-left" data-action="move-prev"></i></button>
                                         <button :disabled="disNext" type="button" class="btn btn-default btn-sm move-day" data-action="move-next"><i class="fas fa-chevron-right" data-action="move-next"></i></button>
                                     </span>
                                     <span class="render-range">{{dateRange}}</span>
@@ -142,8 +142,8 @@ export default {
             tempOptionalAmenities: [],
             fixedAmenities: [],
             optionalAmenities: [],
-            disNext: false,
-            disPrev: false,
+            disNext: true,
+            disPrev: true,
             form: new form({
                 checkInD: '',
                 checkOutD: '',
@@ -253,12 +253,10 @@ export default {
             //this.$refs.mycalendar.usageStatistics = false;
         },
         compareDate() {
-            if(Date.parse(new Date(this.form.checkOutD.getFullYear()+'-'+this.form.checkOutD.getMonth()+1)) > Date.parse(new Date(this.dateRange))) {
-                this.disNext = false;
-            }else{
-                this.disNext = true;
-            }
-
+            if(this.form.checkOutD!='' && Date.parse(new Date(this.form.checkOutD.getFullYear()+'-'+(this.form.checkOutD.getMonth()+1))) > Date.parse(new Date(this.dateRange))) this.disNext = false;
+            else this.disNext = true;
+            if(this.form.checkInD!='' && Date.parse(new Date(this.form.checkInD.getFullYear()+'-'+(this.form.checkInD.getMonth()+1))) < Date.parse(new Date(this.dateRange))) this.disPrev = false;
+            else this.disPrev = true;
         },
         resetList(){
             this.manyAdults = [];
@@ -326,6 +324,7 @@ export default {
               this.form.checkInD = e;
               this.$refs.mycalendar.invoke('setDate', e, true);
               this.dateRange = `${e.getFullYear()}-${(e.getMonth()+1)}`;
+              this.compareDate();
             }
         },
         checkOutDate(e) {
@@ -341,6 +340,7 @@ export default {
                 action = action.replace('move-', '');
                 this.$refs.mycalendar.invoke(action);
                 this.setRenderRangeText();
+                this.compareDate();
             }
         },
         setRenderRangeText() {
