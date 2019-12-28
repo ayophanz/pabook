@@ -24,6 +24,8 @@
                                     :startDate="new Date()"
                                     :minNights="1"
                                     :maxNights="30"
+                                    :closeDatepickerOnClickOutside="false"
+                                    :showCloseButton="true"
                                     />
                                 </div>
                                 <div class="form-group">
@@ -252,6 +254,10 @@ export default {
             this.loadHotels();
             //this.$refs.mycalendar.usageStatistics = false;
         },
+        pickerClose(){
+            this.$refs.mycalendar.invoke('setDate', new Date(), true);
+            this.setRenderRangeText();
+        },
         compareDate() {
             if(this.form.checkOutD!='' && Date.parse(new Date(this.form.checkOutD.getFullYear()+'-'+(this.form.checkOutD.getMonth()+1))) > Date.parse(new Date(this.dateRange))) this.disNext = false;
             else this.disNext = true;
@@ -376,6 +382,14 @@ export default {
     },
     mounted() {
         this.init();
+
+        /**
+         * jQuery
+         * */ 
+        let self = this
+        $(document).on('click', '.datepicker__clear-button', function(e){
+            self.pickerClose();
+        });
     }
 }
 </script>
