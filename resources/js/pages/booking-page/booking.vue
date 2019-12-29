@@ -43,7 +43,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="manyRoom">No. of room</label>
-                                        <Select2 id="manyRoom" v-model="form.manyRoom" :options="(form.roomWithRoomType!='' ? manyRooms:[])" :settings="{ placeholder: 'Please select how many rooms', containerCssClass:'form-control' }" />
+                                        <Select2 id="manyRoom" v-model="form.manyRoom" :options="(form.roomWithRoomType!='' ? manyRooms:[])" :settings="{ placeholder: 'Please select how many rooms', containerCssClass:'form-control' }" @change="isManyRoom" />
                                         <has-error :form="form" field="manyRoom"></has-error>
                                     </div>
                                     <div class="form-group">
@@ -302,15 +302,18 @@ export default {
                     });
                 }
                 if(kind=='total') for(var i=1;i<=parseInt(tempList);i++) tempParam.push({id:i, text:i});
+                if(kind=='many') for(var i=1;i<=(parseInt(tempList)*this.form.manyRoom);i++) tempParam.push({id:i, text:i});
             } 
             
             return tempParam;
         },
+        isManyRoom() {
+            this.manyAdults = this.generateList(this.totalAdults, 'many');
+            this.manyChilds = this.generateList(this.totalChilds, 'many');
+            this.manyChilds.unshift({id:0, text:'0'});
+        },
         isRoomWithRoomType() {
             this.manyRooms = this.generateList(this.totalRooms, 'total');
-            this.manyAdults = this.generateList(this.totalAdults, 'total');
-            this.manyChilds = this.generateList(this.totalChilds, 'total');
-            this.manyChilds.unshift({id:0, text:'0'});
             this.fixedAmenities = this.generateList(this.tempOptionalAmenities, 'value');
             this.optionalAmenities = this.generateList(this.tempFixedAmenities, 'value');
         },
