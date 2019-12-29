@@ -133,7 +133,10 @@ const toast = swal.mixin({
   toast: true,
   position: 'top',
   showConfirmButton: false,
-  timer: 900
+  timer: 900,
+  allowOutsideClick:	false,
+  allowEscapeKey:	false,
+  allowEnterKey: false
 });
 window.toast = toast
 
@@ -143,16 +146,24 @@ const approve = swal.mixin({
     cancelButton: 'btn btn-outline-secondary btn-flat'
   },
   buttonsStyling: false,
+  allowOutsideClick:	false,
+  allowEscapeKey:	false,
+  allowEnterKey: false
 })
 window.approve = approve
+
 const sure = swal.mixin({
   customClass: {
     confirmButton: 'btn btn-outline-danger btn-flat',
     cancelButton: 'btn btn-outline-primary btn-flat'
   },
   buttonsStyling: false,
+  allowOutsideClick:	false,
+  allowEscapeKey:	false,
+  allowEnterKey: false
 })
 window.sure = sure
+
 const paynow = swal.mixin({
   customClass: {
     confirmButton: 'btn btn-outline-primary btn-flat',
@@ -161,6 +172,7 @@ const paynow = swal.mixin({
   buttonsStyling: false,
 })
 window.paynow = paynow
+
 window.guestAction = swal
 window.fire = new Vue();
 

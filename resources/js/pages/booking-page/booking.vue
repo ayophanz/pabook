@@ -1,5 +1,15 @@
 <template>
     <div id="root">
+        <loading 
+            :height="128"
+            :width="128"
+            :transition="`fade`"
+            :loader="`dots`"
+            :background-color="`#fff`"
+            :color="`#38d39f`"
+            :active.sync="isLoading" 
+            :is-full-page="fullPage">
+        </loading>
         <div class="row justify-content-center">
             <booking-page-icon></booking-page-icon>
             <div class="col-md-12">
@@ -132,15 +142,19 @@ import { Calendar } from '@toast-ui/vue-calendar'
 import 'tui-date-picker/dist/tui-date-picker.css'
 import HotelDatePicker from 'vue-hotel-datepicker'
 import Select2 from 'v-select2-component';
+import Loading from 'vue-loading-overlay'
 export default {
     name: 'myCalendar',
     components: {
         Calendar,
         HotelDatePicker,
-        Select2
+        Select2,
+        Loading
     },
     data() {
         return {
+            fullPage: true,
+            isLoading: false,
             hotels:[],
             roomWithRoomTypes:[],
             manyRooms: [],
@@ -267,8 +281,21 @@ export default {
         },
         validateEntries() {
             if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
-                this.form.post('/api/create-book').then(function (response) { 
-                    console.log(response.data);
+                this.isLoading = true;
+                let self = this
+                this.form.post('/api/create-book').then(function (response) {
+                    self.isLoading = false;
+                    toast.fire({
+                      timer: 2000,
+                      type: 'success',
+                      title: 'Room availability confirmed.'
+                    })
+                }).catch(function (error) {
+                    self.isLoading = false;
+                    toast.fire({
+                      type: 'error',
+                      title: 'Something went wrong!'
+                    })
                 });
             }
         },
@@ -418,4 +445,36 @@ export default {
     }
 }
 </script>
+<style lang='scss'>
+    .book-rooms-quantity {
+        border: 1px solid #e5e5e5;
+        padding: 20px 10px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        max-height: 14.3rem;
+        min-height: 14.3rem;
+    }
+
+    .book-rooms-quantity h5 {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 10px 0px;
+        margin: 0px;
+    }
+
+    .book-rooms-quantity span {
+        font-size: 18px;
+        font-family: cursive;
+    }
+
+    .book-rooms-quantity ul {
+        list-style: circle;
+        padding: 0px 0px 0px 15px;
+    }
+
+    .swal2-loading .swal2-styled {
+        border-left-color: #38d39f !important;
+        border-right-color: #38d39f !important;
+    }
+</style>
 

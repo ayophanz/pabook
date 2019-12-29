@@ -324,16 +324,12 @@
                       title: msg
                     })
 
-                })
-                .catch(function (error) {
-                    console.log(error); 
-
+                }).catch(function (error) {
                     self.isLoading = false;
                     toast.fire({
                       type: 'error',
                       title: 'Something went wrong!'
                     })
-
                 });
             }
           },

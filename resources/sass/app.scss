@@ -501,32 +501,6 @@ button:focus, .fc-button-primary:focus {
     background: #28a745 !important;
 }
 
-.book-rooms-quantity {
-    border: 1px solid #e5e5e5;
-    padding: 20px 10px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    max-height: 14.3rem;
-    min-height: 14.3rem;
-}
-
-.book-rooms-quantity h5 {
-    font-size: 12px;
-    font-weight: 600;
-    padding: 10px 0px;
-    margin: 0px;
-}
-
-.book-rooms-quantity span {
-    font-size: 18px;
-    font-family: cursive;
-}
-
-.book-rooms-quantity ul {
-    list-style: circle;
-    padding: 0px 0px 0px 15px;
-}
-
 // .tui-full-calendar-month-week-item .tui-full-calendar-weekday-schedule {
 //     border-radius: 0px !important;
 // }
