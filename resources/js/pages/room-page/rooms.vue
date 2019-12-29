@@ -45,11 +45,11 @@
                         </template>
                         <template slot="column_room" slot-scope="props">
                             {{props.column.label}}&nbsp;
-                            <i class="fas fa-door-closed"></i>
+                            <i class="fas fa-bed"></i>
                         </template>
                         <template slot="column_room_type" slot-scope="props">
                             {{props.column.label}}&nbsp;
-                            <i class="fas fa-bed"></i>
+                            <i class="fas fa-door-closed"></i>
                         </template>
                         <template slot="column_total_room" slot-scope="props">
                             {{props.column.label}}&nbsp;
