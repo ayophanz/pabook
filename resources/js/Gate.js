@@ -5,25 +5,35 @@ export default class Gate {
 	}
 
 	superAdmin() {
-		return this.user.role === 'super_admin';
+		try {
+			return this.user.role === 'super_admin';
+		}catch(e){return false;}
 	}
 
 	hotelReceptionist() {
-		return this.user.role === 'hotel_receptionist';
+		try {
+			return this.user.role === 'hotel_receptionist';
+		}catch(e){return false;}
 	}
 
 	hotelOwner() {
-		return this.user.role === 'hotel_owner';
+		try {
+			return this.user.role === 'hotel_owner';
+		}catch(e){return false;}
 	}
 
 	superAdminOrhotelOwner() {
-		if(this.user.role === 'hotel_owner' || this.user.role === 'super_admin')
-			return	true;
+		try {
+			if(this.user.role === 'hotel_owner' || this.user.role === 'super_admin')
+				return	true;
+		}catch(e){return false;}
 	}
 
 	superAdminOrhotelOwnerOrhotelReceptionist() {
-		if(this.user.role === 'hotel_owner' || this.user.role === 'super_admin' || this.user.role === 'hotel_receptionist')
-			return	true;
+		try {
+			if(this.user.role === 'hotel_owner' || this.user.role === 'super_admin' || this.user.role === 'hotel_receptionist')
+				return	true;
+		}catch(e){return false;}
 	}
 	
 }

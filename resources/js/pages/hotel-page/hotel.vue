@@ -340,9 +340,7 @@
               reader.onloadend = (file) => {
                 this.imageUrl = reader.result;
                 this.form.image = reader.result;
-                console.log(reader.result);
               }
-              console.log(file);
               reader.readAsDataURL(file);
             }else{
               toast.fire({
@@ -357,7 +355,6 @@
             if(file['size'] < 5242880) {
               reader.onloadend = (file) => {
                 this.form.proofFile = reader.result;
-                console.log(reader.result);
               }              
               reader.readAsDataURL(file);
             }else{

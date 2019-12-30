@@ -162,13 +162,6 @@
                             column_text_alignment: "text-left",
                             row_classes: "room-row-class-number",
                         },
-                        // {
-                        //     label: "Image",
-                        //     name: "image",
-                        //     slot_name: "image",
-                        //     row_text_alignment: "text-left",
-                        //     column_text_alignment: "text-left",
-                        // },
                         {
                             label: "Status",
                             name: "status",

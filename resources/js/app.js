@@ -179,10 +179,22 @@ window.fire = new Vue();
 const app = new Vue({
   el: '#app',
   router,
-  created() {
-    /**
-     * Global js
-     */
+  methods:{
+    twoFactorCheck() {
+      if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+        var timeOut;
+        axios.get('/api/check-two-factor-if-expired').then((response) => {
+          if (response.data=='reload') {
+            window.clearTimeout(timeOut);
+            window.location.reload();
+          }
+        });
+        timeOut = window.setTimeout(this.twoFactorCheck, 5000);
+      }
+    }
+  },
+  created(){
+    this.twoFactorCheck();
   }
 });
 

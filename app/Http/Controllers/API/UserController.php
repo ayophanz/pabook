@@ -13,7 +13,7 @@ class UserController extends Controller
 {
     private $isRecep = false;
     public function __construct() {
-        $this->middleware(['auth:api', 'verified', 'two_factor_auth']);
+        $this->middleware(['auth:api', 'verified', 'two_factor_auth'])->except('checkTwoFactExpired');
     }
 
     public function index() {
@@ -174,9 +174,21 @@ class UserController extends Controller
     }
 
     /**
+     * Custom query
+     */
+    public function checkTwoFactExpired() {
+        $user = auth('api')->user();
+        if ($user->two_factor_expiry < \Carbon\Carbon::now()) {
+            return 'reload';
+        }
+        return 'ok';
+    }
+
+
+
+    /**
     *  Extra function
     */
-
 
 
     /**

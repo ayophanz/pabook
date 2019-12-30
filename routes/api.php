@@ -39,6 +39,7 @@ Route::put('/update-profile', 'API\UserController@UpdateProfile');
 
 Route::post('/recep-capability/{action}', 'API\UserController@recapCap');
 
+Route::get('/check-two-factor-if-expired', 'API\UserController@checkTwoFactExpired');
 
 /**
 * Hotel management
