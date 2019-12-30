@@ -27,85 +27,91 @@
                         <form  @submit.prevent="validateEntries" role="form">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <div class="form-group">
-                                        <HotelDatePicker 
-                                        @check-in-changed="checkInDate"
-                                        @check-out-changed="checkOutDate"
-                                        format="YYYY MMM. DD"
-                                        :startDate="new Date()"
-                                        :minNights="1"
-                                        :maxNights="30"
-                                        :closeDatepickerOnClickOutside="false"
-                                        :showCloseButton="true"
-                                        />
-                                        <has-error v-if="form.checkInD==''" :form="form" field="checkInD"></has-error>
-                                        <has-error v-else-if="form.checkOutD==''" :form="form" field="checkOutD"></has-error>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="hotel">Hotel</label>
-                                        <Select2 id="hotel" v-model="form.hotel" :options="hotels" :settings="{ placeholder: 'Please select hotel', containerCssClass:'form-control' }" @change="isHotelChange" />
-                                        <has-error :form="form" field="hotel"></has-error>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="roomWithRoomType">Room</label>
-                                        <Select2 id="roomWithRoomType" v-model="form.roomWithRoomType" :options=" roomWithRoomTypes" :settings="{ placeholder: 'Please select room', containerCssClass:'form-control' }" @change="isRoomWithRoomType" />
-                                        <has-error :form="form" field="roomWithRoomType"></has-error>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="manyRoom">No. of room</label>
-                                        <Select2 id="manyRoom" v-model="form.manyRoom" :options="(form.roomWithRoomType!='' ? manyRooms:[])" :settings="{ placeholder: 'Please select how many rooms', containerCssClass:'form-control' }" @change="isManyRoom" />
-                                        <has-error :form="form" field="manyRoom"></has-error>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="manyAdult">No. of adult</label>
-                                        <Select2 id="manyAdult" v-model="form.manyAdult" :options="(form.manyRoom!='' ? manyAdults:[])" :settings="{ placeholder: 'Please select how many adult(s)', containerCssClass:'form-control' }" />
-                                        <has-error :form="form" field="manyAdult"></has-error>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="manyChild">No. of child</label>
-                                        <Select2 id="manyChild" v-model="form.manyChild" :options="(form.manyAdult!='' ? manyChilds:[])" :settings="{ placeholder: 'Please select how many child(s)', containerCssClass:'form-control' }" />
-                                        <has-error :form="form" field="manyChild"></has-error>
-                                    </div>
-                                    <div class="row justify-content-center">
-                                        <div class="col-md-6">
-                                            <div class="container book-rooms-quantity">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <h5>Total Rooms</h5>
-                                                        <span>{{manyRooms.length}}</span>
+                                    <div v-if=" pageIn=='page_1'" class="tab-pagination page-1">
+                                        <div class="form-group">
+                                            <HotelDatePicker 
+                                            @check-in-changed="checkInDate"
+                                            @check-out-changed="checkOutDate"
+                                            format="YYYY MMM. DD"
+                                            :startDate="new Date()"
+                                            :minNights="1"
+                                            :maxNights="30"
+                                            :closeDatepickerOnClickOutside="false"
+                                            :showCloseButton="true"
+                                            />
+                                            <has-error v-if="form.checkInD==''" :form="form" field="checkInD"></has-error>
+                                            <has-error v-else-if="form.checkOutD==''" :form="form" field="checkOutD"></has-error>
+                                        
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="hotel">Hotel</label>
+                                            <Select2 id="hotel" v-model="form.hotel" :options="hotels" :settings="{ placeholder: 'Please select hotel', containerCssClass:'form-control' }" @change="isHotelChange" />
+                                            <has-error :form="form" field="hotel"></has-error>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="roomWithRoomType">Room</label>
+                                            <Select2 id="roomWithRoomType" v-model="form.roomWithRoomType" :options=" roomWithRoomTypes" :settings="{ placeholder: 'Please select room', containerCssClass:'form-control' }" @change="isRoomWithRoomType" />
+                                            <has-error :form="form" field="roomWithRoomType"></has-error>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="manyRoom">No. of room</label>
+                                            <Select2 id="manyRoom" v-model="form.manyRoom" :options="(form.roomWithRoomType!='' ? manyRooms:[])" :settings="{ placeholder: 'Please select how many rooms', containerCssClass:'form-control' }" @change="isManyRoom" />
+                                            <has-error :form="form" field="manyRoom"></has-error>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="manyAdult">No. of adult</label>
+                                            <Select2 id="manyAdult" v-model="form.manyAdult" :options="(form.manyRoom!='' ? manyAdults:[])" :settings="{ placeholder: 'Please select how many adult(s)', containerCssClass:'form-control' }" />
+                                            <has-error :form="form" field="manyAdult"></has-error>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="manyChild">No. of child</label>
+                                            <Select2 id="manyChild" v-model="form.manyChild" :options="(form.manyAdult!='' ? manyChilds:[])" :settings="{ placeholder: 'Please select how many child(s)', containerCssClass:'form-control' }" />
+                                            <has-error :form="form" field="manyChild"></has-error>
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-6">
+                                                <div class="container book-rooms-quantity">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h5>Total Rooms</h5>
+                                                            <span>{{manyRooms.length}}</span>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <h5>Available Rooms</h5>
+                                                            <span>6</span>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <h5>Booked Rooms</h5>
+                                                            <span>2</span>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-12">
-                                                        <h5>Available Rooms</h5>
-                                                        <span>6</span>
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <h5>Booked Rooms</h5>
-                                                        <span>2</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="container book-rooms-quantity">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h5>Fixed amenities</h5>
+                                                            <ul>
+                                                                <li v-for="item in fixedAmenities">{{item}}</li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <h5>Optional amenities</h5>
+                                                            <ul>
+                                                                <li v-for="item in optionalAmenities">{{item}}</li>
+                                                            </ul>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="container book-rooms-quantity">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <h5>Fixed amenities</h5>
-                                                        <ul>
-                                                            <li v-for="item in fixedAmenities">{{item}}</li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <h5>Optional amenities</h5>
-                                                        <ul>
-                                                            <li v-for="item in optionalAmenities">{{item}}</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div class="form-group text-center mt-4">
+                                            <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat"><i class="fas fa-concierge-bell"></i> Book Room</button>
                                         </div>
                                     </div>
-                                    <div class="form-group text-center mt-4">
-                                        <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat"><i class="fas fa-concierge-bell"></i> Book Room</button>
+                                    <div v-else-if=" pageIn=='page_2'" class="tab-pagination page-2">
+                                        <h1>test</h1>
                                     </div>
                                 </div>
                                 <div class="col-md-9">
@@ -170,6 +176,7 @@ export default {
             disNext: true,
             disPrev: true,
             tempData: [],
+            pageIn: 'page_1',
             form: new form({
                 hotel: '',
                 checkInD: '',
@@ -290,6 +297,7 @@ export default {
                       type: 'success',
                       title: 'Room availability confirmed.'
                     })
+                    self.pageIn = 'page_2'
                 }).catch(function (error) {
                     self.isLoading = false;
                     toast.fire({
