@@ -157,6 +157,12 @@ const sure = swal.mixin({
     confirmButton: 'btn btn-outline-danger btn-flat',
     cancelButton: 'btn btn-outline-primary btn-flat'
   },
+  showClass: {
+    popup: 'animated fadeInDown faster'
+  },
+  hideClass: {
+    popup: 'animated fadeOutUp faster'
+  },
   buttonsStyling: false,
   allowOutsideClick:	false,
   allowEscapeKey:	false,

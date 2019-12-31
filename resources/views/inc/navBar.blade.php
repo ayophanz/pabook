@@ -179,6 +179,12 @@
           @if(Gate::check('superAdmin') || Gate::check('hotelOwner'))
           <li class="nav-item has-treeview">
             <router-link to="/integration" class="nav-link">
+              <i class="fas fa-network-wired"></i>
+              <p>Channel manager</p>
+            </router-link>
+          </li>
+          <li class="nav-item has-treeview">
+            <router-link to="/integration" class="nav-link">
             <i class="fas fa-plug nav-icon"></i>
               <p>Integration</p>
             </router-link>
