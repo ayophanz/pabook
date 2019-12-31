@@ -32,6 +32,8 @@
                                             <HotelDatePicker 
                                             @check-in-changed="checkInDate"
                                             @check-out-changed="checkOutDate"
+                                            :startingDateValue="new Date(form.checkInD)"
+                                            :endingDateValue="new Date(form.checkOutD)"
                                             format="YYYY MMM. DD"
                                             :startDate="new Date()"
                                             :minNights="1"
@@ -229,8 +231,8 @@ export default {
             currency: '',
             form: new form({
                 hotel: '',
-                checkInD: '',
-                checkOutD: '',
+                checkInD: new Date().toString(),
+                checkOutD: new Date(new Date().getDate()+1).toString(),
                 manyAdult: '',
                 manyChild: '',
                 manyRoom:'',
