@@ -232,7 +232,7 @@ export default {
             form: new form({
                 hotel: '',
                 checkInD: new Date().toString(),
-                checkOutD: new Date(new Date().getDate()+1).toString(),
+                checkOutD: new Date(new Date().getTime()+(60 * 60 * 24 * 1000)).toString(),
                 manyAdult: '',
                 manyChild: '',
                 manyRoom:'',
@@ -388,15 +388,14 @@ export default {
         },
         resetAllList(){
             this.resetList();
-            this.currency = '';
             this.form.hotel = '';
-            
         },
         resetList(){
             this.form.manyAdult = '';
             this.form.manyChild = '';
             this.form.manyRoom = '';
             this.form.roomWithRoomType = '';
+            this.currency = '';
             this.roomPrice = 0;
         },
         generateList(param, kind) {
