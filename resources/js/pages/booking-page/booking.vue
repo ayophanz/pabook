@@ -331,9 +331,9 @@ export default {
     },
     methods: {
         init() {
+            this.loadHotels();
             this.selectedMonth = new Date();
             this.setRenderRangeText();
-            this.loadHotels();
             //this.$refs.mycalendar.usageStatistics = false;
         },
         nightNoFunc(){
@@ -374,6 +374,7 @@ export default {
             this.form.checkOutD = '';
             this.disPrev = true;
             this.disNext = true;
+            this.resetAllList();
             this.$refs.mycalendar.invoke('setDate', new Date(), true);
             this.setRenderRangeText();
         },
@@ -383,14 +384,17 @@ export default {
             if(this.form.checkInD!='' && Date.parse(new Date(this.form.checkInD.getFullYear()+'-'+(this.form.checkInD.getMonth()+1))) < Date.parse(new Date(this.dateRange))) this.disPrev = false;
             else this.disPrev = true;
         },
+        resetAllList(){
+            this.resetList();
+            this.currency = '';
+            this.form.hotel = '';
+            
+        },
         resetList(){
-            this.manyAdults = [];
-            this.manyChilds = [];
-            this.manyRooms = [];
-            this.roomWithRoomTypes = [];
-            this.fixedAmenities = [];
-            this.optionalAmenities = [];
-            this.roomPrices = [];
+            this.form.manyAdult = '';
+            this.form.manyChild = '';
+            this.form.manyRoom = '';
+            this.form.roomWithRoomType = '';
             this.roomPrice = 0;
         },
         generateList(param, kind) {
@@ -418,7 +422,13 @@ export default {
         },
         isHotelChange(){
             if(this.$gate.superAdminOrhotelOwner()) {
-                this.resetList();
+                this.roomPrices = [];
+                this.fixedAmenities = [];
+                this.optionalAmenities = [];
+                this.roomWithRoomTypes = [];
+                this.manyRooms = [];
+                this.manyChilds = [];
+                this.manyAdults = [];
                 let self = this;
                 axios.get('/api/hotel-with-room-types/'+this.form.hotel).then(
                     function (response) {
@@ -453,6 +463,7 @@ export default {
         },
         checkInDate(e) {
             if(e!=null) {
+              this.resetAllList();
               this.form.checkInD = e;
               this.$refs.mycalendar.invoke('setDate', e, true);
               this.dateRange = `${e.getFullYear()}-${(e.getMonth()+1)}`;
@@ -461,6 +472,7 @@ export default {
         },
         checkOutDate(e) {
             if(e!=null) {
+              this.resetAllList();
               this.form.checkOutD = e;
               this.compareDate();
             }
