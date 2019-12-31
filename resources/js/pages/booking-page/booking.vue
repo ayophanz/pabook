@@ -389,13 +389,13 @@ export default {
         resetAllList(){
             this.resetList();
             this.form.hotel = '';
+            this.form.roomWithRoomType = '';
+            this.currency = '';
         },
         resetList(){
             this.form.manyAdult = '';
             this.form.manyChild = '';
             this.form.manyRoom = '';
-            this.form.roomWithRoomType = '';
-            this.currency = '';
             this.roomPrice = 0;
         },
         generateList(param, kind) {
@@ -416,6 +416,7 @@ export default {
             this.manyChilds.unshift({id:0, text:'0'});
         },
         isRoomWithRoomType() {
+            this.resetList();
             this.roomPrice = parseFloat(this.generateList(this.roomPrices, 'price')[0]);
             this.manyRooms = this.generateList(this.totalRooms, 'total');
             this.fixedAmenities = this.generateList(this.tempOptionalAmenities, 'value');
@@ -423,6 +424,9 @@ export default {
         },
         isHotelChange(){
             if(this.$gate.superAdminOrhotelOwner()) {
+                this.resetList();
+                this.currency = '';
+                this.form.roomWithRoomType = '';
                 this.roomPrices = [];
                 this.fixedAmenities = [];
                 this.optionalAmenities = [];
