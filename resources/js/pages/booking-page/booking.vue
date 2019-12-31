@@ -68,7 +68,7 @@
                                             <has-error :form="form" field="manyChild"></has-error>
                                         </div>
                                         <div class="row justify-content-center">
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <div class="container book-rooms-quantity">
                                                     <div class="row">
                                                         <div class="col-md-12">
@@ -86,9 +86,28 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-8">
                                                 <div class="container book-rooms-quantity">
                                                     <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h5>Room price</h5>
+                                                            <ul>
+                                                                <li>{{currency}} {{roomPrice}}</li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <h5>Sub total</h5>
+                                                            <ul>
+                                                                <li>{{currency}} {{roomPrice}} x ({{ nightNoFunc() }})night</li>
+                                                                <li>{{currency}} {{roomPrice}} x ({{ roomNoFunc() }})no. of room</li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <h5>Total</h5>
+                                                            <ul>
+                                                                <li>{{currency}} {{totalAmountFunc() }}</li>
+                                                            </ul>
+                                                        </div>
                                                         <div class="col-md-12">
                                                             <h5>Fixed amenities</h5>
                                                             <ul>
@@ -203,7 +222,11 @@ export default {
             disNext: true,
             disPrev: true,
             tempData: [],
-            pageIn: 'page_2',
+            pageIn: 'page_1',
+            roomPrices:[],
+            roomPrice: 0,
+            nightNo: 0,
+            currency: '',
             form: new form({
                 hotel: '',
                 checkInD: '',
@@ -313,6 +336,15 @@ export default {
             this.loadHotels();
             //this.$refs.mycalendar.usageStatistics = false;
         },
+        nightNoFunc(){
+            return parseInt(Math.ceil(Math.abs(new Date(this.form.checkOutD) - new Date(this.form.checkInD)) / (1000 * 60 * 60 * 24)));
+        },
+        roomNoFunc() {
+            return parseInt(this.form.manyRoom);
+        },
+        totalAmountFunc() {
+            return parseFloat((parseFloat(this.roomPrice) * this.nightNoFunc()) * this.roomNoFunc());
+        },
         backIsClick() {
             this.pageIn = 'page_1';
         },
@@ -361,18 +393,16 @@ export default {
             var tempParam = [];
             if (param.length > 0) {
                 var tempList = param.find(e => parseInt(e.id) === parseInt(this.form.roomWithRoomType)).value;
-                if(kind=='value') {
-                    tempList.forEach(function(item, key){
-                        tempParam.push(item.value);
-                    });
-                }
-                if(kind=='total') for(var i=1;i<=parseInt(tempList);i++) tempParam.push({id:i, text:i});
-                if(kind=='many') for(var i=1;i<=(parseInt(tempList)*this.form.manyRoom);i++) tempParam.push({id:i, text:i});
+                if(kind=='price')  tempParam.push(tempList);
+                else if(kind=='value') tempList.forEach(function(item, key){ tempParam.push(item.value); });
+                else if(kind=='total') for(var i=1;i<=parseInt(tempList);i++) tempParam.push({id:i, text:i});
+                else if(kind=='many') for(var i=1;i<=(parseInt(tempList)*this.form.manyRoom);i++) tempParam.push({id:i, text:i});
             } 
             
             return tempParam;
         },
         isManyRoom() {
+            this.roomPrice = parseFloat(this.generateList(this.roomPrices, 'price')[0]);
             this.manyAdults = this.generateList(this.totalAdults, 'many');
             this.manyChilds = this.generateList(this.totalChilds, 'many');
             this.manyChilds.unshift({id:0, text:'0'});
@@ -389,8 +419,10 @@ export default {
                 axios.get('/api/hotel-with-room-types/'+this.form.hotel).then(
                     function (response) {
                         response.data.forEach(function(item, key) {
+                            self.currency = item.room_type_hotel.base_currency.value;
                             if(item.room_type_rooms!='') {
                                 item.room_type_rooms.forEach(function(item2, key2){
+                                    self.roomPrices.push({id:item2.id, value:item2.price});
                                     self.roomWithRoomTypes.push({id:item2.id, text:item2.name+' - '+item.name});
                                     self.totalRooms.push({id:item2.id, value:item2.total_room, available:'none'});
                                     self.totalAdults.push({id:item2.id, value:item2.max_adult});
@@ -496,7 +528,7 @@ export default {
     .book-rooms-quantity h5 {
         font-size: 12px;
         font-weight: 600;
-        padding: 10px 0px;
+        padding: 5px 0px;
         margin: 0px;
     }
 
