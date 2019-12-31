@@ -41,7 +41,6 @@
                                             />
                                             <has-error v-if="form.checkInD==''" :form="form" field="checkInD"></has-error>
                                             <has-error v-else-if="form.checkOutD==''" :form="form" field="checkOutD"></has-error>
-                                        
                                         </div>
                                         <div class="form-group">
                                             <label for="hotel">Hotel</label>
@@ -111,7 +110,35 @@
                                         </div>
                                     </div>
                                     <div v-else-if=" pageIn=='page_2'" class="tab-pagination page-2">
-                                        <h1>test</h1>
+                                        <i @click="backIsClick" class="btn btn-outline-primary btn-flat fas fa-arrow-left"></i>
+                                        <div class="form-group mt-4">
+                                            <label for="name">Name <span class="required-asterisk">*</span></label>
+                                            <input type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }" id="name">
+                                            <has-error :form="form" field="name"></has-error>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="phone_no">Phone no. <span class="required-asterisk">*</span></label>
+                                            <input type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('phone_no') }" id="phone_no">
+                                            <has-error :form="form" field="phone_no"></has-error>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="email">Email </label>
+                                            <input type="email" class="form-control" :class="{ 'is-invalid': form.errors.has('email') }" id="email">
+                                            <i>Note: if not empty system will send receipt.</i>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="address">Address </label>
+                                            <input type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('address') }" id="address">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="summary">Booking Summary </label>
+                                            <div class="summary-container">
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group text-center mt-4">
+                                            <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat"><i class="fas fa-thumbs-up"></i> Done</button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-9">
@@ -176,7 +203,7 @@ export default {
             disNext: true,
             disPrev: true,
             tempData: [],
-            pageIn: 'page_1',
+            pageIn: 'page_2',
             form: new form({
                 hotel: '',
                 checkInD: '',
@@ -285,6 +312,9 @@ export default {
             this.setRenderRangeText();
             this.loadHotels();
             //this.$refs.mycalendar.usageStatistics = false;
+        },
+        backIsClick() {
+            this.pageIn = 'page_1';
         },
         validateEntries() {
             if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
@@ -484,5 +514,12 @@ export default {
         border-left-color: #38d39f !important;
         border-right-color: #38d39f !important;
     }
+
+    .summary-container {
+        border: 1px solid #e5e5e5;
+        min-height: 300px;
+        overflow-y: auto;
+    }
+
 </style>
 

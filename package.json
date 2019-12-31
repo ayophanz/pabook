@@ -37,7 +37,7 @@
         "sweetalert2": "^8.19.0",
         "v-select2-component": "^0.4.1",
         "vform": "^1.0.1",
-        "vue": "^2.4.2",
+        "vue": "^2.6.11",
         "vue-bootstrap4-table": "^1.1.11",
         "vue-hotel-datepicker": "^2.6.4",
         "vue-loading-overlay": "^3.2.0",
