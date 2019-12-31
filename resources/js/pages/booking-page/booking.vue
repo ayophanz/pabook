@@ -92,20 +92,20 @@
                                                         <div class="col-md-12">
                                                             <h5>Room price</h5>
                                                             <ul>
-                                                                <li>{{currency}} {{roomPrice}}</li>
+                                                                <li>{{currency}}{{roomPrice}}</li>
                                                             </ul>
                                                         </div>
                                                         <div class="col-md-12">
                                                             <h5>Sub total</h5>
                                                             <ul>
-                                                                <li>{{currency}} {{roomPrice}} x ({{ nightNoFunc() }})night</li>
-                                                                <li>{{currency}} {{roomPrice}} x ({{ roomNoFunc() }})no. of room</li>
+                                                                <li>{{currency}}{{roomPrice}} x ({{ nightNoFunc() }})night</li>
+                                                                <li>{{currency}}{{roomPrice}} x ({{ roomNoFunc() }})no. of room</li>
                                                             </ul>
                                                         </div>
                                                         <div class="col-md-12">
                                                             <h5>Total</h5>
                                                             <ul>
-                                                                <li>{{currency}} {{totalAmountFunc() }}</li>
+                                                                <li>{{currency}}{{totalAmountFunc() }}</li>
                                                             </ul>
                                                         </div>
                                                         <div class="col-md-12">
@@ -131,6 +131,12 @@
                                     <div v-else-if=" pageIn=='page_2'" class="tab-pagination page-2">
                                         <i @click="backIsClick" class="btn btn-outline-primary btn-flat fas fa-arrow-left"></i>
                                         <div class="form-group mt-4">
+                                            <label for="summary">Booking Summary </label>
+                                            <div class="summary-container">
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <label for="name">Name <span class="required-asterisk">*</span></label>
                                             <input type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }" id="name">
                                             <has-error :form="form" field="name"></has-error>
@@ -148,12 +154,6 @@
                                         <div class="form-group">
                                             <label for="address">Address </label>
                                             <input type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('address') }" id="address">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="summary">Booking Summary </label>
-                                            <div class="summary-container">
-
-                                            </div>
                                         </div>
                                         <div class="form-group text-center mt-4">
                                             <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat"><i class="fas fa-thumbs-up"></i> Done</button>
@@ -388,6 +388,10 @@ export default {
             this.manyChilds = [];
             this.manyRooms = [];
             this.roomWithRoomTypes = [];
+            this.fixedAmenities = [];
+            this.optionalAmenities = [];
+            this.roomPrices = [];
+            this.roomPrice = 0;
         },
         generateList(param, kind) {
             var tempParam = [];
@@ -402,12 +406,12 @@ export default {
             return tempParam;
         },
         isManyRoom() {
-            this.roomPrice = parseFloat(this.generateList(this.roomPrices, 'price')[0]);
             this.manyAdults = this.generateList(this.totalAdults, 'many');
             this.manyChilds = this.generateList(this.totalChilds, 'many');
             this.manyChilds.unshift({id:0, text:'0'});
         },
         isRoomWithRoomType() {
+            this.roomPrice = parseFloat(this.generateList(this.roomPrices, 'price')[0]);
             this.manyRooms = this.generateList(this.totalRooms, 'total');
             this.fixedAmenities = this.generateList(this.tempOptionalAmenities, 'value');
             this.optionalAmenities = this.generateList(this.tempFixedAmenities, 'value');
