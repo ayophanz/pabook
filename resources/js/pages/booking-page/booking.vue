@@ -61,7 +61,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="rooms_no">Room no.</label>
-                                            <multiselect :max="parseInt(form.manyRoom)" @remove="roomsNoOnRemove" @select="roomsNoOnAdd" :class="{ 'is-invalid': form.errors.has('rooms_no') }" v-model="form.rooms_no" label="value" track-by="code" :options="rooms_options" :multiple="true">
+                                            <multiselect :max="parseInt(form.manyRoom)" @remove="roomsNoOnRemove" @select="roomsNoOnAdd" :class="{ 'is-invalid': form.errors.has('rooms_no') }" v-model="form.rooms_options" label="value" track-by="code" :options="tempRoomOptions" :multiple="true">
                                                 <template slot="tag" slot-scope="{ option, remove }"><span :class="option.status" class="multiselect__tag"><span>{{ option.value }}</span><span v-if="option.status=='ready'" :class="option.status" class="custom__remove" @click="remove(option)"><i aria-hidden="true" tabindex="1" class="multiselect__tag-icon"></i></span></span></template>
                                                 <span slot="noResult">Oops! No results</span>
                                             </multiselect>
@@ -236,7 +236,7 @@ export default {
             nightNo: 0,
             currency: '',
             no_unit_avail: 0,
-            rooms_options: [],
+           
             tempRoomOptions: [],
             form: new form({
                 hotel: '',
@@ -245,7 +245,8 @@ export default {
                 manyAdult: '',
                 manyChild: '',
                 manyRoom:'',
-                roomWithRoomType:''
+                roomWithRoomType:'',
+                rooms_options: null
             }),
             calendarList: [
                 {
@@ -436,14 +437,14 @@ export default {
             return tempParam;
         },
         isManyRoom() {
+            this.form.rooms_options = [];
+            this.tempRoomOptions = this.generateList(this.tempRoomOptions, 'roomNo');
             this.manyAdults = this.generateList(this.totalAdults, 'many');
             this.manyChilds = this.generateList(this.totalChilds, 'many');
             this.manyChilds.unshift({id:0, text:'0'});
         },
         isRoomWithRoomType() {
             this.resetList();
-            this.rooms_options = this.generateList(this.tempRoomOptions, 'roomNo');
-            //console.log(this.rooms_options);
             this.roomPrice = parseFloat(this.generateList(this.roomPrices, 'price')[0]);
             this.manyRooms = this.generateList(this.totalRooms, 'total');
             this.fixedAmenities = this.generateList(this.tempOptionalAmenities, 'value');
