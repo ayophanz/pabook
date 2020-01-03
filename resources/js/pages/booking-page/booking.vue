@@ -66,6 +66,7 @@
                                                 <span slot="noResult">Oops! No results</span>
                                                 <span slot="maxElements">{{form.manyRoom}} allowed item</span>
                                             </multiselect>
+                                            <has-error :form="form" field="rooms_no"></has-error>
                                         </div>
                                         <div class="form-group">
                                             <label for="manyAdult">No. of adult</label>
@@ -179,7 +180,6 @@
                                             <!-- <button type="button" class="btn btn-default btn-sm move-today" data-action="move-today">Today</button> -->
                                             &nbsp;<button v-if="disPrev==false" :disabled="disPrev" type="button" class="btn btn-outline-primary btn-flat move-day" data-action="move-prev"><i class="fas fa-chevron-left" data-action="move-prev"></i> Prev</button>
                                             &nbsp;<button v-if="disNext==false" :disabled="disNext" type="button" class="btn btn-outline-primary btn-flat move-day" data-action="move-next">Next <i class="fas fa-chevron-right" data-action="move-next"></i></button>
-                                            &nbsp;
                                         </span>
                                         <span class="render-range">{{dateRange}}</span>
                                     </div>

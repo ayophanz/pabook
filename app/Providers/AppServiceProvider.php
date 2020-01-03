@@ -73,5 +73,14 @@ class AppServiceProvider extends ServiceProvider
             return ((int)$room_total == (int)$field_rooms_no) ? true : false;
         });
 
+        Validator::extend('rooms_no_equal_room_name', function ($attribute, $value, $parameters) {
+            list($field_rooms_no, $room_name) = $parameters;
+            return ((int)$room_name == (int)$field_rooms_no) ? true : false;
+        });
+
+        Validator::replacer('rooms_no_equal_room_name', function($message, $attribute, $rule, $parameters) {
+            return str_replace(':field', $parameters[0], $message);
+        });
+
     }
 }

@@ -34,7 +34,6 @@ class BookController extends Controller
 
     if(\Gate::allows('hotelReceptionist')) 
       return Booking::whereIn('room_id', $this->filterBookings('recep'))->with('room')->get();  
-      
    }
 
    public function create(Request $request) {
@@ -48,7 +47,8 @@ class BookController extends Controller
             'manyAdult' => 'required',
             'manyChild' => 'required',
             'manyRoom'  => 'required',
-            'roomWithRoomType'  => 'required'
+            'roomWithRoomType'  => 'required',
+            'rooms_no'  => 'required|rooms_no_equal_room_name:'.$request['manyRoom'].','.count($request['rooms_no'])
    		]; 
 
    		$customMessages = [
@@ -58,7 +58,8 @@ class BookController extends Controller
                         'manyAdult.required' => 'The number of adult is required.',
                         'manyChild.required' => 'The number of child is required.',
                         'manyRoom.required' => 'The number of how many room is required.',
-                        'roomWithRoomType.required' => 'The room is required.'
+                        'roomWithRoomType.required' => 'The room is required.',
+                        'rooms_no_equal_room_name' => 'The item on this field must match on "No. of room"'
                         ];
 
       $this->validate($request, $data, $customMessages);
@@ -123,12 +124,12 @@ class BookController extends Controller
    }
 
    public function markAsRead($id=null) {
-    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
-        return die('not allowed');
+      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
+          return die('not allowed');
 
-    if($id!=null)
-       auth()->user()->unreadNotifications->where('id', $id)->markAsRead();
-    return auth()->user()->load('notifications');
+      if($id!=null)
+        auth()->user()->unreadNotifications->where('id', $id)->markAsRead();
+      return auth()->user()->load('notifications');
 
    }
 
