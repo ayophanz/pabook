@@ -64,6 +64,7 @@
                                             <multiselect :max="parseInt(form.manyRoom)" @remove="roomsNoOnRemove" @select="roomsNoOnAdd" :class="{ 'is-invalid': form.errors.has('rooms_no') }" v-model="form.rooms_options" label="value" track-by="code" :options="tempRoomOptions" :multiple="true">
                                                 <template slot="tag" slot-scope="{ option, remove }"><span :class="option.status" class="multiselect__tag"><span>{{ option.value }}</span><span v-if="option.status=='ready'" :class="option.status" class="custom__remove" @click="remove(option)"><i aria-hidden="true" tabindex="1" class="multiselect__tag-icon"></i></span></span></template>
                                                 <span slot="noResult">Oops! No results</span>
+                                                <span slot="maxElements">{{form.manyRoom}} allowed item</span>
                                             </multiselect>
                                         </div>
                                         <div class="form-group">
