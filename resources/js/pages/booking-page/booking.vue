@@ -154,6 +154,24 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div id="calendar-menu">
+                                        <div class="row mt-0 room-cell-container">
+                                            <div class="col-md-3 pr-0 pl-0">
+                                                <h5 class="text-center mt-3">Total Rooms</h5>
+                                                <h3 class="text-center">{{manyRooms.length}}</h3>
+                                            </div>
+                                            <div class="col-md-3 pr-0 pl-0">
+                                                <h5 class="text-center mt-3">Available Rooms</h5>
+                                                <h3 class="text-center">6</h3>
+                                            </div>
+                                            <div class="col-md-3 pr-0 pl-0">
+                                                <h5 class="text-center mt-3">Reserved Rooms</h5>
+                                                <h3 class="text-center">2</h3>
+                                            </div>
+                                            <div class="col-md-3 pr-0 pl-0">
+                                                <h5 class="text-center mt-3">Occupied Rooms</h5>
+                                                <h3 class="text-center">2</h3>
+                                            </div>
+                                        </div><br />
                                         <select v-model="selectedView" class="menuSelectedView">
                                             <option v-for="(options, index) in viewModeOptions" :value="options.value" :key="index">{{options.title}}</option>
                                         </select>
@@ -171,20 +189,6 @@
                                         :calendars="calendarList"
                                         :schedules="scheduleList"
                                     />
-                                    <div class="row mt-3 room-cell-container">
-                                        <div class="col-md-4 pr-0 pl-0">
-                                            <h5 class="text-center mt-3">Total Rooms</h5>
-                                            <h3 class="text-center">{{manyRooms.length}}</h3>
-                                        </div>
-                                        <div class="col-md-4 pr-0 pl-0">
-                                            <h5 class="text-center mt-3">Available Rooms</h5>
-                                            <h3 class="text-center">6</h3>
-                                        </div>
-                                        <div class="col-md-4 pr-0 pl-0">
-                                            <h5 class="text-center mt-3">Booked Rooms</h5>
-                                            <h3 class="text-center">2</h3>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </form>
