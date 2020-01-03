@@ -17,7 +17,7 @@ class TwoFactorController extends Controller
         $this->validate($request, ['token' => 'required']);
         $user = auth()->user();
         if ($request->token == $user->two_factor_token) {
-        $user->two_factor_expiry = \Carbon\Carbon::now()->addMinutes(config('session.lifetime'));
+            $user->two_factor_expiry = \Carbon\Carbon::now()->addMinutes(config('session.lifetime'));
             $user->save();
             return redirect()->intended('/');
         }

@@ -60,6 +60,13 @@
                                             <has-error :form="form" field="manyRoom"></has-error>
                                         </div>
                                         <div class="form-group">
+                                            <label for="rooms_no">Room no.</label>
+                                            <multiselect :max="parseInt(form.manyRoom)" @remove="roomsNoOnRemove" @select="roomsNoOnAdd" :class="{ 'is-invalid': form.errors.has('rooms_no') }" v-model="form.rooms_no" label="value" track-by="code" :options="rooms_options" :multiple="true">
+                                                <template slot="tag" slot-scope="{ option, remove }"><span :class="option.status" class="multiselect__tag"><span>{{ option.value }}</span><span v-if="option.status=='ready'" :class="option.status" class="custom__remove" @click="remove(option)"><i aria-hidden="true" tabindex="1" class="multiselect__tag-icon"></i></span></span></template>
+                                                <span slot="noResult">Oops! No results</span>
+                                            </multiselect>
+                                        </div>
+                                        <div class="form-group">
                                             <label for="manyAdult">No. of adult</label>
                                             <Select2 id="manyAdult" v-model="form.manyAdult" :options="(form.manyRoom!='' ? manyAdults:[])" :settings="{ placeholder: 'Please select how many adult(s)', containerCssClass:'form-control' }" />
                                             <has-error :form="form" field="manyAdult"></has-error>
@@ -70,25 +77,7 @@
                                             <has-error :form="form" field="manyChild"></has-error>
                                         </div>
                                         <div class="row justify-content-center">
-                                            <div class="col-md-4">
-                                                <div class="container book-rooms-quantity">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <h5>Total Rooms</h5>
-                                                            <span>{{manyRooms.length}}</span>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <h5>Available Rooms</h5>
-                                                            <span>6</span>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <h5>Booked Rooms</h5>
-                                                            <span>2</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
+                                            <div class="col-md-12">
                                                 <div class="container book-rooms-quantity">
                                                     <div class="row">
                                                         <div class="col-md-12">
@@ -181,6 +170,20 @@
                                         :calendars="calendarList"
                                         :schedules="scheduleList"
                                     />
+                                    <div class="row mt-3 room-cell-container">
+                                        <div class="col-md-4 pr-0 pl-0">
+                                            <h5 class="text-center mt-3">Total Rooms</h5>
+                                            <h3 class="text-center">{{manyRooms.length}}</h3>
+                                        </div>
+                                        <div class="col-md-4 pr-0 pl-0">
+                                            <h5 class="text-center mt-3">Available Rooms</h5>
+                                            <h3 class="text-center">6</h3>
+                                        </div>
+                                        <div class="col-md-4 pr-0 pl-0">
+                                            <h5 class="text-center mt-3">Booked Rooms</h5>
+                                            <h3 class="text-center">2</h3>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </form>
@@ -195,14 +198,17 @@ import 'tui-calendar/dist/tui-calendar.css'
 import { Calendar } from '@toast-ui/vue-calendar'
 import 'tui-date-picker/dist/tui-date-picker.css'
 import HotelDatePicker from 'vue-hotel-datepicker'
-import Select2 from 'v-select2-component';
+import Select2 from 'v-select2-component'
 import Loading from 'vue-loading-overlay'
+import Multiselect from 'vue-multiselect'
+import { parse } from 'path'
 export default {
     name: 'myCalendar',
     components: {
         Calendar,
         HotelDatePicker,
         Select2,
+        Multiselect,
         Loading
     },
     data() {
@@ -229,6 +235,9 @@ export default {
             roomPrice: 0,
             nightNo: 0,
             currency: '',
+            no_unit_avail: 0,
+            rooms_options: [],
+            tempRoomOptions: [],
             form: new form({
                 hotel: '',
                 checkInD: new Date().toString(),
@@ -338,6 +347,12 @@ export default {
             this.setRenderRangeText();
             //this.$refs.mycalendar.usageStatistics = false;
         },
+        roomsNoOnAdd(value) {
+            this.no_unit_avail++;
+        },
+        roomsNoOnRemove(value) {
+            this.no_unit_avail--;
+        },
         nightNoFunc(){
             return parseInt(Math.ceil(Math.abs(new Date(this.form.checkOutD) - new Date(this.form.checkInD)) / (1000 * 60 * 60 * 24)));
         },
@@ -403,6 +418,16 @@ export default {
             if (param.length > 0) {
                 var tempList = param.find(e => parseInt(e.id) === parseInt(this.form.roomWithRoomType)).value;
                 if(kind=='price')  tempParam.push(tempList);
+                else if(kind=='roomNo') {
+                    let self = this
+                    param.forEach(function(item, key){ 
+                        if(parseInt(item.id)==parseInt(self.form.roomWithRoomType)) {
+                            const found = tempParam.some(el => el.value === item.value.value);
+                            if (!found) tempParam.push(item.value);
+                        }
+                    });
+
+                }
                 else if(kind=='value') tempList.forEach(function(item, key){ tempParam.push(item.value); });
                 else if(kind=='total') for(var i=1;i<=parseInt(tempList);i++) tempParam.push({id:i, text:i});
                 else if(kind=='many') for(var i=1;i<=(parseInt(tempList)*this.form.manyRoom);i++) tempParam.push({id:i, text:i});
@@ -417,6 +442,8 @@ export default {
         },
         isRoomWithRoomType() {
             this.resetList();
+            this.rooms_options = this.generateList(this.tempRoomOptions, 'roomNo');
+            //console.log(this.rooms_options);
             this.roomPrice = parseFloat(this.generateList(this.roomPrices, 'price')[0]);
             this.manyRooms = this.generateList(this.totalRooms, 'total');
             this.fixedAmenities = this.generateList(this.tempOptionalAmenities, 'value');
@@ -439,6 +466,13 @@ export default {
                     function (response) {
                         response.data.forEach(function(item, key) {
                             self.currency = item.room_type_hotel.base_currency.value;
+                            if([item.room_type_hotel]!='') {
+                                [item.room_type_hotel].forEach(function(item2, key2){
+                                    JSON.parse(item2.hotel_rooms_no).forEach(function(item3, key3){
+                                        self.tempRoomOptions.push({id:item3.assign_id, value:item3});
+                                    });
+                                });
+                            }
                             if(item.room_type_rooms!='') {
                                 item.room_type_rooms.forEach(function(item2, key2){
                                     self.roomPrices.push({id:item2.id, value:item2.price});
@@ -446,8 +480,8 @@ export default {
                                     self.totalRooms.push({id:item2.id, value:item2.total_room, available:'none'});
                                     self.totalAdults.push({id:item2.id, value:item2.max_adult});
                                     self.totalChilds.push({id:item2.id, value:item2.max_child});
-                                    self.tempOptionalAmenities.push({id:item2.id, value:JSON.parse(item2.room_feature_optional.value)}); //= JSON.parse(item2.room_feature_optional.value);
-                                    self.tempFixedAmenities.push({id:item2.id, value:JSON.parse(item2.room_feature.value)}); //= JSON.parse(item2.room_feature.value);
+                                    self.tempOptionalAmenities.push({id:item2.id, value:JSON.parse(item2.room_feature_optional.value)});
+                                    self.tempFixedAmenities.push({id:item2.id, value:JSON.parse(item2.room_feature.value)});
                                 });
                             }
                         });
@@ -572,6 +606,15 @@ export default {
         border: 1px solid #e5e5e5;
         min-height: 300px;
         overflow-y: auto;
+    }
+
+    .room-cell-container {
+        margin: auto;
+        margin-top: 10px;
+    }
+
+    .room-cell-container div {
+        border: 1px solid #e5e5e5;
     }
 
 </style>
