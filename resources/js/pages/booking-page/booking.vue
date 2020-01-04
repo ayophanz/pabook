@@ -426,6 +426,7 @@ export default {
             this.form.manyRoom = '';
             this.roomPrice = 0;
             this.form.rooms_no = [];
+            this.form.addOnOptionalAmen = [];
         },
         generateList(param, kind) {
             var tempParam = [];
