@@ -28,7 +28,7 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div v-if=" pageIn=='page_1'" class="tab-pagination page-1">
-                                        <div class="form-group">
+                                        <div class="form-group mb-1">
                                             <HotelDatePicker 
                                             @check-in-changed="checkInDate"
                                             @check-out-changed="checkOutDate"
@@ -44,37 +44,37 @@
                                             <has-error v-if="form.checkInD==''" :form="form" field="checkInD"></has-error>
                                             <has-error v-else-if="form.checkOutD==''" :form="form" field="checkOutD"></has-error>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="hotel">Hotel</label>
+                                        <div class="form-group mb-2">
+                                            <label class="mb-0" for="hotel">Hotel</label>
                                             <Select2 id="hotel" v-model="form.hotel" :options="hotels" :settings="{ placeholder: 'Please select hotel', containerCssClass:'form-control' }" @change="isHotelChange" />
                                             <has-error :form="form" field="hotel"></has-error>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="roomWithRoomType">Room</label>
+                                        <div class="form-group mb-2">
+                                            <label class="mb-0" for="roomWithRoomType">Room</label>
                                             <Select2 id="roomWithRoomType" v-model="form.roomWithRoomType" :options=" roomWithRoomTypes" :settings="{ placeholder: 'Please select room', containerCssClass:'form-control' }" @change="isRoomWithRoomType" />
                                             <has-error :form="form" field="roomWithRoomType"></has-error>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="manyRoom">No. of room</label>
+                                        <div class="form-group mb-2">
+                                            <label class="mb-0" for="manyRoom">No. of room</label>
                                             <Select2 id="manyRoom" v-model="form.manyRoom" :options="(form.roomWithRoomType!='' ? manyRooms:[])" :settings="{ placeholder: 'Please select how many rooms', containerCssClass:'form-control' }" @change="isManyRoom" />
                                             <has-error :form="form" field="manyRoom"></has-error>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="rooms_no">Room no.</label>
-                                            <multiselect :max="parseInt(form.manyRoom)" @remove="roomsNoOnRemove" @select="roomsNoOnAdd" :class="{ 'is-invalid': form.errors.has('rooms_no') }" v-model="form.rooms_no" label="value" track-by="code" :options="rooms_options" :multiple="true">
+                                        <div class="form-group mb-2">
+                                            <label class="mb-0" for="rooms_no">Room no.</label>
+                                            <multiselect :max="parseInt(form.manyRoom)" placeholder="Please select designated room no." @remove="roomsNoOnRemove" @select="roomsNoOnAdd" :class="{ 'is-invalid': form.errors.has('rooms_no') }" v-model="form.rooms_no" label="value" track-by="code" :options="rooms_options" :multiple="true">
                                                 <template slot="tag" slot-scope="{ option, remove }"><span :class="option.status" class="multiselect__tag"><span>{{ option.value }}</span><span v-if="option.status=='ready'" :class="option.status" class="custom__remove" @click="remove(option)"><i aria-hidden="true" tabindex="1" class="multiselect__tag-icon"></i></span></span></template>
                                                 <span slot="noResult">Oops! No results</span>
-                                                <span slot="maxElements">{{form.manyRoom}} allowed item</span>
+                                                <span slot="maxElements">{{form.manyRoom}} item allowed</span>
                                             </multiselect>
                                             <has-error :form="form" field="rooms_no"></has-error>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="manyAdult">No. of adult</label>
+                                        <div class="form-group mb-2">
+                                            <label class="mb-0" for="manyAdult">No. of adult</label>
                                             <Select2 id="manyAdult" v-model="form.manyAdult" :options="(form.manyRoom!='' ? manyAdults:[])" :settings="{ placeholder: 'Please select how many adult(s)', containerCssClass:'form-control' }" />
                                             <has-error :form="form" field="manyAdult"></has-error>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="manyChild">No. of child</label>
+                                        <div class="form-group mb-2">
+                                            <label class="mb-0" for="manyChild">No. of child</label>
                                             <Select2 id="manyChild" v-model="form.manyChild" :options="(form.manyAdult!='' ? manyChilds:[])" :settings="{ placeholder: 'Please select how many child(s)', containerCssClass:'form-control' }" />
                                             <has-error :form="form" field="manyChild"></has-error>
                                         </div>
@@ -641,6 +641,10 @@ export default {
     .optionalAmen-list {
         list-style: none !important;
         padding: 0 !important;
+    }
+
+    .multiselect__tags {
+        padding: 8px 40px 0 20px !important;
     }
 </style>
 
