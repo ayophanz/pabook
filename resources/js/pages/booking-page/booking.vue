@@ -85,13 +85,18 @@
                                                         <div class="col-md-12">
                                                             <h5>Fixed amenities</h5>
                                                             <ul>
-                                                                <li v-for="item in optionalAmenities">{{item}}</li>
+                                                                <li v-for="item in fixedAmenities">{{item}}</li>
                                                             </ul>
                                                         </div>
                                                         <div class="col-md-12">
                                                             <h5>Optional amenities</h5>
                                                             <ul>
-                                                                <li v-for="item in fixedAmenities">{{item}}</li>
+                                                                <li v-for="item in optionalAmenities">
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="checkbox" :value="item">
+                                                                        <label class="form-check-label">{{item.value}} | {{currency}}{{item.price}}</label>
+                                                                    </div>
+                                                                </li>
                                                             </ul>
                                                         </div>
                                                     </div>
@@ -106,6 +111,7 @@
                                             <label class="mb-0">Subtotal:</label><br />
                                             &nbsp;&nbsp;<span>{{currency}}{{roomPrice}} x ({{ nightNoFunc() }})night</span><br />
                                             &nbsp;&nbsp;<span>{{currency}}{{roomPrice}} x ({{ roomNoFunc() }})no. of room</span>
+                                            &nbsp;&nbsp;<span v-for="item in form.addOnOptionalAmen">{{item}}</span>
                                         </div>
                                         <div class="form-group mb-0 ml-3 booking-total">
                                             <label>Total:</label>&nbsp;&nbsp;
@@ -245,7 +251,8 @@ export default {
                 manyChild: '',
                 manyRoom:'',
                 roomWithRoomType:'',
-                rooms_no: []
+                rooms_no: [],
+                addOnOptionalAmen: []
             }),
             calendarList: [
                 {
@@ -427,9 +434,9 @@ export default {
                             if (!found) tempParam.push(item.value);
                         }
                     });
-
                 }
                 else if(kind=='value') tempList.forEach(function(item, key){ tempParam.push(item.value); });
+                else if(kind=='optional') tempList.forEach(function(item, key){ tempParam.push(item); });
                 else if(kind=='total') for(var i=1;i<=parseInt(tempList);i++) tempParam.push({id:i, text:i});
                 else if(kind=='many') for(var i=1;i<=(parseInt(tempList)*this.form.manyRoom);i++) tempParam.push({id:i, text:i});
             } 
@@ -447,8 +454,8 @@ export default {
             this.resetList();
             this.roomPrice = parseFloat(this.generateList(this.roomPrices, 'price')[0]);
             this.manyRooms = this.generateList(this.totalRooms, 'total');
-            this.fixedAmenities = this.generateList(this.tempOptionalAmenities, 'value');
-            this.optionalAmenities = this.generateList(this.tempFixedAmenities, 'value');
+            this.fixedAmenities = this.generateList(this.tempFixedAmenities, 'value');
+            this.optionalAmenities = this.generateList(this.tempOptionalAmenities, 'optional');
         },
         isHotelChange(){
             if(this.$gate.superAdminOrhotelOwner()) {

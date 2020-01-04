@@ -449,3 +449,18 @@
         }
     }
 </script>
+<style lang='scss'>
+  .custom-control-input:focus:not(:checked) ~ .custom-control-label::before {
+      border-color: #28a7456b;
+  }
+
+  .custom-control-input:checked ~ .custom-control-label::before {
+      color: #fff;
+      border-color: #28a745;
+      background-color: #28a745;
+  }
+  
+  .custom-control-input:focus ~ .custom-control-label::before {
+      box-shadow: 0 0 0 0.2rem #28a7456e;
+  }
+</style>
