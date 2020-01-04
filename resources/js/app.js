@@ -188,7 +188,7 @@ const app = new Vue({
   methods:{
     twoFactorCheck() {
       if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
-        var timeOut;
+        let timeOut;
         axios.get('/api/check-two-factor-if-expired').then((response) => {
           if (response.data=='reload') {
             window.clearTimeout(timeOut);
