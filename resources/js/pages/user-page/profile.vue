@@ -154,8 +154,8 @@
                   this.isCheckPass = true;
             },
             showHide (id, icon) {
-                var pwd = $(id);
-                var fa = $(icon);
+                let pwd = $(id);
+                let fa = $(icon);
                 if(pwd.attr('type') === 'password') {
                   pwd.attr('type', 'text');
                   fa.removeClass('fa-eye');

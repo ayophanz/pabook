@@ -166,8 +166,8 @@
             }
           },
           showHide () {
-            var pwd = $("#password");
-            var fa = $(".call-password");
+            let pwd = $("#password");
+            let fa = $(".call-password");
             if(pwd.attr('type') === 'password') {
               pwd.attr('type', 'text');
               fa.removeClass('fa-eye');

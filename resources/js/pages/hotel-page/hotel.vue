@@ -225,7 +225,7 @@
           },
           loadRoomType(rooms) {
             this.roomTypeName = [];
-            var roomIds = rooms.map(function(item){return (item.assign_id!='no')?item.assign_id:0;});
+            let roomIds = rooms.map(function(item){return (item.assign_id!='no')?item.assign_id:0;});
             roomIds = roomIds.filter(function(elem, index, self) {return index === self.indexOf(elem);})
             let self = this
             axios.get('/api/specific-rooms/'+roomIds)

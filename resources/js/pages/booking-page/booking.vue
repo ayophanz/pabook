@@ -369,7 +369,7 @@ export default {
             return parseInt(this.form.manyRoom);
         },
         totalAmountFunc() {
-            var optionalAmenPrices = 0;
+            let optionalAmenPrices = 0;
             this.form.addOnOptionalAmen.forEach(function(item, key){
                 optionalAmenPrices += parseFloat(item.price);
             });
@@ -429,9 +429,9 @@ export default {
             this.form.addOnOptionalAmen = [];
         },
         generateList(param, kind) {
-            var tempParam = [];
+            let tempParam = [];
             if (param.length > 0) {
-                var tempList = (kind!='roomNo') ? param.find(e => parseInt(e.id) === parseInt(this.form.roomWithRoomType)).value : [];
+                let tempList = (kind!='roomNo') ? param.find(e => parseInt(e.id) === parseInt(this.form.roomWithRoomType)).value : [];
                 if(kind=='price')  tempParam.push(tempList);
                 else if(kind=='roomNo') {
                     let self = this
@@ -444,8 +444,8 @@ export default {
                 }
                 else if(kind=='value') tempList.forEach(function(item, key){ tempParam.push(item.value); });
                 else if(kind=='optional') tempList.forEach(function(item, key){ tempParam.push(item); });
-                else if(kind=='total') for(var i=1;i<=parseInt(tempList);i++) tempParam.push({id:i, text:i});
-                else if(kind=='many') for(var i=1;i<=(parseInt(tempList)*this.form.manyRoom);i++) tempParam.push({id:i, text:i});
+                else if(kind=='total') for(let i=1;i<=parseInt(tempList);i++) tempParam.push({id:i, text:i});
+                else if(kind=='many') for(let i=1;i<=(parseInt(tempList)*this.form.manyRoom);i++) tempParam.push({id:i, text:i});
             } 
             
             return tempParam;

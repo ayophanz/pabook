@@ -285,7 +285,7 @@
                     this.isLoading = true;
                     this.types = [];
                     let self = this;
-                    var url = '/api/room-with-room-types/'+this.form.hotel+'/'+this.roomId;
+                    let url = '/api/room-with-room-types/'+this.form.hotel+'/'+this.roomId;
                     if(this.roomId==null) url = '/api/hotel-with-room-types/'+this.form.hotel;
                     axios.get(url)
                     .then(
