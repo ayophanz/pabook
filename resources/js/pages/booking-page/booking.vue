@@ -109,9 +109,11 @@
                                         </div>
                                         <div class="form-group ml-3">
                                             <label class="mb-0">Subtotal:</label>
-                                            <p class="mb-0 ml-2">{{currency}}{{roomPrice}} x ({{ nightNoFunc() }})night</p>
-                                            <p class="mb-0 ml-2">{{currency}}{{roomPrice}} x ({{ roomNoFunc() }})no. of room</p>
-                                            <p class="mb-0 ml-2" v-for="item in form.addOnOptionalAmen">{{currency}}{{item.price}} | {{item.value}}</p>
+                                            <div class="optionalList">
+                                                <p class="mb-0 ml-2">{{currency}}{{roomPrice}} x ({{ nightNoFunc() }})night</p>
+                                                <p class="mb-0 ml-2">{{currency}}{{roomPrice}} x ({{ roomNoFunc() }})no. of room</p>
+                                                <p class="mb-0 ml-2" v-for="item in form.addOnOptionalAmen">{{currency}}{{item.price}} | {{item.value}}</p>
+                                            </div>
                                         </div>
                                         <div class="form-group mb-0 ml-3 booking-total">
                                             <label>Total:</label>&nbsp;&nbsp;
