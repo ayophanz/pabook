@@ -83,25 +83,6 @@
                                                 <div class="container book-rooms-quantity">
                                                     <div class="row">
                                                         <div class="col-md-12">
-                                                            <h5>Room price</h5>
-                                                            <ul>
-                                                                <li>{{currency}}{{roomPrice}}</li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <h5>Sub total</h5>
-                                                            <ul>
-                                                                <li>{{currency}}{{roomPrice}} x ({{ nightNoFunc() }})night</li>
-                                                                <li>{{currency}}{{roomPrice}} x ({{ roomNoFunc() }})no. of room</li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <h5>Total</h5>
-                                                            <ul>
-                                                                <li>{{currency}}{{totalAmountFunc() }}</li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="col-md-12">
                                                             <h5>Fixed amenities</h5>
                                                             <ul>
                                                                 <li v-for="item in optionalAmenities">{{item}}</li>
@@ -116,6 +97,19 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="form-group mb-0 mt-3 ml-3">
+                                            <label>Room price:</label>&nbsp;&nbsp;
+                                            <span class="mb-0">{{currency}}{{roomPrice}}</span>
+                                        </div>
+                                        <div class="form-group ml-3">
+                                            <label class="mb-0">Subtotal:</label><br />
+                                            &nbsp;&nbsp;<span>{{currency}}{{roomPrice}} x ({{ nightNoFunc() }})night</span><br />
+                                            &nbsp;&nbsp;<span>{{currency}}{{roomPrice}} x ({{ roomNoFunc() }})no. of room</span>
+                                        </div>
+                                        <div class="form-group mb-0 ml-3 booking-total">
+                                            <label>Total:</label>&nbsp;&nbsp;
+                                            <span>{{currency}}{{totalAmountFunc() }}</span>
                                         </div>
                                         <div class="form-group text-center mt-4">
                                             <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat"><i class="fas fa-concierge-bell"></i> Book Room</button>
@@ -624,5 +618,10 @@ export default {
         border: 1px solid #e5e5e5;
     }
 
+    .booking-total {
+        border: 1px solid #d7d9e2;
+        padding: 5px 5px;
+        display: inline;
+    }
 </style>
 
