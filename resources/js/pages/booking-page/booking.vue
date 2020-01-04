@@ -90,11 +90,11 @@
                                                         </div>
                                                         <div class="col-md-12">
                                                             <h5>Optional amenities</h5>
-                                                            <ul>
-                                                                <li v-for="item in optionalAmenities">
+                                                            <ul class="optionalAmen-list">
+                                                                <li v-for="(item, key) in optionalAmenities">
                                                                     <div class="form-check">
-                                                                        <input class="form-check-input" type="checkbox" :value="item">
-                                                                        <label class="form-check-label">{{item.value}} | {{currency}}{{item.price}}</label>
+                                                                        <input v-model="form.addOnOptionalAmen" :value="item" class="form-check-input" type="checkbox" :id="'optionalAmen-'+key" >
+                                                                        <label  :for="'optionalAmen-'+key" class="form-check-label">{{item.value}} | {{currency}}{{item.price}}</label>
                                                                     </div>
                                                                 </li>
                                                             </ul>
@@ -108,10 +108,10 @@
                                             <span class="mb-0">{{currency}}{{roomPrice}}</span>
                                         </div>
                                         <div class="form-group ml-3">
-                                            <label class="mb-0">Subtotal:</label><br />
-                                            &nbsp;&nbsp;<span>{{currency}}{{roomPrice}} x ({{ nightNoFunc() }})night</span><br />
-                                            &nbsp;&nbsp;<span>{{currency}}{{roomPrice}} x ({{ roomNoFunc() }})no. of room</span>
-                                            &nbsp;&nbsp;<span v-for="item in form.addOnOptionalAmen">{{item}}</span>
+                                            <label class="mb-0">Subtotal:</label>
+                                            <p class="mb-0 ml-2">{{currency}}{{roomPrice}} x ({{ nightNoFunc() }})night</p>
+                                            <p class="mb-0 ml-2">{{currency}}{{roomPrice}} x ({{ roomNoFunc() }})no. of room</p>
+                                            <p class="mb-0 ml-2" v-for="item in form.addOnOptionalAmen">{{currency}}{{item.price}} {{item.value}}</p>
                                         </div>
                                         <div class="form-group mb-0 ml-3 booking-total">
                                             <label>Total:</label>&nbsp;&nbsp;
@@ -629,6 +629,11 @@ export default {
         border: 1px solid #d7d9e2;
         padding: 5px 5px;
         display: inline;
+    }
+    
+    .optionalAmen-list {
+        list-style: none !important;
+        padding: 0 !important;
     }
 </style>
 
