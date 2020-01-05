@@ -112,14 +112,14 @@
                                         <div class="form-group">
                                             <label class="mb-0">Subtotal:</label>
                                             <div class="optionalList">
-                                                <p class="mb-0 ml-2">{{currency}}{{roomPrice}} x ({{ nightNoFunc() }})night</p>
-                                                <p class="mb-0 ml-2">{{currency}}{{roomPrice}} x ({{ roomNoFunc() }})no. of room</p>
+                                                <p class="mb-0 ml-2">{{currency}}{{roomPrice}} x ({{ nightNoFunc }})night</p>
+                                                <p class="mb-0 ml-2">{{currency}}{{roomPrice}} x ({{ roomNoFunc }})no. of room</p>
                                                 <p class="mb-0 ml-2" v-for="item in form.addOnOptionalAmen">{{currency}}{{item.price}} x ({{form.manyRoom}}){{item.value}}</p>
                                             </div>
                                         </div>
                                         <div class="form-group mb-0 booking-total">
                                             <label>Total:</label>&nbsp;&nbsp;
-                                            <span>{{currency}}{{totalAmountFunc() }}</span>
+                                            <span>{{currency}}{{totalAmountFunc}}</span>
                                         </div>
                                         <div class="form-group text-center mt-4">
                                             <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat"><i class="fas fa-concierge-bell"></i> Book Room</button>
@@ -351,6 +351,27 @@ export default {
             this.setRenderRangeText();
         }
     },
+    computed: {
+        nightNoFunc(){
+            return parseInt(Math.ceil(Math.abs(new Date(this.form.checkOutD) - new Date(this.form.checkInD)) / (1000 * 60 * 60 * 24)));
+        },
+        totalAmountFunc() {
+            let optionalAmenPrices = 0;
+            this.form.addOnOptionalAmen.forEach(function(item, key){
+                optionalAmenPrices += parseFloat(item.price);
+            });
+            return parseFloat((parseFloat(this.roomPrice) * this.nightNoFunc) * this.roomNoFunc) + optionalAmenPrices;
+        },
+        roomNoFunc() {
+            return parseInt(this.form.manyRoom);
+        },
+        compareDate() {
+            if(this.form.checkOutD!='' && Date.parse(new Date(this.form.checkOutD.getFullYear()+'-'+(this.form.checkOutD.getMonth()+1))) > Date.parse(new Date(this.dateRange))) this.disNext = false;
+            else this.disNext = true;
+            if(this.form.checkInD!='' && Date.parse(new Date(this.form.checkInD.getFullYear()+'-'+(this.form.checkInD.getMonth()+1))) < Date.parse(new Date(this.dateRange))) this.disPrev = false;
+            else this.disPrev = true;
+        }
+    },
     methods: {
         init() {
             this.loadHotels();
@@ -359,11 +380,13 @@ export default {
             //this.$refs.mycalendar.usageStatistics = false;
         },
         excludeOptional() {
-            let htmlData = '<ul>'+
-                                this.form.rooms_no.forEach(function(item, key){
-                                    +'<li>test</li>'
-                                })
-                            +'</ul>';
+            let optionalAmen;
+            this.form.addOnOptionalAmen.forEach(function(item, key){ optionalAmen += `<li>${item.value}</li>`; });
+            let htmlData = `<ul>
+                                 ${this.form.rooms_no.map(item => 
+                                    `<li>${item.value}</li><ul>${optionalAmen}</ul>`
+                                 )}
+                            </ul>`;
             excludeOpAmen.fire({
                 title: '<h4><strong>Exclude optional amenities <br /> to specific room</strong></h4>',
                 type: 'info',
@@ -381,19 +404,6 @@ export default {
         },
         roomsNoOnRemove(value) {
             this.no_unit_avail--;
-        },
-        nightNoFunc(){
-            return parseInt(Math.ceil(Math.abs(new Date(this.form.checkOutD) - new Date(this.form.checkInD)) / (1000 * 60 * 60 * 24)));
-        },
-        roomNoFunc() {
-            return parseInt(this.form.manyRoom);
-        },
-        totalAmountFunc() {
-            let optionalAmenPrices = 0;
-            this.form.addOnOptionalAmen.forEach(function(item, key){
-                optionalAmenPrices += parseFloat(item.price);
-            });
-            return parseFloat((parseFloat(this.roomPrice) * this.nightNoFunc()) * this.roomNoFunc()) + optionalAmenPrices;
         },
         backIsClick() {
             this.pageIn = 'page_1';
@@ -428,12 +438,6 @@ export default {
             this.$refs.mycalendar.invoke('setDate', new Date(), true);
             this.setRenderRangeText();
         },
-        compareDate() {
-            if(this.form.checkOutD!='' && Date.parse(new Date(this.form.checkOutD.getFullYear()+'-'+(this.form.checkOutD.getMonth()+1))) > Date.parse(new Date(this.dateRange))) this.disNext = false;
-            else this.disNext = true;
-            if(this.form.checkInD!='' && Date.parse(new Date(this.form.checkInD.getFullYear()+'-'+(this.form.checkInD.getMonth()+1))) < Date.parse(new Date(this.dateRange))) this.disPrev = false;
-            else this.disPrev = true;
-        },
         resetAllList(){
             this.resetList();
             this.form.hotel = '';
@@ -447,6 +451,8 @@ export default {
             this.roomPrice = 0;
             this.form.rooms_no = [];
             this.form.addOnOptionalAmen = [];
+            this.fixedAmenities = [];
+            this.optionalAmenities = [];
         },
         generateList(param, kind) {
             let tempParam = [];
@@ -467,7 +473,6 @@ export default {
                 else if(kind=='total') for(let i=1;i<=parseInt(tempList);i++) tempParam.push({id:i, text:i});
                 else if(kind=='many') for(let i=1;i<=(parseInt(tempList)*this.form.manyRoom);i++) tempParam.push({id:i, text:i});
             } 
-            
             return tempParam;
         },
         isManyRoom() {
@@ -490,8 +495,6 @@ export default {
                 this.currency = '';
                 this.form.roomWithRoomType = '';
                 this.roomPrices = [];
-                this.fixedAmenities = [];
-                this.optionalAmenities = [];
                 this.roomWithRoomTypes = [];
                 this.manyRooms = [];
                 this.manyChilds = [];
@@ -541,14 +544,12 @@ export default {
               this.form.checkInD = e;
               this.$refs.mycalendar.invoke('setDate', e, true);
               this.dateRange = `${e.getFullYear()}-${(e.getMonth()+1)}`;
-              this.compareDate();
             }
         },
         checkOutDate(e) {
             if(e!=null) {
               this.resetAllList();
               this.form.checkOutD = e;
-              this.compareDate();
             }
         },
         onClickNavi(event) {
@@ -558,7 +559,6 @@ export default {
                 action = action.replace('move-', '');
                 this.$refs.mycalendar.invoke(action);
                 this.setRenderRangeText();
-                this.compareDate();
             }
         },
         setRenderRangeText() {
