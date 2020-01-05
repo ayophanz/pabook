@@ -157,18 +157,24 @@ const sure = swal.mixin({
     confirmButton: 'btn btn-outline-danger btn-flat',
     cancelButton: 'btn btn-outline-primary btn-flat'
   },
-  showClass: {
-    popup: 'animated fadeInDown faster'
-  },
-  hideClass: {
-    popup: 'animated fadeOutUp faster'
-  },
   buttonsStyling: false,
   allowOutsideClick:	false,
   allowEscapeKey:	false,
   allowEnterKey: false
 })
 window.sure = sure
+
+const excludeOpAmen = swal.mixin({
+  customClass: {
+    confirmButton: 'btn btn-outline-danger btn-flat',
+    cancelButton: 'btn btn-outline-primary btn-flat'
+  },
+  buttonsStyling: false,
+  allowOutsideClick:	false,
+  allowEscapeKey:	false,
+  allowEnterKey: false
+})
+window.excludeOpAmen = excludeOpAmen
 
 const paynow = swal.mixin({
   customClass: {

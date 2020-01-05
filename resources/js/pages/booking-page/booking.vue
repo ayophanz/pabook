@@ -101,7 +101,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <a v-if="form.manyRoom > 1 && form.addOnOptionalAmen.length != 0" href="">Exclude specific room for optional amenities</a>
+                                                <a @click.prevent="excludeOptional" v-if="form.manyRoom > 1 && form.addOnOptionalAmen.length != 0" href="">Exclude specific room for optional amenities</a>
                                             </div>
                                         </div>
                                         <div class="form-group mb-0 mt-3">
@@ -356,6 +356,9 @@ export default {
             this.selectedMonth = new Date();
             this.setRenderRangeText();
             //this.$refs.mycalendar.usageStatistics = false;
+        },
+        excludeOptional() {
+            alert('test');
         },
         roomsNoOnAdd(value) {
             this.no_unit_avail++;
