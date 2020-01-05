@@ -101,21 +101,22 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <a v-if="form.manyRoom > 1 && form.addOnOptionalAmen.length != 0" href="">Exclude specific room for optional amenities</a>
                                             </div>
                                         </div>
-                                        <div class="form-group mb-0 mt-3 ml-3">
+                                        <div class="form-group mb-0 mt-3">
                                             <label>Room price:</label>&nbsp;&nbsp;
                                             <span class="mb-0">{{currency}}{{roomPrice}}</span>
                                         </div>
-                                        <div class="form-group ml-3">
+                                        <div class="form-group">
                                             <label class="mb-0">Subtotal:</label>
                                             <div class="optionalList">
                                                 <p class="mb-0 ml-2">{{currency}}{{roomPrice}} x ({{ nightNoFunc() }})night</p>
                                                 <p class="mb-0 ml-2">{{currency}}{{roomPrice}} x ({{ roomNoFunc() }})no. of room</p>
-                                                <p class="mb-0 ml-2" v-for="item in form.addOnOptionalAmen">{{currency}}{{item.price}} | {{item.value}}</p>
+                                                <p class="mb-0 ml-2" v-for="item in form.addOnOptionalAmen">{{currency}}{{item.price}} x ({{form.manyRoom}}){{item.value}}</p>
                                             </div>
                                         </div>
-                                        <div class="form-group mb-0 ml-3 booking-total">
+                                        <div class="form-group mb-0 booking-total">
                                             <label>Total:</label>&nbsp;&nbsp;
                                             <span>{{currency}}{{totalAmountFunc() }}</span>
                                         </div>
