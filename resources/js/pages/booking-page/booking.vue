@@ -101,7 +101,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <a @click.prevent="excludeOptional" v-if="form.manyRoom > 1 && form.addOnOptionalAmen.length != 0" href="">Exclude specific room for optional amenities</a>
+                                                <!-- v-if="form.manyRoom > 1 && form.addOnOptionalAmen.length != 0" -->
+                                                <a @click.prevent="excludeOptional"  href="">Exclude specific room for optional amenities</a>
                                             </div>
                                         </div>
                                         <div class="form-group mb-0 mt-3">
@@ -358,7 +359,22 @@ export default {
             //this.$refs.mycalendar.usageStatistics = false;
         },
         excludeOptional() {
-            alert('test');
+            let htmlData = '<ul>'+
+                                this.form.rooms_no.forEach(function(item, key){
+                                    +'<li>test</li>'
+                                })
+                            +'</ul>';
+            excludeOpAmen.fire({
+                title: '<h4><strong>Exclude optional amenities <br /> to specific room</strong></h4>',
+                type: 'info',
+                html:htmlData,
+                showCloseButton: true,
+                showCancelButton: false,
+                focusConfirm: true,
+                confirmButtonText:'Confirm & Exclude',
+                cancelButtonText:'Cancel',
+                reverseButtons: true
+            })
         },
         roomsNoOnAdd(value) {
             this.no_unit_avail++;

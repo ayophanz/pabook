@@ -166,8 +166,8 @@ window.sure = sure
 
 const excludeOpAmen = swal.mixin({
   customClass: {
-    confirmButton: 'btn btn-outline-danger btn-flat',
-    cancelButton: 'btn btn-outline-primary btn-flat'
+    confirmButton: 'btn btn-outline-primary btn-flat',
+    cancelButton: 'btn btn-outline-danger btn-flat'
   },
   buttonsStyling: false,
   allowOutsideClick:	false,
