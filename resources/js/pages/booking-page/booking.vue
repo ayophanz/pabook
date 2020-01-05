@@ -101,8 +101,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!-- v-if="form.manyRoom > 1 && form.addOnOptionalAmen.length != 0" -->
-                                                <a @click.prevent="excludeOptional"  href="">Exclude specific room for optional amenities</a>
+                                                <a v-if="form.manyRoom > 1 && form.addOnOptionalAmen.length != 0" @click.prevent="excludeOptional"  href="">Exclude specific room for optional amenities</a>
                                             </div>
                                         </div>
                                         <div class="form-group mb-0 mt-3">
@@ -382,9 +381,9 @@ export default {
         excludeOptional() {
             let optionalAmen;
             this.form.addOnOptionalAmen.forEach(function(item, key){ optionalAmen += `<li>${item.value}</li>`; });
-            let htmlData = `<ul>
+            let htmlData = `<ul class="exclude-rooms-no">
                                  ${this.form.rooms_no.map(item => 
-                                    `<li>${item.value}</li><ul>${optionalAmen}</ul>`
+                                    `<li>${item.value}</li><ul class="exclude-optional-amen">${optionalAmen}</ul>`
                                  )}
                             </ul>`;
             excludeOpAmen.fire({
@@ -665,6 +664,10 @@ export default {
 
     .multiselect__tags {
         padding: 8px 40px 0 20px !important;
+    }
+
+    ul.exclude-rooms-no {
+        text-align: left;
     }
 </style>
 
