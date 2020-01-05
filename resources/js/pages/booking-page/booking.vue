@@ -379,12 +379,10 @@ export default {
             //this.$refs.mycalendar.usageStatistics = false;
         },
         excludeOptional() {
-            let optionalAmen;
+            let optionalAmen = ``;
             this.form.addOnOptionalAmen.forEach(function(item, key){ optionalAmen += `<li>${item.value}</li>`; });
             let htmlData = `<ul class="exclude-rooms-no">
-                                 ${this.form.rooms_no.map(item => 
-                                    `<li>${item.value}</li><ul class="exclude-optional-amen">${optionalAmen}</ul>`
-                                 )}
+                                 ${this.form.rooms_no.map(item =>`<li>${item.value}</li><ul class="exclude-optional-amen">${optionalAmen}</ul>`)}
                             </ul>`;
             excludeOpAmen.fire({
                 title: '<h4><strong>Exclude optional amenities <br /> to specific room</strong></h4>',
