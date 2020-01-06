@@ -388,8 +388,7 @@ export default {
                     optionalAmenList += `<li>
                                         <input checked value="${item2}" class="form-check-input" type="checkbox" id="exclude-optionalAmen-${key}-${key2}" >
                                         <label for="exclude-optionalAmen-${key}-${key2}" class="form-check-label">${item2.value} | ${self.currency}${item2.price}</label>
-                                    </li>`
-                })
+                                    </li>`})
                 optionalAmenList += `</ul></li>`
             })
             let htmlData = `<h5 class="text-left">* Uncheck amenities to exclude</h5><ul class="exclude-rooms-no">${optionalAmenList}</ul>`;
