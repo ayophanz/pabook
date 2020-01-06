@@ -381,9 +381,18 @@ export default {
         excludeOptional() {
             let optionalAmenItem = ``;
             let optionalAmenList = ``;
-            this.form.addOnOptionalAmen.forEach(function(item, key){ optionalAmenItem += `<li>${item.value}</li>`; });
-            this.form.rooms_no.map(item => optionalAmenList +=  `<li>${item.value}<ul class="exclude-optional-amen">${optionalAmenItem}</ul></li>`)
-            let htmlData = `<ul class="exclude-rooms-no">${optionalAmenList}</ul>`;
+            let self = this;
+            this.form.rooms_no.map((item, key) => {
+                optionalAmenList +=  `<li>${item.value}<ul class="exclude-optional-amen">`
+                self.form.addOnOptionalAmen.forEach(function(item2, key2){
+                    optionalAmenList += `<li>
+                                        <input checked value="${item2}" class="form-check-input" type="checkbox" id="exclude-optionalAmen-${key}-${key2}" >
+                                        <label for="exclude-optionalAmen-${key}-${key2}" class="form-check-label">${item2.value} | ${self.currency}${item2.price}</label>
+                                    </li>`
+                })
+                optionalAmenList += `</ul></li>`
+            })
+            let htmlData = `<h5 class="text-left">* Uncheck amenities to exclude</h5><ul class="exclude-rooms-no">${optionalAmenList}</ul>`;
             excludeOpAmen.fire({
                 title: '<h4><strong>Exclude optional amenities <br /> to specific room</strong></h4>',
                 type: 'info',
