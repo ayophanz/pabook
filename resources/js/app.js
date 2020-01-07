@@ -6,7 +6,7 @@
 
 require('./bootstrap');
 import vue from 'vue'
-window.Vue = vue//require('vue/dist/vue.min.js');
+window.Vue = vue
 
 import moment from 'moment'
 window.moment = moment
@@ -82,12 +82,6 @@ const router = new VueRouter({
     mode: 'history',
     routes
 })
-
-
-/**
-* Temporary Holder components
-*/
-Vue.component('temporaryhold', require('./components/temporaryHoldComponent.vue').default);
 
 /**
 * Global components

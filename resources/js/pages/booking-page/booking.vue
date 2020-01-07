@@ -199,6 +199,9 @@
                 </div>
             </div>
         </div>
+        <sweet-modal icon="info" :pulse-on-block="false" blocking ref="excludeOptionAme">
+            <h4 class="swal2-title text-center" id="swal2-title"><strong>Exclude optional amenities <br /> to specific room</strong></h4>
+        </sweet-modal>
     </div>
 </template>
 <script>
@@ -209,6 +212,8 @@ import HotelDatePicker from 'vue-hotel-datepicker'
 import Select2 from 'v-select2-component'
 import Loading from 'vue-loading-overlay'
 import Multiselect from 'vue-multiselect'
+import ExcludeOptionalAmen from '../../components/excludeOptionalAmenComponent'
+import { SweetModal, SweetModalTab } from 'sweet-modal-vue'
 import { parse } from 'path'
 export default {
     name: 'myCalendar',
@@ -217,6 +222,9 @@ export default {
         HotelDatePicker,
         Select2,
         Multiselect,
+        ExcludeOptionalAmen,
+        SweetModal, 
+        SweetModalTab,
         Loading
     },
     data() {
@@ -378,31 +386,32 @@ export default {
             this.setRenderRangeText();
             //this.$refs.mycalendar.usageStatistics = false;
         },
-        excludeOptional() {
-            let optionalAmenItem = ``;
-            let optionalAmenList = ``;
-            let self = this;
-            this.form.rooms_no.map((item, key) => {
-                optionalAmenList +=  `<li>${item.value}<ul class="exclude-optional-amen">`
-                self.form.addOnOptionalAmen.forEach(function(item2, key2){
-                    optionalAmenList += `<li>
-                                        <input checked value="${item2}" class="form-check-input" type="checkbox" id="exclude-optionalAmen-${key}-${key2}" >
-                                        <label for="exclude-optionalAmen-${key}-${key2}" class="form-check-label">${item2.value} | ${self.currency}${item2.price}</label>
-                                    </li>`})
-                optionalAmenList += `</ul></li>`
-            })
-            let htmlData = `<h5 class="text-left">* Uncheck amenities to exclude</h5><ul class="exclude-rooms-no">${optionalAmenList}</ul>`;
-            excludeOpAmen.fire({
-                title: '<h4><strong>Exclude optional amenities <br /> to specific room</strong></h4>',
-                type: 'info',
-                html:htmlData,
-                showCloseButton: true,
-                showCancelButton: false,
-                focusConfirm: true,
-                confirmButtonText:'Confirm & Exclude',
-                cancelButtonText:'Cancel',
-                reverseButtons: true
-            })
+         excludeOptional() {
+             this.$refs.excludeOptionAme.open();
+        //     let optionalAmenItem = ``;
+        //     let optionalAmenList = ``;
+        //     let self = this;
+        //     this.form.rooms_no.map((item, key) => {
+        //         optionalAmenList +=  `<li>${item.value}<ul class="exclude-optional-amen">`
+        //         self.form.addOnOptionalAmen.forEach(function(item2, key2){
+        //             optionalAmenList += `<li>
+        //                                 <input checked value="${item2}" class="form-check-input" type="checkbox" id="exclude-optionalAmen-${key}-${key2}" >
+        //                                 <label for="exclude-optionalAmen-${key}-${key2}" class="form-check-label">${item2.value} | ${self.currency}${item2.price}</label>
+        //                             </li>`})
+        //         optionalAmenList += `</ul></li>`
+        //     })
+        //     let htmlData = `<h5 class="text-left">* Uncheck amenities to exclude</h5><ul class="exclude-rooms-no">${optionalAmenList}</ul>`;
+        //     excludeOpAmen.fire({
+        //         title: '<h4><strong>Exclude optional amenities <br /> to specific room</strong></h4>',
+        //         type: 'info',
+        //         html:`<div><exclude-optional-amen :rooms_no="this.form.rooms_no" :addOnOptionalAmen="this.form.addOnOptionalAmen" :currency="this.currency"></exclude-optional-amen></div>`,
+        //         showCloseButton: true,
+        //         showCancelButton: false,
+        //         focusConfirm: true,
+        //         confirmButtonText:'Confirm & Exclude',
+        //         cancelButtonText:'Cancel',
+        //         reverseButtons: true
+        //     })
         },
         roomsNoOnAdd(value) {
             this.no_unit_avail++;
@@ -674,6 +683,20 @@ export default {
 
     ul.exclude-rooms-no {
         text-align: left;
+    }
+
+    .sweet-modal-overlay.is-visible {
+        opacity: 1;
+        background-color: rgba(0,0,0,.4);
+    }
+
+    .sweet-modal {
+        border-radius: .3125em !important;
+    }
+
+    .sweet-modal .sweet-box-actions .sweet-action-close:hover {
+        background: none !important;
+        color: #dc3545 !important;
     }
 </style>
 

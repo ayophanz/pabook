@@ -34,6 +34,7 @@
         "moment": "^2.24.0",
         "pusher-js": "^5.0.3",
         "serialize-javascript": "^2.1.2",
+        "sweet-modal-vue": "^2.0.0",
         "sweetalert2": "^8.19.0",
         "v-select2-component": "^0.4.1",
         "vform": "^1.0.1",

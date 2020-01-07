@@ -162,6 +162,7 @@
     import 'vue2-timepicker/dist/VueTimepicker.css'
     import Multiselect from 'vue-multiselect'
     import Select2 from 'v-select2-component';
+    import TemporaryHold from '../../components/temporaryHoldComponent'
     export default {
         watch: {
             '$route' (to, from) {
@@ -177,6 +178,7 @@
           cc,
           VueTimepicker,
           Multiselect,
+          TemporaryHold,
           Select2
         },
         data() {

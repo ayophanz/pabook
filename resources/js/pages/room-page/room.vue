@@ -88,7 +88,7 @@
                         </div>  
                         <div class="form-group">
                             <label for="price">Price <span class="required-asterisk">*</span></label>
-                            <my-currency-input :baseCurrency="base_currency" :minValue="`1`" v-model="form.price"></my-currency-input>
+                            <auto-currency :baseCurrency="base_currency" :minValue="`1`" v-model="form.price"></auto-currency>
                             <has-error :form="form" field="price"></has-error>
                         </div>
                         <div class="form-group">
@@ -152,7 +152,8 @@
 </template>
 
 <script>
-    import RepeaterInputComponent from '../../components/repeaterFieldComponent'
+    import RepeaterInput from '../../components/repeaterFieldComponent'
+    import AutoCurrency from '../../components/autoCurrencyComponent'
     import ImageUploader from '../../components/ImageUploaderComponent'
     import Loading from 'vue-loading-overlay'
     import 'vue-loading-overlay/dist/vue-loading.css'
@@ -170,7 +171,8 @@
             }
         },
         components: {
-            RepeaterInputComponent,
+            RepeaterInput,
+            AutoCurrency,
             ImageUploader,
             Multiselect,
             Select2,

@@ -10,7 +10,7 @@
     export default {
         name:'', 
         mounted() {
-            console.log('Component mounted.')
+           //
         }
     }
 </script>
