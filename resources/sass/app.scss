@@ -8,9 +8,18 @@ $fa-font-path: "../webfonts";
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 @import '~admin-lte/dist/css/adminlte.min.css';
+
+// fontawesome
 @import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
 @import '~@fortawesome/fontawesome-free/scss/solid.scss';
 @import '~@fortawesome/fontawesome-free/scss/brands.scss';
+
+// pretty check
+@import '~pretty-checkbox/src/pretty-checkbox.scss';
+
+//vodal
+@import "~vodal/common.css";
+@import "~vodal/zoom.css";
 
 .main-sidebar {
     max-width: 200px;

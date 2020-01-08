@@ -27,9 +27,10 @@ export default {
 
     },
     created() {
-        this.rooms_no_Data = this.rooms_no;
-        this.addOnOptionalAmen_Data = this.addOnOptionalAmen;
+        this.rooms_no_Data = Vue.util.extend([], this.rooms_no);
+        this.addOnOptionalAmen_Data = Vue.util.extend([], this.addOnOptionalAmen);
         this.currency_Data = this.currency;
+        console.log(this.rooms_no);
     }
 }
 </script>

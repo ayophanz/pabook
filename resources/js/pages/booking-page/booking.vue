@@ -10,6 +10,18 @@
             :active.sync="isLoading" 
             :is-full-page="fullPage">
         </loading>
+        <vodal :show="vodal_show" animation="zoom" :closeOnEsc="false" ref="excludeOptionalAmen" :width="600" className="vodal-style" @hide="vodal_show = false">
+            <div class="swal2-header">
+                <div class="swal2-icon swal2-info swal2-animate-info-icon" style="display: flex;"></div>
+                <h4 class="swal2-title" style="display: flex;"><strong>Exclude optional amenities <br /> to specific room</strong></h4>
+            </div>
+            <div class="swal2-content">
+                <exclude-optionalamen :rooms_no="form.rooms_no" :addOnOptionalAmen="form.addOnOptionalAmen" :currency="currency"></exclude-optionalamen>
+            </div>
+            <div class="swal2-actions">
+                <button type="button" class="swal2-cancel btn btn-outline-primary btn-flat" aria-label="" style="display: inline-block;">Confirm &#38; Exclude</button>
+            </div>
+        </vodal>
         <div class="row justify-content-center">
             <booking-page-icon></booking-page-icon>
             <div class="col-md-12">
@@ -92,9 +104,11 @@
                                                             <h5>Optional amenities</h5>
                                                             <ul class="optionalAmen-list">
                                                                 <li v-for="(item, key) in optionalAmenities">
-                                                                    <div class="form-check">
-                                                                        <input v-model="form.addOnOptionalAmen" :value="item" class="form-check-input" type="checkbox" :id="'optionalAmen-'+key" >
-                                                                        <label  :for="'optionalAmen-'+key" class="form-check-label">{{item.value}} | {{currency}}{{item.price}}</label>
+                                                                    <div class="form-check pl-0">
+                                                                        <pretty-check v-model="form.addOnOptionalAmen" :value="item" class="p-icon p-round p-tada" color="danger-o">
+                                                                            <i slot="extra" class="icon mdi mdi-heart fas fa-heart"></i>
+                                                                            {{item.value}} | {{currency}}{{item.price}}
+                                                                        </pretty-check>
                                                                     </div>
                                                                 </li>
                                                             </ul>
@@ -199,11 +213,9 @@
                 </div>
             </div>
         </div>
-        <sweet-modal icon="info" :pulse-on-block="false" blocking ref="excludeOptionAme">
-            <h4 class="swal2-title text-center" id="swal2-title"><strong>Exclude optional amenities <br /> to specific room</strong></h4>
-        </sweet-modal>
     </div>
 </template>
+
 <script>
 import 'tui-calendar/dist/tui-calendar.css'
 import { Calendar } from '@toast-ui/vue-calendar'
@@ -212,8 +224,9 @@ import HotelDatePicker from 'vue-hotel-datepicker'
 import Select2 from 'v-select2-component'
 import Loading from 'vue-loading-overlay'
 import Multiselect from 'vue-multiselect'
-import ExcludeOptionalAmen from '../../components/excludeOptionalAmenComponent'
-import { SweetModal, SweetModalTab } from 'sweet-modal-vue'
+import ExcludeOptionalamen from '../../components/excludeOptionalAmenComponent'
+import PrettyCheck from 'pretty-checkbox-vue/check'
+import Vodal from 'vodal'
 import { parse } from 'path'
 export default {
     name: 'myCalendar',
@@ -222,9 +235,9 @@ export default {
         HotelDatePicker,
         Select2,
         Multiselect,
-        ExcludeOptionalAmen,
-        SweetModal, 
-        SweetModalTab,
+        ExcludeOptionalamen,
+        Vodal,
+        PrettyCheck,
         Loading
     },
     data() {
@@ -254,6 +267,7 @@ export default {
             no_unit_avail: 0,
             tempRoomOptions: [],
             rooms_options: [],
+            vodal_show: false,
             form: new form({
                 hotel: '',
                 checkInD: new Date().toString(),
@@ -387,7 +401,8 @@ export default {
             //this.$refs.mycalendar.usageStatistics = false;
         },
          excludeOptional() {
-             this.$refs.excludeOptionAme.open();
+             this.vodal_show = true;
+             
         //     let optionalAmenItem = ``;
         //     let optionalAmenList = ``;
         //     let self = this;
@@ -643,7 +658,6 @@ export default {
 
     .book-rooms-quantity ul {
         list-style: circle;
-        padding: 0px 0px 0px 15px;
     }
 
     .swal2-loading .swal2-styled {
@@ -673,8 +687,8 @@ export default {
     }
     
     .optionalAmen-list {
-        list-style: none !important;
-        padding: 0 !important;
+        // list-style: none !important;
+        // padding: 0 !important;
     }
 
     .multiselect__tags {
@@ -685,18 +699,21 @@ export default {
         text-align: left;
     }
 
-    .sweet-modal-overlay.is-visible {
-        opacity: 1;
-        background-color: rgba(0,0,0,.4);
+    .pretty.p-icon .state .icon {
+        width: calc(1em + 1px) !important;
+        height: calc(1em + 5px) !important;
     }
 
-    .sweet-modal {
-        border-radius: .3125em !important;
+    .vodal-style {
+        border-radius: .3125em;
     }
 
-    .sweet-modal .sweet-box-actions .sweet-action-close:hover {
-        background: none !important;
-        color: #dc3545 !important;
+    .vodal-close:hover:before, .vodal-close:hover:after {
+        background: #ce7070 !important;
+    }
+
+    .vodal-dialog {
+        height: max-content !important;
     }
 </style>
 
