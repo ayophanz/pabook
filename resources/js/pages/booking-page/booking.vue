@@ -230,7 +230,6 @@ import PrettyCheck from 'pretty-checkbox-vue/check'
 import Vodal from 'vodal'
 import { parse } from 'path'
 export default {
-    //name: 'myCalendar',
     components: {
         Calendar,
         HotelDatePicker,

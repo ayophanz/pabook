@@ -24,10 +24,10 @@ export default {
         }
     },
     mounted() {
-        this.rooms_no_Data = Vue.util.extend([], this.rooms_no);
-        this.addOnOptionalAmen_Data = Vue.util.extend([], this.addOnOptionalAmen);
-        this.currency_Data = this.currency;
-        console.log(this.rooms_no);
+        this.rooms_no_Data = Vue.util.extend([], this.roomsNoComp);
+        this.addOnOptionalAmen_Data = Vue.util.extend([], this.addOnOptionalAmenComp);
+        this.currency_Data = this.currencyComp;
+        console.log(this.roomsNoComp);
     }
 }
 </script>
