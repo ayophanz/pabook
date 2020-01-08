@@ -16,7 +16,7 @@
                 <h4 class="swal2-title" style="display: flex;"><strong>Exclude optional amenities <br /> to specific room</strong></h4>
             </div>
             <div class="swal2-content">
-                <exclude-optionalamen :rooms_no="form.rooms_no" :addOnOptionalAmen="form.addOnOptionalAmen" :currency="currency"></exclude-optionalamen>
+                <exclude-optional-amen :roomsNoComp="form.rooms_no" :addOnOptionalAmenComp="form.addOnOptionalAmen" :currencyComp="currency"></exclude-optional-amen>
             </div>
             <div class="swal2-actions">
                 <button type="button" class="swal2-cancel btn btn-outline-primary btn-flat" aria-label="" style="display: inline-block;">Confirm &#38; Exclude</button>
@@ -39,6 +39,7 @@
                         <form  @submit.prevent="validateEntries" role="form">
                             <div class="row">
                                 <div class="col-md-3">
+                                    <exclude-optional-amen :roomsNoComp="form.rooms_no" :addOnOptionalAmenComp="form.addOnOptionalAmen" :currencyComp="currency"></exclude-optional-amen>
                                     <div v-if=" pageIn=='page_1'" class="tab-pagination page-1">
                                         <div class="form-group mb-1">
                                             <HotelDatePicker 
@@ -217,6 +218,7 @@
 </template>
 
 <script>
+import ExcludeOptionalAmen from '../../components/excludeOptionalAmenComponent'
 import 'tui-calendar/dist/tui-calendar.css'
 import { Calendar } from '@toast-ui/vue-calendar'
 import 'tui-date-picker/dist/tui-date-picker.css'
@@ -224,18 +226,17 @@ import HotelDatePicker from 'vue-hotel-datepicker'
 import Select2 from 'v-select2-component'
 import Loading from 'vue-loading-overlay'
 import Multiselect from 'vue-multiselect'
-import ExcludeOptionalamen from '../../components/excludeOptionalAmenComponent'
 import PrettyCheck from 'pretty-checkbox-vue/check'
 import Vodal from 'vodal'
 import { parse } from 'path'
 export default {
-    name: 'myCalendar',
+    //name: 'myCalendar',
     components: {
         Calendar,
         HotelDatePicker,
         Select2,
         Multiselect,
-        ExcludeOptionalamen,
+        ExcludeOptionalAmen,
         Vodal,
         PrettyCheck,
         Loading

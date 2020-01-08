@@ -15,7 +15,7 @@
 
 <script>
 export default {
-    props: ['rooms_no', 'addOnOptionalAmen', 'currency'],
+    props: ['roomsNoComp', 'addOnOptionalAmenComp', 'currencyComp'],
     data() {
         return {
             rooms_no_Data: [],
@@ -23,10 +23,7 @@ export default {
             currency_Data: ''
         }
     },
-    methods: {
-
-    },
-    created() {
+    mounted() {
         this.rooms_no_Data = Vue.util.extend([], this.rooms_no);
         this.addOnOptionalAmen_Data = Vue.util.extend([], this.addOnOptionalAmen);
         this.currency_Data = this.currency;
