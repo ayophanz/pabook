@@ -108,7 +108,7 @@
                                                             <ul class="optionalAmen-list">
                                                                 <li v-for="(item, key) in optionalAmenities">
                                                                     <div class="form-check pl-0">
-                                                                        <pretty-check v-model="form.addOnOptionalAmen" :value="item" class="p-icon p-round p-tada" color="danger-o">
+                                                                        <pretty-check v-model="form.addOnOptionalAmen" :value="item" class="p-icon p-round p-tada" color="success-o">
                                                                             <i slot="extra" class="icon mdi mdi-heart fas fa-heart"></i>
                                                                             {{item.value}} | {{currency}}{{item.price}}
                                                                         </pretty-check>
