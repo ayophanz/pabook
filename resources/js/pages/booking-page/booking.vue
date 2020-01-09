@@ -10,13 +10,16 @@
             :active.sync="isLoading" 
             :is-full-page="fullPage">
         </loading>
-        <vodal :show="vodal_show" animation="zoom" :closeOnEsc="false" ref="excludeOptionalAmen" :width="600" className="vodal-style" @hide="vodal_show = false">
+        <vodal :show="vodal_show" animation="zoom" :closeOnEsc="false" :width="600" className="vodal-style" @hide="vodal_show = false">
             <div class="swal2-header">
                 <div class="swal2-icon swal2-info swal2-animate-info-icon" style="display: flex;"></div>
                 <h4 class="swal2-title" style="display: flex;"><strong>Exclude optional amenities <br /> to specific room</strong></h4>
             </div>
             <div class="swal2-content">
-                <exclude-optional-amen :roomsNoComp="form.rooms_no" :addOnOptionalAmenComp="form.addOnOptionalAmen" :currencyComp="currency"></exclude-optional-amen>
+                <br />
+                <h6 class="text-left">*Uncheck to exclude item</h6>
+                <exclude-optional-amen ref="dataOptionalFeature" :roomsNoComp="form.rooms_no" :addOnOptionalAmenComp="form.addOnOptionalAmen" :currencyComp="currency"></exclude-optional-amen>
+                <br />
             </div>
             <div class="swal2-actions">
                 <button type="button" class="swal2-cancel btn btn-outline-primary btn-flat" aria-label="" style="display: inline-block;">Confirm &#38; Exclude</button>
@@ -39,7 +42,6 @@
                         <form  @submit.prevent="validateEntries" role="form">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <exclude-optional-amen :roomsNoComp="form.rooms_no" :addOnOptionalAmenComp="form.addOnOptionalAmen" :currencyComp="currency"></exclude-optional-amen>
                                     <div v-if=" pageIn=='page_1'" class="tab-pagination page-1">
                                         <div class="form-group mb-1">
                                             <HotelDatePicker 
@@ -400,33 +402,11 @@ export default {
             this.setRenderRangeText();
             //this.$refs.mycalendar.usageStatistics = false;
         },
-         excludeOptional() {
-             this.vodal_show = true;
-             
-        //     let optionalAmenItem = ``;
-        //     let optionalAmenList = ``;
-        //     let self = this;
-        //     this.form.rooms_no.map((item, key) => {
-        //         optionalAmenList +=  `<li>${item.value}<ul class="exclude-optional-amen">`
-        //         self.form.addOnOptionalAmen.forEach(function(item2, key2){
-        //             optionalAmenList += `<li>
-        //                                 <input checked value="${item2}" class="form-check-input" type="checkbox" id="exclude-optionalAmen-${key}-${key2}" >
-        //                                 <label for="exclude-optionalAmen-${key}-${key2}" class="form-check-label">${item2.value} | ${self.currency}${item2.price}</label>
-        //                             </li>`})
-        //         optionalAmenList += `</ul></li>`
-        //     })
-        //     let htmlData = `<h5 class="text-left">* Uncheck amenities to exclude</h5><ul class="exclude-rooms-no">${optionalAmenList}</ul>`;
-        //     excludeOpAmen.fire({
-        //         title: '<h4><strong>Exclude optional amenities <br /> to specific room</strong></h4>',
-        //         type: 'info',
-        //         html:`<div><exclude-optional-amen :rooms_no="this.form.rooms_no" :addOnOptionalAmen="this.form.addOnOptionalAmen" :currency="this.currency"></exclude-optional-amen></div>`,
-        //         showCloseButton: true,
-        //         showCancelButton: false,
-        //         focusConfirm: true,
-        //         confirmButtonText:'Confirm & Exclude',
-        //         cancelButtonText:'Cancel',
-        //         reverseButtons: true
-        //     })
+        excludeOptional() {
+            this.$refs.dataOptionalFeature.rooms_no_Data = this.form.rooms_no;
+            this.$refs.dataOptionalFeature.addOnOptionalAmen_Data = this.form.addOnOptionalAmen;
+            this.$refs.dataOptionalFeature.currency_Data = this.currency;
+            this.vodal_show = true;
         },
         roomsNoOnAdd(value) {
             this.no_unit_avail++;
@@ -693,10 +673,6 @@ export default {
 
     .multiselect__tags {
         padding: 8px 40px 0 20px !important;
-    }
-
-    ul.exclude-rooms-no {
-        text-align: left;
     }
 
     .pretty.p-icon .state .icon {
