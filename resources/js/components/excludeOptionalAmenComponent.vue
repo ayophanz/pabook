@@ -51,4 +51,9 @@ export default {
     .vodal-mask {
         background-color: rgba(0,0,0,.4) !important;
     }
+
+    .exclude-rooms-no .pretty.p-icon .state .icon {
+        width: calc(1em + 1.4px) !important;
+        height: calc(1em + 2px) !important;
+    }
 </style>
