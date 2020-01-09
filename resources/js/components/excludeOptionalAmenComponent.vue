@@ -11,6 +11,7 @@
                         </pretty-check>
                     </li>
                 </ul>
+                <br />
             </li>
         </ul>
     </div>
