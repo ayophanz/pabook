@@ -108,7 +108,7 @@
                                                             <ul class="optionalAmen-list">
                                                                 <li v-for="(item, key) in optionalAmenities">
                                                                     <div class="form-check pl-0">
-                                                                        <pretty-check v-model="form.addOnOptionalAmen" :value="item" class="p-icon p-round p-tada" color="success-o">
+                                                                        <pretty-check v-model="form.addOnOptionalAmen" :value="item" :disabled="no_unit_avail <= 0" class="p-icon p-round p-tada" color="success-o">
                                                                             <i slot="extra" class="icon mdi mdi-heart fas fa-heart"></i>
                                                                             {{item.value}} | {{currency}}{{item.price}}
                                                                         </pretty-check>
@@ -414,6 +414,7 @@ export default {
         },
         roomsNoOnRemove(e) {
             this.no_unit_avail--;
+            if(this.no_unit_avail<=0) this.form.addOnOptionalAmen = [];
             this.optionalAmenities.forEach(function(item, key){
                 if (item.rooms.indexOf(e.value) !== -1) item.rooms.splice(item.rooms.indexOf(e.value), 1);
             });
