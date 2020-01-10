@@ -38,22 +38,3 @@ export default {
     }
 }
 </script>
-<style lang='scss'>
-    ul.exclude-rooms-no {
-        text-align: left;
-        list-style: none;
-    }
-
-    .vodal-dialog {
-        padding: 1.25em !important;
-    }
-
-    .vodal-mask {
-        background-color: rgba(0,0,0,.4) !important;
-    }
-
-    .exclude-rooms-no .pretty.p-icon .state .icon {
-        width: calc(1em + 1.4px) !important;
-        height: calc(1em + 2px) !important;
-    }
-</style>

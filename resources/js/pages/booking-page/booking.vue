@@ -18,7 +18,7 @@
             <div class="swal2-content">
                 <br />
                 <h6 class="text-left">*Uncheck to exclude item</h6>
-                <exclude-optional-amen ref="dataOptionalFeature" :roomsNoComp="form.rooms_no" :addOnOptionalAmenComp="form.addOnOptionalAmen" :currencyComp="currency"></exclude-optional-amen>
+                <exclude-optional-amen ref="dataOptionalFeature"></exclude-optional-amen>
                 <br />
             </div>
             <div class="swal2-actions">
@@ -408,10 +408,16 @@ export default {
             this.$refs.dataOptionalFeature.currency_Data = this.currency;
             this.vodal_show = true;
         },
-        roomsNoOnAdd(value) {
+        roomsNoOnAdd(e) {
+            this.optionalAmenities.forEach(function(item, key){ item.rooms.push(e.value); });
             this.no_unit_avail++;
         },
-        roomsNoOnRemove(value) {
+        roomsNoOnRemove(e) {
+            this.optionalAmenities.forEach(function(item, key){
+                let index = item.rooms.indexOf(e.value);
+                if (index !== -1) item.rooms.splice(index, 1);
+            });
+            console.log(this.optionalAmenities);
             this.no_unit_avail--;
         },
         backIsClick() {
@@ -478,7 +484,7 @@ export default {
                     });
                 }
                 else if(kind=='value') tempList.forEach(function(item, key){ tempParam.push(item.value); });
-                else if(kind=='optional') tempList.forEach(function(item, key){ tempParam.push(item); });
+                else if(kind=='optional') tempList.forEach(function(item, key){ item['rooms'] = []; tempParam.push(item); });
                 else if(kind=='total') for(let i=1;i<=parseInt(tempList);i++) tempParam.push({id:i, text:i});
                 else if(kind=='many') for(let i=1;i<=(parseInt(tempList)*this.form.manyRoom);i++) tempParam.push({id:i, text:i});
             } 
@@ -527,7 +533,7 @@ export default {
                                     self.totalRooms.push({id:item2.id, value:item2.total_room, available:'none'});
                                     self.totalAdults.push({id:item2.id, value:item2.max_adult});
                                     self.totalChilds.push({id:item2.id, value:item2.max_child});
-                                    self.tempOptionalAmenities.push({id:item2.id, value:JSON.parse(item2.room_feature_optional.value)});
+                                    self.tempOptionalAmenities.push({id:item2.id, value:JSON.parse(item2.room_feature_optional.value), rooms:[] });
                                     self.tempFixedAmenities.push({id:item2.id, value:JSON.parse(item2.room_feature.value)});
                                 });
                             }
@@ -666,11 +672,6 @@ export default {
         display: inline;
     }
     
-    .optionalAmen-list {
-        // list-style: none !important;
-        // padding: 0 !important;
-    }
-
     .multiselect__tags {
         padding: 8px 40px 0 20px !important;
     }
@@ -690,6 +691,24 @@ export default {
 
     .vodal-dialog {
         height: max-content !important;
+    }
+
+    ul.exclude-rooms-no {
+        text-align: left;
+        list-style: none;
+    }
+
+    .vodal-dialog {
+        padding: 1.25em !important;
+    }
+
+    .vodal-mask {
+        background-color: rgba(0,0,0,.4) !important;
+    }
+
+    .exclude-rooms-no .pretty.p-icon .state .icon {
+        width: calc(1em + 1.4px) !important;
+        height: calc(1em + 2px) !important;
     }
 </style>
 
