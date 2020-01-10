@@ -45,16 +45,16 @@
                                     <div v-if=" pageIn=='page_1'" class="tab-pagination page-1">
                                         <div class="form-group mb-1">
                                             <HotelDatePicker 
-                                            @check-in-changed="checkInDate"
-                                            @check-out-changed="checkOutDate"
-                                            :startingDateValue="new Date(form.checkInD)"
-                                            :endingDateValue="new Date(form.checkOutD)"
-                                            format="YYYY MMM. DD"
-                                            :startDate="new Date()"
-                                            :minNights="1"
-                                            :maxNights="30"
-                                            :closeDatepickerOnClickOutside="false"
-                                            :showCloseButton="true"
+                                                @check-in-changed="checkInDate"
+                                                @check-out-changed="checkOutDate"
+                                                :startingDateValue="new Date(form.checkInD)"
+                                                :endingDateValue="new Date(form.checkOutD)"
+                                                format="YYYY MMM. DD"
+                                                :startDate="new Date()"
+                                                :minNights="1"
+                                                :maxNights="30"
+                                                :closeDatepickerOnClickOutside="false"
+                                                :showCloseButton="true"
                                             />
                                             <has-error v-if="form.checkInD==''" :form="form" field="checkInD"></has-error>
                                             <has-error v-else-if="form.checkOutD==''" :form="form" field="checkOutD"></has-error>
@@ -608,7 +608,7 @@ export default {
     },
     mounted() {
         this.init();
-
+        
         /**
          * jQuery
          * */ 

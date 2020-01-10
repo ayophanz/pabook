@@ -5,7 +5,7 @@
                 <i class="fas fa-bed"></i> {{item.value}}
                 <ul class="exclude-optional-amen">
                     <li v-for="(item2, key2) in addOnOptionalAmen_Data">
-                        <pretty-check :value="item2" class="p-icon p-round p-tada" color="danger-o">
+                        <pretty-check @change="onCheckOrUncheck($event, item.value)" class="p-icon p-round p-tada" color="danger-o">
                             <i slot="extra" class="icon mdi mdi-heart fas fa-times"></i>
                             {{item2.value}} | {{currency_Data}}{{item2.price}}
                         </pretty-check>
@@ -30,6 +30,12 @@ export default {
             addOnOptionalAmen_Data: [],
             currency_Data: ''
         }
+    },
+    methods: {
+        onCheckOrUncheck(e, value) {
+            if(e==true) console.log(value);
+            if(e==false) console.log(value);
+        },
     },
     mounted() {
         this.rooms_no_Data = Vue.util.extend([], this.roomsNoComp);
