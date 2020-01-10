@@ -409,16 +409,14 @@ export default {
             this.vodal_show = true;
         },
         roomsNoOnAdd(e) {
-            this.optionalAmenities.forEach(function(item, key){ item.rooms.push(e.value); });
             this.no_unit_avail++;
+            this.optionalAmenities.forEach(function(item, key){ item.rooms.push(e.value); });
         },
         roomsNoOnRemove(e) {
-            this.optionalAmenities.forEach(function(item, key){
-                let index = item.rooms.indexOf(e.value);
-                if (index !== -1) item.rooms.splice(index, 1);
-            });
-            console.log(this.optionalAmenities);
             this.no_unit_avail--;
+            this.optionalAmenities.forEach(function(item, key){
+                if (item.rooms.indexOf(e.value) !== -1) item.rooms.splice(item.rooms.indexOf(e.value), 1);
+            });
         },
         backIsClick() {
             this.pageIn = 'page_1';
