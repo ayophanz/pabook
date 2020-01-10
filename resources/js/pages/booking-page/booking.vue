@@ -18,7 +18,7 @@
             <div class="swal2-content">
                 <br />
                 <h6 class="text-left">*Uncheck to exclude item</h6>
-                <exclude-optional-amen ref="dataOptionalFeature"></exclude-optional-amen>
+                <exclude-optional-amen ref="dataOptionalFeature" @removeRoomOnAmen="onAmenAction('remove', $event)" @undoRemoveOnAmen="onAmenAction('undo', $event)"></exclude-optional-amen>
                 <br />
             </div>
             <div class="swal2-actions">
@@ -402,6 +402,15 @@ export default {
             this.setRenderRangeText();
             //this.$refs.mycalendar.usageStatistics = false;
         },
+        onAmenAction(action, value) {
+            console.log(value);
+            this.optionalAmenities.forEach(function(item, key){
+                if (value[0]==item.id && item.rooms.indexOf(value[1]) !== -1) {
+                    if(action=='remove' && item.rooms.indexOf(value[1])) item.rooms.splice(item.rooms.indexOf(value[1]), 1);
+                    if(action=='undo' && item.rooms.indexOf(value[1])) item.rooms.push(value[1]);
+                }
+            });
+        },
         excludeOptional() {
             this.$refs.dataOptionalFeature.rooms_no_Data = this.form.rooms_no;
             this.$refs.dataOptionalFeature.addOnOptionalAmen_Data = this.form.addOnOptionalAmen;
@@ -483,7 +492,7 @@ export default {
                     });
                 }
                 else if(kind=='value') tempList.forEach(function(item, key){ tempParam.push(item.value); });
-                else if(kind=='optional') tempList.forEach(function(item, key){ item['rooms'] = []; tempParam.push(item); });
+                else if(kind=='optional') tempList.forEach(function(item, key){ item['id'] = (key+1); item['rooms'] = []; tempParam.push(item); });
                 else if(kind=='total') for(let i=1;i<=parseInt(tempList);i++) tempParam.push({id:i, text:i});
                 else if(kind=='many') for(let i=1;i<=(parseInt(tempList)*this.form.manyRoom);i++) tempParam.push({id:i, text:i});
             } 
