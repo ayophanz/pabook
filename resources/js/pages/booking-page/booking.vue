@@ -130,7 +130,7 @@
                                             <div class="optionalList">
                                                 <p class="mb-0 ml-2">{{currency}}{{roomPrice}} x ({{ nightNoFunc }})night</p>
                                                 <p class="mb-0 ml-2">{{currency}}{{roomPrice}} x ({{ roomNoFunc }})no. of room</p>
-                                                <p class="mb-0 ml-2" v-for="item in form.addOnOptionalAmen">{{currency}}{{item.price}} x ({{form.manyRoom}}){{item.value}}</p>
+                                                <p class="mb-0 ml-2" v-for="item in form.addOnOptionalAmen">{{currency}}{{item.price}} x ({{item.rooms.length}}){{item.value}}</p>
                                             </div>
                                         </div>
                                         <div class="form-group mb-0 booking-total">
