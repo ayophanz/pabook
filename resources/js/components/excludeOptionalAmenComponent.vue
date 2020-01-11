@@ -5,7 +5,7 @@
                 <i class="fas fa-bed"></i> {{item.value}}
                 <ul class="exclude-optional-amen">
                     <li v-for="(item2, key2) in addOnOptionalAmen_Data">
-                        <pretty-check @change="onCheckOrUncheck($event, item2.id, item.value)" class="p-icon p-round p-tada" color="danger-o">
+                        <pretty-check v-model="item2.isChecked" :checked="item2.isChecked" @change="onCheckOrUncheck($event, item2.id, item.value)" class="p-icon p-round p-tada" color="danger-o">
                             <i slot="extra" class="icon mdi mdi-heart fas fa-times"></i>
                             {{item2.value}} | {{currency_Data}}{{item2.price}}
                         </pretty-check>
@@ -26,6 +26,7 @@ export default {
     },
     data() {
         return {
+            uncheckedAll: false,
             rooms_no_Data: [],
             addOnOptionalAmen_Data: [],
             currency_Data: ''
@@ -36,8 +37,15 @@ export default {
             if(e==true) this.$emit('removeOrAddRoomOnAmen', ['remove', id, value]);
             else this.$emit('removeOrAddRoomOnAmen', ['undo', id, value]);
         },
+        resetChecked() {
+            this.addOnOptionalAmen_Data.forEach(function(item, key){
+                item.isChecked = false;
+            });
+            console.log(this.addOnOptionalAmen_Data);
+        }
     },
     mounted() {
+        fire.$on('resetChecked', this.resetChecked); 
         //this.rooms_no_Data = Vue.util.extend([], this.roomsNoComp);
         //this.addOnOptionalAmen_Data = Vue.util.extend([], this.addOnOptionalAmenComp);
         //this.currency_Data = this.currencyComp;

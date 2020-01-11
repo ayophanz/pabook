@@ -17,12 +17,9 @@
             </div>
             <div class="swal2-content">
                 <br />
-                <h6 class="text-left">*Uncheck to exclude item</h6>
+                <h6 class="text-left ml-5">*Check to exclude item</h6><br />
                 <exclude-optional-amen ref="dataOptionalFeature" @removeOrAddRoomOnAmen="onRemoveOrAdd"></exclude-optional-amen>
                 <br />
-            </div>
-            <div class="swal2-actions">
-                <button type="button" class="swal2-cancel btn btn-outline-primary btn-flat" aria-label="" style="display: inline-block;">Confirm &#38; Exclude</button>
             </div>
         </vodal>
         <div class="row justify-content-center" :data-test="test">
@@ -382,7 +379,7 @@ export default {
         totalAmountFunc() {
             let optionalAmenPrices = 0;
             this.form.addOnOptionalAmen.forEach(function(item, key){
-                optionalAmenPrices += parseFloat(item.price);
+                optionalAmenPrices += (parseFloat(item.price) * item.rooms.length);
             });
             return parseFloat((parseFloat(this.roomPrice) * this.nightNoFunc) * this.roomNoFunc) + optionalAmenPrices;
         },
@@ -405,14 +402,15 @@ export default {
         },
         excludeOptional() {
             this.$refs.dataOptionalFeature.rooms_no_Data = this.form.rooms_no;
-            this.$refs.dataOptionalFeature.addOnOptionalAmen_Data = this.form.addOnOptionalAmen;
+            this.$refs.dataOptionalFeature.addOnOptionalAmen_Data = this.optionalAmenities;
             this.$refs.dataOptionalFeature.currency_Data = this.currency;
             this.vodal_show = true;
         },
         onRemoveOrAdd(value) {
             this.optionalAmenities.forEach(function(item, key){
-                if(item.id == value[1] && value[0]=='remove' && item.rooms.indexOf(value[2]) !== -1) item.rooms.splice(item.rooms.indexOf(value[2]), 1);
-                else if(item.id == value[1] && value[0]=='undo') item.rooms.push(value[2]);
+                let exist = item.rooms.indexOf(value[2]) !== -1;
+                if(item.id == value[1] && value[0]=='remove' && exist==true) item.rooms.splice(item.rooms.indexOf(value[2]), 1);
+                else if(item.id == value[1] && value[0]=='undo' && exist==false) item.rooms.push(value[2]);
             });
         },
         roomsNoOnAdd(e) {
@@ -421,7 +419,7 @@ export default {
         },
         roomsNoOnRemove(e) {
             this.no_unit_avail--;
-            if(this.no_unit_avail<=0) this.form.addOnOptionalAmen = [];
+            if(this.no_unit_avail<=0) {this.form.addOnOptionalAmen = []; fire.$emit('resetChecked'); }
             this.optionalAmenMani('remove', e.value);
         },
         optionalAmenMani(action, value) {
@@ -495,7 +493,7 @@ export default {
                     });
                 }
                 else if(kind=='value') tempList.forEach(function(item, key){ tempParam.push(item.value); });
-                else if(kind=='optional') tempList.forEach(function(item, key){ item['id'] = (key+1);item['rooms'] = []; tempParam.push(item); });
+                else if(kind=='optional') tempList.forEach(function(item, key){ item['isChecked'] = false; item['id'] = (key+1);item['rooms'] = []; tempParam.push(item); });
                 else if(kind=='total') for(let i=1;i<=parseInt(tempList);i++) tempParam.push({id:i, text:i});
                 else if(kind=='many') for(let i=1;i<=(parseInt(tempList)*this.form.manyRoom);i++) tempParam.push({id:i, text:i});
             } 
