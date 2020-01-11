@@ -18,14 +18,14 @@
             <div class="swal2-content">
                 <br />
                 <h6 class="text-left">*Uncheck to exclude item</h6>
-                <exclude-optional-amen ref="dataOptionalFeature" @removeRoomOnAmen="onAmenAction('remove', $event)" @undoRemoveOnAmen="onAmenAction('undo', $event)"></exclude-optional-amen>
+                <exclude-optional-amen ref="dataOptionalFeature" @removeOrAddRoomOnAmen="onRemoveOrAdd"></exclude-optional-amen>
                 <br />
             </div>
             <div class="swal2-actions">
                 <button type="button" class="swal2-cancel btn btn-outline-primary btn-flat" aria-label="" style="display: inline-block;">Confirm &#38; Exclude</button>
             </div>
         </vodal>
-        <div class="row justify-content-center">
+        <div class="row justify-content-center" :data-test="test">
             <booking-page-icon></booking-page-icon>
             <div class="col-md-12">
                 <div class="card mt-5">
@@ -244,6 +244,7 @@ export default {
     },
     data() {
         return {
+            test: '',
             fullPage: true,
             isLoading: false,
             hotels:[],
@@ -402,31 +403,33 @@ export default {
             this.setRenderRangeText();
             //this.$refs.mycalendar.usageStatistics = false;
         },
-        onAmenAction(action, value) {
-            console.log(value);
-            this.optionalAmenities.forEach(function(item, key){
-                if (value[0]==item.id && item.rooms.indexOf(value[1]) !== -1) {
-                    if(action=='remove' && item.rooms.indexOf(value[1])) item.rooms.splice(item.rooms.indexOf(value[1]), 1);
-                    if(action=='undo' && item.rooms.indexOf(value[1])) item.rooms.push(value[1]);
-                }
-            });
-        },
         excludeOptional() {
             this.$refs.dataOptionalFeature.rooms_no_Data = this.form.rooms_no;
             this.$refs.dataOptionalFeature.addOnOptionalAmen_Data = this.form.addOnOptionalAmen;
             this.$refs.dataOptionalFeature.currency_Data = this.currency;
             this.vodal_show = true;
         },
+        onRemoveOrAdd(value) {
+            this.optionalAmenities.forEach(function(item, key){
+                if(item.id == value[1] && value[0]=='remove' && item.rooms.indexOf(value[2]) !== -1) item.rooms.splice(item.rooms.indexOf(value[2]), 1);
+                else if(item.id == value[1] && value[0]=='undo') item.rooms.push(value[2]);
+            });
+        },
         roomsNoOnAdd(e) {
             this.no_unit_avail++;
-            this.optionalAmenities.forEach(function(item, key){ item.rooms.push(e.value); });
+            this.optionalAmenMani('undo', e.value);
         },
         roomsNoOnRemove(e) {
             this.no_unit_avail--;
             if(this.no_unit_avail<=0) this.form.addOnOptionalAmen = [];
-            this.optionalAmenities.forEach(function(item, key){
-                if (item.rooms.indexOf(e.value) !== -1) item.rooms.splice(item.rooms.indexOf(e.value), 1);
-            });
+            this.optionalAmenMani('remove', e.value);
+        },
+        optionalAmenMani(action, value) {
+            if(action=='remove')
+                this.optionalAmenities.forEach(function(item, key){
+                    if (item.rooms.indexOf(value) !== -1) item.rooms.splice(item.rooms.indexOf(value), 1);
+                });
+            else if(action=='undo') this.optionalAmenities.forEach(function(item, key){ item.rooms.push(value); });
         },
         backIsClick() {
             this.pageIn = 'page_1';
@@ -492,7 +495,7 @@ export default {
                     });
                 }
                 else if(kind=='value') tempList.forEach(function(item, key){ tempParam.push(item.value); });
-                else if(kind=='optional') tempList.forEach(function(item, key){ item['id'] = (key+1); item['rooms'] = []; tempParam.push(item); });
+                else if(kind=='optional') tempList.forEach(function(item, key){ item['id'] = (key+1);item['rooms'] = []; tempParam.push(item); });
                 else if(kind=='total') for(let i=1;i<=parseInt(tempList);i++) tempParam.push({id:i, text:i});
                 else if(kind=='many') for(let i=1;i<=(parseInt(tempList)*this.form.manyRoom);i++) tempParam.push({id:i, text:i});
             } 

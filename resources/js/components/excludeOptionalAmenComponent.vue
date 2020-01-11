@@ -33,8 +33,8 @@ export default {
     },
     methods: {
         onCheckOrUncheck(e, id, value) {
-            if(e==true) this.$emit('removeRoomOnAmenities', [id, value]);
-            if(e==false) this.$emit('undoRemoveOnAmenities', [id, value]);
+            if(e==true) this.$emit('removeOrAddRoomOnAmen', ['remove', id, value]);
+            else this.$emit('removeOrAddRoomOnAmen', ['undo', id, value]);
         },
     },
     mounted() {
