@@ -311,7 +311,7 @@
                 .then(
                     function (response) {
                         response.data.forEach(function(item, key){
-                          if(item.id==e.target.value) {
+                          if(item.id==e) {
                             self.populateRoomsNo(item.room_type_hotel.hotel_rooms_no, self, self.roomId);
                             return false;
                           }

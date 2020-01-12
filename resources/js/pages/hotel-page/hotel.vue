@@ -223,7 +223,8 @@
         },
         methods: {
           getRoomType(assign_id){
-            return (this.roomTypeName.length > 0)? this.roomTypeName.find(element => element.room_id === parseInt(assign_id)).type :'error';
+            let room = (this.roomTypeName.length > 0)? this.roomTypeName.find(element => element.room_id === parseInt(assign_id)) :'error';
+            return room.type+' | '+room.name;
           },
           loadRoomType(rooms) {
             this.roomTypeName = [];
@@ -233,7 +234,7 @@
             axios.get('/api/specific-rooms/'+roomIds)
             .then(function (response) {
               response.data.forEach(function(item, key){
-                self.roomTypeName.push({'room_id':item.id, 'type':item.room_type.name});
+                self.roomTypeName.push({'room_id':item.id, 'type':item.room_type.name, 'name':item.name});
               });
             });
           },
