@@ -18,7 +18,7 @@
             <div class="swal2-content">
                 <br />
                 <h6 class="text-left ml-5">*Check to exclude item</h6>
-                <exclude-optional-amen :roomsNoComp="form.rooms_no" :addOnOptionalAmenComp="form.addOnOptionalAmen" :currencyComp="currency" ref="dataOptionalFeature" @removeOrAddRoomOnAmen="onRemoveOrAdd"></exclude-optional-amen>
+                <exclude-optional-amen ref="dataOptionalFeature" @removeOrAddRoomOnAmen="onRemoveOrAdd"></exclude-optional-amen>
                 <br />
             </div>
         </vodal>
@@ -401,9 +401,9 @@ export default {
             //this.$refs.mycalendar.usageStatistics = false;
         },
         excludeOptional() {
-            // this.$refs.dataOptionalFeature.rooms_no_Data = this.form.rooms_no;
-            // this.$refs.dataOptionalFeature.addOnOptionalAmen_Data = this.form.addOnOptionalAmen;
-            // this.$refs.dataOptionalFeature.currency_Data = this.currency;
+            this.$refs.dataOptionalFeature.rooms_no_Data = this.form.rooms_no;
+            this.$refs.dataOptionalFeature.addOnOptionalAmen_Data = this.form.addOnOptionalAmen;
+            this.$refs.dataOptionalFeature.currency_Data = this.currency;
             this.vodal_show = true;
         },
         onRemoveOrAdd(value) {
@@ -419,9 +419,7 @@ export default {
         },
         roomsNoOnRemove(e) {
             this.no_unit_avail--;
-            if(this.no_unit_avail<=0) {
-                this.form.addOnOptionalAmen = [];
-            } 
+            if(this.no_unit_avail<=0) this.form.addOnOptionalAmen = [];
             this.optionalAmenMani('remove', e.value);
         },
         optionalAmenMani(action, value) {
