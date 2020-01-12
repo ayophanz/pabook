@@ -18,7 +18,7 @@
             <div class="swal2-content">
                 <br />
                 <h6 class="text-left ml-5">*Check to exclude item</h6>
-                <exclude-optional-amen ref="dataOptionalFeature" @removeOrAddRoomOnAmen="onRemoveOrAdd"></exclude-optional-amen>
+                <exclude-optional-amen :roomsNoComp="form.rooms_no" :addOnOptionalAmenComp="form.addOnOptionalAmen" :currencyComp="currency" ref="dataOptionalFeature" @removeOrAddRoomOnAmen="onRemoveOrAdd"></exclude-optional-amen>
                 <br />
             </div>
         </vodal>
@@ -423,11 +423,12 @@ export default {
             this.optionalAmenMani('remove', e.value);
         },
         optionalAmenMani(action, value) {
-            if(action=='remove')
+            if(action=='remove') {
+                 //this.form.addOnOptionalAmen.find(e => e.isChecked == true).splice(0, 1, false);
                 this.optionalAmenities.forEach(function(item, key){
-                    if (item.rooms.indexOf(value) !== -1) item.rooms.splice(item.rooms.indexOf(value), 1);
+                    if(item.rooms.indexOf(value) !== -1) item.rooms.splice(item.rooms.indexOf(value), 1);
                 });
-            else if(action=='undo') this.optionalAmenities.forEach(function(item, key){ item.rooms.push(value); });
+            }else if(action=='undo') this.optionalAmenities.forEach(function(item, key){ item.rooms.push(value); });
         },
         backIsClick() {
             this.pageIn = 'page_1';
@@ -477,7 +478,7 @@ export default {
             this.form.addOnOptionalAmen = [];
             this.fixedAmenities = [];
             this.optionalAmenities = [];
-             this.$refs.dataOptionalFeature.addOnOptionalAmen_Data = [];
+            this.$refs.dataOptionalFeature.addOnOptionalAmen_Data = [];
         },
         generateList(param, kind) {
             let tempParam = [];

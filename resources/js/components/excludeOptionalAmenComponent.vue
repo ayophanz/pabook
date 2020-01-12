@@ -20,8 +20,7 @@
 <script>
 import PrettyCheck from 'pretty-checkbox-vue/check'
 export default {
-    // props: ['roomsNoComp', 'addOnOptionalAmenComp', 'currencyComp'],
-    components :{
+    components: {
         PrettyCheck
     },
     data() {
@@ -36,11 +35,6 @@ export default {
             if(e==true) this.$emit('removeOrAddRoomOnAmen', ['remove', id, value]);
             else this.$emit('removeOrAddRoomOnAmen', ['undo', id, value]);
         }
-    },
-    mounted() { 
-        // this.rooms_no_Data = Vue.util.extend([{}], this.roomsNoComp);
-        // this.addOnOptionalAmen_Data = Vue.util.extend([{}], this.addOnOptionalAmenComp);
-        // this.currency_Data = this.currencyComp;
     }
 }
 </script>
