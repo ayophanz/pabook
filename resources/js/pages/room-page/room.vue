@@ -192,7 +192,7 @@
                 hotels: [],
                 types: [],
                 imageUrl: null,
-                base_currency: 'USD',
+                base_currency: 'none',
                 rooms_options: [],
                 no_unit_avail: 0,
                 form: new form({
@@ -295,6 +295,7 @@
                              response.data.forEach(function(item, key){
                                self.types.push({id:item.id, text:item.name});
                                self.base_currency = item.room_type_hotel.base_currency.value;
+                               self.$refs.repeaterOptionalUpdate.currency = self.base_currency;
                              });
                             self.isLoading = false;
                         }

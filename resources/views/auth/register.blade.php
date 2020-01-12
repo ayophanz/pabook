@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-login100" style="opacity: 0.8;height: 500px;background-image: url('/loginStyle/images/setup-wizard.svg'); background-size: contain; background-repeat: no-repeat;background-position: center;">
+<div class="container-login100" style="opacity: 0.8;height: 500px;background-image: url('/loginStyle/images/setup-wizard.svg'); background-size: cover; background-repeat: no-repeat;background-position: bottom center;">
     <form method="POST" action="{{ route('register') }}">
         @csrf
-        <div class="wrap-login100 p-t-10 p-b-30" style="width: 900px;">
+        <div class="wrap-login100 p-t-10 p-b-30" style="width: 500px;">
             <form class="login100-form validate-form">
                 <div class="login100-form-avatar">
                     <img src="{{asset('/storage/images/pabook.png')}}" alt="pabook">

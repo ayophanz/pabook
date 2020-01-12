@@ -98,7 +98,7 @@ class HotelController extends Controller
 					 explode(':', substr($request->image, 0, 
 					 strpos($request->image, ';')))[1])[1];
 			\Image::make($request->image)
-			->save(public_path('storage/images/upload/hotelImages/').$image);
+			->save(public_path('storage/images/upload/hotelImages/'.$image));
 
 			 Hotel::where('id', $hotel->id)->update(['image'=>$image]);
         }

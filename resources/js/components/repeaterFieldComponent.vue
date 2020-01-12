@@ -23,7 +23,7 @@
       return {
           fields: [{}],
           type: '',
-          currency:'USD'
+          currency:'none'
       }
     },
     methods: {

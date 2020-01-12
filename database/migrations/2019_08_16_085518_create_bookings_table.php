@@ -26,6 +26,10 @@ class CreateBookingsTable extends Migration
             $table->string('currency')->default('USD');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->integer('manyRoom');
+            $table->integer('manyAdult');
+            $table->integer('manyChild');
+            $table->longText('roomsNo');
             $table->string('status')->default('active');
             $table->timestamps();
         });
