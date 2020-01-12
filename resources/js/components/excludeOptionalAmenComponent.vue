@@ -5,7 +5,7 @@
                 <i class="fas fa-bed"></i> {{item.value}}
                 <ul class="exclude-optional-amen">
                     <li v-for="(item2, key2) in addOnOptionalAmen_Data">
-                        <pretty-check v-model="item2.isChecked" :value="item2.isChecked" :checked="item2.isChecked" @change="onCheckOrUncheck($event, item2.id, item.value)" class="p-icon p-round p-tada" color="danger-o">
+                        <pretty-check v-model="item2.isChecked" @change="onCheckOrUncheck($event, item2.id, item.value)" class="p-icon p-round p-tada" color="danger-o">
                             <i slot="extra" class="icon mdi mdi-heart fas fa-times"></i>
                             {{item2.value}} | {{currency_Data}}{{item2.price}}
                         </pretty-check>

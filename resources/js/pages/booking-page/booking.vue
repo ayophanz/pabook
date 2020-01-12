@@ -477,6 +477,7 @@ export default {
             this.form.addOnOptionalAmen = [];
             this.fixedAmenities = [];
             this.optionalAmenities = [];
+             this.$refs.dataOptionalFeature.addOnOptionalAmen_Data = [];
         },
         generateList(param, kind) {
             let tempParam = [];
