@@ -17,8 +17,8 @@
             </div>
             <div class="swal2-content">
                 <br />
-                <h6 class="text-left ml-5">*Check to exclude item</h6>
-                <exclude-optional-amen :roomsNoComp="form.rooms_no" :addOnOptionalAmenComp="form.addOnOptionalAmen" :currencyComp="currency" ref="dataOptionalFeature" @removeOrAddRoomOnAmen="onRemoveOrAdd"></exclude-optional-amen>
+                <h6 class="text-left ml-5">*Uncheck item to exclude</h6>
+                <exclude-optional-amen ref="dataOptionalFeature" @removeOrAddRoomOnAmen="onRemoveOrAdd"></exclude-optional-amen>
                 <br />
             </div>
         </vodal>
@@ -401,9 +401,6 @@ export default {
             //this.$refs.mycalendar.usageStatistics = false;
         },
         excludeOptional() {
-            this.$refs.dataOptionalFeature.rooms_no_Data = this.form.rooms_no;
-            this.$refs.dataOptionalFeature.addOnOptionalAmen_Data = this.form.addOnOptionalAmen;
-            this.$refs.dataOptionalFeature.currency_Data = this.currency;
             this.vodal_show = true;
         },
         onRemoveOrAdd(value) {
@@ -424,9 +421,9 @@ export default {
         },
         optionalAmenMani(action, value) {
             if(action=='remove') {
-                 //this.form.addOnOptionalAmen.find(e => e.isChecked == true).splice(0, 1, false);
                 this.optionalAmenities.forEach(function(item, key){
                     if(item.rooms.indexOf(value) !== -1) item.rooms.splice(item.rooms.indexOf(value), 1);
+                    if(item.isChecked==false) item['isChecked'] = true; 
                 });
             }else if(action=='undo') this.optionalAmenities.forEach(function(item, key){ item.rooms.push(value); });
         },
@@ -495,7 +492,7 @@ export default {
                     });
                 }
                 else if(kind=='value') tempList.forEach(function(item, key){ tempParam.push(item.value); });
-                else if(kind=='optional') tempList.forEach(function(item, key){ item['isChecked'] = false; item['id'] = (key+1);item['rooms'] = []; tempParam.push(item); });
+                else if(kind=='optional') tempList.forEach(function(item, key){ item['isChecked'] = true; item['id'] = (key+1);item['rooms'] = []; tempParam.push(item); });
                 else if(kind=='total') for(let i=1;i<=parseInt(tempList);i++) tempParam.push({id:i, text:i});
                 else if(kind=='many') for(let i=1;i<=(parseInt(tempList)*this.form.manyRoom);i++) tempParam.push({id:i, text:i});
             } 
@@ -618,6 +615,11 @@ export default {
             this.dateRange = dateRangeText;
         }
     },
+    updated() {
+        this.$refs.dataOptionalFeature.rooms_no_Data = this.form.rooms_no;
+        this.$refs.dataOptionalFeature.addOnOptionalAmen_Data = this.form.addOnOptionalAmen;
+        this.$refs.dataOptionalFeature.currency_Data = this.currency;
+    },
     mounted() {
         this.init();
         
@@ -717,9 +719,5 @@ export default {
         background-color: rgba(0,0,0,.4) !important;
     }
 
-    .exclude-rooms-no .pretty.p-icon .state .icon {
-        width: calc(1em + 1.4px) !important;
-        height: calc(1em + 2px) !important;
-    }
 </style>
 

@@ -5,8 +5,8 @@
                 <i class="fas fa-bed"></i> {{item.value}}
                 <ul class="exclude-optional-amen">
                     <li v-for="(item2, key2) in addOnOptionalAmen_Data">
-                        <pretty-check v-model="item2.isChecked" @change="onCheckOrUncheck($event, item2.id, item.value)" class="p-icon p-round p-tada" color="danger-o">
-                            <i slot="extra" class="icon mdi mdi-heart fas fa-times"></i>
+                        <pretty-check v-model="item2.isChecked" @change="onCheckOrUncheck($event, item2.id, item.value)" class="p-icon p-round p-tada" color="success-o">
+                            <i slot="extra" class="icon mdi mdi-heart fas fa-heart"></i>
                             {{item2.value}} | {{currency_Data}}{{item2.price}}
                         </pretty-check>
                     </li>
@@ -32,7 +32,7 @@ export default {
     },
     methods: {
         onCheckOrUncheck(e, id, value) {
-            if(e==true) this.$emit('removeOrAddRoomOnAmen', ['remove', id, value]);
+            if(e==false) this.$emit('removeOrAddRoomOnAmen', ['remove', id, value]);
             else this.$emit('removeOrAddRoomOnAmen', ['undo', id, value]);
         }
     }
