@@ -141,9 +141,33 @@
                 }
             }
         },
-        created() {
-            this.currency = cc.codes();
-            this.hotelOwner();
+        beforeCreate() {
+          //
+        },
+        created(){
+          this.currency = cc.codes();
+          this.hotelOwner();
+        },
+        beforeUpdate() {
+            //
+        },
+        updated() {
+            //
+        },
+        beforeMount(){
+            //
+        },
+        beforeDestroy() {
+            //
+        },
+        destroyed() {
+            //
+        },
+        beforeRouteEnter(to, from, next) {
+            next();
+        },
+        beforeRouteleave() {
+            next();
         }
     }
 </script>

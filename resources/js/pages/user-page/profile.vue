@@ -208,8 +208,32 @@
               this.isEdit = isEdit;
            }
         },
-        created() {
-            this.profile();
+        beforeCreate() {
+          //
+        },
+        created(){
+          this.profile();
+        },
+        beforeUpdate() {
+            //
+        },
+        updated() {
+            //
+        },
+        beforeMount(){
+            //
+        },
+        beforeDestroy() {
+            //
+        },
+        destroyed() {
+            //
+        },
+        beforeRouteEnter(to, from, next) {
+            next();
+        },
+        beforeRouteleave() {
+            next();
         }
     }
 </script>

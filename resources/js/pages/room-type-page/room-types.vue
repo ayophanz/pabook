@@ -170,9 +170,33 @@
                 })
             }
         },
-        created() {
-            this.loadTypes();
-            fire.$on('afterCreated',() => {this.loadTypes()});
+        beforeCreate() {
+          //
+        },
+        created(){
+          this.loadTypes();
+          fire.$on('afterCreated',() => {this.loadTypes()});
+        },
+        beforeUpdate() {
+            //
+        },
+        updated() {
+            //
+        },
+        beforeMount(){
+            //
+        },
+        beforeDestroy() {
+            //
+        },
+        destroyed() {
+            //
+        },
+        beforeRouteEnter(to, from, next) {
+            next();
+        },
+        beforeRouteleave() {
+            next();
         }
     }
 </script>

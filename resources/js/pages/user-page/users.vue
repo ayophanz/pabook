@@ -223,9 +223,33 @@
                 })
             }
         },
-        created() {
-            this.loadUsers(); 
-            fire.$on('afterCreated',() => {this.loadUsers()});   
+        beforeCreate() {
+          //
+        },
+        created(){
+          this.loadUsers(); 
+          fire.$on('afterCreated',() => {this.loadUsers()});   
+        },
+        beforeUpdate() {
+            //
+        },
+        updated() {
+            //
+        },
+        beforeMount(){
+            //
+        },
+        beforeDestroy() {
+            //
+        },
+        destroyed() {
+            //
+        },
+        beforeRouteEnter(to, from, next) {
+            next();
+        },
+        beforeRouteleave() {
+            next();
         }
     }
 </script>

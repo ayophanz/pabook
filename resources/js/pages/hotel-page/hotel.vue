@@ -420,7 +420,10 @@
             }
           }
         },
-        created() {
+        beforeCreate() {
+          //
+        },
+        created(){
           this.populateData();
           //this.currency = cc.codes();
           let self = this
@@ -435,6 +438,27 @@
           }else{
               // do something if add
           }
+        },
+        beforeUpdate() {
+            //
+        },
+        updated() {
+            //
+        },
+        beforeMount(){
+            //
+        },
+        beforeDestroy() {
+            //
+        },
+        destroyed() {
+            //
+        },
+        beforeRouteEnter(to, from, next) {
+            next();
+        },
+        beforeRouteleave() {
+            next();
         }
     }
 </script>

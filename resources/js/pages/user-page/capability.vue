@@ -231,8 +231,32 @@
                 }
             }
         },
-        created() {
-            this.loadOwner();
+        beforeCreate() {
+          //
+        },
+        created(){
+          this.loadOwner();
+        },
+        beforeUpdate() {
+            //
+        },
+        updated() {
+            //
+        },
+        beforeMount(){
+            //
+        },
+        beforeDestroy() {
+            //
+        },
+        destroyed() {
+            //
+        },
+        beforeRouteEnter(to, from, next) {
+            next();
+        },
+        beforeRouteleave() {
+            next();
         }
     }
 </script>

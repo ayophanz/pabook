@@ -105,7 +105,7 @@
                                                             <ul class="optionalAmen-list">
                                                                 <li v-for="(item, key) in optionalAmenities">
                                                                     <div class="form-check pl-0">
-                                                                        <pretty-check v-model="form.addOnOptionalAmen" :value="item" :disabled="no_unit_avail <= 0 || item.rooms.length <= 0" class="p-icon p-round p-tada" color="success-o">
+                                                                        <pretty-check v-model="form.addOnOptionalAmen" :value="item" :disabled="no_unit_avail > 1 && item.rooms.length <= 0" class="p-icon p-round p-tada" color="success-o">
                                                                             <i slot="extra" class="icon mdi mdi-heart fas fa-heart"></i>
                                                                             {{item.value}} | {{currency}}{{item.price}}
                                                                         </pretty-check>
@@ -394,12 +394,6 @@ export default {
         }
     },
     methods: {
-        init() {
-            this.loadHotels();
-            this.selectedMonth = new Date();
-            this.setRenderRangeText();
-            //this.$refs.mycalendar.usageStatistics = false;
-        },
         excludeOptional() {
             this.vodal_show = true;
         },
@@ -416,16 +410,17 @@ export default {
         },
         roomsNoOnRemove(e) {
             this.no_unit_avail--;
-            if(this.no_unit_avail<=0) this.form.addOnOptionalAmen = [];
             this.optionalAmenMani('remove', e.value);
         },
         optionalAmenMani(action, value) {
             if(action=='remove') {
+                let self = this;
                 this.optionalAmenities.forEach(function(item, key){
-                    if(item.rooms.indexOf(value) !== -1) item.rooms.splice(item.rooms.indexOf(value), 1);
-                    if(item.isChecked==false) item['isChecked'] = true; 
+                    if(item.rooms.indexOf(value) !== -1) item.rooms.splice(item.rooms.indexOf(value), 1); 
+                    if(self.form.rooms_no.length == 2 && item.rooms.length == 0) item.rooms.push(self.form.rooms_no[0]);
+                    if(self.form.rooms_no.length <= 1) {item.isChecked = true; item.rooms = []; }
                 });
-            }else if(action=='undo') this.optionalAmenities.forEach(function(item, key){ item.rooms.push(value); });
+            }else if(action=='undo') this.optionalAmenities.forEach(function(item, key){ item.rooms.push(value); item.isChecked = true; });
         },
         backIsClick() {
             this.pageIn = 'page_1';
@@ -615,13 +610,28 @@ export default {
             this.dateRange = dateRangeText;
         }
     },
+    beforeCreate() {
+        //
+    },
+    created(){
+        //
+    },
+    beforeUpdate() {
+        //
+    },
     updated() {
         this.$refs.dataOptionalFeature.rooms_no_Data = this.form.rooms_no;
         this.$refs.dataOptionalFeature.addOnOptionalAmen_Data = this.form.addOnOptionalAmen;
         this.$refs.dataOptionalFeature.currency_Data = this.currency;
     },
+    beforeMount(){
+        //
+    },
     mounted() {
-        this.init();
+        this.loadHotels();
+        this.selectedMonth = new Date();
+        this.setRenderRangeText();
+        //this.$refs.mycalendar.usageStatistics = false;
         
         /**
          * jQuery
@@ -630,6 +640,18 @@ export default {
         $(document).on('click', '.datepicker__clear-button', function(e){
             self.pickerClose();
         });
+    },
+    beforeDestroy() {
+        //
+    },
+    destroyed() {
+        //
+    },
+    beforeRouteEnter(to, from, next) {
+        next();
+    },
+    beforeRouteleave() {
+        next();
     }
 }
 </script>
@@ -691,7 +713,7 @@ export default {
 
     .pretty.p-icon .state .icon {
         width: calc(1em + 1px) !important;
-        height: calc(1em + 5px) !important;
+        height: calc(1em + 4px) !important;
     }
 
     .vodal-style {

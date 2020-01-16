@@ -440,8 +440,11 @@
               });
             }
         },
-        created() {
-            if(this.$route.params.roomId) {
+        beforeCreate() {
+          //
+        },
+        created(){
+          if(this.$route.params.roomId) {
               this.roomId = this.$route.params.roomId;  
               this.roomDetails(this.roomId);
               this.buttonText = 'Update';
@@ -449,6 +452,27 @@
               //
             }
             this.loadHotels();
+        },
+        beforeUpdate() {
+            //
+        },
+        updated() {
+            //
+        },
+        beforeMount(){
+            //
+        },
+        beforeDestroy() {
+            //
+        },
+        destroyed() {
+            //
+        },
+        beforeRouteEnter(to, from, next) {
+            next();
+        },
+        beforeRouteleave() {
+            next();
         }
     }
 </script>

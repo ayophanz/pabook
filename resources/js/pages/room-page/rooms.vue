@@ -248,9 +248,33 @@
                 })
             }
         },
-        created() {
-            this.loadRooms();
-            fire.$on('afterCreated',() => {this.loadRooms()});
+        beforeCreate() {
+          //
+        },
+        created(){
+          this.loadRooms();
+          fire.$on('afterCreated',() => {this.loadRooms()});
+        },
+        beforeUpdate() {
+            //
+        },
+        updated() {
+            //
+        },
+        beforeMount(){
+            //
+        },
+        beforeDestroy() {
+            //
+        },
+        destroyed() {
+            //
+        },
+        beforeRouteEnter(to, from, next) {
+            next();
+        },
+        beforeRouteleave() {
+            next();
         }
     }
 </script>

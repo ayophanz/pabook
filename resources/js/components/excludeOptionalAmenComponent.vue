@@ -35,6 +35,33 @@ export default {
             if(e==false) this.$emit('removeOrAddRoomOnAmen', ['remove', id, value]);
             else this.$emit('removeOrAddRoomOnAmen', ['undo', id, value]);
         }
+    },
+    beforeCreate() {
+        //
+    },
+    created(){
+        //
+    },
+    beforeUpdate() {
+        //
+    },
+    updated() {
+        //
+    },
+    beforeMount(){
+        //
+    },
+    beforeDestroy() {
+        //
+    },
+    destroyed() {
+        //
+    },
+    beforeRouteEnter(to, from, next) {
+        next();
+    },
+    beforeRouteleave() {
+        next();
     }
 }
 </script>

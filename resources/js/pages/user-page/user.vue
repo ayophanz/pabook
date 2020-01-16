@@ -204,7 +204,10 @@
                this.isRecep = false;
           }
         },
-        created() {
+        beforeCreate() {
+          //
+        },
+        created(){
           if(this.$route.params.userId) {
               this.userId = this.$route.params.userId;  
               this.userDetails(this.userId);
@@ -228,8 +231,28 @@
                   });
                 }
               );
-            } 
-          
+          } 
+        },
+        beforeUpdate() {
+            //
+        },
+        updated() {
+            //
+        },
+        beforeMount(){
+            //
+        },
+        beforeDestroy() {
+            //
+        },
+        destroyed() {
+            //
+        },
+        beforeRouteEnter(to, from, next) {
+            next();
+        },
+        beforeRouteleave() {
+            next();
         }
     }
 </script>

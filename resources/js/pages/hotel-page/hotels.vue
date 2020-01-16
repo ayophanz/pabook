@@ -249,9 +249,33 @@
                 })
             }
         },
-        created() {
+        beforeCreate() {
+            //
+        },
+        created(){
             this.loadHotels();
             fire.$on('HotelCreated',() => {this.loadHotels()});
+        },
+        beforeUpdate() {
+            //
+        },
+        updated() {
+            //
+        },
+        beforeMount(){
+            //
+        },
+        beforeDestroy() {
+            //
+        },
+        destroyed() {
+            //
+        },
+        beforeRouteEnter(to, from, next) {
+            next();
+        },
+        beforeRouteleave() {
+            next();
         }
     }
 </script>

@@ -140,15 +140,39 @@
                 }
             }  
         },
-        created() {
-            this.loadHotels();
-            if(this.$route.params.typeId) {
-              this.typeId = this.$route.params.typeId;
-              this.typeDetails(this.typeId);
-              this.buttonText = 'Update'; 
-            }else{
+        beforeCreate() {
+          //
+        },
+        created(){
+          this.loadHotels();
+          if(this.$route.params.typeId) {
+            this.typeId = this.$route.params.typeId;
+            this.typeDetails(this.typeId);
+            this.buttonText = 'Update'; 
+          }else{
 
-            }
+          }
+        },
+        beforeUpdate() {
+            //
+        },
+        updated() {
+            //
+        },
+        beforeMount(){
+            //
+        },
+        beforeDestroy() {
+            //
+        },
+        destroyed() {
+            //
+        },
+        beforeRouteEnter(to, from, next) {
+            next();
+        },
+        beforeRouteleave() {
+            next();
         }
     }
 </script>
