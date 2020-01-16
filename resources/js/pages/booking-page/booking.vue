@@ -63,7 +63,7 @@
                                         </div>
                                         <div class="form-group mb-2">
                                             <label class="mb-0" for="roomWithRoomType">Room</label>
-                                            <Select2 id="roomWithRoomType" v-model="form.roomWithRoomType" :options=" roomWithRoomTypes" :settings="{ placeholder: 'Please select room', containerCssClass:'form-control' }" @change="isRoomWithRoomType" />
+                                            <Select2 id="roomWithRoomType" v-model="form.roomWithRoomType" :options="roomWithRoomTypes" :settings="{ placeholder: 'Please select room', containerCssClass:'form-control' }" @change="isRoomWithRoomType" />
                                             <has-error :form="form" field="roomWithRoomType"></has-error>
                                         </div>
                                         <div class="form-group mb-2">
@@ -73,7 +73,7 @@
                                         </div>
                                         <div class="form-group mb-2">
                                             <label class="mb-0" for="rooms_no">Room no.</label>
-                                            <multiselect :max="parseInt(form.manyRoom)" placeholder="Please select designated room no." @remove="roomsNoOnRemove" @select="roomsNoOnAdd" :class="{ 'is-invalid': form.errors.has('rooms_no') }" v-model="form.rooms_no" label="value" track-by="code" :options="rooms_options" :multiple="true">
+                                            <multiselect v-model="form.rooms_no" :max="parseInt(form.manyRoom)" placeholder="Please select designated room no." @remove="roomsNoOnRemove" @select="roomsNoOnAdd" :class="{ 'is-invalid': form.errors.has('rooms_no') }" label="value" track-by="code" :options="rooms_options" :multiple="true">
                                                 <template slot="tag" slot-scope="{ option, remove }"><span :class="option.status" class="multiselect__tag"><span>{{ option.value }}</span><span v-if="option.status=='ready'" :class="option.status" class="custom__remove" @click="remove(option)"><i aria-hidden="true" tabindex="1" class="multiselect__tag-icon"></i></span></span></template>
                                                 <span slot="noResult">Oops! No results</span>
                                                 <span slot="maxElements">{{form.manyRoom}} item allowed</span>
@@ -228,6 +228,7 @@ import Multiselect from 'vue-multiselect'
 import PrettyCheck from 'pretty-checkbox-vue/check'
 import Vodal from 'vodal'
 import { parse } from 'path'
+import { setImmediate } from 'timers'
 export default {
     components: {
         Calendar,
@@ -367,10 +368,23 @@ export default {
         }
     },
     watch: {
-        selectedView(e) {
+        'selectedView': function(e) {
             this.$refs.mycalendar.invoke('changeView', e, true);
             this.setRenderRangeText();
-        }
+        },
+        'form.hotel': function() { 
+            this.form.roomWithRoomType = [];
+            this.currency = ''; 
+            this.roomWithRoomTypes = [];
+        },
+        'form.roomWithRoomType': function() { this.form.manyRoom = ''; },
+        'form.manyRoom': function() {
+            this.form.rooms_no = [];
+            this.form.addOnOptionalAmen = [];
+            this.optionalAmenities.forEach(function(item, key){item.rooms = [];});
+        },
+        'form.rooms_no': function() { this.form.manyAdult = ''; },
+        'form.manyAdult': function() { this.form.manyChild = ''; }
     },
     computed: {
         nightNoFunc(){
@@ -451,26 +465,8 @@ export default {
             this.form.checkOutD = '';
             this.disPrev = true;
             this.disNext = true;
-            this.resetAllList();
             this.$refs.mycalendar.invoke('setDate', new Date(), true);
             this.setRenderRangeText();
-        },
-        resetAllList(){
-            this.resetList();
-            this.form.hotel = '';
-            this.form.roomWithRoomType = '';
-            this.currency = '';
-        },
-        resetList(){
-            this.form.manyAdult = '';
-            this.form.manyChild = '';
-            this.form.manyRoom = '';
-            this.roomPrice = 0;
-            this.form.rooms_no = [];
-            this.form.addOnOptionalAmen = [];
-            this.fixedAmenities = [];
-            this.optionalAmenities = [];
-            this.$refs.dataOptionalFeature.addOnOptionalAmen_Data = [];
         },
         generateList(param, kind) {
             let tempParam = [];
@@ -494,14 +490,12 @@ export default {
             return tempParam;
         },
         isManyRoom() {
-            this.form.rooms_no = [];
             this.rooms_options = this.generateList(this.tempRoomOptions, 'roomNo');
             this.manyAdults = this.generateList(this.totalAdults, 'many');
             this.manyChilds = this.generateList(this.totalChilds, 'many');
             this.manyChilds.unshift({id:0, text:'0'});
         },
         isRoomWithRoomType() {
-            this.resetList();
             this.roomPrice = parseFloat(this.generateList(this.roomPrices, 'price')[0]);
             this.manyRooms = this.generateList(this.totalRooms, 'total');
             this.fixedAmenities = this.generateList(this.tempFixedAmenities, 'value');
@@ -509,14 +503,6 @@ export default {
         },
         isHotelChange(){
             if(this.$gate.superAdminOrhotelOwner()) {
-                this.resetList();
-                this.currency = '';
-                this.form.roomWithRoomType = '';
-                this.roomPrices = [];
-                this.roomWithRoomTypes = [];
-                this.manyRooms = [];
-                this.manyChilds = [];
-                this.manyAdults = [];
                 let self = this;
                 axios.get('/api/hotel-with-room-types/'+this.form.hotel).then(
                     function (response) {
@@ -558,7 +544,6 @@ export default {
         },
         checkInDate(e) {
             if(e!=null) {
-              this.resetAllList();
               this.form.checkInD = e;
               this.$refs.mycalendar.invoke('setDate', e, true);
               this.dateRange = `${e.getFullYear()}-${(e.getMonth()+1)}`;
@@ -566,7 +551,6 @@ export default {
         },
         checkOutDate(e) {
             if(e!=null) {
-              this.resetAllList();
               this.form.checkOutD = e;
             }
         },
