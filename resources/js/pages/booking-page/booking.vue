@@ -382,6 +382,12 @@ export default {
             this.form.rooms_no = [];
             this.form.addOnOptionalAmen = [];
             this.optionalAmenities.forEach(function(item, key){item.rooms = [];});
+        },
+        'form.rooms_no': function(newVal, oldVal) {
+            this.optionalAmenities.forEach(function(item, key){
+                if(newVal.length < oldVal.length) item.isChecked = true;
+                if(newVal.length <= 1) item.rooms = [];
+            });
         }
     },
     computed: {
@@ -430,7 +436,6 @@ export default {
                 this.optionalAmenities.forEach(function(item, key){
                     if(item.rooms.indexOf(value) !== -1) item.rooms.splice(item.rooms.indexOf(value), 1); 
                     if(self.form.rooms_no.length == 2 && item.rooms.length == 0) item.rooms.push(self.form.rooms_no[0]);
-                    if(self.form.rooms_no.length <= 1) {item.isChecked = true; item.rooms = [];}
                 });
             }else if(action=='undo') this.optionalAmenities.forEach(function(item, key){ item.rooms.push(value); item.isChecked = true; });
         },
