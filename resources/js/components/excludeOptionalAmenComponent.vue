@@ -25,7 +25,7 @@ export default {
     },
     watch: {
         'hideRoom': function() {
-            //console.log('to hide '+this.hideRoom);
+            console.log('to hide '+this.hideRoom);
         },
         'rooms_no_Data': function() {
            //console.log('rooms '+this.rooms_no_Data);

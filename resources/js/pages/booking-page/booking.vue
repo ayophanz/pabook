@@ -388,7 +388,6 @@ export default {
             this.optionalAmenities.forEach(function(item, key){item.rooms = [];});
         },
         'form.rooms_no': function() {
-            let self = this;
             this.$refs.dataOptionalFeature.rooms_no_Data = [ ...new Set(this.$refs.dataOptionalFeature.rooms_no_Data)];
             this.$refs.dataOptionalFeature.addOnOptionalAmen_Data = this.form.addOnOptionalAmen;
         },
@@ -462,7 +461,7 @@ export default {
                     item.rooms.push(value); 
                     item.isChecked = true; 
                 });
-                hideRoom.splice(hideRoom.indexOf(value), 1);
+                if(hideRoom.indexOf(value) !== -1) hideRoom.splice(hideRoom.indexOf(value), 1);
                 addRoom.push(value);
             }
         },
