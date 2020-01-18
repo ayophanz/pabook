@@ -105,7 +105,7 @@
                                                             <ul class="optionalAmen-list">
                                                                 <li v-for="(item, key) in optionalAmenities">
                                                                     <div class="form-check pl-0">
-                                                                        <pretty-check v-model="form.addOnOptionalAmen" :value="item" :disabled="no_unit_avail > 1 && item.rooms.length <= 0" class="p-icon p-round p-tada" color="success-o">
+                                                                        <pretty-check v-model="form.addOnOptionalAmen" :value="item" :disabled="no_unit_avail < 1 && item.rooms.length <= 0" class="p-icon p-round p-tada" color="success-o">
                                                                             <i slot="extra" class="icon mdi mdi-heart fas fa-heart"></i>
                                                                             {{item.value}} | {{currency}}{{item.price}}
                                                                         </pretty-check>
@@ -368,32 +368,43 @@ export default {
         }
     },
     watch: {
+
         'selectedView': function(e) {
             this.$refs.mycalendar.invoke('changeView', e, true);
             this.setRenderRangeText();
         },
+
         'form.hotel': function() { 
             this.form.roomWithRoomType = [];
             this.currency = ''; 
             this.roomWithRoomTypes = [];
         },
+
         'form.roomWithRoomType': function() { this.form.manyRoom = ''; },
+        
         'form.manyRoom': function() {
             this.form.rooms_no = [];
             this.form.addOnOptionalAmen = [];
             this.optionalAmenities.forEach(function(item, key){item.rooms = [];});
         },
-        'form.rooms_no': function(newVal, oldVal) {
-            this.optionalAmenities.forEach(function(item, key){
-                if(newVal.length < oldVal.length) item.isChecked = true;
-                if(newVal.length <= 1) item.rooms = [];
-            });
+        'form.rooms_no': function() {
+            let self = this;
+            this.$refs.dataOptionalFeature.rooms_no_Data = [ ...new Set(this.$refs.dataOptionalFeature.rooms_no_Data)];
+            this.$refs.dataOptionalFeature.addOnOptionalAmen_Data = this.form.addOnOptionalAmen;
+        },
+        'form.addOnOptionalAmen': function() {
+            this.form.addOnOptionalAmen.forEach(function(item, key){ item.rooms = [ ...new Set(item.rooms)]; });
+            this.$refs.dataOptionalFeature.addOnOptionalAmen_Data = this.form.addOnOptionalAmen;
+            this.$refs.dataOptionalFeature.currency_Data = this.currency;
         }
+
     },
     computed: {
+
         nightNoFunc(){
             return parseInt(Math.ceil(Math.abs(new Date(this.form.checkOutD) - new Date(this.form.checkInD)) / (1000 * 60 * 60 * 24)));
         },
+
         totalAmountFunc() {
             let optionalAmenPrices = 0;
             this.form.addOnOptionalAmen.forEach(function(item, key){
@@ -401,20 +412,21 @@ export default {
             });
             return parseFloat((parseFloat(this.roomPrice) * this.nightNoFunc) * this.roomNoFunc) + optionalAmenPrices;
         },
-        roomNoFunc() {
-            return parseInt(this.form.manyRoom);
-        },
+
+        roomNoFunc() { return parseInt(this.form.manyRoom); },
+
         compareDate() {
             if(this.form.checkOutD!='' && Date.parse(new Date(this.form.checkOutD.getFullYear()+'-'+(this.form.checkOutD.getMonth()+1))) > Date.parse(new Date(this.dateRange))) this.disNext = false;
             else this.disNext = true;
             if(this.form.checkInD!='' && Date.parse(new Date(this.form.checkInD.getFullYear()+'-'+(this.form.checkInD.getMonth()+1))) < Date.parse(new Date(this.dateRange))) this.disPrev = false;
             else this.disPrev = true;
         }
+
     },
     methods: {
-        excludeOptional() {
-            this.vodal_show = true;
-        },
+         
+        excludeOptional() { this.vodal_show = true; },
+
         onRemoveOrAdd(value) {
             this.optionalAmenities.forEach(function(item, key){
                 let exist = item.rooms.indexOf(value[2]) !== -1;
@@ -422,26 +434,41 @@ export default {
                 else if(item.id == value[1] && value[0]=='undo' && exist==false) item.rooms.push(value[2]);
             });
         },
+
         roomsNoOnAdd(e) {
             this.no_unit_avail++;
             this.optionalAmenMani('undo', e.value);
         },
+
         roomsNoOnRemove(e) {
             this.no_unit_avail--;
             this.optionalAmenMani('remove', e.value);
         },
+
         optionalAmenMani(action, value) {
+            let hideRoom = this.$refs.dataOptionalFeature.hideRoom;
+            let addRoom = this.$refs.dataOptionalFeature.rooms_no_Data;
             if(action=='remove') {
                 let self = this;
-                this.optionalAmenities.forEach(function(item, key){
-                    if(item.rooms.indexOf(value) !== -1) item.rooms.splice(item.rooms.indexOf(value), 1); 
+                this.form.addOnOptionalAmen.forEach(function(item, key){
+                    if(item.rooms.indexOf(value) !== -1) item.rooms.splice(item.rooms.indexOf(value), 1);
+                });
+                this.optionalAmenities.forEach(function(item, key){ 
                     if(self.form.rooms_no.length == 2 && item.rooms.length == 0) item.rooms.push(self.form.rooms_no[0]);
                 });
-            }else if(action=='undo') this.optionalAmenities.forEach(function(item, key){ item.rooms.push(value); item.isChecked = true; });
+                hideRoom.push(value);
+            }else if(action=='undo') {
+                this.optionalAmenities.forEach(function(item, key){ 
+                    item.rooms.push(value); 
+                    item.isChecked = true; 
+                });
+                hideRoom.splice(hideRoom.indexOf(value), 1);
+                addRoom.push(value);
+            }
         },
-        backIsClick() {
-            this.pageIn = 'page_1';
-        },
+
+        backIsClick() { this.pageIn = 'page_1'; },
+
         validateEntries() {
             if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
                 this.isLoading = true;
@@ -463,6 +490,7 @@ export default {
                 });
             }
         },
+
         pickerClose(){
             this.form.checkInD = '';
             this.form.checkOutD = '';
@@ -471,6 +499,7 @@ export default {
             this.$refs.mycalendar.invoke('setDate', new Date(), true);
             this.setRenderRangeText();
         },
+
         generateList(param, kind) {
             let tempParam = [];
             if (param.length > 0) {
@@ -492,18 +521,21 @@ export default {
             } 
             return tempParam;
         },
+
         isManyRoom() {
             this.rooms_options = this.generateList(this.tempRoomOptions, 'roomNo');
             this.manyAdults = this.generateList(this.totalAdults, 'many');
             this.manyChilds = this.generateList(this.totalChilds, 'many');
             this.manyChilds.unshift({id:0, text:'0'});
         },
+
         isRoomWithRoomType() {
             this.roomPrice = parseFloat(this.generateList(this.roomPrices, 'price')[0]);
             this.manyRooms = this.generateList(this.totalRooms, 'total');
             this.fixedAmenities = this.generateList(this.tempFixedAmenities, 'value');
             this.optionalAmenities = this.generateList(this.tempOptionalAmenities, 'optional');
         },
+
         isHotelChange(){
             if(this.$gate.superAdminOrhotelOwner()) {
                 let self = this;
@@ -533,6 +565,7 @@ export default {
                     });
             }
         },
+
         loadHotels() {
             if(this.$gate.superAdminOrhotelOwner()) {
                 let self = this
@@ -545,6 +578,7 @@ export default {
                     });
             }
         },
+
         checkInDate(e) {
             if(e!=null) {
               this.form.checkInD = e;
@@ -552,11 +586,13 @@ export default {
               this.dateRange = `${e.getFullYear()}-${(e.getMonth()+1)}`;
             }
         },
+
         checkOutDate(e) {
             if(e!=null) {
               this.form.checkOutD = e;
             }
         },
+
         onClickNavi(event) {
             if (event.target.tagName === 'BUTTON') {
                 const {target} = event;
@@ -566,6 +602,7 @@ export default {
                 this.setRenderRangeText();
             }
         },
+        
         setRenderRangeText() {
             const {invoke} = this.$refs.mycalendar;
             const view = invoke('getViewName');
@@ -596,6 +633,7 @@ export default {
             }
             this.dateRange = dateRangeText;
         }
+
     },
     beforeCreate() {
         //
@@ -607,9 +645,7 @@ export default {
         //
     },
     updated() {
-        this.$refs.dataOptionalFeature.rooms_no_Data = this.form.rooms_no;
-        this.$refs.dataOptionalFeature.addOnOptionalAmen_Data = this.form.addOnOptionalAmen;
-        this.$refs.dataOptionalFeature.currency_Data = this.currency;
+        //
     },
     beforeMount(){
         //
