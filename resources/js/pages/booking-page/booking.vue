@@ -387,14 +387,12 @@ export default {
             this.form.addOnOptionalAmen = [];
             this.optionalAmenities.forEach(function(item, key){item.rooms = [];});
         },
+
         'form.rooms_no': function() {
-            this.$refs.dataOptionalFeature.rooms_no_Data = [ ...new Set(this.$refs.dataOptionalFeature.rooms_no_Data)];
-            this.$refs.dataOptionalFeature.addOnOptionalAmen_Data = this.form.addOnOptionalAmen;
-        },
-        'form.addOnOptionalAmen': function() {
-            this.form.addOnOptionalAmen.forEach(function(item, key){ item.rooms = [ ...new Set(item.rooms)]; });
-            this.$refs.dataOptionalFeature.addOnOptionalAmen_Data = this.form.addOnOptionalAmen;
             this.$refs.dataOptionalFeature.currency_Data = this.currency;
+        },
+
+        'form.addOnOptionalAmen': function() {
         }
 
     },
@@ -445,24 +443,20 @@ export default {
         },
 
         optionalAmenMani(action, value) {
-            let hideRoom = this.$refs.dataOptionalFeature.hideRoom;
-            let addRoom = this.$refs.dataOptionalFeature.rooms_no_Data;
+            let self = this;
+            let roomsOptAmen = this.$refs.dataOptionalFeature.rooms_no_Data;
             if(action=='remove') {
-                let self = this;
-                this.form.addOnOptionalAmen.forEach(function(item, key){
-                    if(item.rooms.indexOf(value) !== -1) item.rooms.splice(item.rooms.indexOf(value), 1);
-                });
                 this.optionalAmenities.forEach(function(item, key){ 
                     if(self.form.rooms_no.length == 2 && item.rooms.length == 0) item.rooms.push(self.form.rooms_no[0]);
+                    else if(item.rooms.indexOf(value) !== -1) item.rooms.splice(item.rooms.indexOf(value), 1);
+                    item.isChecked = true;
                 });
-                hideRoom.push(value);
+                this.$refs.dataOptionalFeature.rooms_no_Data.forEach(function(item, key){
+                    if(item.room==value) item.isVisible = false;
+                });
             }else if(action=='undo') {
-                this.optionalAmenities.forEach(function(item, key){ 
-                    item.rooms.push(value); 
-                    item.isChecked = true; 
-                });
-                if(hideRoom.indexOf(value) !== -1) hideRoom.splice(hideRoom.indexOf(value), 1);
-                addRoom.push(value);
+                roomsOptAmen.push({room:value, optAmen:this.optionalAmenities, isVisible:true});
+                this.optionalAmenities.forEach(function(item, key){ item.rooms.push(value); });
             }
         },
 

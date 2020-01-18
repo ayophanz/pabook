@@ -1,11 +1,11 @@
 <template>
     <div>
         <ul class="exclude-rooms-no">
-            <li v-for="item in rooms_no_Data" v-if="isHide(item)">
-                <i class="fas fa-bed"></i> {{item}}
+            <li v-for="item in rooms_no_Data" v-if="item.isVisible">
+                <i class="fas fa-bed"></i> {{item.room}}
                 <ul class="exclude-optional-amen">
-                    <li v-for="item2 in addOnOptionalAmen_Data">
-                        <pretty-check v-model="item2.isChecked" @change="onCheckOrUncheck($event, item2.id, item)" class="p-icon p-round p-tada" color="success-o">
+                    <li v-for="item2 in item.optAmen">
+                        <pretty-check v-model="item2.isChecked" :key="item2.id" @change="onCheckOrUncheck($event, item2.id, item.room)" class="p-icon p-round p-tada" color="success-o">
                             <i slot="extra" class="icon mdi mdi-heart fas fa-heart"></i>
                             {{item2.value}} | {{currency_Data}}{{item2.price}}
                         </pretty-check>
@@ -24,28 +24,20 @@ export default {
         PrettyCheck
     },
     watch: {
-        'hideRoom': function() {
-            console.log('to hide '+this.hideRoom);
-        },
         'rooms_no_Data': function() {
-           //console.log('rooms '+this.rooms_no_Data);
+           console.log(this.rooms_no_Data);
         }
     },
     data() {
         return {
             rooms_no_Data: [],
-            addOnOptionalAmen_Data: [],
-            currency_Data: '',
-            hideRoom: []
+            currency_Data: ''
         }
     },
     methods: {
         onCheckOrUncheck(e, id, value) {
             if(e==false) this.$emit('removeOrAddRoomOnAmen', ['remove', id, value]);
             else this.$emit('removeOrAddRoomOnAmen', ['undo', id, value]);
-        },
-        isHide(e) {
-            return (this.hideRoom.includes(e)==true)? false : true;
         }
     },
     beforeCreate() {
