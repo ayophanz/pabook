@@ -22,7 +22,7 @@
                 <br />
             </div>
         </vodal>
-        <div class="row justify-content-center" :data-test="test">
+        <div class="row justify-content-center">
             <booking-page-icon></booking-page-icon>
             <div class="col-md-12">
                 <div class="card mt-5">
@@ -105,7 +105,7 @@
                                                             <ul class="optionalAmen-list">
                                                                 <li v-for="(item, key) in optionalAmenities">
                                                                     <div class="form-check pl-0">
-                                                                        <pretty-check v-model="form.addOnOptionalAmen" :value="item" :disabled="no_unit_avail < 1 && item.rooms.length <= 0" class="p-icon p-round p-tada" color="success-o">
+                                                                        <pretty-check v-model="form.addOnOptionalAmen" :checked="true" :value="item" :disabled="no_unit_avail < 1 && item.rooms.length <= 0" class="p-icon p-round p-tada" color="success-o">
                                                                             <i slot="extra" class="icon mdi mdi-heart fas fa-heart"></i>
                                                                             {{item.value}} | {{currency}}{{item.price}}
                                                                         </pretty-check>
@@ -242,7 +242,6 @@ export default {
     },
     data() {
         return {
-            test: '',
             fullPage: true,
             isLoading: false,
             hotels:[],
@@ -390,9 +389,11 @@ export default {
 
         'form.rooms_no': function() {
             this.$refs.dataOptionalFeature.currency_Data = this.currency;
+            console.log(this.form.addOnOptionalAmen);
         },
 
-        'form.addOnOptionalAmen': function() {
+        'form.optionalAmenities': function() {
+            //
         }
 
     },
@@ -446,14 +447,16 @@ export default {
             let self = this;
             let roomsOptAmen = this.$refs.dataOptionalFeature.rooms_no_Data;
             if(action=='remove') {
-                this.optionalAmenities.forEach(function(item, key){ 
-                    if(self.form.rooms_no.length == 2 && item.rooms.length == 0) item.rooms.push(self.form.rooms_no[0]);
-                    else if(item.rooms.indexOf(value) !== -1) item.rooms.splice(item.rooms.indexOf(value), 1);
+                this.optionalAmenities.forEach(function(item, key){
+                    if(item.rooms.indexOf(value) !== -1) item.rooms.splice(item.rooms.indexOf(value), 1);
                     item.isChecked = true;
                 });
-                this.$refs.dataOptionalFeature.rooms_no_Data.forEach(function(item, key){
-                    if(item.room==value) item.isVisible = false;
+                let tempData = this.form.addOnOptionalAmen.filter(function(e){
+                    if(e.rooms.length <= 2 && self.form.rooms_no.length==1) e.rooms.push(e.rooms[0]);
+                    return e.rooms.length !== 0;
                 });
+                this.form.addOnOptionalAmen = tempData;
+                this.$refs.dataOptionalFeature.rooms_no_Data.forEach(function(item, key){ if(item.room==value) item.isVisible = false; });
             }else if(action=='undo') {
                 roomsOptAmen.push({room:value, optAmen:this.optionalAmenities, isVisible:true});
                 this.optionalAmenities.forEach(function(item, key){ item.rooms.push(value); });

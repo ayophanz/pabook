@@ -25,7 +25,7 @@ export default {
     },
     watch: {
         'rooms_no_Data': function() {
-           console.log(this.rooms_no_Data);
+           //console.log(this.rooms_no_Data);
         }
     },
     data() {
