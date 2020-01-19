@@ -390,7 +390,7 @@ export default {
         'form.rooms_no': function(newVal, oldVal) {
             let self = this;
             this.$refs.dataOptionalFeature.currency_Data = this.currency;
-            if(newVal.length==1 && newVal.length < oldVal.length) {
+            if(newVal.length==1) {
                 this.$refs.dataOptionalFeature.rooms_no_Data.forEach(function(item, key){
                     if(item.isVisible==true) 
                         item.optAmen.forEach(function(item2, key2){ 
