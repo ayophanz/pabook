@@ -25,6 +25,7 @@
             <div class="card-body">
               <div class="row">
                   <div class="col-sm-12">
+                    <summary-info :summaryInfo_Data="summaryInfo"></summary-info>
                     <vue-bootstrap4-table class="tb-hotel-list" :rows="rowData" :columns="columns" :config="config">
                         <template slot="sort-asc-icon">
                             <i class="fas fa-sort-up"></i>
@@ -87,11 +88,13 @@
     import Loading from 'vue-loading-overlay'
     import 'vue-loading-overlay/dist/vue-loading.css'
     import MoneyFormat from 'vue-money-format'
+    import summaryInfo from '../../components/summaryInfoComponent'
     export default {
         components: {
             // VuePureLightbox,
              Loading,
-             MoneyFormat
+             MoneyFormat,
+             summaryInfo
         },
         data() {
             return {
@@ -101,6 +104,10 @@
                 isLoading: false,
                 //rooms: [],
                 rowData:[],
+                summaryInfo: [
+                                {count:0, label:'Active', iconClass:'fa-grin-hearts', class:'icon-active'},
+                                {count:0, label:'Pending', iconClass:'fa-frown-open', class:'icon-pending'}
+                            ],
                 columns: [{
                             label: "Id",
                             name: "id",
@@ -210,6 +217,10 @@
                         function (response) {
                             //self.rooms = response.data;
                             self.rowData = response.data;
+                            response.data.forEach(function(item, key){
+                                if(item.status=='active') self.summaryInfo[0].count+=1;
+                                else if(item.status=='pending') self.summaryInfo[1].count+=1;
+                            });
                         }
                     );
                 }

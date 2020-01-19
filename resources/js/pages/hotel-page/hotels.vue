@@ -26,6 +26,7 @@
             <div class="card-body">
               <div class="row">
                   <div class="col-sm-12">
+                        <summary-info :summaryInfo_Data="summaryInfo"></summary-info>
                         <vue-bootstrap4-table class="tb-hotel-list" :rows="rowData" :columns="columns" :config="config">
                         <template slot="sort-asc-icon">
                             <i class="fas fa-sort-up"></i>
@@ -87,15 +88,22 @@
     import Loading from 'vue-loading-overlay'
     import 'vue-loading-overlay/dist/vue-loading.css'
     import VueBootstrap4Table from 'vue-bootstrap4-table'
+    import summaryInfo from '../../components/summaryInfoComponent'
     export default {
         components:{
             //VuePureLightbox,
             Loading,
-            VueBootstrap4Table
+            VueBootstrap4Table,
+            summaryInfo
         },
         data() {
             return {
                 rowData:[],
+                summaryInfo: [
+                                {count:0, label:'Verified', iconClass:'fa-shield-alt', class:'icon-verified'},
+                                {count:0, label:'Email Confirmation', iconClass:'fa-envelope-open-text', class:'icon-email'},
+                                {count:0, label:'Document Verifying', iconClass:'fa-file-alt', class:'icon-document'}
+                            ],
                 columns: [{
                             label: "Id",
                             name: "id",
@@ -211,6 +219,11 @@
                         function (response) {
                             //self.hotels = response.data
                             self.rowData = response.data
+                            response.data.forEach(function(item, key){
+                                if(item.status=='verified') self.summaryInfo[0].count+=1;
+                                else if(item.status=='email_verifying') self.summaryInfo[1].count+=1;
+                                else if(item.status=='verifying') self.summaryInfo[2].count+=1;
+                            });
                         }
                     );
                 }
