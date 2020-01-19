@@ -5,7 +5,7 @@
                 <i class="fas fa-bed"></i> {{item.room}}
                 <ul class="exclude-optional-amen">
                     <li v-for="item2 in item.optAmen">
-                        <pretty-check v-model="item2.isChecked" :key="item2.id" @change="onCheckOrUncheck($event, item2.id, item.room)" class="p-icon p-round p-tada" color="success-o">
+                        <pretty-check v-model="item2.isChecked" :id="'optionalAmenItem-'+item2.id" :key="item2.id" @change="onCheckOrUncheck($event, item2.id, item.room)" class="p-icon p-round p-tada" color="success-o">
                             <i slot="extra" class="icon mdi mdi-heart fas fa-heart"></i>
                             {{item2.value}} | {{currency_Data}}{{item2.price}}
                         </pretty-check>

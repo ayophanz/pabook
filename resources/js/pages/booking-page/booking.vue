@@ -387,13 +387,14 @@ export default {
             this.optionalAmenities.forEach(function(item, key){item.rooms = [];});
         },
 
-        'form.rooms_no': function() {
+        'form.rooms_no': function(newVal, oldVal) {
             this.$refs.dataOptionalFeature.currency_Data = this.currency;
-            console.log(this.form.addOnOptionalAmen);
-        },
-
-        'form.optionalAmenities': function() {
-            //
+            if(newVal.length==1 && newVal.length < oldVal.length) {
+                this.$refs.dataOptionalFeature.rooms_no_Data.forEach(function(item, key){
+                    if(item.isVisible==true) 
+                        item.optAmen.forEach(function(item2, key2){ document.getElementById('optionalAmenItem-'+item2.id).getElementsByTagName('input')[0].checked = true; });
+                });
+            }
         }
 
     },
@@ -451,11 +452,7 @@ export default {
                     if(item.rooms.indexOf(value) !== -1) item.rooms.splice(item.rooms.indexOf(value), 1);
                     item.isChecked = true;
                 });
-                let tempData = this.form.addOnOptionalAmen.filter(function(e){
-                    if(e.rooms.length <= 2 && self.form.rooms_no.length==1) e.rooms.push(e.rooms[0]);
-                    return e.rooms.length !== 0;
-                });
-                this.form.addOnOptionalAmen = tempData;
+                this.form.addOnOptionalAmen.forEach(function(item, key){ if(item.rooms.length==0 && self.form.rooms_no.length==2) item.rooms.push(self.form.rooms_no[0]); })
                 this.$refs.dataOptionalFeature.rooms_no_Data.forEach(function(item, key){ if(item.room==value) item.isVisible = false; });
             }else if(action=='undo') {
                 roomsOptAmen.push({room:value, optAmen:this.optionalAmenities, isVisible:true});
