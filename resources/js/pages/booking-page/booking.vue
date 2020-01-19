@@ -390,12 +390,14 @@ export default {
         'form.rooms_no': function(newVal, oldVal) {
             let self = this;
             this.$refs.dataOptionalFeature.currency_Data = this.currency;
-            if(newVal.length==1) {
+            if(newVal.length==1 && newVal.length < oldVal.length) {
                 this.$refs.dataOptionalFeature.rooms_no_Data.forEach(function(item, key){
                     if(item.isVisible==true) 
                         item.optAmen.forEach(function(item2, key2){ 
+                            console.log('working');
                             self.onRemoveOrAdd(['undo', item2.id, item.room]);
-                            document.getElementById('optionalAmenItem-'+item2.id).getElementsByTagName('input')[0].checked = true; 
+                            let isChecked = document.getElementById('optionalAmenItem-'+key+'-'+key2);
+                            if(isChecked) isChecked.getElementsByTagName('input')[0].checked = true; 
                         });
                 });
             }
