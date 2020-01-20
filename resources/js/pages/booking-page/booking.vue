@@ -18,7 +18,7 @@
             <div class="swal2-content">
                 <br />
                 <h6 class="text-left ml-5">*Uncheck item to exclude</h6>
-                <exclude-optional-amen ref="dataOptionalFeature" @removeOrAddRoomOnAmen="onRemoveOrAdd"></exclude-optional-amen>
+                <exclude-optional-amen :ref="'dataOptionalFeature'" @removeOrAddRoomOnAmen="onRemoveOrAdd"></exclude-optional-amen>
                 <br />
             </div>
         </vodal>
@@ -394,11 +394,20 @@ export default {
                 this.$refs.dataOptionalFeature.rooms_no_Data.forEach(function(item, key){
                     if(item.isVisible==true) 
                         item.optAmen.forEach(function(item2, key2){ 
-                            console.log('working');
                             self.onRemoveOrAdd(['undo', item2.id, item.room]);
                             let isChecked = document.getElementById('optionalAmenItem-'+key+'-'+key2);
                             if(isChecked) isChecked.getElementsByTagName('input')[0].checked = true; 
                         });
+                });
+            }else if(newVal.length==0) {
+                this.$refs.dataOptionalFeature.rooms_no_Data = [];
+            }
+        },
+
+        'form.addOnOptionalAmen': function(newVal, oldVal) {
+            if(newVal.length < oldVal.length && newVal.length!=0) {
+                this.$refs.dataOptionalFeature.rooms_no_Data.forEach(function(item, key){
+                    item.optAmen.find(e => parseInt(e.id) === parseInt(newVal[newVal.length-1].id)).isChecked = false;
                 });
             }
         }
@@ -458,7 +467,7 @@ export default {
                     if(item.rooms.indexOf(value) !== -1) item.rooms.splice(item.rooms.indexOf(value), 1);
                     item.isChecked = true;
                 });
-                this.$refs.dataOptionalFeature.rooms_no_Data.forEach(function(item, key){ if(item.room==value) item.isVisible = false; });
+                roomsOptAmen.find(e => e.room === value).isVisible = false;
             }else if(action=='undo') {
                 roomsOptAmen.push({room:value, optAmen:this.optionalAmenities, isVisible:true});
                 this.optionalAmenities.forEach(function(item, key){ item.rooms.push(value); });
