@@ -18,7 +18,7 @@
             <div class="swal2-content">
                 <br />
                 <h6 class="text-left ml-5">*Uncheck item to exclude</h6>
-                <exclude-optional-amen :ref="'dataOptionalFeature'" @removeOrAddRoomOnAmen="onRemoveOrAdd"></exclude-optional-amen>
+                <exclude-optional-amen @removeOrAddRoomOnAmen="onRemoveOrAdd"></exclude-optional-amen>
                 <br />
             </div>
         </vodal>
@@ -379,7 +379,10 @@ export default {
             this.roomWithRoomTypes = [];
         },
 
-        'form.roomWithRoomType': function() { this.form.manyRoom = ''; },
+        'form.roomWithRoomType': function() { 
+            this.form.manyRoom = ''; 
+            this.$store.state.currencyStore = this.currency;
+        },
         
         'form.manyRoom': function() {
             this.form.rooms_no = [];
@@ -389,9 +392,8 @@ export default {
 
         'form.rooms_no': function(newVal, oldVal) {
             let self = this;
-            this.$refs.dataOptionalFeature.currency_Data = this.currency;
             if(newVal.length==1 && newVal.length < oldVal.length) {
-                this.$refs.dataOptionalFeature.rooms_no_Data.forEach(function(item, key){
+                 this.$store.state.optionalAmenStore.forEach(function(item, key){
                     if(item.isVisible==true) 
                         item.optAmen.forEach(function(item2, key2){ 
                             self.onRemoveOrAdd(['undo', item2.id, item.room]);
@@ -399,17 +401,11 @@ export default {
                             if(isChecked) isChecked.getElementsByTagName('input')[0].checked = true; 
                         });
                 });
-            }else if(newVal.length==0) {
-                this.$refs.dataOptionalFeature.rooms_no_Data = [];
-            }
+            }else if(newVal.length==0) this.$store.commit('emptyOptionAmenMutat');
         },
 
         'form.addOnOptionalAmen': function(newVal, oldVal) {
-            if(newVal.length < oldVal.length && newVal.length!=0) {
-                this.$refs.dataOptionalFeature.rooms_no_Data.forEach(function(item, key){
-                    item.optAmen.find(e => parseInt(e.id) === parseInt(newVal[newVal.length-1].id)).isChecked = false;
-                });
-            }
+            //if(newVal.length >= oldVal.length && newVal.length!=0) this.$store.commit('visibleOptionalAmenMutat', newVal[newVal.length-1].id);
         }
 
     },
@@ -461,15 +457,14 @@ export default {
 
         optionalAmenMani(action, value) {
             let self = this;
-            let roomsOptAmen = this.$refs.dataOptionalFeature.rooms_no_Data;
             if(action=='remove') {
                 this.optionalAmenities.forEach(function(item, key){
                     if(item.rooms.indexOf(value) !== -1) item.rooms.splice(item.rooms.indexOf(value), 1);
                     item.isChecked = true;
                 });
-                roomsOptAmen.find(e => e.room === value).isVisible = false;
+                this.$store.commit('hideRoomNoMutat', value);
             }else if(action=='undo') {
-                roomsOptAmen.push({room:value, optAmen:this.optionalAmenities, isVisible:true});
+                this.$store.commit('addRoomNoMutat', {room:value, optAmen:this.optionalAmenities, isVisible:true});
                 this.optionalAmenities.forEach(function(item, key){ item.rooms.push(value); });
             }
         },
@@ -522,7 +517,7 @@ export default {
                     });
                 }
                 else if(kind=='value') tempList.forEach(function(item, key){ tempParam.push(item.value); });
-                else if(kind=='optional') tempList.forEach(function(item, key){ item['isChecked'] = true; item['id'] = (key+1);item['rooms'] = []; tempParam.push(item); });
+                else if(kind=='optional') tempList.forEach(function(item, key){ item['isChecked']=true; item['id']=(key+1);item['rooms']=[]; tempParam.push(item); });
                 else if(kind=='total') for(let i=1;i<=parseInt(tempList);i++) tempParam.push({id:i, text:i});
                 else if(kind=='many') for(let i=1;i<=(parseInt(tempList)*this.form.manyRoom);i++) tempParam.push({id:i, text:i});
             } 

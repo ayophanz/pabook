@@ -1,13 +1,13 @@
 <template>
     <div>
         <ul class="exclude-rooms-no">
-            <li v-for="(item, key) in rooms_no_Data" v-if="item.isVisible">
+            <li v-for="(item, key) in optionalAmenities" v-if="item.isVisible">
                 <i class="fas fa-bed"></i> {{item.room}}
                 <ul class="exclude-optional-amen">
-                    <li v-for="(item2, key2) in item.optAmen" :data-test="item2.isChecked">
+                    <li v-for="(item2, key2) in item.optAmen">
                         <pretty-check v-model="item2.isChecked" :id="'optionalAmenItem-'+key+'-'+key2" :key="item2.id" @change="onCheckOrUncheck($event, item2.id, item.room)" class="p-icon p-round p-tada" color="success-o">
                             <i slot="extra" class="icon mdi mdi-heart fas fa-heart"></i>
-                            {{item2.value}} | {{currency_Data}}{{item2.price}}
+                            {{item2.value}} | {{currency}}{{item2.price}}
                         </pretty-check>
                     </li>
                 </ul>
@@ -24,14 +24,20 @@ export default {
         PrettyCheck
     },
     watch: {
-        'rooms_no_Data': function() {
-           console.log(this.rooms_no_Data);
-        }
+        //
     },
     data() {
         return {
-            rooms_no_Data: [],
-            currency_Data: ''
+            //
+        }
+    },
+    computed: {
+        optionalAmenities() {
+            console.log(this.$store.state.optionalAmenStore);
+            return this.$store.state.optionalAmenStore;
+        },
+        currency() {
+            return this.$store.state.currencyStore;
         }
     },
     methods: {

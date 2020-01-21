@@ -8,6 +8,8 @@ require('./bootstrap');
 import vue from 'vue'
 window.Vue = vue
 
+import {store} from './store'
+
 import moment from 'moment'
 window.moment = moment
 
@@ -185,6 +187,7 @@ window.fire = new Vue();
 const app = new Vue({
   el: '#app',
   router,
+  store: store,
   methods:{
     twoFactorCheck() {
       if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
