@@ -402,10 +402,6 @@ export default {
                         });
                 });
             }else if(newVal.length==0) this.$store.commit('emptyOptionAmenMutat');
-        },
-
-        'form.addOnOptionalAmen': function(newVal, oldVal) {
-            //if(newVal.length >= oldVal.length && newVal.length!=0) this.$store.commit('visibleOptionalAmenMutat', newVal[newVal.length-1].id);
         }
 
     },
