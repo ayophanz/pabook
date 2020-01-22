@@ -105,7 +105,7 @@
                                                             <ul class="optionalAmen-list">
                                                                 <li v-for="(item, key) in optionalAmenities">
                                                                     <div class="form-check pl-0">
-                                                                        <pretty-check v-model="form.addOnOptionalAmen" :checked="true" :value="item" :disabled="no_unit_avail < 1 && item.rooms.length <= 0" class="p-icon p-round p-tada" color="success-o">
+                                                                        <pretty-check v-model="form.addOnOptionalAmen" @change="onCheckOptionalAmen($event)" :value="item" :disabled="no_unit_avail < 1 && item.rooms.length <= 0" class="p-icon p-round p-tada" color="success-o">
                                                                             <i slot="extra" class="icon mdi mdi-heart fas fa-heart"></i>
                                                                             {{item.value}} | {{currency}}{{item.price}}
                                                                         </pretty-check>
@@ -434,6 +434,11 @@ export default {
 
     },
     methods: {
+
+        onCheckOptionalAmen(e) {
+            this.$store.commit('visibleOptionalAmenMutat', e);
+            console.log(this.$store.state.optionalAmenStore);
+        },
          
         excludeOptional() { this.vodal_show = true; },
 
@@ -464,7 +469,7 @@ export default {
                 });
                 this.$store.commit('hideRoomNoMutat', value);
             }else if(action=='undo') {
-                this.$store.commit('addRoomNoMutat', {room:value, optAmen:this.optionalAmenities, isVisible:true});
+                this.$store.commit('addRoomNoMutat', {room:value, optAmen:this.$store.getters.whenAddRoomNoGett, isVisible:true});
                 this.optionalAmenities.forEach(function(item, key){ item.rooms.push(value); });
             }
         },
@@ -517,7 +522,7 @@ export default {
                     });
                 }
                 else if(kind=='value') tempList.forEach(function(item, key){ tempParam.push(item.value); });
-                else if(kind=='optional') tempList.forEach(function(item, key){ item['isChecked']=true; item['id']=(key+1);item['rooms']=[]; tempParam.push(item); });
+                else if(kind=='optional') tempList.forEach(function(item, key){ item['isVisible']=false; item['isChecked']=true; item['id']=(key+1);item['rooms']=[]; tempParam.push(item); });
                 else if(kind=='total') for(let i=1;i<=parseInt(tempList);i++) tempParam.push({id:i, text:i});
                 else if(kind=='many') for(let i=1;i<=(parseInt(tempList)*this.form.manyRoom);i++) tempParam.push({id:i, text:i});
             } 

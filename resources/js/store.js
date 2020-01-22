@@ -6,10 +6,13 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
     state: {
         optionalAmenStore: [],
-        currencyStore: ''
+        currencyStore: '', 
+        currentOptionalAmen: []
     },
     getters: {
-        //
+        whenAddRoomNoGett(state) {
+            return state.currentOptionalAmen;
+        }
     },
     mutations: {
         addRoomNoMutat(state, data) {
@@ -24,9 +27,10 @@ export const store = new Vuex.Store({
             state.optionalAmenStore = [];
         },
         visibleOptionalAmenMutat(state, data) {
-            // state.optionalAmenStore.forEach(function(item, key){
-            //     item.optAmen = data;
-            // });
+            state.currentOptionalAmen = data;
+            state.optionalAmenStore.forEach(function(item2, key2){
+                item2.optAmen = data;
+            });
         }
     }
 })
