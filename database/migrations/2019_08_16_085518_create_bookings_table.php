@@ -15,17 +15,17 @@ class CreateBookingsTable extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('room_id');
-            $table->foreign('room_id')->references('id')->on('rooms');
+            $table->unsignedBigInteger('roomId');
+            $table->foreign('roomId')->references('id')->on('rooms');
             $table->string('name');
             $table->string('email');
-            $table->string('phone_no');
+            $table->string('phoneNo');
             $table->timestamp('dateStart')->nullable();
             $table->timestamp('dateEnd')->nullable();
             $table->float('amount', 8, 2);
             $table->string('currency')->default('USD');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('userId');
+            $table->foreign('userId')->references('id')->on('users');
             $table->integer('manyRoom');
             $table->integer('manyAdult');
             $table->integer('manyChild');

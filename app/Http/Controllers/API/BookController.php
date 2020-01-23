@@ -63,15 +63,29 @@ class BookController extends Controller
                         ];
 
       $this->validate($request, $data, $customMessages);
+
+      $data = [
+                'name'         => 'incomplete',
+                'phoneNo'      => 'incomplete',
+                'email'        => 'incomplete',
+                'roomId'       => (int)$request['roomWithRoomType'],
+                'hotelId'      => (int)$request['hotel'],
+                'dateStart'    => date($request['checkInD']),
+                'dateEnd'      => date($request['checkOutD']),
+                'amount'       => (float)$request['totalAmount'],
+                'currency'     => $request['currency_use'],
+                'userId'       => auth('api')->user()->id,
+                'manyRoom'     => (int)$request['manyRoom'],
+                'manyAdult'    => (int)$request['manyAdult'],
+                'manyChild'    => (int)$request['manyChild'],
+                'roomsNo'      =>  json_encode($request['rooms_no']),
+                'status'       => 'incomplete',
+                'optionalAmen' =>  json_encode($request['addOnOptionalAmen'])
+              ];      
+
+      Booking::create($data);
        
-      return [
-                'checkInD'  => $request['checkInD'],
-                'checkOutD' => $request['checkOutD'],
-                'manyAdult' => $request['manyAdult'],
-                'manyChild' => $request['manyChild'],
-                'manyRoom'  => $request['manyRoom'],
-                'roomWithRoomType'  => $request['roomWithRoomType'],
-              ];
+      return $data;
 
       // $book = Booking::create($dataCreate);
       // if($book) {

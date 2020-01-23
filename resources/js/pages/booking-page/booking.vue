@@ -275,8 +275,10 @@ export default {
                 manyAdult: '',
                 manyChild: '',
                 manyRoom:'',
+                currency_use: '',
                 roomWithRoomType:'',
                 rooms_no: [],
+                totalAmount: 0,
                 addOnOptionalAmen: []
             }),
             calendarList: [
@@ -433,7 +435,6 @@ export default {
 
         onCheckOptionalAmen(e) {
             this.$store.commit('visibleOptionalAmenMutat', e);
-            console.log(this.$store.state.optionalAmenStore);
         },
          
         excludeOptional() { this.vodal_show = true; },
@@ -476,6 +477,10 @@ export default {
             if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
                 this.isLoading = true;
                 let self = this
+                this.form.currency_use = this.currency;
+                this.form.totalAmount = this.totalAmountFunc;
+                this.form.checkInD = moment(this.form.checkInD).format('YYYY-MM-DD HH:MM:SS');
+                this.form.checkOutD = moment(this.form.checkOutD).format('YYYY-MM-DD HH:MM:SS');
                 this.form.post('/api/create-book').then(function (response) {
                     self.isLoading = false;
                     toast.fire({
