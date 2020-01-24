@@ -14,6 +14,9 @@
       <create-page-icon v-if="roomId==null"></create-page-icon>
         <form @submit.prevent="register" role="form">
             <div class="row justify-content-center">
+                <div class="col-md-12">
+                  <flash-message class="notifybar-msg notif-warning"></flash-message>
+                </div>
                 <div class="col-md-9">
                     <div class="card">
                   <div class="card-header">

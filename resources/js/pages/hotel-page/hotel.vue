@@ -16,6 +16,9 @@
       <create-page-icon v-if="hotelId==null"></create-page-icon>
       <form v-if="isVerified=='verified' || hotelId==null"  @submit.prevent="register" role="form" enctype="multipart/form-data">
         <div class="row justify-content-center">
+            <div class="col-md-12">
+              <flash-message class="notifybar-msg notif-warning"></flash-message>
+            </div>
             <div class="col-md-9">
                 <div class="card">
               <div class="card-header">

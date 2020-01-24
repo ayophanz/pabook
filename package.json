@@ -41,6 +41,7 @@
         "vodal": "^2.4.0",
         "vue": "^2.6.11",
         "vue-bootstrap4-table": "^1.1.11",
+        "vue-flash-message": "^0.7.2",
         "vue-hotel-datepicker": "^2.6.4",
         "vue-loading-overlay": "^3.2.0",
         "vue-money-format": "^1.1.1",

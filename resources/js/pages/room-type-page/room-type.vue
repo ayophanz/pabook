@@ -14,12 +14,13 @@
       <create-page-icon v-if="typeId==null"></create-page-icon>
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card">
-              <div class="card-header">
-                <div class="card-tool">
-                    <router-link to="/room-types"><button class="btn btn-outline-primary btn-flat"><i class="fa fa-arrow-left"></i> Back</button></router-link>
+              <flash-message class="notifybar-msg notif-warning"></flash-message>
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-tool">
+                      <router-link to="/room-types"><button class="btn btn-outline-primary btn-flat"><i class="fa fa-arrow-left"></i> Back</button></router-link>
+                  </div>
                 </div>
-              </div>
 
               <form @submit.prevent="register" role="form">
                 <div class="card-body">

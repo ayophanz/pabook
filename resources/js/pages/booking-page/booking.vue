@@ -23,9 +23,10 @@
             </div>
         </vodal>
         <div class="row justify-content-center">
-            <booking-page-icon></booking-page-icon>
+            <booking-page-icon></booking-page-icon><br />
             <div class="col-md-12">
-                <div class="card mt-5">
+                <flash-message class="notifybar-msg notif-warning"></flash-message>
+                <div class="card mt-0">
                     <div class="card-header">
                         <div class="card-tool">
                             <router-link to="/add-book-entry">
@@ -772,5 +773,8 @@ export default {
         background-color: rgba(0,0,0,.4) !important;
     }
 
+    .notifybar-msg {
+        width: 100%;
+    }
 </style>
 

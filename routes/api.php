@@ -41,6 +41,7 @@ Route::post('/recep-capability/{action}', 'API\UserController@recapCap');
 
 Route::get('/check-two-factor-if-expired', 'API\UserController@checkTwoFactExpired');
 
+
 /**
 * Hotel management
 */
@@ -113,6 +114,8 @@ Route::put('/room-book-cancel/{id}', 'API\BookController@bookCancel');
 Route::put('/mark-as-read/{id}', 'API\BookController@markAsRead');
 
 Route::get('/mark-as-read', 'API\BookController@markAsRead');
+
+Route::get('/warning-incomplete-booking', 'API\BookController@incompleteBooking');
 
 
 /**
