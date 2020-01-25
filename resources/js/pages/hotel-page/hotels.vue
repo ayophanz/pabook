@@ -1,6 +1,5 @@
 <template>
     <div class="row justify-content-center">
-
         <loading 
             :height="128"
             :width="128"

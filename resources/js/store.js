@@ -44,7 +44,7 @@ export const store = new Vuex.Store({
         notifymsgMutat() {
             axios.get('/api/warning-incomplete-booking').then((response) => {
                 response.data.forEach(function(item, key){
-                    Vue.prototype.$flashStorage.flash('#'+(key+1)+'('+moment(item.dateStart).format('MMMM Do YYYY')+' - '+moment(item.dateEnd).format('MMMM Do YYYY')+') please complete the booking <a href="#">Click here</a> or <a href="#">Cancel booking</a>', 'warning', {
+                    Vue.prototype.$flashStorage.flash('#'+(key+1)+'('+moment(item.dateStart).format('MMMM Do YYYY')+' - '+moment(item.dateEnd).format('MMMM Do YYYY')+') please complete the booking <a href="#">Click here</a> or <a href="#" id="trigNoticeMsg" data-id="'+item.id+'">Cancel booking</a>', 'warning', {
                         important: true
                     });
                 });

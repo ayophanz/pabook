@@ -208,23 +208,59 @@ const app = new Vue({
         timeOut = window.setTimeout(this.twoFactorCheck, 5000);
       }
     },
+
     queryIncompleteBook() {
-      this.$store.commit('trigLoaderNoticeMutat', true);
       Vue.prototype.$flashStorage.destroyAll();
+      this.$store.commit('trigLoaderNoticeMutat', true);
       if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
         let timeOut;
         let self = this
         setTimeout(function() {
           self.$store.commit('notifymsgMutat');
           self.$store.commit('trigLoaderNoticeMutat', false);
-          timeOut = window.setTimeout(self.queryIncompleteBook, 30000);
+          timeOut = window.setTimeout(self.queryIncompleteBook, 100000);
          }, 5000);
       }
+    },
+
+    cancelBooking(id) {
+      sure.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel! ',
+        focusCancel: true,
+        reverseButtons: true
+      }).then((result) => {
+        if(result.value) {
+          let self = this
+          axios.delete('/api/cancel-booking/'+id)
+          .then(function (response) {
+              toast.fire({
+                type: 'success', 
+                title: 'Booking is successfully cancelled'
+              })
+              self.queryIncompleteBook();
+          });
+        }
+      });
+
     }
   },
+
   created(){
     this.twoFactorCheck();
     this.queryIncompleteBook();
+  },
+
+  mounted() {
+    let self = this
+    $(document).on('click', '#trigNoticeMsg', function(e) {
+      e.preventDefault();
+      self.cancelBooking($(this).attr('data-id'));
+    });
   }
 });
 

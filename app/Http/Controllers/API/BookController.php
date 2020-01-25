@@ -156,6 +156,14 @@ class BookController extends Controller
    }
 
 
+   public function cancelBooking($id) {
+    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
+      return die('not allowed');
+
+     return Booking::where('id', $id)->delete();
+   }
+
+
    /**
     *  Extra function
     */
