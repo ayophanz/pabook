@@ -6,9 +6,10 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
     state: {
         optionalAmenStore: [],
-        currencyStore: '', 
         currentOptionalAmenStore: [],
-        trigloaderNoticeStore: false
+        currencyStore: '', 
+        trigloaderNoticeStore: false,
+        bookingPagiStore: 'page_1'
     },
     getters: {
         whenAddRoomNoGett(state) {
@@ -17,6 +18,10 @@ export const store = new Vuex.Store({
 
         trigLoaderNoticeGett(state) {
             return state.trigloaderNoticeStore;
+        },
+
+        bookingPagiGett(state) {
+            return state.bookingPagiStore;
         }
     },
     mutations: {
@@ -44,7 +49,7 @@ export const store = new Vuex.Store({
         notifymsgMutat() {
             axios.get('/api/warning-incomplete-booking').then((response) => {
                 response.data.forEach(function(item, key){
-                    Vue.prototype.$flashStorage.flash('#'+(key+1)+'('+moment(item.dateStart).format('MMMM Do YYYY')+' - '+moment(item.dateEnd).format('MMMM Do YYYY')+') please complete the booking <a href="#">Click here</a> or <a href="#" id="trigNoticeMsg" data-id="'+item.id+'">Cancel booking</a>', 'warning', {
+                    Vue.prototype.$flashStorage.flash('#'+(key+1)+'('+moment(item.dateStart).format('MMMM Do YYYY')+' - '+moment(item.dateEnd).format('MMMM Do YYYY')+') please complete the booking <a href="#" class="redirectToBooking" data-id="'+item.id+'">Click here</a> or <a href="#" class="trigNoticeMsg" data-id="'+item.id+'">Cancel booking</a>', 'warning', {
                         important: true
                     });
                 });
@@ -53,6 +58,10 @@ export const store = new Vuex.Store({
 
         trigLoaderNoticeMutat(state, data) {
             state.trigloaderNoticeStore = data;
+        },
+
+        bookingPagiMutat(state, data) {
+            state.bookingPagiStore = data;
         }
     }
 })

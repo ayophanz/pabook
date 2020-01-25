@@ -40,7 +40,7 @@
                         <form  @submit.prevent="validateEntries" role="form">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <div v-if=" pageIn=='page_1'" class="tab-pagination page-1">
+                                    <div v-if=" $store.getters.bookingPagiGett=='page_1'" class="tab-pagination page-1">
                                         <div class="form-group mb-1">
                                             <HotelDatePicker 
                                                 @check-in-changed="checkInDate"
@@ -139,7 +139,7 @@
                                             <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat"><i class="fas fa-concierge-bell"></i> Book Room</button>
                                         </div>
                                     </div>
-                                    <div v-else-if=" pageIn=='page_2'" class="tab-pagination page-2">
+                                    <div v-else-if=" $store.getters.bookingPagiGett=='page_2'" class="tab-pagination page-2">
                                         <i @click="backIsClick" class="btn btn-outline-primary btn-flat fas fa-arrow-left"></i>
                                         <div class="form-group mt-4">
                                             <label for="summary">Booking Summary </label>
@@ -260,7 +260,6 @@ export default {
             disNext: true,
             disPrev: true,
             tempData: [],
-            pageIn: 'page_1',
             roomPrices:[],
             roomPrice: 0,
             nightNo: 0,
@@ -472,7 +471,7 @@ export default {
             }
         },
 
-        backIsClick() { this.pageIn = 'page_1'; },
+        backIsClick() { this.$store.commit('bookingPagiMutat', 'page_1'); },
 
         validateEntries() {
             if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
@@ -489,7 +488,7 @@ export default {
                       type: 'success',
                       title: 'Room availability confirmed.'
                     })
-                    self.pageIn = 'page_2'
+                    self.$store.commit('bookingPagiMutat', 'page_2');
                 }).catch(function (error) {
                     self.isLoading = false;
                     toast.fire({

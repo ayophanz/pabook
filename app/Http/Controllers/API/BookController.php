@@ -96,6 +96,13 @@ class BookController extends Controller
       
    }
 
+   public function continueBook(Request $request, $id) {
+    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
+      return die('not allowed');
+    
+    
+   }
+
    public function autoCancel() {
       if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
         return die('not allowed');

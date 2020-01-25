@@ -256,10 +256,23 @@ const app = new Vue({
   },
 
   mounted() {
+
+     /**
+      * jQuery
+      * */ 
     let self = this
-    $(document).on('click', '#trigNoticeMsg', function(e) {
+    $(document).on('click', '.trigNoticeMsg', function(e) {
       e.preventDefault();
       self.cancelBooking($(this).attr('data-id'));
+    });
+
+    $(document).on('click', '.redirectToBooking', function(e) {
+      e.preventDefault();
+      self.$store.commit('bookingPagiMutat', 'page_2');
+      if(self.$router.currentRoute.name!='Bookings') {
+        $('.nav-booking').click();
+        self.$router.push('/');
+      }
     });
   }
 });

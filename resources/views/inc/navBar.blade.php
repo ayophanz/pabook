@@ -20,7 +20,7 @@
         <ul class="nav nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="true">
 
           <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
+            <a href="#" class="nav-link nav-booking">
               <i class="nav-icon fas fa-calendar-alt"></i>
               <p>
                 Bookings

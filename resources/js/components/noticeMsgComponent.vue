@@ -9,6 +9,7 @@
 </template>
 <style lang='scss'>
     .warning.flash__message {
+        margin-top: 10px;
         border-left: 5px solid #fd7e14 !important;
     }
     .el-loading-notice-msg.hide {
