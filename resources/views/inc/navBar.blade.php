@@ -29,7 +29,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <router-link to="/" class="nav-link">
+                <router-link to="/" class="nav-link nav-new-booking">
                   <i class="nav-icon fas fa-list"></i>
                   <p>Bookings</p>
                 </router-link>

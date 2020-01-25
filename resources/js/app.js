@@ -274,6 +274,10 @@ const app = new Vue({
         self.$router.push('/');
       }
     });
+
+    $(document).on('click', '.nav-new-booking', function(e){
+      self.$store.commit('bookingPagiMutat', 'page_1');
+    });
   }
 });
 

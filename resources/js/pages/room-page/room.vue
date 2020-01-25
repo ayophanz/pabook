@@ -166,11 +166,9 @@
     export default {
         watch: {
             '$route' (to, from) {
-               if(to.path === '/add-room') {
-                  this.resetComponent();
-               }else{
-                  to.params.roomId
-               }
+               if(to.path === '/add-room') this.resetComponent();
+               else to.params.roomId;
+               
             }
         },
         components: {
