@@ -13,7 +13,7 @@
           </loading>
           <result-page-icon></result-page-icon>
         <div class="col-12">
-          <flash-message class="notifybar-msg notif-warning"></flash-message>
+          <notice-msg></notice-msg>
           <div class="card">
             <div class="card-header">
                 <div class="card-tool">

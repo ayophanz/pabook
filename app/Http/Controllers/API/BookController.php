@@ -68,7 +68,7 @@ class BookController extends Controller
                 'name'         => 'incomplete',
                 'phoneNo'      => 'incomplete',
                 'email'        => 'incomplete',
-                'address'        => 'incomplete',
+                'address'      => 'incomplete',
                 'roomId'       => (int)$request['roomWithRoomType'],
                 'hotelId'      => (int)$request['hotel'],
                 'dateStart'    => date($request['checkInD']),

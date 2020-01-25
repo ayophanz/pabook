@@ -90,6 +90,7 @@ const router = new VueRouter({
 */
 Vue.component('notifycount', require('./components/notifyCountComponent.vue').default);
 Vue.component('notifybar', require('./components/notificationBarComponent.vue').default);
+Vue.component('noticeMsg', require('./components/noticeMsgComponent.vue').default);
 Vue.component(require('./components/autoCurrencyComponent').default);
 
 /**
@@ -185,13 +186,10 @@ window.guestAction = swal
 window.fire = new Vue();
 
 import VueFlashMessage from 'vue-flash-message'
-Vue.use(VueFlashMessage,{
-  messageOptions: {
-    important: true,
-    autoEmit: true,
-    pauseOnInteract: true
-  }
-})
+Vue.use(VueFlashMessage)
+
+import VueElementLoading from 'vue-element-loading'
+Vue.component('VueElementLoading', VueElementLoading)
 
 const app = new Vue({
   el: '#app',
@@ -210,23 +208,23 @@ const app = new Vue({
         timeOut = window.setTimeout(this.twoFactorCheck, 5000);
       }
     },
-    getIncompleteBooking() {
+    queryIncompleteBook() {
+      this.$store.commit('trigLoaderNoticeMutat', true);
+      Vue.prototype.$flashStorage.destroyAll();
       if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
         let timeOut;
         let self = this
-        axios.get('/api/warning-incomplete-booking').then((response) => {
-          response.data.forEach(function(item, key){
-              //window.clearTimeout(timeOut);
-              self.flashWarning('#'+(key+1)+'('+moment(item.dateStart).format('MMMM Do YYYY')+' - '+moment(item.dateEnd).format('MMMM Do YYYY')+') please complete the booking or reservation, this is valid in 1 hour system will delete automatically. <a href="#">Click here</a>');
-          });
-        });
-        //timeOut = window.setTimeout(this.getIncompleteBooking, 5000);
+        setTimeout(function() {
+          self.$store.commit('notifymsgMutat');
+          self.$store.commit('trigLoaderNoticeMutat', false);
+          timeOut = window.setTimeout(self.queryIncompleteBook, 30000);
+         }, 5000);
       }
     }
   },
   created(){
-    this.getIncompleteBooking();
     this.twoFactorCheck();
+    this.queryIncompleteBook();
   }
 });
 

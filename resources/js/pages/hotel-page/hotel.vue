@@ -17,13 +17,13 @@
       <form v-if="isVerified=='verified' || hotelId==null"  @submit.prevent="register" role="form" enctype="multipart/form-data">
         <div class="row justify-content-center">
             <div class="col-md-12">
-              <flash-message class="notifybar-msg notif-warning"></flash-message>
+              <notice-msg></notice-msg>
             </div>
             <div class="col-md-9">
                 <div class="card">
               <div class="card-header">
                 <div class="card-tool">
-                    <router-link to="/hotels"><button class="btn btn-outline-primary btn-flat"><i class="fa fa-arrow-left"></i> Back</button></router-link>
+                    <router-link to="/hotels"><button class="btn btn-outline-primary btn-flat"><i class="fa fa-arrow-left"></i> Go to list</button></router-link>
                 </div>
               </div>
 

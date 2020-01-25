@@ -17,7 +17,7 @@
                 <div class="card">
               <div class="card-header">
                 <div class="card-tool">
-                    <router-link to="/users"><button class="btn btn-outline-primary btn-flat"><i class="fa fa-arrow-left"></i> Back</button></router-link>
+                    <router-link to="/users"><button class="btn btn-outline-primary btn-flat"><i class="fa fa-arrow-left"></i> Go to list</button></router-link>
                     <router-link to="/users-capability"><button class="btn btn-outline-primary btn-flat">Capability <i class="fa fa-arrow-right"></i></button></router-link>
                 </div>
               </div>

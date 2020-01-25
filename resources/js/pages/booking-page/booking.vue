@@ -23,9 +23,9 @@
             </div>
         </vodal>
         <div class="row justify-content-center">
-            <booking-page-icon></booking-page-icon><br />
+            <booking-page-icon></booking-page-icon>
             <div class="col-md-12">
-                <flash-message class="notifybar-msg notif-warning"></flash-message>
+                <notice-msg></notice-msg>
                 <div class="card mt-0">
                     <div class="card-header">
                         <div class="card-tool">
@@ -775,6 +775,10 @@ export default {
 
     .notifybar-msg {
         width: 100%;
+    }
+
+    .el-loading-notice-msg .velmld-overlay {
+        background-color: transparent !important;
     }
 </style>
 
