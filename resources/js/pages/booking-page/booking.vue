@@ -148,9 +148,9 @@
                                                     <li>Hotel: {{$store.getters.summaryDetailsGett[0].hotel.name}}</li>
                                                     <li>Room Type: {{$store.getters.summaryDetailsGett[0].room.room_type.name}}</li>
                                                     <li>Room: {{$store.getters.summaryDetailsGett[0].room.name}}</li>
-                                                    <li>Room No.:<span v-for="(item, key) in JSON.parse($store.getters.summaryDetailsGett[0].roomsNo)"> {{item.value}}</span></li>
+                                                    <li>Room No.:<span v-for="(item, key) in JSON.parse($store.getters.summaryDetailsGett[0].roomsNo)"> {{item.value}}{{(JSON.parse($store.getters.summaryDetailsGett[0].roomsNo).length-1 == key)?'':', '}}</span></li>
                                                     <li>Total Room: {{$store.getters.summaryDetailsGett[0].manyRoom}}</li>
-                                                    <li>Date <span>Check-In: {{$store.getters.summaryDetailsGett[0].dateStart}}</span> - <span>Check-Out: {{$store.getters.summaryDetailsGett[0].dateEnd}}</span></li>
+                                                    <li>Date: <br /><span>Check-In {{$store.getters.summaryDetailsGett[0].dateStart}}</span> - <span>Check-Out {{$store.getters.summaryDetailsGett[0].dateEnd}}</span></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -729,6 +729,12 @@ export default {
         border: 1px solid #e5e5e5;
         min-height: 300px;
         overflow-y: auto;
+        padding: 10px 2px;
+    }
+
+    .summary-container ul {
+        list-style: circle;
+        padding-left: 25px;
     }
 
     .room-cell-container {
