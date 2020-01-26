@@ -7,6 +7,7 @@ export const store = new Vuex.Store({
     state: {
         optionalAmenStore: [],
         currentOptionalAmenStore: [],
+        summaryDetailsStore: [],
         currencyStore: '', 
         trigloaderNoticeStore: false,
         bookingPagiStore: 'page_1'
@@ -22,6 +23,10 @@ export const store = new Vuex.Store({
 
         bookingPagiGett(state) {
             return state.bookingPagiStore;
+        },
+
+        summaryDetailsGett(state) {
+            return state.summaryDetailsStore;
         }
     },
     mutations: {
@@ -62,6 +67,10 @@ export const store = new Vuex.Store({
 
         bookingPagiMutat(state, data) {
             state.bookingPagiStore = data;
+        },
+
+        summaryDetailsMutat(state, data) {
+            state.summaryDetailsStore = data;
         }
     }
 })

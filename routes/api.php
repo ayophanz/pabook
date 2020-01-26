@@ -119,6 +119,8 @@ Route::get('/warning-incomplete-booking', 'API\BookController@incompleteBooking'
 
 Route::delete('/cancel-booking/{id}', 'API\BookController@cancelBooking');
 
+Route::get('/continue-booking/{id}', 'API\BookController@continueBooking');
+
 
 /**
 * Option

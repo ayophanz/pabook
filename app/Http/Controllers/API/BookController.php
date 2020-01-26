@@ -87,10 +87,12 @@ class BookController extends Controller
       $book = Booking::create($data);       
       return Booking::where('id', $book->id)->with('room', 'hotel')->get();
    }
-
-   public function continueBook(Request $request, $id) {
+   
+   public function continueBooking($id) {
     if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
       return die('not allowed');
+    
+    return Booking::where('id', (int)$id)->with('room', 'hotel')->get();
     
       // $book = Booking::create($dataCreate);
       // if($book) {

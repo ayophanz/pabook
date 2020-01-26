@@ -236,17 +236,28 @@ const app = new Vue({
       }).then((result) => {
         if(result.value) {
           let self = this
-          axios.delete('/api/cancel-booking/'+id)
-          .then(function (response) {
-              toast.fire({
-                type: 'success', 
-                title: 'Booking is successfully cancelled'
-              })
-              self.queryIncompleteBook();
-          });
+          if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+            axios.delete('/api/cancel-booking/'+id)
+            .then(function (response) {
+                toast.fire({
+                  type: 'success', 
+                  title: 'Booking is successfully cancelled'
+                })
+                self.queryIncompleteBook();
+            });
+          }
         }
       });
+    },
 
+    continueBooking(id) {
+      let self = this
+      if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+        axios.get('/api/continue-booking/'+id)
+        .then(function (response) {
+          self.$store.commit('summaryDetailsMutat', response.data);
+        });
+      }
     }
   },
 
@@ -257,9 +268,9 @@ const app = new Vue({
 
   mounted() {
 
-     /**
-      * jQuery
-      * */ 
+    /**
+    * jQuery
+    **/ 
     let self = this
     $(document).on('click', '.trigNoticeMsg', function(e) {
       e.preventDefault();
@@ -268,6 +279,7 @@ const app = new Vue({
 
     $(document).on('click', '.redirectToBooking', function(e) {
       e.preventDefault();
+      self.continueBooking($(this).attr('data-id'));
       self.$store.commit('bookingPagiMutat', 'page_2');
       if(self.$router.currentRoute.name!='Bookings') {
         $('.nav-booking').click();
