@@ -144,7 +144,14 @@
                                         <div class="form-group mt-4">
                                             <label for="summary">Booking Summary </label>
                                             <div class="summary-container">
-
+                                                <ul>
+                                                    <li>Hotel: {{summaryDetails[0].hotel.name}}</li>
+                                                    <li>Room Type: {{summaryDetails[0].room.room_type.name}}</li>
+                                                    <li>Room: {{summaryDetails[0].room.name}}</li>
+                                                    <li>Room No.:<span v-for="(item, key) in JSON.parse(summaryDetails[0].roomsNo)"> {{item.value}}</span></li>
+                                                    <li>Total Room: {{summaryDetails[0].manyRoom}}</li>
+                                                    <li>Date: <span>Check-In: {{moment(new Date(summaryDetails[0].dateStart)).format('MMM Do YY')}}</span> - <span>Check-Out: {{moment(new Date(summaryDetails[0].dateEnd)).format('MMM Do YY')}}</span></li>
+                                                </ul>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -268,6 +275,7 @@ export default {
             tempRoomOptions: [],
             rooms_options: [],
             vodal_show: false,
+            summaryDetails: [],
             form: new form({
                 hotel: '',
                 checkInD: new Date().toString(),
@@ -488,6 +496,7 @@ export default {
                       type: 'success',
                       title: 'Room availability confirmed.'
                     })
+                    self.summaryDetails = response.data;
                     self.$store.commit('bookingPagiMutat', 'page_2');
                 }).catch(function (error) {
                     self.isLoading = false;

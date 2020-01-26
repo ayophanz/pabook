@@ -84,23 +84,19 @@ class BookController extends Controller
                 'optionalAmen' =>  json_encode($request['addOnOptionalAmen'])
               ];      
 
-      Booking::create($data);
-       
-      return $data;
-
-      // $book = Booking::create($dataCreate);
-      // if($book) {
-      //   Notification::send($this->userToNotify($book->room_id), new RoomReservation($book));
-      //   return $book;
-      // }
-      
+      $book = Booking::create($data);       
+      return Booking::where('id', $book->id)->with('room', 'hotel')->get();
    }
 
    public function continueBook(Request $request, $id) {
     if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
       return die('not allowed');
     
-    
+      // $book = Booking::create($dataCreate);
+      // if($book) {
+      //   Notification::send($this->userToNotify($book->room_id), new RoomReservation($book));
+      //   return $book;
+      // }
    }
 
    public function autoCancel() {

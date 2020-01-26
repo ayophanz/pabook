@@ -26,10 +26,14 @@ class Booking extends Model
                 'status'
     			];
 
-    protected $with = ['room'];//rermove this if unnecessary                  
+    protected $with = ['room', 'hotel'];//rermove this if unnecessary                  
 
     public function room() {
         return $this->belongsTo(Room::class, 'roomId', 'id'); 
+    }
+
+    public function hotel() {
+        return $this->belongsTo(Hotel::class, 'hotelId', 'id'); 
     }
 
     //public static function boot() {
