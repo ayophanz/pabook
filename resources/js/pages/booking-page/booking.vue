@@ -150,11 +150,19 @@
                                                     <li>Room: {{$store.getters.summaryDetailsGett[0].room.name}}</li>
                                                     <li>Room No.:<span v-for="(item, key) in JSON.parse($store.getters.summaryDetailsGett[0].roomsNo)"> {{item.value}}{{(JSON.parse($store.getters.summaryDetailsGett[0].roomsNo).length-1 == key)?'':', '}}</span></li>
                                                     <li>Total Room: {{$store.getters.summaryDetailsGett[0].manyRoom}}</li>
-                                                    <li>Date: <br />
-                                                        <span>Check-In {{moment($store.getters.summaryDetailsGett[0].dateStart).format("MMM Do YY")}}</span><br />
-                                                        <span>Check-Out {{moment($store.getters.summaryDetailsGett[0].dateEnd).format("MMM Do YY")}}</span>
+                                                    <li>Date: 
+                                                        <ul>
+                                                            <li>Check-In {{moment($store.getters.summaryDetailsGett[0].dateStart).format("MMM Do YY")}}</li>
+                                                            <li>Check-Out {{moment($store.getters.summaryDetailsGett[0].dateEnd).format("MMM Do YY")}}</li>
+                                                        </ul>
                                                     </li>
                                                     <li>Night(s):  {{nightsNo($store.getters.summaryDetailsGett[0].dateStart, $store.getters.summaryDetailsGett[0].dateEnd)}}</li>
+                                                    <li>Optional Amenities:
+                                                        <ul>
+                                                            <li v-for="(item, key) in JSON.parse($store.getters.summaryDetailsGett[0].optionalAmen)">{{item.value}} ({{item.rooms.length}})</li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>Total Amount: {{$store.getters.summaryDetailsGett[0].currency}}{{$store.getters.summaryDetailsGett[0].amount}}</li>
                                                 </ul>
                                             </div>
                                         </div>
