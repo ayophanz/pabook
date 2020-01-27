@@ -5,50 +5,34 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
     state: {
-        optionalAmenStore: [],
-        currentOptionalAmenStore: [],
         summaryDetailsStore: [],
-        currencyStore: '', 
-        trigloaderNoticeStore: false,
-        bookingPagiStore: 'page_1'
+        bookingPagiStore: 'page_1',
+        trigloaderNoticeStore: false
     },
     getters: {
-        whenAddRoomNoGett(state) {
-            return state.currentOptionalAmenStore;
-        },
-
-        trigLoaderNoticeGett(state) {
-            return state.trigloaderNoticeStore;
-        },
-
         bookingPagiGett(state) {
             return state.bookingPagiStore;
         },
 
         summaryDetailsGett(state) {
             return state.summaryDetailsStore;
+        },
+
+        trigLoaderNoticeGett(state) {
+            return state.trigloaderNoticeStore;
         }
     },
     mutations: {
-        addRoomNoMutat(state, data) {
-            state.optionalAmenStore.push(data);
+        bookingPagiMutat(state, data) {
+            state.bookingPagiStore = data;
         },
 
-        hideRoomNoMutat(state, data) {
-            state.optionalAmenStore.forEach(function(item, key){ 
-                if(item.room==data) item.isVisible = false;
-            });
+        summaryDetailsMutat(state, data) {
+            state.summaryDetailsStore = data;
         },
 
-        emptyOptionAmenMutat(state) {
-            state.optionalAmenStore = [];
-        },
-
-        visibleOptionalAmenMutat(state, data) {
-            state.currentOptionalAmenStore = data;
-            state.optionalAmenStore.forEach(function(item2, key2){
-                item2.optAmen = data;
-            });
+        trigLoaderNoticeMutat(state, data) {
+            state.trigloaderNoticeStore = data;
         },
 
         notifymsgMutat() {
@@ -59,18 +43,6 @@ export const store = new Vuex.Store({
                     });
                 });
             });
-        },
-
-        trigLoaderNoticeMutat(state, data) {
-            state.trigloaderNoticeStore = data;
-        },
-
-        bookingPagiMutat(state, data) {
-            state.bookingPagiStore = data;
-        },
-
-        summaryDetailsMutat(state, data) {
-            state.summaryDetailsStore = data;
         }
     }
 })

@@ -9,6 +9,7 @@ import vue from 'vue'
 window.Vue = vue
 
 import {store} from './store'
+import {booking_store} from './pages/booking-page/booking-store'
 
 import moment from 'moment'
 window.moment = moment
@@ -41,8 +42,6 @@ let routes = [
      * Booking
      */
     {path: '/', name:'Bookings', component: require('./pages/booking-page/booking.vue').default},
-    {path: '/add-book-entry', name:'New Reservation', component: require('./pages/booking-page/add-entry.vue').default},
-    {path: '/walk-in-payment', name:'Payment', component: require('./pages/booking-page/payment-method.vue').default},
 
     /**
      * RoomType

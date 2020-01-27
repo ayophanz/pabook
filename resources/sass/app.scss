@@ -1,28 +1,47 @@
-// Fonts
+/**
+* Fonts
+**/
 @import url('https://fonts.googleapis.com/css?family=Nunito');
 
-// Variables
+/**
+* Variables
+**/
 @import 'variables';
 $fa-font-path: "../webfonts";
 
-// Bootstrap
+/**
+* Bootstrap
+**/
 @import '~bootstrap/scss/bootstrap';
 @import '~admin-lte/dist/css/adminlte.min.css';
 
-// fontawesome
+/**
+* fontawesome
+**/
 @import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
 @import '~@fortawesome/fontawesome-free/scss/solid.scss';
 @import '~@fortawesome/fontawesome-free/scss/brands.scss';
 
-// pretty check
+/**
+* pretty check
+**/
 @import '~pretty-checkbox/src/pretty-checkbox.scss';
 
-//vodal
+/**
+* vodal
+**/
 @import "~vodal/common.css";
 @import "~vodal/zoom.css";
 
-//notification
+/**
+* notification
+**/
 @import "~vue-flash-message/dist/vue-flash-message.min.css";
+
+/**
+* Timepicker
+**/
+@import '~vue2-timepicker/dist/VueTimepicker.css';
 
 
 .main-sidebar {
