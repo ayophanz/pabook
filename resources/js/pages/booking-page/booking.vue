@@ -150,7 +150,7 @@
                                                     <li>Room: {{$store.getters.summaryDetailsGett[0].room.name}}</li>
                                                     <li>Room No.:<span v-for="(item, key) in JSON.parse($store.getters.summaryDetailsGett[0].roomsNo)"> {{item.value}}{{(JSON.parse($store.getters.summaryDetailsGett[0].roomsNo).length-1 == key)?'':', '}}</span></li>
                                                     <li>Total Room: {{$store.getters.summaryDetailsGett[0].manyRoom}}</li>
-                                                    <li>Date: <br /><span>Check-In {{$store.getters.summaryDetailsGett[0].dateStart}}</span> - <span>Check-Out {{$store.getters.summaryDetailsGett[0].dateEnd}}</span></li>
+                                                    <li>Date: <br /><span>Check-In {{moment($store.getters.summaryDetailsGett[0].dateStart).format("MMM Do YY")}}</span> - <span>Check-Out {{moment($store.getters.summaryDetailsGett[0].dateEnd).format("MMM Do YY")}}</span></li>
                                                 </ul>
                                             </div>
                                         </div>

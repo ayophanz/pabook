@@ -12,6 +12,7 @@ import {store} from './store'
 
 import moment from 'moment'
 window.moment = moment
+Vue.prototype.moment = moment
 
 import { Form, HasError, AlertError } from 'vform'
 
