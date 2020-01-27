@@ -9,7 +9,6 @@ import vue from 'vue'
 window.Vue = vue
 
 import {store} from './store'
-import {booking_store} from './pages/booking-page/booking-store'
 
 import moment from 'moment'
 window.moment = moment
@@ -212,12 +211,11 @@ const app = new Vue({
       Vue.prototype.$flashStorage.destroyAll();
       this.$store.commit('trigLoaderNoticeMutat', true);
       if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
-        let timeOut;
         let self = this
         setTimeout(function() {
           self.$store.commit('notifymsgMutat');
           self.$store.commit('trigLoaderNoticeMutat', false);
-          timeOut = window.setTimeout(self.queryIncompleteBook, 100000);
+          window.setTimeout(self.queryIncompleteBook, 100000);
          }, 5000);
       }
     },
