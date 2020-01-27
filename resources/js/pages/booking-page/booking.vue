@@ -145,24 +145,24 @@
                                             <label for="summary">Booking Summary </label>
                                             <div class="summary-container">
                                                 <ul v-if="$store.getters.summaryDetailsGett.length != 0">
-                                                    <li>Hotel: {{$store.getters.summaryDetailsGett[0].hotel.name}}</li>
-                                                    <li>Room Type: {{$store.getters.summaryDetailsGett[0].room.room_type.name}}</li>
-                                                    <li>Room: {{$store.getters.summaryDetailsGett[0].room.name}}</li>
-                                                    <li>Room No.:<span v-for="(item, key) in JSON.parse($store.getters.summaryDetailsGett[0].roomsNo)"> {{item.value}}{{(JSON.parse($store.getters.summaryDetailsGett[0].roomsNo).length-1 == key)?'':', '}}</span></li>
-                                                    <li>Total Room: {{$store.getters.summaryDetailsGett[0].manyRoom}}</li>
-                                                    <li>Date: 
+                                                    <li><strong>Hotel: </strong>{{$store.getters.summaryDetailsGett[0].hotel.name}}</li>
+                                                    <li><strong>Room Type: </strong>{{$store.getters.summaryDetailsGett[0].room.room_type.name}}</li>
+                                                    <li><strong>Room: </strong>{{$store.getters.summaryDetailsGett[0].room.name}}</li>
+                                                    <li><strong>Room No.: </strong><span v-for="(item, key) in JSON.parse($store.getters.summaryDetailsGett[0].roomsNo)"> {{item.value}}{{(JSON.parse($store.getters.summaryDetailsGett[0].roomsNo).length-1 == key)?'':', '}}</span></li>
+                                                    <li><strong>Total Room: </strong>{{$store.getters.summaryDetailsGett[0].manyRoom}}</li>
+                                                    <li><strong>Date: </strong>
                                                         <ul>
-                                                            <li>Check-In {{moment($store.getters.summaryDetailsGett[0].dateStart).format("MMM Do YY")}}</li>
-                                                            <li>Check-Out {{moment($store.getters.summaryDetailsGett[0].dateEnd).format("MMM Do YY")}}</li>
+                                                            <li><strong>Check-In </strong>{{moment($store.getters.summaryDetailsGett[0].dateStart).format("MMM Do YY")}}</li>
+                                                            <li><strong>Check-Out </strong>{{moment($store.getters.summaryDetailsGett[0].dateEnd).format("MMM Do YY")}}</li>
                                                         </ul>
                                                     </li>
-                                                    <li>Night(s):  {{nightsNo($store.getters.summaryDetailsGett[0].dateStart, $store.getters.summaryDetailsGett[0].dateEnd)}}</li>
-                                                    <li>Optional Amenities:
+                                                    <li><strong>Night(s): </strong>{{nightsNo($store.getters.summaryDetailsGett[0].dateStart, $store.getters.summaryDetailsGett[0].dateEnd)}}</li>
+                                                    <li><strong>Optional Amenities: </strong>
                                                         <ul>
                                                             <li v-for="(item, key) in JSON.parse($store.getters.summaryDetailsGett[0].optionalAmen)">{{item.value}} ({{item.rooms.length}})</li>
                                                         </ul>
                                                     </li>
-                                                    <li>Total Amount: {{$store.getters.summaryDetailsGett[0].currency}}{{$store.getters.summaryDetailsGett[0].amount}}</li>
+                                                    <li><strong>Total Amount: </strong>{{$store.getters.summaryDetailsGett[0].currency}}{{$store.getters.summaryDetailsGett[0].amount}}</li>
                                                 </ul>
                                             </div>
                                         </div>
