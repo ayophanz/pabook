@@ -150,7 +150,11 @@
                                                     <li>Room: {{$store.getters.summaryDetailsGett[0].room.name}}</li>
                                                     <li>Room No.:<span v-for="(item, key) in JSON.parse($store.getters.summaryDetailsGett[0].roomsNo)"> {{item.value}}{{(JSON.parse($store.getters.summaryDetailsGett[0].roomsNo).length-1 == key)?'':', '}}</span></li>
                                                     <li>Total Room: {{$store.getters.summaryDetailsGett[0].manyRoom}}</li>
-                                                    <li>Date: <br /><span>Check-In {{moment($store.getters.summaryDetailsGett[0].dateStart).format("MMM Do YY")}}</span> - <span>Check-Out {{moment($store.getters.summaryDetailsGett[0].dateEnd).format("MMM Do YY")}}</span></li>
+                                                    <li>Date: <br />
+                                                        <span>Check-In {{moment($store.getters.summaryDetailsGett[0].dateStart).format("MMM Do YY")}}</span><br />
+                                                        <span>Check-Out {{moment($store.getters.summaryDetailsGett[0].dateEnd).format("MMM Do YY")}}</span>
+                                                    </li>
+                                                    <li>Night(s):  {{nightsNo($store.getters.summaryDetailsGett[0].dateStart, $store.getters.summaryDetailsGett[0].dateEnd)}}</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -436,9 +440,16 @@ export default {
             if(this.form.checkInD!='' && Date.parse(new Date(this.form.checkInD.getFullYear()+'-'+(this.form.checkInD.getMonth()+1))) < Date.parse(new Date(this.dateRange))) this.disPrev = false;
             else this.disPrev = true;
         }
-
     },
     methods: {
+
+        nightsNo(startD, endD) {
+            const date1 = new Date(startD);
+            const date2 = new Date(endD);
+            const diffTime = Math.abs(date2 - date1);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+            return diffDays;
+        },
 
         onCheckOptionalAmen(e) {
             this.$store.commit('visibleOptionalAmenMutat', e);
