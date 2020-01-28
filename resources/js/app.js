@@ -249,6 +249,7 @@ const app = new Vue({
                   title: 'Booking is successfully cancelled'
                 })
                 self.refreshNoticeMsg();
+                self.$store.commit('bookingPagiMutat', 'page_1');
                 self.$store.commit('summaryDetailsMutat', '');
             });
           }
