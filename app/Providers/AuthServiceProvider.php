@@ -41,6 +41,13 @@ class AuthServiceProvider extends ServiceProvider
             return $user->role === 'hotel_owner';
         });
 
+        /**
+         * Websocket dashboard
+         */
+        Gate::define('viewWebSocketsDashboard', function ($user = null) {
+            return $user != null;
+        });
+
         Passport::routes();
     }
 }

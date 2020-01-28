@@ -195,6 +195,22 @@ const app = new Vue({
   router,
   store: store,
   methods:{
+    refreshNoticeMsg() {
+      Vue.prototype.$flashStorage.destroyAll();
+      this.$store.commit('trigLoaderNoticeMutat', true);
+      this.$store.commit('notifymsgMutat');
+      this.$store.commit('trigLoaderNoticeMutat', false);
+    },
+
+    listen(name){
+      if(name=='incompletebooking') {
+        let self = this
+        Echo.channel('incomplete-booking').listen('incompleteBooking', (e)=> {
+          if(e.bookId!=null) self.refreshNoticeMsg();
+        });
+      }
+    },
+
     twoFactorCheck() {
       if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
         let timeOut;
@@ -209,16 +225,7 @@ const app = new Vue({
     },
 
     queryIncompleteBook() {
-      Vue.prototype.$flashStorage.destroyAll();
-      this.$store.commit('trigLoaderNoticeMutat', true);
-      if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
-        let self = this
-        setTimeout(function() {
-          self.$store.commit('notifymsgMutat');
-          self.$store.commit('trigLoaderNoticeMutat', false);
-          window.setTimeout(self.queryIncompleteBook, 100000);
-         }, 5000);
-      }
+      if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) this.listen('incompletebooking');
     },
 
     cancelBooking(id) {
@@ -241,7 +248,8 @@ const app = new Vue({
                   type: 'success', 
                   title: 'Booking is successfully cancelled'
                 })
-                self.queryIncompleteBook();
+                self.refreshNoticeMsg();
+                self.$store.commit('summaryDetailsMutat', '');
             });
           }
         }
@@ -260,11 +268,13 @@ const app = new Vue({
   },
 
   created(){
-    this.twoFactorCheck();
-    this.queryIncompleteBook();
+    //
   },
 
   mounted() {
+    this.twoFactorCheck();
+    this.queryIncompleteBook();
+    this.$store.commit('notifymsgMutat');
 
     /**
     * jQuery

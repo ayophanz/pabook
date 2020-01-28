@@ -81,6 +81,5 @@ class AppServiceProvider extends ServiceProvider
         Validator::replacer('rooms_no_equal_room_name', function($message, $attribute, $rule, $parameters) {
             return str_replace(':field', $parameters[0], $message);
         });
-
     }
 }

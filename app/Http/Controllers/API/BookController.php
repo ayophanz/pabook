@@ -14,6 +14,7 @@ use App\Room;
 use App\RoomType;
 use App\Hotel;
 use DateTime;
+use App\Events\incompleteBooking;
 
 
 class BookController extends Controller
@@ -84,7 +85,8 @@ class BookController extends Controller
                 'optionalAmen' =>  json_encode($request['addOnOptionalAmen'])
               ];      
 
-      $book = Booking::create($data);       
+      $book = Booking::create($data);
+      event(new incompleteBooking($book->id));       
       return Booking::where('id', $book->id)->with('room', 'hotel')->get();
    }
    
