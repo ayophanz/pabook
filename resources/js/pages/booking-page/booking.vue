@@ -30,7 +30,7 @@
                     <div class="card-header">
                         <div class="card-tool">
                             <button class="btn btn-outline-primary btn-flat" @click="resetData()">
-                                <i class="fas fa-broom"></i> Clear Fields
+                                <i class="fas fa-broom"></i> Reset Fields
                             </button>
                         </div>
                     </div>

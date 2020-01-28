@@ -95,8 +95,29 @@ class BookController extends Controller
       return die('not allowed');
     
     return Booking::where('id', (int)$id)->with('room', 'hotel')->get();
-    
-      // $book = Booking::create($dataCreate);
+   }
+
+   public function saveContinueBooking(Request $request, $id) {
+    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
+      return die('not allowed');
+
+    $data = [
+          'name'    => 'required',
+          'phoneNo' => 'required',
+          'email'   => 'required'
+    ]; 
+
+    $this->validate($request, $data);  
+
+    $data = [
+      'name'         => $request['name'],
+      'phoneNo'      => $request['phoneNo'],
+      'email'        => $request['email'],
+      'address'      => $request['address']
+    ]; 
+
+    return Booking::where('id', $id)->update($data);
+    // $book = Booking::create($dataCreate);
       // if($book) {
       //   Notification::send($this->userToNotify($book->room_id), new RoomReservation($book));
       //   return $book;
