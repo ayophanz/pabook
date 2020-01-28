@@ -137,7 +137,7 @@
                                             <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat"><i class="fas fa-concierge-bell"></i> Book Room</button>
                                         </div>
                                     </div>
-                                    <div v-else-if=" $store.getters.bookingPagiGett=='page_2'" class="tab-pagination page-2">
+                                    <div v-else-if="$store.getters.bookingPagiGett=='page_2'" class="tab-pagination page-2">
                                         <i @click="backIsClick" class="btn btn-outline-primary btn-flat fas fa-arrow-left"></i>
                                         <div class="form-group mt-4">
                                             <label for="summary">Booking Summary </label>
@@ -157,7 +157,7 @@
                                                     <li><strong>Night(s): </strong>{{nightsNo($store.getters.summaryDetailsGett[0].dateStart, $store.getters.summaryDetailsGett[0].dateEnd)}}</li>
                                                     <li><strong>Optional Amenities: </strong>
                                                         <ul>
-                                                            <li v-for="(item, key) in JSON.parse($store.getters.summaryDetailsGett[0].optionalAmen)">{{item.value}} ({{item.rooms.length}})</li>
+                                                            <li v-for="(item, key) in JSON.parse($store.getters.summaryDetailsGett[0].optionalAmen)" v-if="item.rooms.length!=0">{{item.value}} ({{item.rooms.length}})</li>
                                                         </ul>
                                                     </li>
                                                     <li><strong>Total Amount: </strong>{{$store.getters.summaryDetailsGett[0].currency}}{{$store.getters.summaryDetailsGett[0].amount}}</li>
@@ -455,6 +455,10 @@ export default {
             this.loadHotels();
             this.selectedMonth = new Date();
             this.setRenderRangeText();
+            if(this.$store.getters.bookingPagiGett=='page_2') {
+                this.$store.commit('summaryDetailsMutat', '');
+                this.$store.commit('bookingPagiMutat', 'page_1');
+            }
         },
 
         nightsNo(startD, endD) {
@@ -507,26 +511,43 @@ export default {
             if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
                 this.isLoading = true;
                 let self = this
-                this.form.currency_use = this.currency;
-                this.form.totalAmount = this.totalAmountFunc;
-                this.form.checkInD = moment(this.form.checkInD).format('YYYY-MM-DD HH:MM:SS');
-                this.form.checkOutD = moment(this.form.checkOutD).format('YYYY-MM-DD HH:MM:SS');
-                this.form.post('/api/create-book').then(function (response) {
-                    self.isLoading = false;
-                    toast.fire({
-                      timer: 2000,
-                      type: 'success',
-                      title: 'Room availability confirmed.'
-                    })
-                    self.$store.commit('summaryDetailsMutat', response.data);
-                    self.$store.commit('bookingPagiMutat', 'page_2');
-                }).catch(function (error) {
-                    self.isLoading = false;
-                    toast.fire({
-                      type: 'error',
-                      title: 'Something went wrong!'
-                    })
-                });
+                if(this.$store.getters.bookingPagiGett=='page_1') {
+                    this.form.currency_use = this.currency;
+                    this.form.totalAmount = this.totalAmountFunc;
+                    this.form.checkInD = moment(this.form.checkInD).format('YYYY-MM-DD HH:MM:SS');
+                    this.form.checkOutD = moment(this.form.checkOutD).format('YYYY-MM-DD HH:MM:SS');
+                    this.form.post('/api/create-book').then(function (response) {
+                        self.isLoading = false;
+                        toast.fire({
+                            timer: 2000,
+                            type: 'success',
+                            title: 'Room availability confirmed.'
+                        })
+                        self.$store.commit('summaryDetailsMutat', response.data);
+                        self.$store.commit('bookingPagiMutat', 'page_2');
+                    }).catch(function (error) {
+                        self.isLoading = false;
+                            toast.fire({
+                            type: 'error',
+                            title: 'Something went wrong!'
+                        })
+                    });
+                }else if(this.$store.getters.bookingPagiGett=='page_2') {
+                    this.form.post('/api/save-continue-booking/'+this.$store.getters.summaryDetailsGett[0].id).then(function (response) {
+                        self.isLoading = false;
+                            toast.fire({
+                            timer: 2000,
+                            type: 'success',
+                            title: 'Successful Booked.'
+                        })
+                    }).catch(function (error) {
+                        self.isLoading = false;
+                            toast.fire({
+                            type: 'error',
+                            title: 'Something went wrong!'
+                        })
+                    });
+                }
             }
         },
 

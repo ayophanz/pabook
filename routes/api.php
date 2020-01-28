@@ -121,6 +121,8 @@ Route::delete('/cancel-booking/{id}', 'API\BookController@cancelBooking');
 
 Route::get('/continue-booking/{id}', 'API\BookController@continueBooking');
 
+Route::post('/save-continue-booking/{id}', 'API\BookController@saveContinueBooking');
+
 
 /**
 * Option
