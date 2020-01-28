@@ -251,6 +251,7 @@ const app = new Vue({
                 self.refreshNoticeMsg();
                 self.$store.commit('bookingPagiMutat', 'page_1');
                 self.$store.commit('summaryDetailsMutat', '');
+                fire.$emit('bookingResetData');
             });
           }
         }

@@ -29,11 +29,9 @@
                 <div class="card mt-0">
                     <div class="card-header">
                         <div class="card-tool">
-                            <router-link to="/add-book-entry">
-                                <button class="btn btn-outline-primary btn-flat">
-                                    <i class="fa fa-plus-circle"></i> Add
-                                </button>
-                            </router-link>
+                            <button class="btn btn-outline-primary btn-flat" @click="resetData()">
+                                <i class="fas fa-broom"></i> Clear Fields
+                            </button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -448,8 +446,16 @@ export default {
             if(this.form.checkInD!='' && Date.parse(new Date(this.form.checkInD.getFullYear()+'-'+(this.form.checkInD.getMonth()+1))) < Date.parse(new Date(this.dateRange))) this.disPrev = false;
             else this.disPrev = true;
         }
+
     },
     methods: {
+
+        resetData() {
+            Object.assign(this.$data, this.$options.data.apply(this));
+            this.loadHotels();
+            this.selectedMonth = new Date();
+            this.setRenderRangeText();
+        },
 
         nightsNo(startD, endD) {
             const date1 = new Date(startD);
@@ -459,9 +465,7 @@ export default {
             return diffDays;
         },
 
-        onCheckOptionalAmen(e) {
-            this.$store.commit('visibleOptionalAmenMutat', e);
-        },
+        onCheckOptionalAmen(e) { this.$store.commit('visibleOptionalAmenMutat', e); },
          
         excludeOptional() { this.vodal_show = true; },
 
@@ -689,6 +693,8 @@ export default {
         this.loadHotels();
         this.selectedMonth = new Date();
         this.setRenderRangeText();
+
+        fire.$on('bookingResetData', this.resetData); 
         //this.$refs.mycalendar.usageStatistics = false;
         
         /**
