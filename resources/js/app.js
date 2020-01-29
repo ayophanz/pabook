@@ -278,6 +278,8 @@ const app = new Vue({
     this.queryIncompleteBook();
     this.$store.commit('notifymsgMutat');
 
+    fire.$on('refreshNoticeMsg', this.refreshNoticeMsg); 
+
     /**
     * jQuery
     **/ 

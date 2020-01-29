@@ -103,17 +103,18 @@ class BookController extends Controller
 
     $data = [
           'name'    => 'required',
-          'phone_no' => 'required',
+          'phoneNo' => 'required',
           'email'   => 'string|email|max:191'
     ]; 
 
     $this->validate($request, $data);  
 
     $data = [
-      'name'         => $request['name'],
-      'phoneNo'      => $request['phone_no'],
-      'email'        => $request['email'],
-      'address'      => $request['address']
+      'name'    => $request['name'],
+      'phoneNo' => $request['phoneNo'],
+      'email'   => $request['email'],
+      'address' => $request['address'],
+      'status'  => 'active'
     ]; 
 
     return Booking::where('id', $id)->update($data);

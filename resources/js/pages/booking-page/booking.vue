@@ -35,10 +35,10 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form  @submit.prevent="validateEntries" role="form">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div v-if=" $store.getters.bookingPagiGett=='page_1'" class="tab-pagination page-1">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div v-if=" $store.getters.bookingPagiGett=='page_1'" class="tab-pagination page-1">
+                                    <form  @submit.prevent="validateEntries" role="form">
                                         <div class="form-group mb-1">
                                             <HotelDatePicker 
                                                 @check-in-changed="checkInDate"
@@ -136,8 +136,11 @@
                                         <div class="form-group text-center mt-4">
                                             <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat"><i class="fas fa-concierge-bell"></i> Book Room</button>
                                         </div>
-                                    </div>
-                                    <div v-else-if="$store.getters.bookingPagiGett=='page_2'" class="tab-pagination page-2">
+                                    </form>
+                                </div>
+
+                                <div v-else-if="$store.getters.bookingPagiGett=='page_2'" class="tab-pagination page-2">
+                                    <form  @submit.prevent="validateEntries" role="form">
                                         <i @click="backIsClick" class="btn btn-outline-primary btn-flat fas fa-arrow-left"></i>
                                         <div class="form-group mt-4">
                                             <label for="summary">Booking Summary </label>
@@ -166,67 +169,66 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="name">Name <span class="required-asterisk">*</span></label>
-                                            <input type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }" id="name">
+                                            <input v-model="form.name" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }" id="name">
                                             <has-error :form="form" field="name"></has-error>
                                         </div>
                                         <div class="form-group">
-                                            <label for="phone_no">Phone no. <span class="required-asterisk">*</span></label>
-                                            <input type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('phone_no') }" id="phone_no">
-                                            <has-error :form="form" field="phone_no"></has-error>
+                                            <label for="phoneNo">Phone no. <span class="required-asterisk">*</span></label>
+                                            <input v-model="form.phoneNo" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('phoneNo') }" id="phoneNo">
+                                            <has-error :form="form" field="phoneNo"></has-error>
                                         </div>
                                         <div class="form-group">
                                             <label for="email">Email </label>
-                                            <input type="email" class="form-control" :class="{ 'is-invalid': form.errors.has('email') }" id="email">
+                                            <input v-model="form.email" type="email" class="form-control" :class="{ 'is-invalid': form.errors.has('email') }" id="email">
                                             <i>Note: if not empty system will send receipt.</i>
                                         </div>
                                         <div class="form-group">
                                             <label for="address">Address </label>
-                                            <input type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('address') }" id="address">
+                                            <input v-model="form.address" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('address') }" id="address">
                                         </div>
                                         <div class="form-group text-center mt-4">
                                             <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat"><i class="fas fa-thumbs-up"></i> Done</button>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-9">
-                                    <div id="calendar-menu">
-                                        <div class="row mt-0 room-cell-container">
-                                            <div class="col-md-3 pr-0 pl-0">
-                                                <h5 class="text-center mt-3">Total Rooms</h5>
-                                                <h3 class="text-center">{{manyRooms.length}}</h3>
-                                            </div>
-                                            <div class="col-md-3 pr-0 pl-0">
-                                                <h5 class="text-center mt-3">Available Rooms</h5>
-                                                <h3 class="text-center">6</h3>
-                                            </div>
-                                            <div class="col-md-3 pr-0 pl-0">
-                                                <h5 class="text-center mt-3">Reserved Rooms</h5>
-                                                <h3 class="text-center">2</h3>
-                                            </div>
-                                            <div class="col-md-3 pr-0 pl-0">
-                                                <h5 class="text-center mt-3">Occupied Rooms</h5>
-                                                <h3 class="text-center">2</h3>
-                                            </div>
-                                        </div><br />
-                                        <select v-model="selectedView" class="menuSelectedView">
-                                            <option v-for="(options, index) in viewModeOptions" :value="options.value" :key="index">{{options.title}}</option>
-                                        </select>
-                                        <span id="menu-navi" @click="onClickNavi($event)">
-                                            <!-- <button type="button" class="btn btn-default btn-sm move-today" data-action="move-today">Today</button> -->
-                                            &nbsp;<button v-if="disPrev==false" :disabled="disPrev" type="button" class="btn btn-outline-primary btn-flat move-day" data-action="move-prev"><i class="fas fa-chevron-left" data-action="move-prev"></i> Prev</button>
-                                            &nbsp;<button v-if="disNext==false" :disabled="disNext" type="button" class="btn btn-outline-primary btn-flat move-day" data-action="move-next">Next <i class="fas fa-chevron-right" data-action="move-next"></i></button>
-                                        </span>
-                                        <span class="render-range">{{dateRange}}</span>
-                                    </div>
-                                    <calendar ref="mycalendar" style="height: 800px;"
-                                        :view="selectedView"
-                                        :theme="theme"
-                                        :calendars="calendarList"
-                                        :schedules="scheduleList"
-                                    />
+                                    </form>
                                 </div>
                             </div>
-                        </form>
+                            <div class="col-md-9">
+                                <div id="calendar-menu">
+                                    <div class="row mt-0 room-cell-container">
+                                        <div class="col-md-3 pr-0 pl-0">
+                                            <h5 class="text-center mt-3">Total Rooms</h5>
+                                            <h3 class="text-center">{{manyRooms.length}}</h3>
+                                        </div>
+                                        <div class="col-md-3 pr-0 pl-0">
+                                            <h5 class="text-center mt-3">Available Rooms</h5>
+                                            <h3 class="text-center">6</h3>
+                                        </div>
+                                        <div class="col-md-3 pr-0 pl-0">
+                                            <h5 class="text-center mt-3">Reserved Rooms</h5>
+                                            <h3 class="text-center">2</h3>
+                                        </div>
+                                        <div class="col-md-3 pr-0 pl-0">
+                                            <h5 class="text-center mt-3">Occupied Rooms</h5>
+                                            <h3 class="text-center">2</h3>
+                                        </div>
+                                    </div><br />
+                                    <select v-model="selectedView" class="menuSelectedView">
+                                        <option v-for="(options, index) in viewModeOptions" :value="options.value" :key="index">{{options.title}}</option>
+                                    </select>
+                                    <span id="menu-navi" @click="onClickNavi($event)">
+                                        <!-- <button type="button" class="btn btn-default btn-sm move-today" data-action="move-today">Today</button> -->
+                                        &nbsp;<button v-if="disPrev==false" :disabled="disPrev" type="button" class="btn btn-outline-primary btn-flat move-day" data-action="move-prev"><i class="fas fa-chevron-left" data-action="move-prev"></i> Prev</button>
+                                        &nbsp;<button v-if="disNext==false" :disabled="disNext" type="button" class="btn btn-outline-primary btn-flat move-day" data-action="move-next">Next <i class="fas fa-chevron-right" data-action="move-next"></i></button>
+                                    </span>
+                                    <span class="render-range">{{dateRange}}</span>
+                                </div>
+                                <calendar ref="mycalendar" style="height: 800px;"
+                                    :view="selectedView"
+                                    :theme="theme"
+                                    :calendars="calendarList"
+                                    :schedules="scheduleList" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -294,9 +296,14 @@ export default {
                 manyRoom:'',
                 currency_use: '',
                 roomWithRoomType:'',
+                name:'',
+                phoneNo: '',
+                address: '',
+                email: '',
                 rooms_no: [],
-                totalAmount: 0,
-                addOnOptionalAmen: []
+                addOnOptionalAmen: [],
+                totalAmount: 0
+                
             }),
             calendarList: [
                 {
@@ -536,10 +543,12 @@ export default {
                     this.form.post('/api/save-continue-booking/'+this.$store.getters.summaryDetailsGett[0].id).then(function (response) {
                         self.isLoading = false;
                             toast.fire({
-                            timer: 2000,
+                            timer:3000,
                             type: 'success',
                             title: 'Successful Booked.'
                         })
+                        self.resetData();
+                        fire.$emit('refreshNoticeMsg');
                     }).catch(function (error) {
                         self.isLoading = false;
                             toast.fire({
