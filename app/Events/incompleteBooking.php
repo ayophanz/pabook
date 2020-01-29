@@ -35,6 +35,6 @@ class incompleteBooking implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('incomplete-booking');
+        return new PrivateChannel('incomplete-booking');
     }
 }

@@ -205,7 +205,7 @@ const app = new Vue({
     listen(name){
       if(name=='incompletebooking') {
         let self = this
-        Echo.channel('incomplete-booking').listen('incompleteBooking', (e)=> {
+        Echo.private('incomplete-booking').listen('incompleteBooking', (e)=> {
           if(e.bookId!=null) self.refreshNoticeMsg();
         });
       }
