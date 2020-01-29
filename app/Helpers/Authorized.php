@@ -5,7 +5,5 @@ use Request;
 
 class Authorized
 {
-
-
-
+    
 }

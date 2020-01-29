@@ -207,7 +207,7 @@
                     hotel: 0,
                     changeFeature: '',
                     featureData: null,
-                    featureOptionalData: [{value:'', price:0}],
+                    featureOptionalData: [{value:null, price:0}],
                     gallery: [],
                     rooms_no: [],
                     max_child: 0,
