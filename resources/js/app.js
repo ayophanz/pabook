@@ -264,6 +264,7 @@ const app = new Vue({
         axios.get('/api/continue-booking/'+id)
         .then(function (response) {
           self.$store.commit('summaryDetailsMutat', response.data);
+          fire.$emit('continueBooking');
         });
       }
     }

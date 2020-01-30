@@ -92,30 +92,30 @@ class BookController extends Controller
    }
 
    public function saveContinueBooking(Request $request, $id) {
-    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
-      return die('not allowed');
+      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
+        return die('not allowed');
 
-    $data = [
-          'name'    => 'required',
-          'phoneNo' => 'required',
-          'email'   => 'string|email|max:191'
-    ]; 
+      $data = [
+            'name'    => 'required',
+            'phoneNo' => 'required',
+            'email'   => 'string|email|max:191'
+      ]; 
 
-    $this->validate($request, $data);  
+      $this->validate($request, $data);  
 
-    $data = [
-      'name'    => $request['name'],
-      'phoneNo' => $request['phoneNo'],
-      'email'   => $request['email'],
-      'address' => $request['address'],
-      'status'  => 'active'
-    ]; 
+      $data = [
+        'name'    => $request['name'],
+        'phoneNo' => $request['phoneNo'],
+        'email'   => $request['email'],
+        'address' => $request['address'],
+        'status'  => 'active'
+      ]; 
 
-    Booking::where('id', $id)->update($data);
-    $book = Booking::where('id', $id)->with('room', 'hotel')->first();
-    Notification::send(Helpers::userToNotify($book->roomId), new RoomReservation($book));
+      Booking::where('id', $id)->update($data);
+      $book = Booking::where('id', $id)->with('room', 'hotel')->first();
+      Notification::send(Helpers::userToNotify($book->roomId), new RoomReservation($book));
 
-    return $book;
+      return $book;
    }
 
    public function autoCancel() {

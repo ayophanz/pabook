@@ -287,6 +287,7 @@ export default {
             tempRoomOptions: [],
             rooms_options: [],
             vodal_show: false,
+            resumeBooking: false,
             form: new form({
                 hotel: '',
                 checkInD: new Date().toString(),
@@ -401,8 +402,8 @@ export default {
 
         'form.hotel': function() { 
             this.form.roomWithRoomType = [];
-            this.currency = ''; 
             this.roomWithRoomTypes = [];
+            this.currency = ''; 
         },
 
         'form.roomWithRoomType': function() { 
@@ -456,6 +457,19 @@ export default {
 
     },
     methods: {
+
+        continueBooking() {
+            Object.assign(this.$data, this.$options.data.apply(this));
+            this.loadHotels();
+            this.selectedMonth = new Date();
+            this.setRenderRangeText();
+            this.resumeBooking = true;
+            this.form.checkInD = new Date(this.$store.getters.summaryDetailsGett[0].dateStart);
+            this.form.checkOutD = new Date(this.$store.getters.summaryDetailsGett[0].dateEnd);
+            this.form.hotel = this.$store.getters.summaryDetailsGett[0].hotel.id;
+            this.isHotelChange();
+            console.log(this.$store.getters.summaryDetailsGett[0]);
+        },
 
         resetData() {
             Object.assign(this.$data, this.$options.data.apply(this));
@@ -619,18 +633,21 @@ export default {
                                     });
                                 });
                             }
-                            if(item.room_type_rooms!='') {
-                                item.room_type_rooms.forEach(function(item2, key2){
-                                    self.roomPrices.push({id:item2.id, value:item2.price});
-                                    self.roomWithRoomTypes.push({id:item2.id, text:item2.name+' - '+item.name});
-                                    self.totalRooms.push({id:item2.id, value:item2.total_room, available:'none'});
-                                    self.totalAdults.push({id:item2.id, value:item2.max_adult});
-                                    self.totalChilds.push({id:item2.id, value:item2.max_child});
-                                    self.tempOptionalAmenities.push({id:item2.id, value:JSON.parse(item2.room_feature_optional.value), rooms:[] });
-                                    self.tempFixedAmenities.push({id:item2.id, value:JSON.parse(item2.room_feature.value)});
-                                });
-                            }
+                            item.room_type_rooms.forEach(function(item2, key2){
+                                self.roomPrices.push({id:item2.id, value:item2.price});
+                                self.roomWithRoomTypes.push({id:item2.id, text:item2.name+' - '+item.name});
+                                self.totalRooms.push({id:item2.id, value:item2.total_room, available:'none'});
+                                self.totalAdults.push({id:item2.id, value:item2.max_adult});
+                                self.totalChilds.push({id:item2.id, value:item2.max_child});
+                                self.tempOptionalAmenities.push({id:item2.id, value:JSON.parse(item2.room_feature_optional.value), rooms:[] });
+                                self.tempFixedAmenities.push({id:item2.id, value:JSON.parse(item2.room_feature.value)});
+                            });
                         });
+                        if(self.resumeBooking) {
+                            self.form.roomWithRoomType = self.$store.getters.summaryDetailsGett[0].roomId;
+                            self.isRoomWithRoomType();
+                            self.form.manyRoom = self.$store.getters.summaryDetailsGett[0].manyRoom;
+                        }
                     });
             }
         },
@@ -725,6 +742,7 @@ export default {
         this.setRenderRangeText();
 
         fire.$on('bookingResetData', this.resetData); 
+        fire.$on('continueBooking', this.continueBooking);
         //this.$refs.mycalendar.usageStatistics = false;
         
         /**
