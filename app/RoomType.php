@@ -11,7 +11,7 @@ class RoomType extends Model
                 'name'
     			];
      
-            protected $with = ['roomTypeHotel'/*, 'roomTypeRooms'*/];    
+    protected $with = ['roomTypeHotel'];    
 
     public function roomTypeHotel() {
         return $this->belongsTo(Hotel::class, 'hotel_id', 'id'); 

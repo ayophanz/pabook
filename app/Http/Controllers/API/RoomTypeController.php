@@ -5,8 +5,8 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\RoomType;
-use App\hotel;
 use App\Room;
+use App\Helpers\Helpers;
 
 class RoomTypeController extends Controller
 {
@@ -20,7 +20,7 @@ class RoomTypeController extends Controller
           return die('not allowed');
 
       if(\Gate::allows('hotelOwner'))
-          return RoomType::whereIn('hotel_id', $this->hotel_ids())->with('roomTypeHotel')->orderBy('created_at', 'desc')->get(); 
+          return RoomType::whereIn('hotel_id', Helpers::hotel_ids())->with('roomTypeHotel')->orderBy('created_at', 'desc')->get(); 
       
       if(\Gate::allows('superAdmin'))
           return RoomType::with('roomTypeHotel')->orderBy('created_at', 'desc')->get();  
@@ -54,7 +54,7 @@ class RoomTypeController extends Controller
           return die('not allowed');
 
       if(\Gate::allows('hotelOwner'))
-           return RoomType::whereIn('hotel_id', $this->hotel_ids())->where('id', $id)->first();
+           return RoomType::whereIn('hotel_id', Helpers::hotel_ids())->where('id', $id)->first();
 
        if(\Gate::allows('superAdmin'))
            return RoomType::where('id', $id)->first();
@@ -79,7 +79,7 @@ class RoomTypeController extends Controller
         $this->validate($request,$data,$customMessages);
 
         if(\Gate::allows('hotelOwner'))
-            return RoomType::whereIn('hotel_id', $this->hotel_ids())->where('id', $id)->update($dataUpdate);
+            return RoomType::whereIn('hotel_id', Helpers::hotel_ids())->where('id', $id)->update($dataUpdate);
 
         if(\Gate::allows('superAdmin'))
             return RoomType::where('id', $id)->update($dataUpdate);
@@ -90,7 +90,7 @@ class RoomTypeController extends Controller
           return die('not allowed');
 
       if(\Gate::allows('hotelOwner'))
-          return RoomType::whereIn('hotel_id', $this->hotel_ids())->where('id', $id)->delete();
+          return RoomType::whereIn('hotel_id', Helpers::hotel_ids())->where('id', $id)->delete();
 
       if(\Gate::allows('superAdmin')) 
          return RoomType::where('id', $id)->delete();
@@ -114,39 +114,5 @@ class RoomTypeController extends Controller
 
     return RoomType::where('hotel_id', $id)->with('roomTypeHotel')->orderBy('created_at', 'desc')->get();
    }
-
-
-   /**
-    *  Extra function
-    */
-
-   /**
-    *  Get owner hotels ID
-    */
-   private function hotel_ids() {
-      return Hotel::where('user_id', auth('api')->user()->id)->pluck('id')->toArray();
-   }
-
-   /**
-    *  Get unassigned room types
-    */
-   private function roomTypeIds($hotelId, $roomId) {
-      $roomType = RoomType::select('id')->where('hotel_id', $hotelId)->get()->toArray();
-      foreach ($roomType as $key => $value) {
-        unset($roomType[$key]['room_type_hotel']);
-      }
-      
-      $rooms = Room::select('room_type_id')->whereIn('room_type_id', $roomType)->get()->toArray();
-      if($roomId!=null) 
-        $rooms = Room::select('room_type_id')->where('id', '!=', $roomId)->whereIn('room_type_id', $roomType)->get()->toArray();
-
-      foreach ($rooms as $key => $value) {
-        unset($rooms[$key]['room_type']);
-        unset($rooms[$key]['room_feature']);
-        unset($rooms[$key]['room_gallery']);
-      }
-
-      return $rooms;
-   }
-
+   
 }

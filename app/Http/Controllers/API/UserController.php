@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Notifications\EmailVerificationForNewRegistered;
 use App\User;
 use App\UserMeta;
+use App\Helpers\Helpers;
 
 class UserController extends Controller
 {
@@ -21,7 +22,7 @@ class UserController extends Controller
           return die('not allowed');
 
         if(\Gate::allows('hotelOwner')) 
-            return User::whereIn('id', $this->recep())->where('role', 'hotel_receptionist')->orderBy('created_at', 'desc')->get();
+            return User::whereIn('id', Helpers::recep())->where('role', 'hotel_receptionist')->orderBy('created_at', 'desc')->get();
         
         if(\Gate::allows('superAdmin'))
 		    return User::where('role', '!=', 'super_admin')->orderBy('created_at', 'desc')->get();  	
@@ -79,7 +80,7 @@ class UserController extends Controller
             return die('not allowed');
 
         if(\Gate::allows('hotelOwner')) 
-            return User::whereIn('id', $this->recep())->where('id', $id)->where('role', 'hotel_receptionist')->first();
+            return User::whereIn('id', Helpers::recep())->where('id', $id)->where('role', 'hotel_receptionist')->first();
         
         if(\Gate::allows('superAdmin'))
             return User::where('id', $id)->where('role', '!=', 'super_admin')->first();
@@ -97,7 +98,7 @@ class UserController extends Controller
             return die('not allowed');
 
         if(\Gate::allows('hotelOwner'))
-            return User::whereIn('id', $this->recep())->where('id', $id)->delete();
+            return User::whereIn('id', Helpers::recep())->where('id', $id)->delete();
 
         if(\Gate::allows('superAdmin')) 
     	   return User::where('id', $id)->delete();
@@ -137,7 +138,7 @@ class UserController extends Controller
             return User::where('role', 'hotel_receptionist')->where('status', 'active')->whereIn('id', $recep)->get();
         }
         if(\Gate::allows('hotelOwner')) 
-            return User::where('role', 'hotel_receptionist')->where('status', 'active')->whereIn('id', $this->recep())->get();
+            return User::where('role', 'hotel_receptionist')->where('status', 'active')->whereIn('id', Helpers::recep())->get();
     }
 
     public function recapCap(Request $request, $action) {
@@ -184,25 +185,10 @@ class UserController extends Controller
         return 'ok';
     }
 
-
-
-    /**
-    *  Extra function
-    */
-
-
-    /**
-    *  User Id security verification
-    */
-    private function recep() {
-        return UserMeta::select('value')->where('user_id', auth('api')->user()->id)->get()->toArray();
-    }
-
     /**
     *  Validate update for single user page and user profile
     */
     private function validateUpdate(Request $request, $id) {
-        //$this->authorize('superAdmin');
         $data = [
                 'fullname' => 'required|string|max:191',
                 'email'    => 'required|string|email|max:191|unique:users,email,'.$id,
@@ -241,9 +227,6 @@ class UserController extends Controller
 
         $this->validate($request, $data, $customMessages);
 
-        // if(\Gate::allows('hotelOwner')) 
-        //     return User::whereIn('id', $this->recep())->orWhere('id', $id)->where('role', 'hotel_receptionist')->update($dataUpdate);
-        // if(\Gate::allows('superAdmin'))
         $user = User::where('id', $id)->update($dataUpdate); 
         if($emailChange) {
             if($id==auth('api')->user()->id) {

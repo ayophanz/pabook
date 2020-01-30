@@ -7,10 +7,7 @@ use Illuminate\Support\Facades\File;
 use App\Http\Controllers\Controller;
 use App\Room;
 use App\RoomMeta;
-use App\RoomType;
-use App\Hotel;
-use App\UserMeta;
-use App\Option;
+use App\Helpers\Helpers;
 use Exception;
 
 class RoomController extends Controller
@@ -24,7 +21,7 @@ class RoomController extends Controller
           return die('not allowed');
 
       if(\Gate::allows('hotelOwner'))
-        return Room::whereIn('room_type_id', $this->owner())->with('roomType')->orderBy('created_at', 'desc')->get();
+        return Room::whereIn('room_type_id', Helpers::hotelOwner())->with('roomType')->orderBy('created_at', 'desc')->get();
 
       if(\Gate::allows('superAdmin'))
 		      return Room::with('roomType')->orderBy('created_at', 'desc')->get();
@@ -70,18 +67,18 @@ class RoomController extends Controller
 
       if($request->image) {
 
-        $image = $this->featureImage($request->image, $room->id, $room->name, 'create');
+        $image = Helpers::featureImage($request->image, $room->id, $room->name, 'create');
         
   			Room::where('id', $room->id)->update(['image'=>$image]);
       }	
       
-      try{$this->amenities('room_feature', $request->featureData, $room->id);}catch(Exception $e){}
-      try{$this->amenities('room_feature_optional', $request->featureOptionalData, $room->id);}catch(Exception $e){}
-      try{$this->roomsNo($request->rooms_no, $room->id, $request->hotel);}catch(Exception $e){}
+      try{Helpers::amenities('room_feature', $request->featureData, $room->id);}catch(Exception $e){}
+      try{Helpers::amenities('room_feature_optional', $request->featureOptionalData, $room->id);}catch(Exception $e){}
+      try{Helpers::roomsNo($request->rooms_no, $room->id, $request->hotel);}catch(Exception $e){}
 
       if($request->gallery) {
 
-        $file = $this->imageGallery($request->gallery, $room->id, 'create');
+        $file = Helpers::imageGallery($request->gallery, $room->id, 'create');
         
         $dataMetaCreate = [
                           'room_id'  => $room->id,
@@ -153,18 +150,18 @@ class RoomController extends Controller
 
       if($request->image && $request['changeFeature']) {
 
-        $image = $this->featureImage($request->image, $id, $request['name'], 'update');  
+        $image = Helpers::featureImage($request->image, $id, $request['name'], 'update');  
 
         Room::where('id', $id)->update(['image'=>$image]);
       }
 
-      try{$this->updateAmenities('room_feature', $request->featureData, $id);}catch(Exception $e){}
-      try{$this->updateAmenities('room_feature_optional', $request->featureOptionalData, $id);}catch(Exception $e){}
-      try{$this->roomsNo($request->rooms_no, $id, $request->hotel);}catch(Exception $e){}
+      try{Helpers::updateAmenities('room_feature', $request->featureData, $id);}catch(Exception $e){}
+      try{Helpers::updateAmenities('room_feature_optional', $request->featureOptionalData, $id);}catch(Exception $e){}
+      try{Helpers::roomsNo($request->rooms_no, $id, $request->hotel);}catch(Exception $e){}
 
       if($request->gallery) {
 
-        $file = $this->imageGallery($request->gallery, $id, 'update');
+        $file = Helpers::imageGallery($request->gallery, $id, 'update');
 
         $dataMetaUpdate = ['value' => json_encode($file)];
         RoomMeta::where('room_id', $id)->where('meta_key', 'room_gallery')->update($dataMetaUpdate);                  
@@ -191,7 +188,7 @@ class RoomController extends Controller
    }
 
 
-   /**
+    /**
     *  Custom query
     */
     public function specificRooms($ids) {
@@ -200,139 +197,5 @@ class RoomController extends Controller
       $ids = explode(',', $ids);
       return Room::whereIn('id', $ids)->with('roomType')->orderBy('created_at', 'desc')->get();
     }
-
-
-    /**
-    *  Extra function
-    */
-
-
-    /**
-    * Gallery upload
-    */
-    private function imageGallery($images, $id, $action) {
-      $file = [];                     
-      foreach ($images as $key => $subArr) {
-          $image = $subArr['1']['filename'];
-          $fileExist = public_path().'/storage/images/upload/roomImages/gallery-'.$id.'/'.$image;
-          if($action=='update' && File::exists($fileExist))
-            unlink(storage_path('app/public/images/upload/roomImages/gallery-'.$id.'/'.$image));
-          \Image::make($subArr['2']['image'])->save(public_path('storage/images/upload/roomImages/gallery-'.$id.'/').$image); 
-          unset($subArr['2']);
-          $file[$key] = $subArr;  
-      }
-      return $file;
-    }
-
-    /**
-    * Feature image upload
-    */
-    private function featureImage($img, $id, $name, $action) {
-      $folder = public_path().'/storage/images/upload/roomImages/gallery-'.$id.'/';
-      if (!File::exists($folder)) 
-          File::makeDirectory($folder, 0775, true);
-
-      $image =  $name.'-'.$id.'.'.explode('/', 
-           explode(':', substr($img, 0, 
-           strpos($img, ';')))[1])[1];
-      if($action=='update')
-          unlink(storage_path('app/public/images/upload/roomImages/gallery-'.$id.'/'.$image));
-      \Image::make($img)
-      ->save(public_path('storage/images/upload/roomImages/gallery-'.$id.'/').$image);
-      return $image;
-    }
-
-    /**
-    *  Hotel owner
-    */
-    private function owner($roomType=0) {
-      $user = auth('api')->user();
-      if($roomType==0) {
-        $hotel = Hotel::select('id')->where('status', 'verified')->where('user_id', $user->id)->pluck('id')->toArray();
-        if(empty($hotel)) {
-          $userMeta = UserMeta::select('user_id')->where('value', $user->id)->first();
-          if(!empty($userMeta))
-            $hotel = Hotel::select('id')->where('status', 'verified')->where('user_id', $userMeta->user_id)->pluck('id')->toArray();
-        }
-
-        $roomType = RoomType::select('id')->whereIn('hotel_id', $hotel)->pluck('id')->toArray();
-        foreach ($roomType as $key => $value) {
-          unset($roomType[$key]['room_type_hotel']);
-        }
-        return $roomType;
-      }else{
-        //
-      }
-    }
-
-    /**
-    *  create rooms no.
-    */
-    private function roomsNo($roomsNoData, $room_id, $hotel_id) {
-      $hotel = Hotel::where('id', $hotel_id)->first();
-      $newData = json_decode($hotel->hotel_rooms_no, true); 
-      foreach($newData as &$val) {
-        if($val['assign_id']==$room_id && $val['status']=='ready') $val['assign_id'] = 'no';
-        foreach($roomsNoData as $val2) {
-          if($val['code']==$val2['code']) {
-            $val['status'] = $val2['status'];
-            $val['assign_id'] = $room_id;
-            continue;
-          }
-        }
-      }
-      $data = ['hotel_rooms_no' => json_encode($newData)];
-      if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner'))
-        Hotel::where('id', $hotel_id)->update($data);
-    }
-
-
-    /**
-    *  create amenities
-    */
-    private function amenities($type, $featureData, $room_id) {
-        $featureDataTemp = array_filter($featureData, function($v) { return !is_null($v['value']); });
-        if(json_encode($featureDataTemp)!='[[]]') {
-          $dataMetaCreate = [
-                            'room_id'  => $room_id,
-                            'meta_key' => $type,
-                            'value'    => json_encode($featureDataTemp)
-                            ];
-          if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner'))                  
-            RoomMeta::create($dataMetaCreate);
-        }
-    }
-
-
-    /**
-    *  update amenities
-    */
-    private function updateAmenities($type, $featureData, $room_id) {
-      $featureDataTemp = array_filter($featureData, function($v) { return !is_null($v['value']); });
-      if(json_encode($featureDataTemp)!='[[]]') {
-          $dataMetaUpdate = ['value' => json_encode($featureDataTemp)];
-          if(RoomMeta::where('room_id', $room_id)->where('meta_key', $type)->get()->count()) {
-            if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner'))
-              RoomMeta::where('room_id', $room_id)->where('meta_key', $type)->update($dataMetaUpdate);
-          }else{
-            $dataMetaCreate = [
-              'room_id'  => $room_id,
-              'meta_key' => $type,
-              'value' => json_encode($featureDataTemp)
-            ];
-            if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner'))
-              RoomMeta::create($dataMetaCreate);
-          }
-        }
-    }
-
-    /**
-    *  is room available
-    */
-    // private function isRoomAvailable() {
-    //   $room = Room::select('id')->whereIn('room_type_id', $this->owner())->where('status', 'active')->get()->toArray();
-    //   $book = Booking::whereIn('room_id', $room)->get();
-    //   return false;
-    // }
 
 }

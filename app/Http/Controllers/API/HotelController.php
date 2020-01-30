@@ -6,9 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Hotel;
 use App\UserMeta;
-use App\Option;
-use Storage;
-
+use App\Helpers\Helpers;
 
 class HotelController extends Controller
 {
@@ -24,10 +22,10 @@ class HotelController extends Controller
             if(\Gate::allows('superAdmin'))
     		    return Hotel::orderBy('created_at', 'desc')->get();
             if(\Gate::allows('hotelOwner'))
-                return Hotel::where('user_id',  $this->ownerId())->orderBy('created_at', 'desc')->get(); 
+                return Hotel::where('user_id',  Helpers::ownerId())->orderBy('created_at', 'desc')->get(); 
         }else{
             if($id=='0')
-                $id = $this->ownerId();
+                $id = Helpers::ownerId();
             $exist_recep = UserMeta::select('value')->where('meta_key', 'assign_to_hotel')->where('user_id', $recep)->get();
             $exist_recep = json_decode(json_encode($exist_recep),true); 
             $toarr = array();
@@ -85,13 +83,13 @@ class HotelController extends Controller
         }
 
         if(\Gate::allows('hotelOwner'))
-            $dataCreate['user_id'] =  (int)$this->ownerId();
+            $dataCreate['user_id'] =  (int)Helpers::ownerId();
 
         $this->validate($request, $data, $customMessages);
 
         $hotel = Hotel::create($dataCreate);
 
-        $this->baseCurrencyExist($hotel->id, $request['base_currency']);
+        Helpers::baseCurrencyExist($hotel->id, $request['base_currency']);
         
 		if($request->image) {
 			$image =  $hotel->name.'-'.$hotel->id.'.'.explode('/', 
@@ -116,7 +114,7 @@ class HotelController extends Controller
     	if(\Gate::allows('superAdmin'))
             return Hotel::with('globalBaseCurrency', 'baseCurrency')->where('id', $id)->first();
         if(\Gate::allows('hotelOwner'))
-            return Hotel::with('globalBaseCurrency', 'baseCurrency')->where('id', $id)->where('user_id', $this->ownerId())->first();
+            return Hotel::with('globalBaseCurrency', 'baseCurrency')->where('id', $id)->where('user_id', Helpers::ownerId())->first();
     }
 
     public function update(Request $request, $id) {
@@ -170,12 +168,12 @@ class HotelController extends Controller
             $dataUpdate['image'] = $image;
         }
 
-        $this->baseCurrencyExist($id, $request['base_currency']);
+        Helpers::baseCurrencyExist($id, $request['base_currency']);
 
         if(\Gate::allows('superAdmin'))
             return Hotel::where('id', $id)->update($dataUpdate);
         if(\Gate::allows('hotelOwner'))
-            return Hotel::where('id', $id)->where('user_id', $this->ownerId())->update($dataUpdate);
+            return Hotel::where('id', $id)->where('user_id', Helpers::ownerId())->update($dataUpdate);
     }
 
     public function approveHotel(Request $request) {
@@ -188,77 +186,13 @@ class HotelController extends Controller
         
         $hotel = Hotel::where('id', $id)->first();
         if(\Gate::allows('hotelOwner'))
-            $hotel = Hotel::where('id', $id)->where('user_id', $this->ownerId())->first();
+            $hotel = Hotel::where('id', $id)->where('user_id', Helpers::ownerId())->first();
 
         if($hotel) {
             unlink(storage_path('app/public/images/upload/hotelImages/'.$hotel->image));
             return Hotel::where('id', $id)->delete();
         }
         return die('Something went wrong!');
-    }
-
-    
-    /**
-    *  Extra function
-    */
-
-    /**
-    *  Owner Id security verification
-    */
-    private function ownerId() {
-        return auth('api')->user()->id;
-    }
-
-
-    /**
-    *  If does have base currency
-    */
-    private function baseCurrencyExist($id, $base_currency) {
-        $option = [
-                    'meta_key' => 'base_currency',
-                    'meta_value' => $id,
-                    'value' => $base_currency
-                  ];
-        $exist = Option::where('meta_key', 'base_currency')->where('meta_value', $id)->first();
-        if($exist) {
-            if($base_currency=='use_global')
-                Option::where('meta_key', 'base_currency')->where('meta_value', $id)->delete();
-            else
-                Option::where('meta_key', 'base_currency')->where('meta_value', $id)->update($option);
-        }else{
-             if($base_currency!='use_global')
-                Option::create($option);
-        }
-    }
-
-
-    /**
-    *  File upload
-    */
-    private function uploadFile($base64_file, $path, $name) {
-        $file = $base64_file;
-        $check_base64 = strrpos($file, "base64");
-        if($check_base64 > 0) {
-            $explode = explode(",", $file);
-            $decode_file = base64_decode($explode[1]);
-            $file_extension = $this->uf_get_base64_file_extension($explode[0]);
-            $filename = $name.'.'.$file_extension ;
-            Storage::disk('public')->put($path."/".$filename, $decode_file, "public");
-            $url = Storage::url($path."/".$filename);
-            return $url;
-        }else{
-            return $file;
-        }
-    }
-
-    private function uf_get_base64_file_extension($base64_raw_file) {
-        $mime = str_replace(";base64", '', $base64_raw_file);
-        $mime = str_replace("data:", '', $mime);
-        $extension_arr = [
-            "application/zip" => "zip",
-            "application/x-zip-compressed" => "zip"
-        ];
-        return $extension_arr[$mime];
     }
 
 }
