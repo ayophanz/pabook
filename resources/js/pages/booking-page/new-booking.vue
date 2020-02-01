@@ -460,6 +460,8 @@ export default {
             Object.assign(this.$data, this.$options.data.apply(this));
             this.loadHotels();
             this.selectedMonth = new Date();
+            this.form.checkInD = new Date().toString();
+            this.form.checkOutD = new Date(new Date().getTime()+(60 * 60 * 24 * 1000)).toString();
             this.setRenderRangeText();
             if(this.$store.getters.bookingPagiGett=='page_2') {
                 this.$store.commit('summaryDetailsMutat', '');
@@ -515,39 +517,26 @@ export default {
             if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
                 let self = this
                 if(this.$store.getters.bookingPagiGett=='page_1') {
-                    confirmBooking.fire({
-                        title: 'Are you sure?',
-                        text: "Please click 'Yes, proceed!' to confirm new booking!",
-                        type: 'info',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, proceed!',
-                        cancelButtonText: 'No, cancel! ',
-                        focusCancel: true,
-                        reverseButtons: true
-                        }).then((result) => {
-                        if(result.value) {
-                            this.isLoading = true;
-                            this.form.currency_use = this.currency;
-                            this.form.totalAmount = this.totalAmountFunc;
-                            this.form.checkInD = moment(this.form.checkInD).format('YYYY-MM-DD HH:MM:SS');
-                            this.form.checkOutD = moment(this.form.checkOutD).format('YYYY-MM-DD HH:MM:SS');
-                            this.form.post('/api/create-book').then(function (response) {
-                                self.isLoading = false;
-                                toast.fire({
-                                    timer: 2000,
-                                    type: 'success',
-                                    title: 'Room availability confirmed.'
-                                })
-                                self.$store.commit('summaryDetailsMutat', response.data);
-                                self.$store.commit('bookingPagiMutat', 'page_2');
-                            }).catch(function (error) {
-                                self.isLoading = false;
-                                    toast.fire({
-                                    type: 'error',
-                                    title: 'Something went wrong!'
-                                })
-                            });
-                        }
+                    this.isLoading = true;
+                    this.form.currency_use = this.currency;
+                    this.form.totalAmount = this.totalAmountFunc;
+                    this.form.checkInD = moment(this.form.checkInD).format('YYYY-MM-DD HH:MM:SS');
+                    this.form.checkOutD = moment(this.form.checkOutD).format('YYYY-MM-DD HH:MM:SS');
+                    this.form.post('/api/create-book').then(function (response) {
+                        self.isLoading = false;
+                        toast.fire({
+                            timer: 2000,
+                            type: 'success',
+                            title: 'Room availability confirmed.'
+                        })
+                        self.$store.commit('summaryDetailsMutat', response.data);
+                        self.$store.commit('bookingPagiMutat', 'page_2');
+                    }).catch(function (error) {
+                        self.isLoading = false;
+                            toast.fire({
+                            type: 'error',
+                            title: 'Something went wrong!'
+                        })
                     });
                 }else if(this.$store.getters.bookingPagiGett=='page_2') {
                     this.form.post('/api/save-continue-booking/'+this.$store.getters.summaryDetailsGett[0].id).then(function (response) {
@@ -731,7 +720,7 @@ export default {
         this.loadHotels();
         this.selectedMonth = new Date();
         this.setRenderRangeText();
-        
+
         fire.$on('bookingResetData', this.resetData);
         //this.$refs.mycalendar.usageStatistics = false;
         

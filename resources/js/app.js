@@ -149,18 +149,6 @@ const approve = swal.mixin({
 })
 window.approve = approve
 
-const confirmBooking = swal.mixin({
-  customClass: {
-    confirmButton: 'btn btn-outline-primary btn-flat',
-    cancelButton: 'btn btn-outline-secondary btn-flat'
-  },
-  buttonsStyling: false,
-  allowOutsideClick:	false,
-  allowEscapeKey:	false,
-  allowEnterKey: false
-})
-window.confirmBooking = confirmBooking
-
 const sure = swal.mixin({
   customClass: {
     confirmButton: 'btn btn-outline-danger btn-flat',
