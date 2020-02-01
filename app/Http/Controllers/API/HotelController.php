@@ -102,7 +102,7 @@ class HotelController extends Controller
         }
         
         if($request->proofFile) 
-            $this->uploadFile($request->proofFile, "/ImportantFiles", $hotel->id);
+            Helpers::uploadFile($request->proofFile, "/ImportantFiles", $hotel->id);
 
 		return ( ($hotel!=null)? $hotel : die('Something went wrong!') );
     }

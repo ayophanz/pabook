@@ -114,7 +114,7 @@ class Helpers
         if($check_base64 > 0) {
             $explode = explode(",", $file);
             $decode_file = base64_decode($explode[1]);
-            $file_extension = $this->uf_get_base64_file_extension($explode[0]);
+            $file_extension = self::uf_get_base64_file_extension($explode[0]);
             $filename = $name.'.'.$file_extension ;
             Storage::disk('public')->put($path."/".$filename, $decode_file, "public");
             $url = Storage::url($path."/".$filename);

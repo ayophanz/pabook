@@ -646,7 +646,8 @@ export default {
                         if(self.resumeBooking) {
                             self.form.roomWithRoomType = self.$store.getters.summaryDetailsGett[0].roomId;
                             self.isRoomWithRoomType();
-                            self.form.manyRoom = self.$store.getters.summaryDetailsGett[0].manyRoom;
+                            self.form.manyRoom = 1;
+                            //self.isManyRoom();
                         }
                     });
             }
