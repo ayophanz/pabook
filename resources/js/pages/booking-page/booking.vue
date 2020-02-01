@@ -412,8 +412,7 @@ export default {
         },
         
         'form.manyRoom': function() {
-            if(this.resumeBooking==false) this.form.rooms_no = [];
-            this.form.addOnOptionalAmen = [];
+            if(this.resumeBooking==false) { this.form.rooms_no = []; this.form.addOnOptionalAmen = []; }
             this.optionalAmenities.forEach(function(item, key){item.rooms = [];});
         },
 
@@ -651,6 +650,7 @@ export default {
                             self.form.rooms_no = JSON.parse(self.$store.getters.summaryDetailsGett[0].roomsNo);
                             self.form.manyAdult = self.$store.getters.summaryDetailsGett[0].manyAdult
                             self.form.manyChild = self.$store.getters.summaryDetailsGett[0].manyChild
+                            self.form.addOnOptionalAmen = JSON.parse(self.$store.getters.summaryDetailsGett[0].optionalAmen);
                         }
                     });
             }
