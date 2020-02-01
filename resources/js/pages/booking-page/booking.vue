@@ -141,7 +141,6 @@
 
                                 <div v-else-if="$store.getters.bookingPagiGett=='page_2'" class="tab-pagination page-2">
                                     <form  @submit.prevent="validateEntries" role="form">
-                                        <i @click="backIsClick" class="btn btn-outline-primary btn-flat fas fa-arrow-left"></i>
                                         <div class="form-group mt-4">
                                             <label for="summary">Booking Summary </label>
                                             <div class="summary-container">
@@ -287,7 +286,6 @@ export default {
             tempRoomOptions: [],
             rooms_options: [],
             vodal_show: false,
-            resumeBooking: false,
             form: new form({
                 hotel: '',
                 checkInD: new Date().toString(),
@@ -407,12 +405,13 @@ export default {
         },
 
         'form.roomWithRoomType': function() { 
-           if(this.resumeBooking==false) this.form.manyRoom = ''; 
+           this.form.manyRoom = ''; 
             this.$store.state.currencyStore = this.currency;
         },
         
         'form.manyRoom': function() {
-            if(this.resumeBooking==false) { this.form.rooms_no = []; this.form.addOnOptionalAmen = []; }
+            this.form.rooms_no = []; 
+            this.form.addOnOptionalAmen = []; 
             this.optionalAmenities.forEach(function(item, key){item.rooms = [];});
         },
 
@@ -456,19 +455,6 @@ export default {
 
     },
     methods: {
-
-        continueBooking() {
-            Object.assign(this.$data, this.$options.data.apply(this));
-            this.loadHotels();
-            this.selectedMonth = new Date();
-            this.setRenderRangeText();
-            this.resumeBooking = true;
-            this.form.checkInD = new Date(this.$store.getters.summaryDetailsGett[0].dateStart);
-            this.form.checkOutD = new Date(this.$store.getters.summaryDetailsGett[0].dateEnd);
-            this.form.hotel = this.$store.getters.summaryDetailsGett[0].hotel.id;
-            this.isHotelChange();
-            console.log(this.$store.getters.summaryDetailsGett[0]);
-        },
 
         resetData() {
             Object.assign(this.$data, this.$options.data.apply(this));
@@ -524,9 +510,7 @@ export default {
                 this.optionalAmenities.forEach(function(item, key){ item.rooms.push(value); });
             }
         },
-
-        backIsClick() { this.$store.commit('bookingPagiMutat', 'page_1'); },
-
+        
         validateEntries() {
             if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
                 this.isLoading = true;
@@ -642,17 +626,6 @@ export default {
                                 self.tempFixedAmenities.push({id:item2.id, value:JSON.parse(item2.room_feature.value)});
                             });
                         });
-                        if(self.resumeBooking) {
-                            self.form.roomWithRoomType = self.$store.getters.summaryDetailsGett[0].roomId;
-                            self.isRoomWithRoomType();
-                            self.form.manyRoom = self.$store.getters.summaryDetailsGett[0].manyRoom;
-                            self.isManyRoom();
-                            self.form.rooms_no = JSON.parse(self.$store.getters.summaryDetailsGett[0].roomsNo);
-                            self.form.manyAdult = self.$store.getters.summaryDetailsGett[0].manyAdult
-                            self.form.manyChild = self.$store.getters.summaryDetailsGett[0].manyChild
-                            self.form.addOnOptionalAmen = JSON.parse(self.$store.getters.summaryDetailsGett[0].optionalAmen);
-                            self.no_unit_avail = self.form.addOnOptionalAmen.length;
-                        }
                     });
             }
         },
@@ -746,8 +719,7 @@ export default {
         this.selectedMonth = new Date();
         this.setRenderRangeText();
 
-        fire.$on('bookingResetData', this.resetData); 
-        fire.$on('continueBooking', this.continueBooking);
+        fire.$on('bookingResetData', this.resetData);
         //this.$refs.mycalendar.usageStatistics = false;
         
         /**
