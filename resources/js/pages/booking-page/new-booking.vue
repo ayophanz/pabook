@@ -731,7 +731,7 @@ export default {
         this.loadHotels();
         this.selectedMonth = new Date();
         this.setRenderRangeText();
-
+        
         fire.$on('bookingResetData', this.resetData);
         //this.$refs.mycalendar.usageStatistics = false;
         

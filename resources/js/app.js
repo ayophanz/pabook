@@ -295,10 +295,7 @@ const app = new Vue({
       self.continueBooking($(this).attr('data-id'));
       self.$store.commit('bookingPagiMutat', 'page_2');
       if(self.$router.currentRoute.name!='Bookings') {
-        if($('.nav-booking').parent().hasClass('menu-open')==false) {
-          $('.nav-booking').click();
-          self.$router.push('/add-book-entry');
-        }
+        self.$router.push('/add-book-entry');
       }
     });
 
