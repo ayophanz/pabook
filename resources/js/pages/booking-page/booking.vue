@@ -651,6 +651,7 @@ export default {
                             self.form.manyAdult = self.$store.getters.summaryDetailsGett[0].manyAdult
                             self.form.manyChild = self.$store.getters.summaryDetailsGett[0].manyChild
                             self.form.addOnOptionalAmen = JSON.parse(self.$store.getters.summaryDetailsGett[0].optionalAmen);
+                            self.no_unit_avail = self.form.addOnOptionalAmen.length;
                         }
                     });
             }
