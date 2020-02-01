@@ -276,6 +276,9 @@
         beforeMount(){
             //
         },
+        mounted() {
+
+        },
         beforeDestroy() {
             //
         },

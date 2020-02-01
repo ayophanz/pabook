@@ -25,10 +25,10 @@ class BookController extends Controller
       return Booking::with('room')->get();
     
     if(\Gate::allows('hotelOwner')) 
-      return Booking::whereIn('roomId', Helpers::getRoomsBaseIdUser('owner'))->with('room')->get();
+      return Booking::whereIn('roomId', Helpers::getRoomsIdBaseUser('owner'))->with('room')->get();
 
     if(\Gate::allows('hotelReceptionist')) 
-      return Booking::whereIn('roomId', Helpers::getRoomsBaseIdUser('recep'))->with('room')->get();  
+      return Booking::whereIn('roomId', Helpers::getRoomsIdBaseUser('recep'))->with('room')->get();  
    }
 
    public function create(Request $request) {
@@ -123,10 +123,10 @@ class BookController extends Controller
         return die('not allowed');
       
       if(\Gate::allows('hotelOwner')) 
-        return Booking::whereIn('roomId', Helpers::getRoomsBaseIdUser('owner'))->whereDate('dateEnd', '<=', date('Y-m-d'))->where('status', 'book')->update(['status'=>'cancel']);
+        return Booking::whereIn('roomId', Helpers::getRoomsIdBaseUser('owner'))->whereDate('dateEnd', '<=', date('Y-m-d'))->where('status', 'book')->update(['status'=>'cancel']);
       
       if(\Gate::allows('hotelReceptionist')) 
-        return Booking::whereIn('roomId', Helpers::getRoomsBaseIdUser('recep'))->whereDate('dateEnd', '<=', date('Y-m-d'))->where('status', 'book')->update(['status'=>'cancel']);
+        return Booking::whereIn('roomId', Helpers::getRoomsIdBaseUser('recep'))->whereDate('dateEnd', '<=', date('Y-m-d'))->where('status', 'book')->update(['status'=>'cancel']);
 
    }
 
