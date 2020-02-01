@@ -510,31 +510,44 @@ export default {
                 this.optionalAmenities.forEach(function(item, key){ item.rooms.push(value); });
             }
         },
-        
+
         validateEntries() {
             if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
-                this.isLoading = true;
                 let self = this
                 if(this.$store.getters.bookingPagiGett=='page_1') {
-                    this.form.currency_use = this.currency;
-                    this.form.totalAmount = this.totalAmountFunc;
-                    this.form.checkInD = moment(this.form.checkInD).format('YYYY-MM-DD HH:MM:SS');
-                    this.form.checkOutD = moment(this.form.checkOutD).format('YYYY-MM-DD HH:MM:SS');
-                    this.form.post('/api/create-book').then(function (response) {
-                        self.isLoading = false;
-                        toast.fire({
-                            timer: 2000,
-                            type: 'success',
-                            title: 'Room availability confirmed.'
-                        })
-                        self.$store.commit('summaryDetailsMutat', response.data);
-                        self.$store.commit('bookingPagiMutat', 'page_2');
-                    }).catch(function (error) {
-                        self.isLoading = false;
-                            toast.fire({
-                            type: 'error',
-                            title: 'Something went wrong!'
-                        })
+                    confirmBooking.fire({
+                        title: 'Are you sure?',
+                        text: "Please click 'Yes, proceed!' to confirm new booking!",
+                        type: 'info',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, proceed!',
+                        cancelButtonText: 'No, cancel! ',
+                        focusCancel: true,
+                        reverseButtons: true
+                        }).then((result) => {
+                        if(result.value) {
+                            this.isLoading = true;
+                            this.form.currency_use = this.currency;
+                            this.form.totalAmount = this.totalAmountFunc;
+                            this.form.checkInD = moment(this.form.checkInD).format('YYYY-MM-DD HH:MM:SS');
+                            this.form.checkOutD = moment(this.form.checkOutD).format('YYYY-MM-DD HH:MM:SS');
+                            this.form.post('/api/create-book').then(function (response) {
+                                self.isLoading = false;
+                                toast.fire({
+                                    timer: 2000,
+                                    type: 'success',
+                                    title: 'Room availability confirmed.'
+                                })
+                                self.$store.commit('summaryDetailsMutat', response.data);
+                                self.$store.commit('bookingPagiMutat', 'page_2');
+                            }).catch(function (error) {
+                                self.isLoading = false;
+                                    toast.fire({
+                                    type: 'error',
+                                    title: 'Something went wrong!'
+                                })
+                            });
+                        }
                     });
                 }else if(this.$store.getters.bookingPagiGett=='page_2') {
                     this.form.post('/api/save-continue-booking/'+this.$store.getters.summaryDetailsGett[0].id).then(function (response) {
