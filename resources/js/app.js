@@ -41,7 +41,8 @@ let routes = [
     /**
      * Booking
      */
-    {path: '/', name:'Bookings', component: require('./pages/booking-page/booking.vue').default},
+    {path: '/', name:'Bookings', component: require('./pages/booking-page/bookings.vue').default},
+    {path: '/add-book-entry', name:'New booking entry', component: require('./pages/booking-page/new-booking.vue').default},
 
     /**
      * RoomType
@@ -294,8 +295,8 @@ const app = new Vue({
       self.continueBooking($(this).attr('data-id'));
       self.$store.commit('bookingPagiMutat', 'page_2');
       if(self.$router.currentRoute.name!='Bookings') {
-        $('.nav-booking').click();
-        self.$router.push('/');
+        if($('.nav-booking').parents().hasClass('menu-open')==false) $('.nav-booking').click();
+        self.$router.push('/add-book-entry');
       }
     });
 
