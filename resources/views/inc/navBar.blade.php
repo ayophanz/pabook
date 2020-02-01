@@ -9,7 +9,6 @@
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
           <default-profile class="img-circle elevation-2" alt="User Image"></default-profile>
-          <!-- <img src="{{asset('/storage/images/icon/boy.svg')}}" class="img-circle elevation-2" alt="User Image"> -->
         </div>
         <div class="info align-items-center">
           <router-link to="/profile" class="d-block">{{ Auth::user()->name }} <span class="caret"></span></router-link>
@@ -23,7 +22,7 @@
             <a href="#" class="nav-link nav-booking">
               <i class="nav-icon fas fa-calendar-alt"></i>
               <p>
-                Bookings
+                Bookings 
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
