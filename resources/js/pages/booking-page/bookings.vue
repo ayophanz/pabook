@@ -33,17 +33,16 @@
                                     {{props.column.label}}&nbsp;
                                     <i class="fas fa-user-friends"></i>
                                 </template>
-                                <template slot="column_dateStart" slot-scope="props">
+                                <template slot="column_checkInCheckOut" slot-scope="props">
                                     {{props.column.label}}&nbsp;
                                     <i class="fas fa-calendar-alt"></i>
                                 </template>
-                                <template slot="column_dateEnd" slot-scope="props">
+                                <template slot="column_actions" slot-scope="props">
                                     {{props.column.label}}&nbsp;
-                                    <i class="fas fa-calendar-alt"></i>
+                                    <i class="fas fa-external-link-square-alt"></i>
                                 </template>
                                 <template slot="actions" slot-scope="props">
-                                    <router-link :to="`/edit-room/${props.cell_value}`"  class="btn btn-outline-primary btn-flat btn-action"><i class="fa fa-edit"></i> Edit</router-link>
-                                    <a href="#" @click.prevent="selectRoom(props.cell_value)" :data-id="props.cell_value" class="btn btn-outline-danger btn-flat btn-action"><i class="fa fa-trash"></i> Delete</a>
+                                    <router-link :to="`/edit-bookings/${props.cell_value}`"  class="btn btn-outline-primary btn-flat btn-action"><i class="fa fa-edit"></i> Edit</router-link>
                                 </template>
                             </vue-bootstrap4-table>
                         </div>
@@ -93,31 +92,26 @@
                             row_classes: "",
                         },
                         {
-                            label: "Check-In",
-                            name: "dateStart",
+                            label: "Check-In & Check-Out",
+                            name: "checkInCheckOut",
                             filter: {
                                 type: "simple",
                                 placeholder: "Enter guest name"
                             },
                             sort: true,
-                            slot_name: "dateStart",
+                            slot_name: "checkInCheckOut",
                             row_text_alignment: "text-left",
                             column_text_alignment: "text-left",
                             row_classes: "",
                         },
                         {
-                            label: "Check-Out",
-                            name: "dateEnd",
-                            filter: {
-                                type: "simple",
-                                placeholder: "Enter guest name"
-                            },
-                            sort: true,
-                            slot_name: "dateEnd",
-                            row_text_alignment: "text-left",
-                            column_text_alignment: "text-left",
-                            row_classes: "",
-                        },
+                            label: "Actions",
+                            name: "id",
+                            sort: false,
+                            slot_name: "actions",
+                            row_text_alignment: "text-center",
+                            column_text_alignment: "text-center",
+                        }
                  ],
                  config: {
                     checkbox_rows: false,
@@ -136,7 +130,9 @@
                     axios.get('/api/bookings')
                     .then(
                         function (response) {
-                            self.rowData = response.data;
+                            response.data.forEach(function(item, key){
+                                self.rowData.push({ id:item.id, name:item.name, checkInCheckOut:moment(item.dateStart).format("MMM Do YY")+' - '+moment(item.dateEnd).format("MMM Do YY") });
+                            });
                         }
                     );
                 }
