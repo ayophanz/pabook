@@ -10,7 +10,7 @@
             :active.sync="isLoading" 
             :is-full-page="fullPage">
         </loading>
-        <vodal :show="vodal_show" animation="zoom" :closeOnEsc="false" :width="600" className="vodal-style" @hide="vodal_show = false">
+        <vodal :closeOnClickMask="false" :show="vodal_show" animation="zoom" :closeOnEsc="false" :width="600" className="vodal-style" @hide="vodal_show = false">
             <div class="swal2-header">
                 <div class="swal2-icon swal2-info swal2-animate-info-icon" style="display: flex;"></div>
                 <h4 class="swal2-title" style="display: flex;"><strong>Exclude optional amenities <br /> to specific room</strong></h4>
@@ -427,7 +427,10 @@ export default {
                         });
                 });
             }else if(newVal.length==0) this.$store.commit('emptyOptionAmenMutat');
-        }
+        },
+
+        'vodal_show': function(newVal, oldValue) { if(newVal==false) $('body').removeClass('overflow-hidden'); } 
+            
 
     },
     computed: {
@@ -479,7 +482,10 @@ export default {
 
         onCheckOptionalAmen(e) { this.$store.commit('visibleOptionalAmenMutat', e); },
          
-        excludeOptional() { this.vodal_show = true; },
+        excludeOptional() { 
+            this.vodal_show = true; 
+            $('body').addClass('overflow-hidden');
+        },
 
         onRemoveOrAdd(value) {
             this.optionalAmenities.forEach(function(item, key){
@@ -844,6 +850,19 @@ export default {
 
     .el-loading-notice-msg .velmld-overlay {
         background-color: transparent !important;
+    }
+
+    .vodal {
+        overflow-y: auto;
+        background-color: rgba(0, 0, 0, 0.4) !important;
+    }
+
+    .vodal-mask {
+        background-color: transparent !important;
+    }
+
+    .overflow-hidden {
+        overflow: hidden !important;
     }
 </style>
 
