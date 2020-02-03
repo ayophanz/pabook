@@ -42,7 +42,7 @@
                                     <i class="fas fa-external-link-square-alt"></i>
                                 </template>
                                 <template slot="actions" slot-scope="props">
-                                    <router-link :to="`/edit-bookings/${props.cell_value}`"  class="btn btn-outline-primary btn-flat btn-action"><i class="fa fa-edit"></i> Edit</router-link>
+                                    <router-link :to="`/edit-bookings/${props.cell_value}`"  class="btn btn-outline-primary btn-flat btn-action"><i class="fas fa-eye"></i> View</router-link>
                                 </template>
                             </vue-bootstrap4-table>
                         </div>
