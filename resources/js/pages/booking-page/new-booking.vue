@@ -331,11 +331,11 @@ export default {
                 {
                     id: '2',
                     calendarId: '1',
-                    title: 'second schedule',
+                    title: 'Incomplete booking',
                     category: 'time',
                     dueDateClass: '',
-                    start: '2019-12-18T17:30:00+09:00',
-                    end: '2019-12-19T17:31:00+09:00'
+                    start: '2020-02-18T17:30:00+09:00',
+                    end: '2020-02-19T17:31:00+09:00'
                 }
             ],
             viewModeOptions: [
