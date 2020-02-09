@@ -8,25 +8,30 @@
             <div class="swal2-content">
                 <br />
                 <ul v-if="vodal_show" class="booking-details">
-                    <li>Name: {{singlebooking.name}}</li>
-                    <li>Phone No.: {{singlebooking.phoneNo}}</li>
-                    <li v-if="singlebooking.email">Email: {{singlebooking.email}}</li>
-                    <li v-if="singlebooking.address">Address: {{singlebooking.address}}</li>
+                    <li><strong>Name:</strong> {{singlebooking.name}}</li>
+                    <li><strong>Phone No.:</strong> {{singlebooking.phoneNo}}</li>
+                    <li v-if="singlebooking.email"><strong>Email:</strong> {{singlebooking.email}}</li>
+                    <li v-if="singlebooking.address"><strong>Address:</strong> {{singlebooking.address}}</li>
                     <hr>
-                    <li>Boooking ID: {{singlebooking.id}}</li>
-                    <li>Hotel: {{(Object.keys(singlebooking).length>0)?singlebooking.hotel.name:''}}</li>
-                    <li>Room: {{(Object.keys(singlebooking).length>0)?singlebooking.room.name:''}}</li>
-                    <li>Room Type: {{(Object.keys(singlebooking).length>0)?singlebooking.room.room_type.name:''}}</li>
-                    <li>CheckIn: {{moment(singlebooking.DateStart).format("MMM Do YYYY")}}</li>
-                    <li>CheckOut: {{moment(singlebooking.DateEnd).format("MMM Do YYYY")}}</li>
-                    <li>Night(s): soon</li>
-                    <li>Total Room(s): {{singlebooking.manyRoom}}</li>
-                    <li>Adult(s): {{singlebooking.manyAdult}}</li>
-                    <li>Child(s): {{singlebooking.manyChild}}</li>
-                    <li>Room No.: <span v-for="(item, key) in ((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.roomsNo):[])">{{item.value}}{{dynamicSemecolon(singlebooking.roomsNo, key)}}</span></li>
-                    <li>
+                    <li><strong>Boooking ID:</strong> {{singlebooking.id}}</li>
+                    <li><strong>Hotel:</strong> {{(Object.keys(singlebooking).length>0)?singlebooking.hotel.name:''}}</li>
+                    <li><strong>Room:</strong> {{(Object.keys(singlebooking).length>0)?singlebooking.room.name:''}}</li>
+                    <li><strong>Room Type:</strong> {{(Object.keys(singlebooking).length>0)?singlebooking.room.room_type.name:''}}</li>
+                    <li><strong>CheckIn:</strong> {{moment(singlebooking.DateStart).format("MMM Do YYYY")}}</li>
+                    <li><strong>CheckOut:</strong> {{moment(singlebooking.DateEnd).format("MMM Do YYYY")}}</li>
+                    <li><strong>Night(s):</strong> {{night(singlebooking.DateStart, singlebooking.DateEnd)}}</li>
+                    <li><strong>Total Room(s):</strong> {{singlebooking.manyRoom}}</li>
+                    <li><strong>Adult(s):</strong> {{singlebooking.manyAdult}}</li>
+                    <li><strong>Child(s):</strong> {{singlebooking.manyChild}}</li>
+                    <li><strong>Room No.:</strong> <span v-for="(item, key) in ((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.roomsNo):[])">{{item.value}}{{dynamicSemecolon(singlebooking.roomsNo, key)}}</span></li>
+                    <li><strong>Fixed Amenities:</strong> 
                         <ul class="booking-details-amenities amen-fixed">
-                            <li v-for="(item, key) in ((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.room.room_feature.value):[])">{{item.value}}{{dynamicSemecolon(singlebooking.room.room_feature.value, key)}}</li>
+                            <li v-for="(item, key) in ((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.room.room_feature.value):[])">{{item.value}}</li>
+                        </ul>
+                    </li>
+                    <li><strong>Optional Amenities:</strong> 
+                        <ul class="booking-details-amenities amen-optional">
+                            <li v-for="(item, key) in ((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.optionalAmen):[])">{{item.value}} | {{singlebooking.currency}}{{item.price}}</li>
                         </ul>
                     </li>
                 </ul>
@@ -164,6 +169,11 @@ export default {
         'vodal_show': function(newVal, oldValue) { if(newVal==false) $('body').removeClass('overflow-hidden'); } 
     },
     methods: {
+
+        night(dateStart, dateEnd) {
+            console.log(moment(dateEnd).format());
+            return Math.ceil(Math.abs(new Date(moment(dateEnd).format()) - new Date(moment(dateStart).format())) / (1000 * 60 * 60 * 24)); 
+        },
 
         dynamicSemecolon(data, key) {
             return (JSON.parse(data).length-1==key)?'':', ';
