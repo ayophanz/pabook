@@ -39,7 +39,12 @@
                     <li><strong>Total Optional Amenities:</strong> {{singlebooking.currency}}{{optionalAmenTotal((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.optionalAmen):[])}}</li>
                     <li><strong>Total:</strong> {{singlebooking.currency}}{{singlebooking.amount}}</li>
                 </ul>
-                <br />
+                <br /> 
+                <div>
+                    <button class="btn btn-outline-secondary btn-flat"><i class="fas fa-expand-alt"></i> Extend Booking</button>
+                    <button class="btn btn-outline-secondary btn-flat"><i class="fas fa-exchange-alt"></i> Change Booking</button>
+                    <button class="btn btn-outline-primary btn-flat"><i class="fas fa-archive"></i> Archieve Booking</button>
+                </div>     
             </div>
         </vodal>
         <div class="row justify-content-center">

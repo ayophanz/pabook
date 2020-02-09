@@ -18456,6 +18456,8 @@ tr.vbt-table-tools {
   height: -webkit-max-content !important;
   height: -moz-max-content !important;
   height: max-content !important;
+  margin-bottom: 15px !important;
+  margin-top: 15px !important;
 }
 
 ul.exclude-rooms-no {
