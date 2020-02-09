@@ -292,7 +292,7 @@
         }
     }
 </script>
-<style lang='scss'>
+<style scoped>
     .booking-row-class-id {
         width: 150px !important;
     }

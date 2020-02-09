@@ -201,7 +201,7 @@
         }
     }
 </script>
-<style lang="scss">
+<style scoped>
     .room-types-row-class-id {
         width: 150px;
     }

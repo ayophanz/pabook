@@ -7,6 +7,29 @@
             </div>
             <div class="swal2-content">
                 <br />
+                <ul v-if="vodal_show" class="booking-details">
+                    <li>Name: {{singlebooking.name}}</li>
+                    <li>Phone No.: {{singlebooking.phoneNo}}</li>
+                    <li v-if="singlebooking.email">Email: {{singlebooking.email}}</li>
+                    <li v-if="singlebooking.address">Address: {{singlebooking.address}}</li>
+                    <hr>
+                    <li>Boooking ID: {{singlebooking.id}}</li>
+                    <li>Hotel: {{(Object.keys(singlebooking).length>0)?singlebooking.hotel.name:''}}</li>
+                    <li>Room: {{(Object.keys(singlebooking).length>0)?singlebooking.room.name:''}}</li>
+                    <li>Room Type: {{(Object.keys(singlebooking).length>0)?singlebooking.room.room_type.name:''}}</li>
+                    <li>CheckIn: {{moment(singlebooking.DateStart).format("MMM Do YYYY")}}</li>
+                    <li>CheckOut: {{moment(singlebooking.DateEnd).format("MMM Do YYYY")}}</li>
+                    <li>Night(s): soon</li>
+                    <li>Total Room(s): {{singlebooking.manyRoom}}</li>
+                    <li>Adult(s): {{singlebooking.manyAdult}}</li>
+                    <li>Child(s): {{singlebooking.manyChild}}</li>
+                    <li>Room No.: <span v-for="(item, key) in ((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.roomsNo):[])">{{item.value}}{{dynamicSemecolon(singlebooking.roomsNo, key)}}</span></li>
+                    <li>
+                        <ul class="booking-details-amenities amen-fixed">
+                            <li v-for="(item, key) in ((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.room.room_feature.value):[])">{{item.value}}{{dynamicSemecolon(singlebooking.room.room_feature.value, key)}}</li>
+                        </ul>
+                    </li>
+                </ul>
                 <br />
             </div>
         </vodal>
@@ -53,7 +76,7 @@
                                         <i class="fas fa-external-link-square-alt"></i>
                                     </template>
                                     <template slot="actions" slot-scope="props">
-                                        <button @click.prevent="viewDetails" class="btn btn-outline-primary btn-flat btn-action"><i class="fas fa-eye"></i> View</button>
+                                        <button @click.prevent="viewDetails(props.cell_value)" class="btn btn-outline-primary btn-flat btn-action"><i class="fas fa-eye"></i> View</button>
                                     </template>
                                 </vue-bootstrap4-table>
                             </div>
@@ -73,7 +96,7 @@ export default {
     data() {
         return {
             vodal_show: false,
-            bookings: [],
+            singlebooking: [],
             rowData:[],
             summaryInfo: [
                             {count:0, label:'Active', iconClass:'fa-grin-hearts', class:'icon-active'},
@@ -137,10 +160,31 @@ export default {
             }
         }
     },
+    watch: {
+        'vodal_show': function(newVal, oldValue) { if(newVal==false) $('body').removeClass('overflow-hidden'); } 
+    },
     methods: {
+
+        dynamicSemecolon(data, key) {
+            return (JSON.parse(data).length-1==key)?'':', ';
+        },
+
+        singleDetails(id) {
+            if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+                let self = this
+                axios.get('/api/single-booking-details/'+id)
+                .then(
+                    function (response) {
+                        self.singlebooking = response.data;
+                        console.log(self.singlebooking);
+                    }
+                );
+            }
+        },
         
-        viewDetails() { 
-            this.vodal_show = true; 
+        viewDetails(id) { 
+            this.singleDetails(id);
+            this.vodal_show = true;
             $('body').addClass('overflow-hidden');
         },
 
@@ -191,3 +235,8 @@ export default {
     }
 }
 </script>
+<style scoped>
+    ul.booking-details {
+        text-align: left;
+    }
+</style>

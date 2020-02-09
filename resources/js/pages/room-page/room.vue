@@ -477,7 +477,7 @@
         }
     }
 </script>
-<style lang='scss'>
+<style scoped>
   .custom-control-input:focus:not(:checked) ~ .custom-control-label::before {
       border-color: #28a7456b;
   }

@@ -253,7 +253,7 @@
         }
     }
 </script>
-<style lang="scss">
+<style scoped>
     .user-row-class-id {
         width: 150px;
     }

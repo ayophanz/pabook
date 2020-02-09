@@ -123,6 +123,8 @@ Route::get('/continue-booking/{id}', 'API\BookController@continueBooking');
 
 Route::post('/save-continue-booking/{id}', 'API\BookController@saveContinueBooking');
 
+Route::get('/single-booking-details/{id}', 'API\BookController@singleDetails');
+
 
 /**
 * Option

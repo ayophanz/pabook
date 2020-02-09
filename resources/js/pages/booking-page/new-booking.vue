@@ -752,7 +752,7 @@ export default {
     }
 }
 </script>
-<style lang='scss'>
+<style scoped>
     .book-rooms-quantity {
         border: 1px solid #e5e5e5;
         padding: 20px 10px;
@@ -819,50 +819,5 @@ export default {
         height: calc(1em + 4px) !important;
     }
 
-    .vodal-style {
-        border-radius: .3125em;
-    }
-
-    .vodal-close:hover:before, .vodal-close:hover:after {
-        background: #ce7070 !important;
-    }
-
-    .vodal-dialog {
-        height: max-content !important;
-    }
-
-    ul.exclude-rooms-no {
-        text-align: left;
-        list-style: none;
-    }
-
-    .vodal-dialog {
-        padding: 1.25em !important;
-    }
-
-    .vodal-mask {
-        background-color: rgba(0,0,0,.4) !important;
-    }
-
-    .notifybar-msg {
-        width: 100%;
-    }
-
-    .el-loading-notice-msg .velmld-overlay {
-        background-color: transparent !important;
-    }
-
-    .vodal {
-        overflow-y: auto;
-        background-color: rgba(0, 0, 0, 0.4) !important;
-    }
-
-    .vodal-mask {
-        background-color: transparent !important;
-    }
-
-    .overflow-hidden {
-        overflow: hidden !important;
-    }
 </style>
 

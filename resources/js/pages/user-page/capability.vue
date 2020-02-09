@@ -260,7 +260,7 @@
         }
     }
 </script>
-<style lang='scss'>
+<style scoped>
     .capability-container {
         height: 100%;
     }

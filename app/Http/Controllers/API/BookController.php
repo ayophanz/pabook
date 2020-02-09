@@ -185,4 +185,11 @@ class BookController extends Controller
      return Booking::where('id', $id)->delete();
    }
 
+   public function singleDetails($id) {
+    if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
+      return die('not allowed');
+
+     return Booking::where('id', $id)->with('hotel', 'room')->first();
+   }
+
 }

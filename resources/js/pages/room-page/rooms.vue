@@ -293,7 +293,7 @@
         }
     }
 </script>
-<style lang='scss'>
+<style scoped>
     .room-row-class-id {
         width: 150px;   
     }
