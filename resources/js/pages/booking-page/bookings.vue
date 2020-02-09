@@ -31,12 +31,12 @@
                     </li>
                     <li><strong>Optional Amenities:</strong> 
                         <ul class="booking-details-amenities amen-optional">
-                            <li v-for="(item, key) in ((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.optionalAmen):[])">{{item.value}} | {{singlebooking.currency}}{{item.price}} = {{item.rooms}}</li>
+                            <li v-for="(item, key) in ((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.optionalAmen):[])">{{item.value}} | {{singlebooking.currency}}{{item.price}} x {{item.rooms.length}} = {{singlebooking.currency}}{{item.price*item.rooms.length}}</li>
                         </ul>
                     </li>
                     <hr>
                     <li><strong>Room Price:</strong> {{singlebooking.currency}}{{(Object.keys(singlebooking).length>0)?singlebooking.room.price+' x '+singlebooking.manyRoom+' = '+singlebooking.currency+''+(singlebooking.room.price*singlebooking.manyRoom):''}}</li>
-                    <li><strong>Total Optional Amenities:</strong> {{singlebooking.currency}}{{singlebooking.amount}}</li>
+                    <li><strong>Total Optional Amenities:</strong> {{singlebooking.currency}}{{optionalAmenTotal((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.optionalAmen):[])}}</li>
                     <li><strong>Total:</strong> {{singlebooking.currency}}{{singlebooking.amount}}</li>
                 </ul>
                 <br />
@@ -173,6 +173,12 @@ export default {
         'vodal_show': function(newVal, oldValue) { if(newVal==false) $('body').removeClass('overflow-hidden'); } 
     },
     methods: {
+
+        optionalAmenTotal(data) {
+            let total = 0;
+            data.forEach(function(item, key){ total += item.price * item.rooms.length; });
+            return total;
+        },
 
         night(dateStart, dateEnd) {
             return Math.ceil(Math.abs(new Date(moment(dateEnd).format()) - new Date(moment(dateStart).format())) / (1000 * 60 * 60 * 24)); 
