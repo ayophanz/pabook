@@ -31,9 +31,13 @@
                     </li>
                     <li><strong>Optional Amenities:</strong> 
                         <ul class="booking-details-amenities amen-optional">
-                            <li v-for="(item, key) in ((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.optionalAmen):[])">{{item.value}} | {{singlebooking.currency}}{{item.price}}</li>
+                            <li v-for="(item, key) in ((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.optionalAmen):[])">{{item.value}} | {{singlebooking.currency}}{{item.price}} = {{item.rooms}}</li>
                         </ul>
                     </li>
+                    <hr>
+                    <li><strong>Room Price:</strong> {{singlebooking.currency}}{{(Object.keys(singlebooking).length>0)?singlebooking.room.price+' x '+singlebooking.manyRoom+' = '+singlebooking.currency+''+(singlebooking.room.price*singlebooking.manyRoom):''}}</li>
+                    <li><strong>Total Optional Amenities:</strong> {{singlebooking.currency}}{{singlebooking.amount}}</li>
+                    <li><strong>Total:</strong> {{singlebooking.currency}}{{singlebooking.amount}}</li>
                 </ul>
                 <br />
             </div>
@@ -171,7 +175,6 @@ export default {
     methods: {
 
         night(dateStart, dateEnd) {
-            console.log(moment(dateEnd).format());
             return Math.ceil(Math.abs(new Date(moment(dateEnd).format()) - new Date(moment(dateStart).format())) / (1000 * 60 * 60 * 24)); 
         },
 
