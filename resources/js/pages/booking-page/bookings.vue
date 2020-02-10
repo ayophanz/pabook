@@ -31,7 +31,7 @@
                     </li>
                     <li><strong>Optional Amenities:</strong> 
                         <ul class="booking-details-amenities amen-optional">
-                            <li v-for="(item, key) in ((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.optionalAmen):[])">{{item.value}} | {{singlebooking.currency}}{{item.price}} x {{item.rooms.length}} = {{singlebooking.currency}}{{item.price*item.rooms.length}}</li>
+                            <li v-for="(item, key) in ((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.optionalAmen):[])">{{item.value}} | ({{arrayExtract(item.rooms)}})<br />{{singlebooking.currency}}{{item.price}} x {{item.rooms.length}} = {{singlebooking.currency}}{{item.price*item.rooms.length}}</li>
                         </ul>
                     </li>
                     <hr>
@@ -43,7 +43,7 @@
                 <div>
                     <button class="btn btn-outline-secondary btn-flat"><i class="fas fa-expand-alt"></i> Extend Booking</button>
                     <button class="btn btn-outline-secondary btn-flat"><i class="fas fa-exchange-alt"></i> Change Booking</button>
-                    <button class="btn btn-outline-primary btn-flat"><i class="fas fa-archive"></i> Archieve Booking</button>
+                    <button class="btn btn-outline-primary btn-flat"><i class="fas fa-archive"></i> CheckOut</button>
                 </div>     
             </div>
         </vodal>
@@ -179,6 +179,15 @@ export default {
     },
     methods: {
 
+        arrayExtract(data){
+            let self = this
+            let output = '';
+            data.forEach(function(item, key){
+               output += item+self.dynamicSemecolon(data, key, false);
+            });
+            return output;
+        },
+
         optionalAmenTotal(data) {
             let total = 0;
             data.forEach(function(item, key){ total += item.price * item.rooms.length; });
@@ -189,8 +198,10 @@ export default {
             return Math.ceil(Math.abs(new Date(moment(dateEnd).format()) - new Date(moment(dateStart).format())) / (1000 * 60 * 60 * 24)); 
         },
 
-        dynamicSemecolon(data, key) {
-            return (JSON.parse(data).length-1==key)?'':', ';
+        dynamicSemecolon(data, key, parseArray=true) {
+            let dataTemp = data;
+            if(parseArray) dataTemp = JSON.parse(data);
+            return (dataTemp.length-1==key)?'':', ';
         },
 
         singleDetails(id) {
