@@ -31,7 +31,7 @@
                     </li>
                     <li><strong>Optional Amenities:</strong> 
                         <ul class="booking-details-amenities amen-optional">
-                            <li v-for="(item, key) in ((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.optionalAmen):[])">{{item.value}} | ({{arrayExtract(item.rooms)}})<br />{{singlebooking.currency}}{{item.price}} x {{item.rooms.length}} = {{singlebooking.currency}}{{item.price*item.rooms.length}}</li>
+                            <li v-for="(item, key) in ((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.optionalAmen):[])">{{item.value}} | <span>({{arrayExtract(item.rooms)}})</span><br /><span>{{singlebooking.currency}}{{item.price}} x {{item.rooms.length}} = {{singlebooking.currency}}{{item.price*item.rooms.length}}</span></li>
                         </ul>
                     </li>
                     <hr>
@@ -273,5 +273,9 @@ export default {
 <style scoped>
     ul.booking-details {
         text-align: left;
+    }
+    .amen-optional span {
+        font-weight: 800;
+        font-size: 12px;
     }
 </style>

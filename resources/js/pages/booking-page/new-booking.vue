@@ -316,28 +316,25 @@ export default {
                     bgColor: '#3490dc',
                     borderColor: '#3490dc',
                     dragBgColor: '#9e5fff'
-                }
-            ],
-            scheduleList: [
-                {
-                    id: '1',
-                    calendarId: '1',
-                    title: 'my schedule',
-                    category: 'time',
-                    dueDateClass: '',
-                    start: '2019-12-18T22:30:00+09:00',
-                    end: '2019-12-19T02:30:00+09:00'
                 },
                 {
                     id: '2',
-                    calendarId: '1',
-                    title: 'Incomplete booking',
-                    category: 'time',
-                    dueDateClass: '',
-                    start: '2020-02-18T17:30:00+09:00',
-                    end: '2020-02-19T17:31:00+09:00'
+                    name: 'incomplete',
+                    color: 'white',
+                    bgColor: 'red',
+                    borderColor: '#3490dc',
+                    dragBgColor: '#9e5fff'
+                },
+                {
+                    id: '3',
+                    name: 'unknown',
+                    color: 'white',
+                    bgColor: 'red',
+                    borderColor: 'red',
+                    dragBgColor: 'red'
                 }
             ],
+            scheduleList: [],
             viewModeOptions: [
                 {
                 title: 'Monthly',
@@ -611,7 +608,7 @@ export default {
         },
 
         isHotelChange(){
-            if(this.$gate.superAdminOrhotelOwner()) {
+            if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
                 let self = this;
                 axios.get('/api/hotel-with-room-types/'+this.form.hotel).then(
                     function (response) {
@@ -639,7 +636,7 @@ export default {
         },
 
         loadHotels() {
-            if(this.$gate.superAdminOrhotelOwner()) {
+            if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
                 let self = this
                 axios.get('/api/hotels').then(
                     function (response) {
@@ -647,7 +644,30 @@ export default {
                             if(item.status=='verified')
                                 self.hotels.push({id:item.id, text:item.name});
                         });
-                    });
+                    }
+                );
+            }
+        },
+
+        loadBookings() {
+            if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+                let self =  this
+                axios.get('/api/bookings').then(
+                    function (response) {
+                        console.log(response.data);
+                        response.data.forEach((item, key) => {
+                            self.scheduleList.push({
+                                id: key,
+                                calendarId: (item.status=='active')? '1': (item.status=='incomplete')? '2': (item.status=='reserved')? '0': '3',
+                                title: item.name+' | '+item.room.name,
+                                category: 'time',
+                                dueDateClass: '',
+                                start: item.dateStart,
+                                end: item.dateEnd
+                            });
+                        });
+                    }
+                )
             }
         },
 
@@ -723,6 +743,7 @@ export default {
         //
     },
     mounted() {
+        this.loadBookings();
         this.loadHotels();
         this.selectedMonth = new Date();
         this.setRenderRangeText();
