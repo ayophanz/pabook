@@ -222,8 +222,13 @@
                                     <span class="render-range">{{dateRange}}</span>
                                 </div>
                                 <calendar ref="mycalendar" style="height: 800px;"
+                                    :usageStatistics="false"
+                                    :useCreationPopup="false"
+                                    :useDetailPopup="false"
                                     :view="selectedView"
                                     :theme="theme"
+                                    :disableDblClick="true"
+                                    :disableClick="true"
                                     :calendars="calendarList"
                                     :schedules="scheduleList" />
                             </div>
