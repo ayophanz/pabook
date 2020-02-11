@@ -127,7 +127,6 @@ class BookController extends Controller
       
       if(\Gate::allows('hotelReceptionist')) 
         return Booking::whereIn('roomId', Helpers::getRoomsIdBaseUser('recep'))->whereDate('dateEnd', '<=', date('Y-m-d'))->where('status', 'book')->update(['status'=>'cancel']);
-
    }
 
    public function bookCancel($id) {
@@ -167,7 +166,6 @@ class BookController extends Controller
       if($id!=null)
         auth()->user()->unreadNotifications->where('id', $id)->markAsRead();
       return auth()->user()->load('notifications');
-
    }
 
    public function incompleteBooking() {
@@ -176,7 +174,6 @@ class BookController extends Controller
 
      return Booking::where('status', 'incomplete')->get();
    }
-
 
    public function cancelBooking($id) {
     if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))

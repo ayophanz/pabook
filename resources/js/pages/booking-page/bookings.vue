@@ -17,9 +17,9 @@
                     <li><strong>Hotel:</strong> {{(Object.keys(singlebooking).length>0)?singlebooking.hotel.name:''}}</li>
                     <li><strong>Room:</strong> {{(Object.keys(singlebooking).length>0)?singlebooking.room.name:''}}</li>
                     <li><strong>Room Type:</strong> {{(Object.keys(singlebooking).length>0)?singlebooking.room.room_type.name:''}}</li>
-                    <li><strong>CheckIn:</strong> {{moment(singlebooking.DateStart).format("MMM Do YYYY")}}</li>
-                    <li><strong>CheckOut:</strong> {{moment(singlebooking.DateEnd).format("MMM Do YYYY")}}</li>
-                    <li><strong>Night(s):</strong> {{night(singlebooking.DateStart, singlebooking.DateEnd)}}</li>
+                    <li><strong>CheckIn:</strong> {{moment(singlebooking.dateStart).format("MMM Do YYYY")}}</li>
+                    <li><strong>CheckOut:</strong> {{moment(singlebooking.dateEnd).format("MMM Do YYYY")}}</li>
+                    <li><strong>Night(s):</strong> {{night(singlebooking.dateStart, singlebooking.dateEnd)}}</li>
                     <li><strong>Total Room(s):</strong> {{singlebooking.manyRoom}}</li>
                     <li><strong>Adult(s):</strong> {{singlebooking.manyAdult}}</li>
                     <li><strong>Child(s):</strong> {{singlebooking.manyChild}}</li>
