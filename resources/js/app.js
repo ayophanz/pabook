@@ -286,6 +286,8 @@ const app = new Vue({
         if($('.nav-booking').parent().hasClass('menu-open')==false) {
           $('.nav-booking').click();
           self.$router.push('/add-book-entry');
+        }else if($('.nav-link.nav-new-booking').hasClass('router-link-active')) {
+          alert('test');
         }
       }
     });

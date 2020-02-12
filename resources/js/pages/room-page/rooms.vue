@@ -84,15 +84,12 @@
 </template>
 
 <script>
-    //import styles from 'vue-pure-lightbox/dist/VuePureLightbox.css'
-    //import VuePureLightbox from 'vue-pure-lightbox'
     import Loading from 'vue-loading-overlay'
     import 'vue-loading-overlay/dist/vue-loading.css'
     import MoneyFormat from 'vue-money-format'
     import summaryInfo from '../../components/summaryInfoComponent'
     export default {
         components: {
-            // VuePureLightbox,
              Loading,
              MoneyFormat,
              summaryInfo
@@ -103,7 +100,6 @@
                 base_currency: 'USD',
                 fullPage: true,
                 isLoading: false,
-                //rooms: [],
                 rowData:[],
                 summaryInfo: [
                                 {count:0, label:'Active', iconClass:'fa-grin-hearts', class:'icon-active'},
@@ -216,7 +212,6 @@
                     axios.get('/api/rooms')
                     .then(
                         function (response) {
-                            //self.rooms = response.data;
                             self.rowData = response.data;
                             response.data.forEach(function(item, key){
                                 if(item.status=='active') self.summaryInfo[0].count+=1;
