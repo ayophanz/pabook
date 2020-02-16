@@ -263,8 +263,7 @@ class Helpers
             strpos($img, ';')))[1])[1];
         if($action=='update')
             unlink(storage_path('app/public/images/upload/roomImages/gallery-'.$id.'/'.$image));
-        \Image::make($img)
-        ->save(public_path('storage/images/upload/roomImages/gallery-'.$id.'/').$image);
+        \Image::make($img)->save(public_path('storage/images/upload/roomImages/gallery-'.$id.'/').$image);
         return $image;
     }
 

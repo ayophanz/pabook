@@ -414,7 +414,9 @@
                         try{
                           let images = JSON.parse(response.data.room_gallery.value);
                           images.forEach(item => {
-                              self.$refs.uploaderUpdate.images.push(url+item[1]['filename']);
+                              self.getBase64Image(url+item[1]['filename'], function(base64image){
+                                  self.$refs.uploaderUpdate.images.push('data:image/jpeg;base64,'+base64image);
+                              });
                               self.$refs.uploaderUpdate.files.push({
                                   'name':item[1]['filename'],
                                   'size':item[0]['filesize']

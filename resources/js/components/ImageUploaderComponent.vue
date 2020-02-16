@@ -49,7 +49,6 @@ export default {
         },
         OnDragEnter(e) {
             e.preventDefault();
-            
             this.dragCount++;
             this.isDragging = true;
             return false;
