@@ -243,7 +243,7 @@ class Helpers
             $fileExist = public_path().'/storage/images/upload/roomImages/gallery-'.$id.'/'.$image;
             if($action=='update' && File::exists($fileExist))
               unlink(storage_path('app/public/images/upload/roomImages/gallery-'.$id.'/'.$image));
-            \Image::make($subArr['2']['image'])->save(public_path('storage/images/upload/roomImages/gallery-'.$id.'/').$image); 
+            \Image::make($subArr['2']['image'])->save(storage_path('app/public/images/upload/roomImages/gallery-'.$id.'/').$image); 
             unset($subArr['2']);
             $file[$key] = $subArr;  
         }
