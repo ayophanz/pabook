@@ -233,20 +233,18 @@
                fire.$emit('resetGallery');
                this.form.reset();
             },
-            getBase64Image(imgUrl, callback) {
-                let img = new Image();
-                img.onload = function(){
-                  let canvas = document.createElement("canvas");
-                  canvas.width = img.width;
-                  canvas.height = img.height;
-                  let ctx = canvas.getContext("2d");
-                  ctx.drawImage(img, 0, 0);
-                  let dataURL = canvas.toDataURL("image/png");
-                      dataURL = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-                  callback(dataURL); // the base64 string
+            getBase64Image(url, callback) {
+                var httpRequest = new XMLHttpRequest();
+                httpRequest.onload = function() {
+                  var fileReader = new FileReader();
+                      fileReader.onloadend = function() {
+                        callback(fileReader.result);
+                      }
+                      fileReader.readAsDataURL(httpRequest.response);
                 };
-                img.setAttribute('crossOrigin', 'anonymous'); 
-                img.src = imgUrl;
+                httpRequest.open('GET', url);
+                httpRequest.responseType = 'blob';
+                httpRequest.send();
             },
             toggleCheck () {
                 if(this.isCheckCover) {
@@ -415,7 +413,7 @@
                           let images = JSON.parse(response.data.room_gallery.value);
                           images.forEach(item => {
                               self.getBase64Image(url+item[1]['filename'], function(base64image){
-                                  self.$refs.uploaderUpdate.images.push('data:image/jpeg;base64,'+base64image);
+                                  self.$refs.uploaderUpdate.images.push(base64image);
                               });
                               self.$refs.uploaderUpdate.files.push({
                                   'name':item[1]['filename'],
