@@ -225,10 +225,26 @@
           }
         },
         methods: {
+          
+          getBase64Image(url, callback) {
+              var httpRequest = new XMLHttpRequest();
+              httpRequest.onload = function() {
+                var fileReader = new FileReader();
+                    fileReader.onloadend = function() {
+                      callback(fileReader.result);
+                    }
+                    fileReader.readAsDataURL(httpRequest.response);
+              };
+              httpRequest.open('GET', url);
+              httpRequest.responseType = 'blob';
+              httpRequest.send();
+          },
+
           getRoomType(assign_id){
             let room = (this.roomTypeName.length > 0)? this.roomTypeName.find(element => element.room_id === parseInt(assign_id)) :'error';
             return room.type+' | '+room.name;
           },
+
           loadRoomType(rooms) {
             this.roomTypeName = [];
             let roomIds = rooms.map(function(item){return (item.assign_id!='no')?item.assign_id:0;});
@@ -241,6 +257,7 @@
               });
             });
           },
+          
           addRoomNo (newRoomNo) {
             const roomNo = {
               value: newRoomNo,
@@ -251,6 +268,7 @@
             this.rooms_options.push(roomNo)
             this.form.rooms_no.push(roomNo)
           },
+          
           verificationData(status, hotel_name, hotel_id) {
             this.verificationValue['hotel_id'] = hotel_id;
             this.verificationValue['hotel_name'] = hotel_name;
@@ -282,6 +300,7 @@
               }
             }
           },
+          
           currencyCall(){
             if(this.form.base_currency!='use_global') {
               this.currencyName = cc.code(this.form.base_currency).currency;
@@ -289,24 +308,28 @@
               this.currencyName = 'you are using global currency';
             }
           },
+          
           resetComponent() {
              this.buttonText = 'Save';
              this.hotelId = null;
              this.imageUrl = null;
              this.form.reset();
           },
+          
           toggleCheck () {
             if(this.isCheckCover) {
               this.isCheckCover = false;
               this.form.errors.clear('image');
               this.form.image = this.tempImage;
-              this.imageUrl = '../storage/images/upload/hotelImages/'+this.tempImage;
+              let self = this
+              this.getBase64Image('../storage/images/upload/hotelImages/'+this.tempImage, function(base64image){ self.imageUrl = base64image;});
             }else{
               this.imageUrl = null;
               this.isCheckCover = true;
               this.form.image = null;
             }
           },
+          
           register() {
             if(this.$gate.superAdminOrhotelOwner()) {
                 this.isLoading = true;
@@ -339,6 +362,7 @@
                 });
             }
           },
+          
           updateCover(e) {
             let file = e.target.files[0];
             let reader = new FileReader();
@@ -355,6 +379,7 @@
               })
             }
           },
+          
           updateProofDocx(e) {
             let file = e.target.files[0];
             let reader = new FileReader();
@@ -370,6 +395,7 @@
               })
             }
           },
+          
           populateData() {
             let self = this;
             countries_list.forEach(function(item) {
@@ -387,6 +413,7 @@
               );
             }
           },
+          
           hotelDetails(id) {
             if(this.$gate.superAdminOrhotelOwner()) {
               this.isLoading = true;
@@ -407,7 +434,7 @@
                     self.form.check_out = response.data.check_out;
                     self.form.website = response.data.website;
                     self.tempImage = response.data.image;
-                    self.imageUrl = '../storage/images/upload/hotelImages/'+self.tempImage;
+                    self.getBase64Image('../storage/images/upload/hotelImages/'+self.tempImage, function(base64image){ self.imageUrl = base64image;});
                     self.downloadUrl='../storage/ImportantFiles/'+response.data.id+'.zip';
                     self.isVerified = response.data.status;
                     self.form.rooms_no = (response.data.hotel_rooms_no)? JSON.parse(response.data.hotel_rooms_no):[];
@@ -422,6 +449,7 @@
                 );  
             }
           }
+
         },
         beforeCreate() {
           //

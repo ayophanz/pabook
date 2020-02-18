@@ -216,15 +216,18 @@
             }
         },
         methods: {
+            
             roomsNoOnAdd(value) {
               if(value.status=='ready')
                 this.no_unit_avail++;
               
             },
+            
             roomsNoOnRemove(value) {
               if(value.status=='ready')
                 this.no_unit_avail--;
             },
+            
             resetComponent() {
                this.buttonText = 'Save';
                this.roomId = null;
@@ -233,6 +236,7 @@
                fire.$emit('resetGallery');
                this.form.reset();
             },
+
             getBase64Image(url, callback) {
                 var httpRequest = new XMLHttpRequest();
                 httpRequest.onload = function() {
@@ -246,6 +250,7 @@
                 httpRequest.responseType = 'blob';
                 httpRequest.send();
             },
+            
             toggleCheck () {
                 if(this.isCheckCover) {
                   this.isCheckCover = false;
@@ -259,6 +264,7 @@
                   this.form.image = null;
                 }
             },
+            
             toggleStatus() {
               if(this.isCheckStatus) {
                 this.isCheckStatus = false;
@@ -268,6 +274,7 @@
                 this.form.status = 'active';
               }
             },
+            
             loadHotels() {
                 if(this.$gate.superAdminOrhotelOwner()) {
                     let self = this
@@ -282,6 +289,7 @@
                     );
                 }
             },
+            
             ifChange() {
                 if(this.$gate.superAdminOrhotelOwner()) {
                     this.isLoading = true;
@@ -302,6 +310,7 @@
                     );
                 }
             },
+            
             ifChangeType(e){
               if(this.roomId==null) {
                 this.rooms_options = [];
@@ -320,6 +329,7 @@
                 );
               }
             },
+            
             register() {
                 if(this.$gate.superAdminOrhotelOwner()) {
                     this.form.no_of_room = this.form.rooms_no.length;
@@ -361,6 +371,7 @@
                     });
                 }
             },
+            
             updateImage(e) {
                 let file = e.target.files[0];
                 let reader = new FileReader();
@@ -377,6 +388,7 @@
                   })
                 }
             },
+            
             roomDetails(id) {
                 if(this.$gate.superAdminOrhotelOwner()) {
                   let self = this
@@ -433,6 +445,7 @@
                     
                 }
             },
+            
             populateRoomsNo(data, self, room_id){
               JSON.parse(data).forEach(function(item, key){
                   if(item.status=='ready' && item.assign_id==room_id) self.no_unit_avail++; 
@@ -440,6 +453,7 @@
                   if(item.assign_id==room_id) self.form.rooms_no.push(item);
               });
             }
+            
         },
         beforeCreate() {
           //
