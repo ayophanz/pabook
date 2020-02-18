@@ -251,7 +251,8 @@
                   this.isCheckCover = false;
                   this.form.errors.clear('image');
                   this.form.image = this.tempImage;
-                  this.imageUrl = '../storage/images/upload/roomImages/gallery-'+this.roomId+'/'+this.tempImage;
+                  let self = this
+                  this.getBase64Image('../storage/images/upload/roomImages/gallery-'+this.roomId+'/'+this.tempImage, function(base64image){ self.imageUrl = base64image;});
                 }else{
                   this.imageUrl = null;
                   this.isCheckCover = true;
@@ -398,7 +399,8 @@
                         //self.form.no_of_room = response.data.total_room;
                         self.tempImage = response.data.image;
                         let url = '../storage/images/upload/roomImages/gallery-'+id+'/';
-                        self.imageUrl = url+self.tempImage;
+                        //self.imageUrl = url+self.tempImage;
+                        self.getBase64Image('../storage/images/upload/roomImages/gallery-'+id+'/'+self.tempImage, function(base64image){ self.imageUrl = base64image;});
                         self.form.hotel = response.data.room_type.hotel_id;
                         try{
                           self.form.featureData = JSON.parse(response.data.room_feature.value);
