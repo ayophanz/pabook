@@ -282,13 +282,13 @@ const app = new Vue({
       e.preventDefault();
       self.continueBooking($(this).attr('data-id'));
       self.$store.commit('bookingPagiMutat', 'page_2');
-      if(self.$router.currentRoute.name!='Bookings') {
+      if(self.$router.currentRoute.path!='/' && self.$router.currentRoute.path!='/add-book-entry') {
         if($('.nav-booking').parent().hasClass('menu-open')==false) {
           $('.nav-booking').click();
           self.$router.push('/add-book-entry');
-        }else if($('.nav-link.nav-new-booking').hasClass('router-link-active')) {
-          //alert('test');
         }
+      }else if(self.$router.currentRoute.path=='/') {
+        self.$router.push('/add-book-entry');
       }
     });
 
