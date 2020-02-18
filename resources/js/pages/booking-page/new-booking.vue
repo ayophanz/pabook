@@ -225,6 +225,7 @@
                                     :usageStatistics="false"
                                     :useCreationPopup="false"
                                     :useDetailPopup="false"
+                                    :isReadOnly="true"
                                     :view="selectedView"
                                     :theme="theme"
                                     :disableDblClick="true"
