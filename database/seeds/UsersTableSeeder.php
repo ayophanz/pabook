@@ -19,5 +19,13 @@ class UsersTableSeeder extends Seeder
             'email'    => 'admin@pabook.rf.gd',
             'status'   => 'active'
         ]);
+
+        App\User::create([
+            'name'     => 'owner1',
+            'password' => '$2y$10$AWcOU9P8T04C70vO49h.O.yA1ny4vH3kYrfb2oHomujCUVrqpp/Jq',
+            'role'     => 'hotel_owner',
+            'email'    => 'owner1@gmail.com',
+            'status'   => 'active'
+        ]);
     }
 }

@@ -104,9 +104,11 @@
 </template>
 <script>
 import Vodal from 'vodal'
+import VueBootstrap4Table from 'vue-bootstrap4-table'
 export default {
     components: {
-        Vodal
+        Vodal,
+        VueBootstrap4Table,
     },
     data() {
         return {

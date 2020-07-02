@@ -16,7 +16,7 @@ class CreateRoomMetasTable extends Migration
         Schema::create('room_metas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('room_id');
-            $table->foreign('room_id')->references('id')->on('rooms');
+            $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
             $table->string('meta_key');
             $table->longText('value');
             $table->timestamps();

@@ -83,11 +83,13 @@
 </template>
 
 <script>
-    import Loading from 'vue-loading-overlay'
-    import 'vue-loading-overlay/dist/vue-loading.css'
+    import Loading from 'vue-loading-overlay';
+    import 'vue-loading-overlay/dist/vue-loading.css';
+    import VueBootstrap4Table from 'vue-bootstrap4-table';
     export default {
         components: {
-            Loading
+            Loading,
+            VueBootstrap4Table
         },
         data() {
             return {

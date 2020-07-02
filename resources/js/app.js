@@ -5,80 +5,28 @@
  */
 
 require('./bootstrap');
-import vue from 'vue'
-window.Vue = vue
+import vue from 'vue';
+window.Vue = vue;
 
-import {store} from './store'
+import {store} from './store';
 
-import moment from 'moment'
-window.moment = moment
-Vue.prototype.moment = moment
+import moment from 'moment';
+window.moment = moment;
+Vue.prototype.moment = moment;
 
-import { Form, HasError, AlertError } from 'vform'
+import { Form, HasError, AlertError } from 'vform';
 
 import Gate from './Gate';
 Vue.prototype.$gate = new Gate(window.user);
 
 window.form = Form;
-Vue.component(HasError.name, HasError)
-Vue.component(AlertError.name, AlertError)
+Vue.component(HasError.name, HasError);
+Vue.component(AlertError.name, AlertError);
 
-import VueRouter from 'vue-router'
-Vue.use(VueRouter)
+import VueRouter from 'vue-router';
+Vue.use(VueRouter);
 
-let routes = [
-
-    /**
-     * Integration
-     */
-    {path: '/integration', name:'Integration', component: require('./pages/integration-page/integration.vue').default},
-    
-    /**
-     * Setting
-     */
-    {path: '/settings', name:'Settings', component: require('./pages/setting-page/settings.vue').default},
-
-    /**
-     * Booking
-     */
-    {path: '/', name:'Bookings', component: require('./pages/booking-page/bookings.vue').default},
-    {path: '/add-book-entry', name:'New booking entry', component: require('./pages/booking-page/new-booking.vue').default},
-
-    /**
-     * RoomType
-     */
-    {path: '/room-types', name:'Room Types', component: require('./pages/room-type-page/room-types.vue').default},
-    {path: '/add-room-type', name:'New Room Type', component: require('./pages/room-type-page/room-type.vue').default},
-    {path: '/edit-room-type/:typeId', name:'Edit Room Type', component: require('./pages/room-type-page/room-type.vue').default},
-
-    /**
-     * Room
-     */
-    {path: '/rooms', name:'Rooms', component: require('./pages/room-page/rooms.vue').default},
-    {path: '/add-room', name:'New Room', component: require('./pages/room-page/room.vue').default},
-    {path: '/edit-room/:roomId', name:'Edit Room', component: require('./pages/room-page/room.vue').default},
-    
-    /**
-     * Hotel
-     */
-    {path: '/hotels', name:'Hotels', component: require('./pages/hotel-page/hotels.vue').default},
-    {path: '/add-hotel', name:'New Hotel', component: require('./pages/hotel-page/hotel.vue').default},
-    {path: '/edit-hotel/:hotelId', name:'Edit Hotel', component: require('./pages/hotel-page/hotel.vue').default},
-
-    /**
-     * User
-     */
-    {path: '/profile', name:'Account', component: require('./pages/user-page/profile.vue').default},
-    {path: '/users', name:'Users', component: require('./pages/user-page/users.vue').default},
-    {path: '/add-user', name:'New User', component: require('./pages/user-page/user.vue').default},
-    {path: '/edit-user/:userId', name:'Edit User', component: require('./pages/user-page/user.vue').default},
-    {path: '/users-capability', name:'User Capability', component: require('./pages/user-page/capability.vue').default},
-
-    /**
-     * 404
-     */
-     {path: '*', name:'Not found', component: require('./pages/404.vue').default}
-]
+import routes from './routes';
 
 const router = new VueRouter({
     mode: 'history',
@@ -193,28 +141,28 @@ const app = new Vue({
 
     listen(name){
       if(name=='incompletebooking') {
-        let self = this
-        Echo.private('incomplete-booking').listen('incompleteBooking', (e)=> {
-          if(e.bookId!=null) self.refreshNoticeMsg();
-        });
+        // let self = this
+        // Echo.private('incomplete-booking').listen('incompleteBooking', (e)=> {
+        //   if(e.bookId!=null) self.refreshNoticeMsg();
+        // });
       }
     },
 
     twoFactorCheck() {
       if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
-        let timeOut;
-        axios.get('/api/check-two-factor-if-expired').then((response) => {
-          if (response.data=='reload') {
-              window.clearTimeout(timeOut);
-            window.location.reload();
-          }
-        });
-        timeOut = window.setTimeout(this.twoFactorCheck, 5000);
+        // let timeOut;
+        // axios.get('/api/check-two-factor-if-expired').then((response) => {
+        //   if (response.data=='reload') {
+        //       window.clearTimeout(timeOut);
+        //     window.location.reload();
+        //   }
+        // });
+        // timeOut = window.setTimeout(this.twoFactorCheck, 5000);
       }
     },
 
     queryIncompleteBook() {
-      if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) this.listen('incompletebooking');
+      // if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) this.listen('incompletebooking');
     },
 
     cancelBooking(id) {

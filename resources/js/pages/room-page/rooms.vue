@@ -84,15 +84,17 @@
 </template>
 
 <script>
-    import Loading from 'vue-loading-overlay'
-    import 'vue-loading-overlay/dist/vue-loading.css'
-    import MoneyFormat from 'vue-money-format'
-    import summaryInfo from '../../components/summaryInfoComponent'
+    import Loading from 'vue-loading-overlay';
+    import 'vue-loading-overlay/dist/vue-loading.css';
+    import MoneyFormat from 'vue-money-format';
+    import summaryInfo from '../../components/summaryInfoComponent';
+    import VueBootstrap4Table from 'vue-bootstrap4-table';
     export default {
         components: {
              Loading,
              MoneyFormat,
-             summaryInfo
+             summaryInfo,
+             VueBootstrap4Table
         },
         data() {
             return {

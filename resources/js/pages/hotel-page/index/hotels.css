@@ -1,0 +1,30 @@
+.booking-row-class-id {
+    width: 150px !important;
+}
+
+.booking-row-class-country, .booking-row-class-name {
+    width: 250px;
+}
+.tb-hotel-list .card-header {
+    display: none;
+}
+.tb-hotel-list table thead tr:first-child th {
+    border-top: 0px;
+}
+.page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #32cc98;
+    border-color: #38c172;
+}
+.page-link:focus {
+    z-index: 2;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem #38c17259;
+}
+.table thead tr:first-child th {
+    display: none;
+}
+ul.pagination div:last-child {
+    display: none;
+}

@@ -2,55 +2,55 @@
     <div class="row justify-content-center">
         <result-page-icon></result-page-icon>
         <div class="col-12">
-          <notice-msg></notice-msg>
-          <div class="card">
-            <div class="card-header">
-                <div class="card-tool">
-                    <router-link to="/add-room-type">
-                        <button class="btn btn-outline-primary btn-flat">
-                            <i class="fa fa-plus-circle"></i> Add
-                        </button>
-                    </router-link>
+            <notice-msg></notice-msg>
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-tool">
+                        <router-link to="/add-room-type">
+                            <button class="btn btn-outline-primary btn-flat">
+                                <i class="fa fa-plus-circle"></i> Add
+                            </button>
+                        </router-link>
+                    </div>
                 </div>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                  <div class="col-sm-12">
-                    <vue-bootstrap4-table class="tb-hotel-list" :rows="rowData" :columns="columns" :config="config">
-                        <template slot="sort-asc-icon">
-                            <i class="fas fa-sort-up"></i>
-                        </template>
-                        <template slot="sort-desc-icon">
-                            <i class="fas fa-sort-down"></i>
-                        </template>
-                        <template slot="no-sort-icon">
-                            <i class="fas fa-sort"></i>
-                        </template>
-                        <template slot="column_id" slot-scope="props">
-                            {{props.column.label}}&nbsp;
-                            <i class="fab fa-slack-hash"></i>
-                        </template>
-                        <template slot="column_hotel" slot-scope="props">
-                            {{props.column.label}}&nbsp;
-                            <i class="fas fa-hotel"></i>
-                        </template>
-                        <template slot="column_room_type" slot-scope="props">
-                            {{props.column.label}}&nbsp;
-                            <i class="fas fa-bed"></i>
-                        </template>
-                        <template slot="column_created_at" slot-scope="props">
-                            {{props.column.label}}&nbsp;
-                            <i class="fas fa-table"></i>
-                        </template>
-                        <template slot="column_actions" slot-scope="props">
-                            {{props.column.label}}&nbsp;
-                            <i class="fas fa-external-link-square-alt"></i>
-                        </template>
-                        <template slot="actions" slot-scope="props">
-                            <router-link :to="`/edit-room-type/${props.cell_value}`"  class="btn btn-outline-primary btn-flat btn-action"><i class="fa fa-edit"></i> Edit</router-link>
-                            <a href="#" @click.prevent="selectType(props.cell_value)" :data-id="props.cell_value" class="btn btn-outline-danger btn-flat btn-action"><i class="fa fa-trash"></i> Delete</a>
-                        </template>
-                    </vue-bootstrap4-table>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <vue-bootstrap4-table class="tb-hotel-list" :rows="rowData" :columns="columns" :config="config">
+                                <template slot="sort-asc-icon">
+                                    <i class="fas fa-sort-up"></i>
+                                </template>
+                                <template slot="sort-desc-icon">
+                                    <i class="fas fa-sort-down"></i>
+                                </template>
+                                <template slot="no-sort-icon">
+                                    <i class="fas fa-sort"></i>
+                                </template>
+                                <template slot="column_id" slot-scope="props">
+                                    {{props.column.label}}&nbsp;
+                                    <i class="fab fa-slack-hash"></i>
+                                </template>
+                                <template slot="column_hotel" slot-scope="props">
+                                    {{props.column.label}}&nbsp;
+                                    <i class="fas fa-hotel"></i>
+                                </template>
+                                <template slot="column_room_type" slot-scope="props">
+                                    {{props.column.label}}&nbsp;
+                                    <i class="fas fa-bed"></i>
+                                </template>
+                                <template slot="column_created_at" slot-scope="props">
+                                    {{props.column.label}}&nbsp;
+                                    <i class="fas fa-table"></i>
+                                </template>
+                                <template slot="column_actions" slot-scope="props">
+                                    {{props.column.label}}&nbsp;
+                                    <i class="fas fa-external-link-square-alt"></i>
+                                </template>
+                                <template slot="actions" slot-scope="props">
+                                    <router-link :to="`/edit-room-type/${props.cell_value}`"  class="btn btn-outline-primary btn-flat btn-action"><i class="fa fa-edit"></i> Edit</router-link>
+                                    <a href="#" @click.prevent="selectType(props.cell_value)" :data-id="props.cell_value" class="btn btn-outline-danger btn-flat btn-action"><i class="fa fa-trash"></i> Delete</a>
+                                </template>
+                            </vue-bootstrap4-table>
                         </div>
                     </div>
                 </div>
@@ -59,7 +59,11 @@
     </div> 
 </template>
 <script>
+    import VueBootstrap4Table from 'vue-bootstrap4-table';
     export default {
+        components: {
+            VueBootstrap4Table
+        },
         data() {
             return {
                 //types: [],
