@@ -1,0 +1,15 @@
+.room-row-class-id {
+    width: 150px;   
+}
+.room-row-class-hotel, .room-row-class-room {
+    width: 200px;
+}
+.room-row-class-name-type {
+    width: 200px;
+}
+.room-row-class-number {
+    width: 150px;
+}
+.room-row-class-date {
+    width: 160px;
+}

@@ -27,9 +27,9 @@ export default [
     /**
      * Room
      */
-    {path: '/rooms', name:'Rooms', component: require('./pages/room-page/rooms.vue').default},
-    {path: '/add-room', name:'New Room', component: require('./pages/room-page/room.vue').default},
-    {path: '/edit-room/:roomId', name:'Edit Room', component: require('./pages/room-page/room.vue').default},
+    {path: '/rooms', name:'Rooms', component: require('./pages/room-page/index/rooms.vue').default},
+    {path: '/add-room', name:'New Room', component: require('./pages/room-page/create/room.vue').default},
+    {path: '/edit-room/:roomId', name:'Edit Room', component: require('./pages/room-page/edit/room.vue').default},
     
     /**
      * Hotel

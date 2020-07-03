@@ -33,9 +33,8 @@ export default {
         isCheckCover: false,
         isAdmin: false,
         imageUrl: null,
-        hotelId: null,
         countries: [],
-        owners: [],
+        organization: [],
         currency: [],
         isVerified: false,
         verificationValue: [],
@@ -242,7 +241,7 @@ export default {
             .then(
             function (response) {
                 response.data.forEach(function(item){
-                self.owners.push(item);
+                self.organization.push(item);
                 });
             }
             );

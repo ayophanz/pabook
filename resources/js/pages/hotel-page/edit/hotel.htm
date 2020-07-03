@@ -9,11 +9,10 @@
       :active.sync="isLoading" 
       :is-full-page="fullPage">
     </loading>
-    <verification v-if="(isVerified=='verifying' || isVerified=='email_verifying') && hotelId!=null"></verification>
-    <temporary-hold v-if="(isVerified=='verifying' || isVerified=='email_verifying') && hotelId!=null" v-bind:dataValue="verificationValue"></temporary-hold>
-    <collection-page-icon v-if="hotelId!=null && isVerified=='verified'"></collection-page-icon>
-    <create-page-icon v-if="hotelId==null"></create-page-icon>
-    <form v-if="isVerified=='verified' || hotelId==null"  @submit.prevent="register" role="form" enctype="multipart/form-data">
+    <verification v-if="isVerified=='verifying' || isVerified=='email_verifying'"></verification>
+    <temporary-hold v-if="isVerified=='verifying' || isVerified=='email_verifying'" v-bind:dataValue="verificationValue"></temporary-hold>
+    <collection-page-icon v-if="isVerified=='verified'"></collection-page-icon>
+    <form v-if="isVerified=='verified'"  @submit.prevent="register" role="form" enctype="multipart/form-data">
       <div class="row justify-content-center">
           <div class="col-md-12">
             <notice-msg></notice-msg>
@@ -98,12 +97,6 @@
                   </multiselect>
                   <i>Note: You can only remove the unassign item.</i>
                   <has-error :form="form" field="rooms_no"></has-error>
-                </div>
-                <div v-if="hotelId==null" class="form-group">
-                    <label for="proofFile">Please provide any proof of document that you own the hotel and it is legal <span class="required-asterisk">* ( Note: zip your file )</span></label>
-                    </br>
-                    <input type="file" @change="updateProofDocx" :class="{ 'is-invalid': form.errors.has('proofFile') }" name="proofFile">
-                    <has-error :form="form" field="proofFile"></has-error>
                 </div> 
               </div>
           </div>
@@ -129,7 +122,7 @@
                      <p>{{currencyName}} <router-link v-if="form.base_currency=='use_global'" to="/settings">settings</router-link></p>
                     <has-error :form="form" field="base_currency"></has-error>
                   </div>
-                  <div class="form-group" v-if="hotelId != null">
+                  <div class="form-group">
                     <div class="custom-control custom-switch">
                       <input @click="toggleCheck" :checked="isCheckCover" type="checkbox" class="custom-control-input" id="isChangeCover" name="isChangeCover">
                       <label class="custom-control-label" for="isChangeCover">Change logo</label>
@@ -138,7 +131,7 @@
                  <div class="form-group">
                     <label for="image">Hotel Logo <span class="required-asterisk">*</span></label>
                     </br>
-                    <input v-if="isCheckCover == true || hotelId == null" type="file" @change="updateCover" :class="{ 'is-invalid': form.errors.has('image') }" name="image">
+                    <input v-if="isCheckCover == true" type="file" @change="updateCover" :class="{ 'is-invalid': form.errors.has('image') }" name="image">
                     <has-error :form="form" field="image"></has-error>
                     <div class="cover-preview">
                       <img :src="imageUrl">

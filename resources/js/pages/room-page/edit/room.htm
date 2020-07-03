@@ -1,0 +1,152 @@
+<div class="" id="root">
+    <loading 
+      :height="128"
+      :width="128"
+      :transition="`fade`"
+      :loader="`dots`"
+      :background-color="`#fff`"
+      :color="`#38d39f`"
+      :active.sync="isLoading" 
+      :is-full-page="fullPage">
+    </loading>
+    <collection-page-icon></collection-page-icon>
+      <form @submit.prevent="register" role="form">
+          <div class="row justify-content-center">
+              <div class="col-md-12">
+                <notice-msg></notice-msg>
+              </div>
+              <div class="col-md-9">
+                  <div class="card">
+                <div class="card-header">
+                  <div class="card-tool">
+                      <router-link to="/rooms"><button class="btn btn-outline-primary btn-flat"><i class="fa fa-arrow-left"></i> Go to list</button></router-link>
+                  </div>
+                </div>
+
+                  <div class="card-body">
+                    <div class="form-group">
+                      <label for="hotel">Hotel <span class="required-asterisk">*</span></label>
+                      <Select2 id="hotel" v-model="form.hotel" :options="hotels" :settings="{ placeholder: 'Please select hotel', containerCssClass:'form-control' }" @change="ifChange" />
+                      <has-error :form="form" field="hotel"></has-error>
+                    </div>
+                    <div class="form-group">
+                      <label for="type">Room Type <span class="required-asterisk">*</span></label>
+                      <Select2 v-if="types!=''" id="type" v-model="form.type" :options="types" :settings="{ placeholder: 'Please select room type', containerCssClass:'form-control' }" @change="ifChangeType($event)" />
+                      <has-error v-if="types!=''" :form="form" field="type"></has-error>
+                      <p v-if="types==''">This hotel doesn't have any room type available, <router-link to="/add-room-type">click here to add.</router-link></p>
+                    </div>    
+                    <div class="form-group">
+                      <label for="description">Short description </label>
+                      <textarea v-model="form.description" rows="6" class="form-control" :class="{ 'is-invalid': form.errors.has('description') }" id="description"></textarea>
+                      <has-error :form="form" field="description"></has-error>
+                    </div>
+                    <div class="row">
+                      <div class="col-auto">
+                          <div class="form-group">
+                            <label for="max_adult">Max Adult <span class="required-asterisk">*</span></label>
+                            <vue-number-input v-model="form.max_adult" :class="{ 'is-invalid': form.errors.has('max_adult') }" size="small" :value="1" :min="1" :inputtable="false" inline center controls id="max_adult"></vue-number-input>
+                            <has-error :form="form" field="max_adult"></has-error>
+                          </div>  
+                      </div>
+                      <div class="col-auto">
+                          <div class="form-group">
+                            <label for="max_child">Max Child <span class="required-asterisk">*</span></label>
+                            <vue-number-input v-model="form.max_child" :class="{ 'is-invalid': form.errors.has('max_child') }" size="small" :value="0" :min="0" :inputtable="false" inline center controls id="max_child"></vue-number-input>
+                            <has-error :form="form" field="max_child"></has-error>
+                          </div>
+                      </div>
+                    </div> 
+                    <div class="form-group">
+                      <label for="feature">Fixed amenities </label>
+                      <repeater-input :repeaterType="`single`" :dataValue="form.featureData" ref="repeaterUpdate" @dataFeature="form.featureData = $event"></repeater-input>
+                    </div>
+                    <div class="form-group">
+                      <label for="feature_optional">Optional amenities </label>
+                      <repeater-input :repeaterType="`double`" :baseCurrency="base_currency" :dataValue="form.featureOptionalData" ref="repeaterOptionalUpdate" @dataFeature="form.featureOptionalData = $event"></repeater-input>
+                    </div>
+                    <div class="form-group">
+                      <label for="feature">Gallery </label>
+                      <image-uploader ref="uploaderUpdate" @images="form.gallery = $event"></image-uploader>
+                    </div> 
+                  </div>
+                
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card">
+                  <div class="card-body">
+                      <div class="form-group">
+                        <label for="isChangeStatus">Status: </label>
+                        <div class="custom-control custom-switch">
+                          <input @click="toggleStatus" :checked="isCheckStatus" type="checkbox" class="custom-control-input" id="isChangeStatus" name="isChangeStatus">
+                          <label class="custom-control-label" for="isChangeStatus">{{ form.status }}</label>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="name">Name <span class="required-asterisk">*</span></label>
+                          <input v-model="form.name" type="text" placeholder="ex. double bed, single bed" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }" id="name">
+                          <has-error :form="form" field="name"></has-error>
+                      </div>  
+                      <div class="form-group">
+                          <label for="price">Price <span class="required-asterisk">*</span></label>
+                          <auto-currency :baseCurrency="base_currency" :minValue="`1`" v-model="form.price"></auto-currency>
+                          <has-error :form="form" field="price"></has-error>
+                      </div>
+                      <div class="form-group">
+                        <div class="container">
+                          <div class="row">
+                            <!-- <div class="col nopadding">
+                              <label for="no_of_room">No. of unit </label>
+                              <input v-model="form.no_of_room" type="number" class="form-control" :class="{ 'is-invalid': form.errors.has('no_of_room') }" id="no_of_room">
+                              <p class="form-control" id="no_of_room">{{form.rooms_no.length}}</p>
+                              <has-error :form="form" field="no_of_room"></has-error>
+                            </div>
+                            <div class="col nopadding">
+                              <label for="no_of_room_available">No. of unit available</label>
+                              <p class="form-control" id="no_of_room_available">{{no_unit_avail}}</p>
+                            </div> -->
+                            <div class="col-md-12 nopadding">
+                              <label for="rooms_no">Rooms no.</label>
+                              <div class="container">
+                                <div class="row today-status"><div class="col-md-12 text-center"><strong>Today status</strong></div></div>
+                                <div class="row room-status-code">
+                                  <div class="col-md-3">Ready</div>
+                                  <div class="col-md-3">Occupied</div>
+                                  <div class="col-md-3">Reserved</div>
+                                  <div class="col-md-3">Cleaning</div>
+                                </div>
+                              </div>
+                              <multiselect @remove="roomsNoOnRemove" @select="roomsNoOnAdd" :class="{ 'is-invalid': form.errors.has('rooms_no') }" v-model="form.rooms_no" label="value" track-by="code" :options="rooms_options" :multiple="true">
+                                <template slot="tag" slot-scope="{ option, remove }"><span :class="option.status" class="multiselect__tag"><span>{{ option.value }}</span><span v-if="option.status=='ready'" :class="option.status" class="custom__remove" @click="remove(option)"><i aria-hidden="true" tabindex="1" class="multiselect__tag-icon"></i></span></span></template>
+                                <span slot="noResult">Oops! No results</span>
+                              </multiselect>
+                              <i>Note: you can only remove "ready" item.</i>
+                              <has-error :form="form" field="rooms_no"></has-error>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="custom-control custom-switch">
+                          <input @click="toggleCheck" :checked="isCheckCover" type="checkbox" class="custom-control-input" id="isChangeCover" name="isChangeCover">
+                          <label class="custom-control-label" for="isChangeCover">Change feature image</label>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="image">Feature image <span class="required-asterisk">*</span></label>
+                          </br>
+                          <input v-if="isCheckCover == true" type="file" @change="updateImage" :class="{ 'is-invalid': form.errors.has('image') }" name="image">
+                          <has-error :form="form" field="image"></has-error>
+                          <div class="cover-preview">
+                            <img :src="imageUrl">
+                          </div>
+                      </div> 
+                  </div>
+                  <div class="card-footer">
+                    <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat"><i class="fa fa-save"></i> {{ 'Update' }}</button>
+                  </div>
+              </div>    
+            </div>
+          </div>
+      </form>
+  </div>
