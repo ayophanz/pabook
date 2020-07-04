@@ -11,14 +11,6 @@
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-//Auth::routes();
-
-//Route::get('/', 'HomeController@index')->name('name');
-
 Auth::routes(['verify' => true, 'reset' => true]);
 
 Route::get('/resend-email-verification', 'Auth\RegisterController@ResendVerification');

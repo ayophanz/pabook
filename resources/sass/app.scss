@@ -60,6 +60,10 @@ $fa-font-path: "../webfonts";
     display: block;
 }
 
+.sidebar-collapse .main-sidebar:hover #logo-with-text {
+    margin: 0px 10px;
+}
+
 .main-sidebar:hover #logo-without-text {
     display: none;
 }

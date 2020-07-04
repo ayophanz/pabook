@@ -9,7 +9,7 @@ export default [
     /**
      * Setting
      */
-    {path: '/settings', name:'Settings', component: require('./pages/setting-page/settings.vue').default},
+    {path: '/settings', name:'Settings', component: require('./pages/setting-page/index/settings.vue').default},
 
     /**
      * Booking
@@ -20,9 +20,9 @@ export default [
     /**
      * RoomType
      */
-    {path: '/room-types', name:'Room Types', component: require('./pages/room-type-page/room-types.vue').default},
-    {path: '/add-room-type', name:'New Room Type', component: require('./pages/room-type-page/room-type.vue').default},
-    {path: '/edit-room-type/:typeId', name:'Edit Room Type', component: require('./pages/room-type-page/room-type.vue').default},
+    {path: '/room-types', name:'Room Types', component: require('./pages/room-type-page/index/room-types.vue').default},
+    {path: '/add-room-type', name:'New Room Type', component: require('./pages/room-type-page/create/room-type.vue').default},
+    {path: '/edit-room-type/:typeId', name:'Edit Room Type', component: require('./pages/room-type-page/edit/room-type.vue').default},
 
     /**
      * Room

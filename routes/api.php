@@ -135,9 +135,4 @@ Route::get('/config', 'API\OptionController@index');
 
 Route::post('/create-config', 'API\OptionController@create');
 
-// Client ID: 1
-// Client secret: qrGGChraskfl3MXtcrSXK5afaFehdffW519S5pHX
-// Password grant client created successfully.
-// Client ID: 2
-// Client secret: xtSnFJZUgIj4on6TJMGpME58kxfUZLmmH8rE0DyR
 

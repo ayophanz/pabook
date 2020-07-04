@@ -1,7 +1,7 @@
 <aside class="main-sidebar sidebar-light-success elevation-4">
     <router-link to="/"class="brand-link navbar-teal">
-      <img id="logo-with-text" src="{{asset('/storage/images/pabook-logo.png')}}" alt="pabook" class="custom-logo">
-      <img id="logo-without-text" src="{{asset('/storage/images/pabook-no-text.png')}}" width="50" height="50" alt="pabook" class="custom-logo">
+      <img id="logo-with-text" src="{{asset('/images/logo.png')}}" alt="pabook" class="custom-logo">
+      <img id="logo-without-text" src="{{asset('/images/mini-logo.png')}}" width="50" height="50" alt="pabook" class="custom-logo">
       <!-- <span class="brand-text font-weight-light">pabook</span> -->
     </router-link>
 
