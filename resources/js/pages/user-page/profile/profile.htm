@@ -1,0 +1,118 @@
+<div class="col-md-12">
+    <loading 
+      :height="128"
+      :width="128"
+      :transition="`fade`"
+      :loader="`dots`"
+      :background-color="`#fff`"
+      :color="`#38d39f`"
+      :active.sync="isLoading" 
+      :is-full-page="fullPage">
+    </loading>
+    <profile-page-icon></profile-page-icon>
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+          <div class="col-md-8 col-sm-12 col-xm-12">
+            <div class="card card-primary card-outline" v-if="isEdit==false">
+              <div class="card-header">
+              </div>
+              <div class="card-body box-profile">
+                <h3 v-model="form.fullname" class="profile-username text-center">{{form.fullname}}</h3>
+                <p class="text-muted text-center">Name</p>
+                <ul class="list-group list-group-unbordered mb-3">
+                  <li class="list-group-item">
+                    <b>Status</b> <a v-model="form.status" class="float-right">{{form.status}}</a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Role</b> <a v-model="form.role" class="float-right">{{form.role}}</a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Email</b> <a v-model="form.email" class="float-right">{{form.email}}</a>
+                  </li>
+                </ul>
+
+                <div class="text-center">
+                    <a href="#" @click.prevent="toEdit(true)" class="btn btn-outline-primary btn-flat"><i class="fa fa-edit"></i> Edit</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-outline" v-if="isEdit">
+              <div class="card-header">
+                <div class="card-tool">
+                    <a href="#" @click.prevent="toEdit(false)" class="btn btn-outline-primary btn-flat"><i class="fa fa-arrow-left"></i> Cancel</a>
+                </div>
+              </div>
+              <div class="card-body box-profile">
+                <form @submit.prevent="updateProfile" role="form">
+                    <div class="form-group">
+                        <label for="fullname">Fullname <span class="required-asterisk">*</span></label>
+                        <input v-model="form.fullname" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('fullname') }" id="fullname" placeholder="Enter fullname">
+                        <has-error :form="form" field="fullname"></has-error>
+                      </div>  
+                      <div class="form-group">
+                        <label for="email">Email address <span class="required-asterisk">* ( Note: changing email require email verification. )</span></label>
+                        <input v-model="form.email" type="email" class="form-control" :class="{ 'is-invalid': form.errors.has('email') }" id="email" placeholder="Enter email">
+                        <has-error :form="form" field="email"></has-error>
+                      </div>
+                      <div class="form-group" v-if="super_admin==false">
+                        <label for="role">Role <span class="required-asterisk">*</span></label>
+                        <select v-model="form.role" class="form-control" :class="{ 'is-invalid': form.errors.has('role') }" id="role">
+                          <option v-for="item in role" :selected="item === form.role" :value="item">{{item}}</option>
+                        </select>
+                        <has-error :form="form" field="role"></has-error>
+                      </div>
+                      <div class="form-group" v-if="super_admin">
+                        <label for="role">Role <span class="required-asterisk">*</span></label>
+                        <input disabled class="form-control" :value="form.role">
+                      </div>
+                      <div class="form-group" v-if="super_admin==false">
+                        <label for="status">Status <span class="required-asterisk">*</span></label>
+                         <select v-model="form.status" class="form-control" :class="{ 'is-invalid': form.errors.has('status') }" id="status">
+                          <option v-for="item in status" :selected="item === form.status" :value="item">{{item}}</option>
+                         </select>
+                        <has-error :form="form" field="status"></has-error>
+                      </div>
+                      <div class="form-group" v-if="super_admin">
+                        <label for="status">Status <span class="required-asterisk">*</span></label>
+                        <input disabled class="form-control" :value="form.status">
+                      </div>
+                      <div class="form-group">
+                        <div class="custom-control custom-switch">
+                          <input @click="toggleCheck" :checked="isCheckPass" type="checkbox" class="custom-control-input" id="isChangePass" name="isChangePass">
+                          <label class="custom-control-label" for="isChangePass">Change password</label>
+                        </div>
+                      </div>
+                      <div class="form-group" v-if="isCheckPass == true">
+                        <label for="password">Old Password <span class="required-asterisk">*</span></label>
+                        <div class="input-group">
+                            <input v-model="form.old_password" type="password" class="form-control" :class="{ 'is-invalid': form.errors.has('old_password') }" id="old_password" name="old_password">
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <a href="#" @click.prevent="showHide('#old_password', '.call-old-password')"><i class="call-old-password fa fa-eye"></i></a>
+                                </span>          
+                            </div>
+                            <has-error :form="form" field="old_password"></has-error>
+                        </div>
+                        <label for="password">Password <span class="required-asterisk">*</span></label>
+                        <div class="input-group">
+                            <input v-model="form.password" type="password" class="form-control" :class="{ 'is-invalid': form.errors.has('password') }" id="password" name="password">
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <a href="#" @click.prevent="showHide('#password', '.call-password')"><i class="call-password fa fa-eye"></i></a>
+                                </span>          
+                            </div>
+                            <has-error :form="form" field="password"></has-error>
+                        </div>
+                      </div>
+                      <div class="text-center">
+                        <button type="submit" class="btn btn-outline-primary btn-flat"><i class="fa fa-save"></i> Update</button>
+                        </div> 
+                  </form>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+  </div>

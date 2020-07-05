@@ -5,8 +5,8 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use App\Http\Controllers\Controller;
-use App\Room;
-use App\RoomMeta;
+use App\Models\Room;
+use App\Models\RoomMeta;
 use App\Helpers\Helpers;
 use Exception;
 

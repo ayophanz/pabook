@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="csrf-token" content="{{csrf_token()}}">
+  <link rel="icon" type="image/png" href="{{asset('/images/fav-logo.png')}}"/>
   <title>Pabook</title>
 
   <link rel="stylesheet" href="https://unpkg.com/vue-multiselect@2.1.0/dist/vue-multiselect.min.css">

@@ -14,8 +14,8 @@ export default [
     /**
      * Booking
      */
-    {path: '/', name:'Bookings', component: require('./pages/booking-page/bookings.vue').default},
-    {path: '/add-book-entry', name:'New booking entry', component: require('./pages/booking-page/new-booking.vue').default},
+    {path: '/', name:'Bookings', component: require('./pages/booking-page/index/bookings.vue').default},
+    {path: '/add-book-entry', name:'New booking entry', component: require('./pages/booking-page/create/booking.vue').default},
 
     /**
      * RoomType
@@ -41,11 +41,11 @@ export default [
     /**
      * User
      */
-    {path: '/profile', name:'Account', component: require('./pages/user-page/profile.vue').default},
-    {path: '/users', name:'Users', component: require('./pages/user-page/users.vue').default},
+    {path: '/users', name:'Users', component: require('./pages/user-page/index/users.vue').default},
+    {path: '/profile', name:'Account', component: require('./pages/user-page/profile/profile.vue').default},
     {path: '/add-user', name:'New User', component: require('./pages/user-page/user.vue').default},
     {path: '/edit-user/:userId', name:'Edit User', component: require('./pages/user-page/user.vue').default},
-    {path: '/users-capability', name:'User Capability', component: require('./pages/user-page/capability.vue').default},
+    {path: '/users-capability', name:'User Capability', component: require('./pages/user-page/capability/capability.vue').default},
 
     /**
      * 404

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Notifications\notifiable;
 use Illuminate\Support\Facades\Notification;
 use App\Http\Controllers\Controller;
-use App\Booking;
+use App\Models\Booking;
 use App\Notifications\RoomReservation;
 use App\Events\incompleteBooking;
 use App\Helpers\Helpers;
@@ -80,7 +80,7 @@ class BookController extends Controller
               ];      
 
       $book = Booking::create($data);
-      event(new incompleteBooking($book->id));       
+      // event(new incompleteBooking($book->id));       
       return Booking::where('id', $book->id)->with('room', 'hotel')->get();
    }
    
@@ -95,6 +95,8 @@ class BookController extends Controller
       if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
         return die('not allowed');
 
+      if (!$request->has('email')) $request['email'] = 'mail@mail.com';
+
       $data = [
             'name'    => 'required',
             'phoneNo' => 'required',
@@ -106,8 +108,7 @@ class BookController extends Controller
       $data = [
         'name'    => $request['name'],
         'phoneNo' => $request['phoneNo'],
-        'email'   => $request['email'],
-        'address' => $request['address'],
+        'email'   => ($request['email']=='mail@mail.com') ? null : $request['email'],
         'status'  => 'active'
       ]; 
 

@@ -18709,3 +18709,10 @@ ul.exclude-rooms-no {
   overflow: hidden !important;
 }
 
+:not(.layout-fixed) .main-sidebar {
+  height: auto !important;
+  position: fixed;
+  overflow-y: auto;
+  max-height: 100%;
+}
+

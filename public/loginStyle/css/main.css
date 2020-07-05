@@ -188,8 +188,9 @@ iframe {
 }
 
 .wrap-login100 {
-  width: 390px;
-  background: transparent;
+  background-color: #f1f2f4 !important;
+  padding: 10px;
+  border-radius: 2px;
 }
 
 

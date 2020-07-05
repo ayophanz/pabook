@@ -1,0 +1,236 @@
+<div id="root">
+    <loading 
+        :height="128"
+        :width="128"
+        :transition="`fade`"
+        :loader="`dots`"
+        :background-color="`#fff`"
+        :color="`#38d39f`"
+        :active.sync="isLoading" 
+        :is-full-page="fullPage">
+    </loading>
+    <vodal :closeOnClickMask="false" :show="vodal_show" animation="zoom" :closeOnEsc="false" :width="600" className="vodal-style" @hide="vodal_show = false">
+        <div class="swal2-header">
+            <div class="swal2-icon swal2-info swal2-animate-info-icon" style="display: flex;"></div>
+            <h4 class="swal2-title" style="display: flex;"><strong>Exclude optional amenities <br /> to specific room</strong></h4>
+        </div>
+        <div class="swal2-content">
+            <br />
+            <h6 class="text-left ml-5">*Uncheck item to exclude</h6>
+            <exclude-optional-amen @removeOrAddRoomOnAmen="onRemoveOrAdd"></exclude-optional-amen>
+            <br />
+        </div>
+    </vodal>
+    <div class="row justify-content-center">
+        <booking-page-icon></booking-page-icon>
+        <div class="col-md-12">
+            <notice-msg></notice-msg>
+            <div class="card mt-0">
+                <div class="card-header">
+                    <div class="card-tool">
+                        <button class="btn btn-outline-primary btn-flat" @click="resetData()">
+                            <i class="fas fa-broom"></i> Reset Fields
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div v-if=" $store.getters.bookingPagiGett=='page_1'" class="tab-pagination page-1">
+                                <form  @submit.prevent="validateEntries" role="form">
+                                    <div class="form-group mb-1">
+                                        <HotelDatePicker 
+                                            @check-in-changed="checkInDate"
+                                            @check-out-changed="checkOutDate"
+                                            :startingDateValue="new Date(form.checkInD)"
+                                            :endingDateValue="new Date(form.checkOutD)"
+                                            format="YYYY MMM. DD"
+                                            :startDate="new Date()"
+                                            :minNights="1"
+                                            :maxNights="30"
+                                            :closeDatepickerOnClickOutside="false"
+                                            :showCloseButton="true"
+                                        />
+                                        <has-error v-if="form.checkInD==''" :form="form" field="checkInD"></has-error>
+                                        <has-error v-else-if="form.checkOutD==''" :form="form" field="checkOutD"></has-error>
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <label class="mb-0" for="hotel">Hotel</label>
+                                        <Select2 id="hotel" v-model="form.hotel" :options="hotels" :settings="{ placeholder: 'Please select hotel', containerCssClass:'form-control' }" @change="isHotelChange" />
+                                        <has-error :form="form" field="hotel"></has-error>
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <label class="mb-0" for="roomWithRoomType">Room</label>
+                                        <Select2 id="roomWithRoomType" v-model="form.roomWithRoomType" :options="roomWithRoomTypes" :settings="{ placeholder: 'Please select room', containerCssClass:'form-control' }" @change="isRoomWithRoomType" />
+                                        <has-error :form="form" field="roomWithRoomType"></has-error>
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <label class="mb-0" for="manyRoom">No. of room</label>
+                                        <Select2 id="manyRoom" v-model="form.manyRoom" :options="(form.roomWithRoomType!='' ? manyRooms:[])" :settings="{ placeholder: 'Please select how many rooms', containerCssClass:'form-control' }" @change="isManyRoom" />
+                                        <has-error :form="form" field="manyRoom"></has-error>
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <label class="mb-0" for="rooms_no">Room no.</label>
+                                        <multiselect v-model="form.rooms_no" :max="parseInt(form.manyRoom)" placeholder="Please select designated room no." @remove="roomsNoOnRemove" @select="roomsNoOnAdd" :class="{ 'is-invalid': form.errors.has('rooms_no') }" label="value" track-by="code" :options="rooms_options" :multiple="true">
+                                            <template slot="tag" slot-scope="{ option, remove }"><span :class="option.status" class="multiselect__tag"><span>{{ option.value }}</span><span v-if="option.status=='ready'" :class="option.status" class="custom__remove" @click="remove(option)"><i aria-hidden="true" tabindex="1" class="multiselect__tag-icon"></i></span></span></template>
+                                            <span slot="noResult">Oops! No results</span>
+                                            <span slot="maxElements">{{form.manyRoom}} item allowed</span>
+                                        </multiselect>
+                                        <has-error :form="form" field="rooms_no"></has-error>
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <label class="mb-0" for="manyAdult">No. of adult</label>
+                                        <Select2 id="manyAdult" v-model="form.manyAdult" :options="(form.manyRoom!='' ? manyAdults:[])" :settings="{ placeholder: 'Please select how many adult(s)', containerCssClass:'form-control' }" />
+                                        <has-error :form="form" field="manyAdult"></has-error>
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <label class="mb-0" for="manyChild">No. of child</label>
+                                        <Select2 id="manyChild" v-model="form.manyChild" :options="(form.manyAdult!='' ? manyChilds:[])" :settings="{ placeholder: 'Please select how many child(s)', containerCssClass:'form-control' }" />
+                                        <has-error :form="form" field="manyChild"></has-error>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-12">
+                                            <div class="container book-rooms-quantity">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <h5>Fixed amenities</h5>
+                                                        <ul>
+                                                            <li v-for="item in fixedAmenities">{{item}}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <h5>Optional amenities</h5>
+                                                        <ul class="optionalAmen-list">
+                                                            <li v-for="(item, key) in optionalAmenities">
+                                                                <div class="form-check pl-0">
+                                                                    <pretty-check v-model="form.addOnOptionalAmen" @change="onCheckOptionalAmen($event)" :value="item" :disabled="no_unit_avail < 1 && item.rooms.length <= 0" class="p-icon p-round p-tada" color="success-o">
+                                                                        <i slot="extra" class="icon mdi mdi-heart fas fa-heart"></i>
+                                                                        {{item.value}} | {{currency}}{{item.price}}
+                                                                    </pretty-check>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <a v-if="no_unit_avail > 1 && form.addOnOptionalAmen.length != 0" @click.prevent="excludeOptional"  href="">Exclude specific room for optional amenities</a>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-0 mt-3">
+                                        <label>Room price:</label>&nbsp;&nbsp;
+                                        <span class="mb-0">{{currency}}{{roomPrice}}</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="mb-0">Subtotal:</label>
+                                        <div class="optionalList">
+                                            <p class="mb-0 ml-2">{{currency}}{{roomPrice}} x ({{ nightNoFunc }})night</p>
+                                            <p class="mb-0 ml-2">{{currency}}{{roomPrice}} x ({{ roomNoFunc }})no. of room</p>
+                                            <p class="mb-0 ml-2" v-for="item in form.addOnOptionalAmen">{{currency}}{{item.price}} x ({{item.rooms.length}}){{item.value}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-0 booking-total">
+                                        <label>Total:</label>&nbsp;&nbsp;
+                                        <span>{{currency}}{{totalAmountFunc}}</span>
+                                    </div>
+                                    <div class="form-group text-center mt-4">
+                                        <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat"><i class="fas fa-concierge-bell"></i> Book Room</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div v-else-if="$store.getters.bookingPagiGett=='page_2'" class="tab-pagination page-2">
+                                <form  @submit.prevent="validateEntries" role="form">
+                                    <div class="form-group mt-4">
+                                        <label for="summary">Booking Summary </label>
+                                        <div class="summary-container">
+                                            <ul v-if="$store.getters.summaryDetailsGett.length != 0">
+                                                <li><strong>Hotel: </strong>{{$store.getters.summaryDetailsGett[0].hotel.name}}</li>
+                                                <li><strong>Room Type: </strong>{{$store.getters.summaryDetailsGett[0].room.room_type.name}}</li>
+                                                <li><strong>Room: </strong>{{$store.getters.summaryDetailsGett[0].room.name}}</li>
+                                                <li><strong>Room No.: </strong><span v-for="(item, key) in JSON.parse($store.getters.summaryDetailsGett[0].roomsNo)"> {{item.value}}{{(JSON.parse($store.getters.summaryDetailsGett[0].roomsNo).length-1 == key)?'':', '}}</span></li>
+                                                <li><strong>Total Room: </strong>{{$store.getters.summaryDetailsGett[0].manyRoom}}</li>
+                                                <li><strong>Date: </strong>
+                                                    <ul>
+                                                        <li><strong>Check-In </strong>{{moment($store.getters.summaryDetailsGett[0].dateStart).format("MMM Do YY")}}</li>
+                                                        <li><strong>Check-Out </strong>{{moment($store.getters.summaryDetailsGett[0].dateEnd).format("MMM Do YY")}}</li>
+                                                    </ul>
+                                                </li>
+                                                <li><strong>Night(s): </strong>{{nightsNo($store.getters.summaryDetailsGett[0].dateStart, $store.getters.summaryDetailsGett[0].dateEnd)}}</li>
+                                                <li><strong>Optional Amenities: </strong>
+                                                    <ul>
+                                                        <li v-for="(item, key) in JSON.parse($store.getters.summaryDetailsGett[0].optionalAmen)" v-if="item.rooms.length!=0">{{item.value}} ({{item.rooms.length}})</li>
+                                                    </ul>
+                                                </li>
+                                                <li><strong>Total Amount: </strong>{{$store.getters.summaryDetailsGett[0].currency}}{{$store.getters.summaryDetailsGett[0].amount}}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name">Name <span class="required-asterisk">*</span></label>
+                                        <input v-model="form.name" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }" id="name">
+                                        <has-error :form="form" field="name"></has-error>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phoneNo">Phone no. <span class="required-asterisk">*</span></label>
+                                        <input v-model="form.phoneNo" type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('phoneNo') }" id="phoneNo">
+                                        <has-error :form="form" field="phoneNo"></has-error>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email </label>
+                                        <input v-model="form.email" type="email" class="form-control" :class="{ 'is-invalid': form.errors.has('email') }" id="email">
+                                        <i>Note: if not empty system will send receipt.</i>
+                                    </div>
+                                    <div class="form-group text-center mt-4">
+                                        <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat"><i class="fas fa-thumbs-up"></i> Done</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div id="calendar-menu">
+                                <div class="row mt-0 room-cell-container">
+                                    <div class="col-md-3 pr-0 pl-0">
+                                        <h5 class="text-center mt-3">Total Rooms</h5>
+                                        <h3 class="text-center">{{manyRooms.length}}</h3>
+                                    </div>
+                                    <div class="col-md-3 pr-0 pl-0">
+                                        <h5 class="text-center mt-3">Available Rooms</h5>
+                                        <h3 class="text-center">6</h3>
+                                    </div>
+                                    <div class="col-md-3 pr-0 pl-0">
+                                        <h5 class="text-center mt-3">Reserved Rooms</h5>
+                                        <h3 class="text-center">2</h3>
+                                    </div>
+                                    <div class="col-md-3 pr-0 pl-0">
+                                        <h5 class="text-center mt-3">Occupied Rooms</h5>
+                                        <h3 class="text-center">2</h3>
+                                    </div>
+                                </div><br />
+                                <select v-model="selectedView" class="menuSelectedView">
+                                    <option v-for="(options, index) in viewModeOptions" :value="options.value" :key="index">{{options.title}}</option>
+                                </select>
+                                <span id="menu-navi" @click="onClickNavi($event)">
+                                    <!-- <button type="button" class="btn btn-default btn-sm move-today" data-action="move-today">Today</button> -->
+                                    &nbsp;<button v-if="disPrev==false" :disabled="disPrev" type="button" class="btn btn-outline-primary btn-flat move-day" data-action="move-prev"><i class="fas fa-chevron-left" data-action="move-prev"></i> Prev</button>
+                                    &nbsp;<button v-if="disNext==false" :disabled="disNext" type="button" class="btn btn-outline-primary btn-flat move-day" data-action="move-next">Next <i class="fas fa-chevron-right" data-action="move-next"></i></button>
+                                </span>
+                                <span class="render-range">{{dateRange}}</span>
+                            </div>
+                            <calendar ref="mycalendar" style="height: 800px;"
+                                :usageStatistics="false"
+                                :useCreationPopup="false"
+                                :useDetailPopup="false"
+                                :isReadOnly="true"
+                                :view="selectedView"
+                                :theme="theme"
+                                :disableDblClick="true"
+                                :disableClick="true"
+                                :calendars="calendarList"
+                                :schedules="scheduleList" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

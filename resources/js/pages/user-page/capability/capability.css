@@ -1,0 +1,15 @@
+.capability-container {
+    height: 100%;
+}
+.row.capability-container .right-column {
+    border-left: 0.02px solid #e7e7e7;
+}
+.row.capability-container .left-column {
+    border-right: 0.02px solid #e7e7e7;
+}
+.capability-container .form-group {
+    text-align: center;
+}
+.custom-switch {
+    text-align: left;
+}

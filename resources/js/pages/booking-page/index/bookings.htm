@@ -1,0 +1,102 @@
+<div id="root">
+    <vodal :closeOnClickMask="false" :show="vodal_show" animation="zoom" :closeOnEsc="false" :width="600" className="vodal-style" @hide="vodal_show = false">
+        <div class="swal2-header">
+            <div class="swal2-icon swal2-info swal2-animate-info-icon" style="display: flex;"></div>
+            <h4 class="swal2-title" style="display: flex;"><strong>Booking details</strong></h4>
+        </div>
+        <div class="swal2-content">
+            <br />
+            <ul v-if="vodal_show" class="booking-details">
+                <li><strong>Name:</strong> {{singlebooking.name}}</li>
+                <li><strong>Phone No.:</strong> {{singlebooking.phoneNo}}</li>
+                <li v-if="singlebooking.email"><strong>Email:</strong> {{singlebooking.email}}</li>
+                <li v-if="singlebooking.address"><strong>Address:</strong> {{singlebooking.address}}</li>
+                <hr>
+                <li><strong>Boooking ID:</strong> {{singlebooking.id}}</li>
+                <li><strong>Hotel:</strong> {{(Object.keys(singlebooking).length>0)?singlebooking.hotel.name:''}}</li>
+                <li><strong>Room:</strong> {{(Object.keys(singlebooking).length>0)?singlebooking.room.name:''}}</li>
+                <li><strong>Room Type:</strong> {{(Object.keys(singlebooking).length>0)?singlebooking.room.room_type.name:''}}</li>
+                <li><strong>CheckIn:</strong> {{moment(singlebooking.dateStart).format("MMM Do YYYY")}}</li>
+                <li><strong>CheckOut:</strong> {{moment(singlebooking.dateEnd).format("MMM Do YYYY")}}</li>
+                <li><strong>Night(s):</strong> {{night(singlebooking.dateStart, singlebooking.dateEnd)}}</li>
+                <li><strong>Total Room(s):</strong> {{singlebooking.manyRoom}}</li>
+                <li><strong>Adult(s):</strong> {{singlebooking.manyAdult}}</li>
+                <li><strong>Child(s):</strong> {{singlebooking.manyChild}}</li>
+                <li><strong>Room No.:</strong> <span v-for="(item, key) in ((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.roomsNo):[])">{{item.value}}{{dynamicSemecolon(singlebooking.roomsNo, key)}}</span></li>
+                <li><strong>Fixed Amenities:</strong> 
+                    <ul class="booking-details-amenities amen-fixed">
+                        <li v-for="(item, key) in ((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.room.room_feature.value):[])">{{item.value}}</li>
+                    </ul>
+                </li>
+                <li><strong>Optional Amenities:</strong> 
+                    <ul class="booking-details-amenities amen-optional">
+                        <li v-for="(item, key) in ((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.optionalAmen):[])">{{item.value}} | <span>({{arrayExtract(item.rooms)}})</span><br /><span>{{singlebooking.currency}}{{item.price}} x {{item.rooms.length}} = {{singlebooking.currency}}{{item.price*item.rooms.length}}</span></li>
+                    </ul>
+                </li>
+                <hr>
+                <li><strong>Room Price:</strong> {{singlebooking.currency}}{{(Object.keys(singlebooking).length>0)?singlebooking.room.price+' x '+singlebooking.manyRoom+' = '+singlebooking.currency+''+(singlebooking.room.price*singlebooking.manyRoom):''}}</li>
+                <li><strong>Total Optional Amenities:</strong> {{singlebooking.currency}}{{optionalAmenTotal((Object.keys(singlebooking).length>0)?JSON.parse(singlebooking.optionalAmen):[])}}</li>
+                <li><strong>Total:</strong> {{singlebooking.currency}}{{singlebooking.amount}}</li>
+            </ul>
+            <br /> 
+            <div>
+                <button class="btn btn-outline-secondary btn-flat"><i class="fas fa-expand-alt"></i> Extend Booking</button>
+                <button class="btn btn-outline-secondary btn-flat"><i class="fas fa-exchange-alt"></i> Change Booking</button>
+                <button class="btn btn-outline-primary btn-flat"><i class="fas fa-archive"></i> CheckOut</button>
+            </div>     
+        </div>
+    </vodal>
+    <div class="row justify-content-center">
+        <result-page-icon></result-page-icon>
+        <div class="col-12">
+            <notice-msg></notice-msg>
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-tool">
+                        <router-link to="/add-book-entry">
+                            <button class="btn btn-outline-primary btn-flat">
+                                <i class="fa fa-plus-circle"></i> New book
+                            </button>
+                        </router-link>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <vue-bootstrap4-table class="tb-hotel-list" :rows="rowData" :columns="columns" :config="config">
+                                <template slot="sort-asc-icon">
+                                    <i class="fas fa-sort-up"></i>
+                                </template>
+                                <template slot="sort-desc-icon">
+                                    <i class="fas fa-sort-down"></i>
+                                </template>
+                                <template slot="no-sort-icon">
+                                    <i class="fas fa-sort"></i>
+                                </template>
+                                <template slot="column_id" slot-scope="props">
+                                    {{props.column.label}}&nbsp;
+                                    <i class="fab fa-slack-hash"></i>
+                                </template>
+                                <template slot="column_name" slot-scope="props">
+                                    {{props.column.label}}&nbsp;
+                                    <i class="fas fa-user-friends"></i>
+                                </template>
+                                <template slot="column_checkInCheckOut" slot-scope="props">
+                                    {{props.column.label}}&nbsp;
+                                    <i class="fas fa-calendar-alt"></i>
+                                </template>
+                                <template slot="column_actions" slot-scope="props">
+                                    {{props.column.label}}&nbsp;
+                                    <i class="fas fa-external-link-square-alt"></i>
+                                </template>
+                                <template slot="actions" slot-scope="props">
+                                    <button @click.prevent="viewDetails(props.cell_value)" class="btn btn-outline-primary btn-flat btn-action"><i class="fas fa-eye"></i> View</button>
+                                </template>
+                            </vue-bootstrap4-table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>

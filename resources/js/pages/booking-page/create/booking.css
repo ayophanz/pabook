@@ -1,0 +1,65 @@
+.book-rooms-quantity {
+    border: 1px solid #e5e5e5;
+    padding: 20px 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 14.3rem;
+    min-height: 14.3rem;
+}
+
+.book-rooms-quantity h5 {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 0px;
+    margin: 0px;
+}
+
+.book-rooms-quantity span {
+    font-size: 18px;
+    font-family: cursive;
+}
+
+.book-rooms-quantity ul {
+    list-style: circle;
+}
+
+.swal2-loading .swal2-styled {
+    border-left-color: #38d39f !important;
+    border-right-color: #38d39f !important;
+}
+
+.summary-container {
+    border: 1px solid #e5e5e5;
+    min-height: 300px;
+    overflow-y: auto;
+    padding: 10px 2px;
+}
+
+.summary-container ul {
+    list-style: circle;
+    padding-left: 25px;
+}
+
+.room-cell-container {
+    margin: auto;
+    margin-top: 10px;
+}
+
+.room-cell-container div {
+    border: 1px solid #e5e5e5;
+}
+
+.booking-total {
+    border: 1px solid #d7d9e2;
+    padding: 5px 5px;
+    display: inline;
+}
+
+.multiselect__tags {
+    padding: 8px 40px 0 20px !important;
+}
+
+.pretty.p-icon .state .icon {
+    width: calc(1em + 1px) !important;
+    height: calc(1em + 4px) !important;
+}

@@ -2,14 +2,14 @@
 
 namespace App\Helpers;
 use Illuminate\Support\Facades\File;
-use App\User;
-use App\Booking;
-use App\Hotel;
-use App\Room;
-use App\RoomType;
-use App\UserMeta;
-use App\RoomMeta;
-use App\Option;
+use App\Models\User;
+use App\Models\Booking;
+use App\Models\Hotel;
+use App\Models\Room;
+use App\Models\RoomType;
+use App\Models\UserMeta;
+use App\Models\RoomMeta;
+use App\Models\Option;
 use Storage;
 
 class Helpers
@@ -221,8 +221,6 @@ class Helpers
           foreach ($roomType as $key => $value) { unset($roomType[$key]['room_type_hotel']); }
 
           return $roomType;
-        }else{
-          //
         }
     }
 
@@ -242,7 +240,7 @@ class Helpers
             $image = $subArr['1']['filename'];
             $fileExist = public_path().'/storage/images/upload/roomImages/gallery-'.$id.'/'.$image;
             if($action=='update' && File::exists($fileExist))
-              unlink(storage_path('app/public/images/upload/roomImages/gallery-'.$id.'/'.$image));
+              unlink(public_path('storage/images/upload/roomImages/gallery-'.$id.'/'.$image));
             \Image::make($subArr['2']['image'])->save(storage_path('app/public/images/upload/roomImages/gallery-'.$id.'/').$image); 
             unset($subArr['2']);
             $file[$key] = $subArr;  
@@ -262,7 +260,12 @@ class Helpers
             explode(':', substr($img, 0, 
             strpos($img, ';')))[1])[1];
         if($action=='update')
-            unlink(storage_path('app/public/images/upload/roomImages/gallery-'.$id.'/'.$image));
+
+          $fileExist = public_path().'/storage/images/upload/roomImages/gallery-'.$id.'/'.$name.'-'.$id;
+          if (File::exists($fileExist.'.png')) unlink($fileExist.'.png');
+          elseif (File::exists($fileExist.'.jpg')) unlink($fileExist.'.jpg');
+          elseif (File::exists($fileExist.'.jpeg')) unlink($fileExist.'.jpeg');
+          elseif (File::exists($fileExist.'.gif')) unlink($fileExist.'.gif');
         \Image::make($img)->save(public_path('storage/images/upload/roomImages/gallery-'.$id.'/').$image);
         return $image;
     }

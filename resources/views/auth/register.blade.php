@@ -7,7 +7,7 @@
         <div class="wrap-login100 p-t-10 p-b-30" style="width: 500px;">
             <form class="login100-form validate-form">
                 <div class="login100-form-avatar">
-                    <img src="{{asset('/storage/images/pabook.png')}}" alt="pabook">
+                    <img src="{{asset('/images/orig-logo.png')}}" alt="pabook">
                 </div>
                 <span class="login100-form-title p-t-20 p-b-45">
                         Register with pabook

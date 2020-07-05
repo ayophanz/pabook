@@ -4,8 +4,8 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Hotel;
-use App\UserMeta;
+use App\Models\Hotel;
+use App\Models\UserMeta;
 use App\Helpers\Helpers;
 
 class HotelController extends Controller

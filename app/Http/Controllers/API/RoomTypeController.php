@@ -4,8 +4,8 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\RoomType;
-use App\Room;
+use App\Models\RoomType;
+use App\Models\Room;
 use App\Helpers\Helpers;
 
 class RoomTypeController extends Controller
