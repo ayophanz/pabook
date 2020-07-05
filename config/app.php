@@ -229,6 +229,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Authorized' => App\Helpers\Authorized::class,
+        'Helpers' => App\Helpers\Helpers::class,
 
     ],
 

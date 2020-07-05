@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\File;
 use App\Http\Controllers\Controller;
 use App\Models\Room;
 use App\Models\RoomMeta;
-use App\Helpers\Helpers;
+use Helpers;
 use Exception;
 
 class RoomController extends Controller

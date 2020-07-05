@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\RoomType;
 use App\Models\Room;
-use App\Helpers\Helpers;
+use Helpers;
 
 class RoomTypeController extends Controller
 {

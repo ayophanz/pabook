@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Notifications\EmailVerificationForNewRegistered;
 use App\Models\User;
 use App\Models\UserMeta;
-use App\Helpers\Helpers;
+use Helpers;
 
 class UserController extends Controller
 {

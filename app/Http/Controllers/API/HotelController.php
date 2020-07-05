@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Hotel;
 use App\Models\UserMeta;
-use App\Helpers\Helpers;
+use Helpers;
 
 class HotelController extends Controller
 {

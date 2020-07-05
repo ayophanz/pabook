@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Notifications\RoomReservation;
 use App\Events\incompleteBooking;
-use App\Helpers\Helpers;
+use Helpers;
 
 class BookController extends Controller
 {
@@ -36,7 +36,7 @@ class BookController extends Controller
         return die('not allowed');
 
    		$data = [
-            'hotel'  => 'required',
+            'hotel' => 'required',
             'checkInD'  => 'required',
             'checkOutD' => 'required',
             'manyAdult' => 'required',
