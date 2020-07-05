@@ -230,7 +230,7 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'Authorized' => App\Helpers\Authorized::class,
         'Helpers' => App\Helpers\Helpers::class,
-
+        'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
     ],
 
 ];

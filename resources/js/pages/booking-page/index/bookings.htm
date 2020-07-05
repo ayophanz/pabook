@@ -12,7 +12,7 @@
                 <li v-if="singlebooking.email"><strong>Email:</strong> {{singlebooking.email}}</li>
                 <li v-if="singlebooking.address"><strong>Address:</strong> {{singlebooking.address}}</li>
                 <hr>
-                <li><strong>Boooking ID:</strong> {{singlebooking.id}}</li>
+                <li><strong>Booking ID:</strong> {{singlebooking.id}}</li>
                 <li><strong>Hotel:</strong> {{(Object.keys(singlebooking).length>0)?singlebooking.hotel.name:''}}</li>
                 <li><strong>Room:</strong> {{(Object.keys(singlebooking).length>0)?singlebooking.room.name:''}}</li>
                 <li><strong>Room Type:</strong> {{(Object.keys(singlebooking).length>0)?singlebooking.room.room_type.name:''}}</li>

@@ -62,8 +62,6 @@ class BookController extends Controller
       $data = [
                 'name'         => 'incomplete',
                 'phoneNo'      => 'incomplete',
-                'email'        => 'incomplete',
-                'address'      => 'incomplete',
                 'roomId'       => (int)$request['roomWithRoomType'],
                 'hotelId'      => (int)$request['hotel'],
                 'dateStart'    => date($request['checkInD']),
@@ -95,7 +93,7 @@ class BookController extends Controller
       if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
         return die('not allowed');
 
-      if (!$request->has('email')) $request['email'] = 'mail@mail.com';
+      if ($request['email']=='') $request['email'] = 'mail@mail.com';
 
       $data = [
             'name'    => 'required',

@@ -7,8 +7,8 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\BroadcastMessage;
-use App\Booking;
-use App\User;
+use App\Models\Booking;
+use App\Models\User;
 
 class RoomReservation extends Notification
 {
