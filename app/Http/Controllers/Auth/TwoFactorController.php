@@ -12,6 +12,7 @@ class TwoFactorController extends Controller
     public function show2faForm() {
         return view('auth.2fa');
     }
+    
     // post token to the backend for check
     public function verifyToken(Request $request) {
         $this->validate($request, ['token' => 'required']);
