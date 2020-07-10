@@ -199,7 +199,7 @@ export default {
 
         totalAmountFunc() {
             let optionalAmenPrices = 0;
-            this.form.addOnOptionalAmen.forEach(function(item, key){
+            this.form.addOnOptionalAmen.forEach(function(item){
                 optionalAmenPrices += (parseFloat(item.price) * item.rooms.length);
             });
             return parseFloat((parseFloat(this.roomPrice) * this.nightNoFunc) * this.roomNoFunc) + optionalAmenPrices;
@@ -208,15 +208,15 @@ export default {
         roomNoFunc() { return parseInt(this.form.manyRoom); },
 
         compareDate() {
-            if(this.form.checkOutD!='' && Date.parse(new Date(this.form.checkOutD.getFullYear()+'-'+(this.form.checkOutD.getMonth()+1))) > Date.parse(new Date(this.dateRange))) this.disNext = false;
+            if (this.form.checkOutD!='' && Date.parse(new Date(this.form.checkOutD.getFullYear()+'-'+(this.form.checkOutD.getMonth()+1))) > Date.parse(new Date(this.dateRange))) this.disNext = false;
             else this.disNext = true;
-            if(this.form.checkInD!='' && Date.parse(new Date(this.form.checkInD.getFullYear()+'-'+(this.form.checkInD.getMonth()+1))) < Date.parse(new Date(this.dateRange))) this.disPrev = false;
+            if (this.form.checkInD!='' && Date.parse(new Date(this.form.checkInD.getFullYear()+'-'+(this.form.checkInD.getMonth()+1))) < Date.parse(new Date(this.dateRange))) this.disPrev = false;
             else this.disPrev = true;
         }
 
     },
     methods: {
-
+        
         resetData() {
             Object.assign(this.$data, this.$options.data.apply(this));
             this.loadHotels();
@@ -224,7 +224,7 @@ export default {
             this.form.checkInD = new Date().toString();
             this.form.checkOutD = new Date(new Date().getTime()+(60 * 60 * 24 * 1000)).toString();
             this.setRenderRangeText();
-            if(this.$store.getters.bookingPagiGett=='page_2') {
+            if (this.$store.getters.bookingPagiGett=='page_2') {
                 this.$store.commit('summaryDetailsMutat', '');
                 this.$store.commit('bookingPagiMutat', 'page_1');
             }
@@ -248,8 +248,8 @@ export default {
         onRemoveOrAdd(value) {
             this.optionalAmenities.forEach(function(item, key){
                 let exist = item.rooms.indexOf(value[2]) !== -1;
-                if(item.id == value[1] && value[0]=='remove' && exist==true) item.rooms.splice(item.rooms.indexOf(value[2]), 1);
-                else if(item.id == value[1] && value[0]=='undo' && exist==false) item.rooms.push(value[2]);
+                if (item.id == value[1] && value[0]=='remove' && exist==true) item.rooms.splice(item.rooms.indexOf(value[2]), 1);
+                else if (item.id == value[1] && value[0]=='undo' && exist==false) item.rooms.push(value[2]);
             });
         },
 
@@ -265,22 +265,22 @@ export default {
 
         optionalAmenMani(action, value) {
             let self = this;
-            if(action=='remove') {
+            if (action=='remove') {
                 this.optionalAmenities.forEach(function(item, key){
-                    if(item.rooms.indexOf(value) !== -1) item.rooms.splice(item.rooms.indexOf(value), 1);
+                    if (item.rooms.indexOf(value) !== -1) item.rooms.splice(item.rooms.indexOf(value), 1);
                     item.isChecked = true;
                 });
                 this.$store.commit('hideRoomNoMutat', value);
-            }else if(action=='undo') {
+            }else if (action=='undo') {
                 this.$store.commit('addRoomNoMutat', {room:value, optAmen:this.$store.getters.whenAddRoomNoGett, isVisible:true});
                 this.optionalAmenities.forEach(function(item, key){ item.rooms.push(value); });
             }
         },
 
         validateEntries() {
-            if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+            if (this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
                 let self = this
-                if(this.$store.getters.bookingPagiGett=='page_1') {
+                if (this.$store.getters.bookingPagiGett=='page_1') {
                     this.isLoading = true;
                     this.form.currency_use = this.currency;
                     this.form.totalAmount = this.totalAmountFunc;
@@ -302,7 +302,7 @@ export default {
                             title: 'Something went wrong!'
                         })
                     });
-                }else if(this.$store.getters.bookingPagiGett=='page_2') {
+                } else if (this.$store.getters.bookingPagiGett=='page_2') {
                     this.form.post('/api/save-continue-booking/'+this.$store.getters.summaryDetailsGett[0].id).then(function (response) {
                         self.isLoading = false;
                             toast.fire({
@@ -336,20 +336,20 @@ export default {
             let tempParam = [];
             if (param.length > 0) {
                 let tempList = (kind!='roomNo') ? param.find(e => parseInt(e.id) === parseInt(this.form.roomWithRoomType)).value : [];
-                if(kind=='price')  tempParam.push(tempList);
-                else if(kind=='roomNo') {
+                if (kind=='price')  tempParam.push(tempList);
+                else if (kind=='roomNo') {
                     let self = this
                     param.forEach(function(item, key){ 
-                        if(parseInt(item.id)==parseInt(self.form.roomWithRoomType)) {
+                        if (parseInt(item.id)==parseInt(self.form.roomWithRoomType)) {
                             const found = tempParam.some(el => el.value === item.value.value);
                             if (!found) tempParam.push(item.value);
                         }
                     });
                 }
-                else if(kind=='value') tempList.forEach(function(item, key){ tempParam.push(item.value); });
-                else if(kind=='optional') tempList.forEach(function(item, key){ item['isVisible']=false; item['isChecked']=true; item['id']=(key+1);item['rooms']=[]; tempParam.push(item); });
-                else if(kind=='total') for(let i=1;i<=parseInt(tempList);i++) tempParam.push({id:i, text:i});
-                else if(kind=='many') for(let i=1;i<=(parseInt(tempList)*this.form.manyRoom);i++) tempParam.push({id:i, text:i});
+                else if (kind=='value') tempList.forEach(function(item, key){ tempParam.push(item.value); });
+                else if (kind=='optional') tempList.forEach(function(item, key){ item['isVisible']=false; item['isChecked']=true; item['id']=(key+1);item['rooms']=[]; tempParam.push(item); });
+                else if (kind=='total') for (let i=1;i<=parseInt(tempList);i++) tempParam.push({id:i, text:i});
+                else if (kind=='many') for (let i=1;i<=(parseInt(tempList)*this.form.manyRoom);i++) tempParam.push({id:i, text:i});
             } 
             return tempParam;
         },
@@ -369,13 +369,13 @@ export default {
         },
 
         isHotelChange(){
-            if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+            if (this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
                 let self = this;
                 axios.get('/api/hotel-with-room-types/'+this.form.hotel).then(
                     function (response) {
                         response.data.forEach(function(item, key) {
                             self.currency = item.room_type_hotel.base_currency.value;
-                            if([item.room_type_hotel]!='') {
+                            if ([item.room_type_hotel]!='') {
                                 [item.room_type_hotel].forEach(function(item2, key2){
                                     JSON.parse(item2.hotel_rooms_no).forEach(function(item3, key3){
                                         self.tempRoomOptions.push({id:item3.assign_id, value:item3});
@@ -397,12 +397,12 @@ export default {
         },
 
         loadHotels() {
-            if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+            if (this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
                 let self = this
                 axios.get('/api/hotels').then(
                     function (response) {
                         response.data.forEach(item => {
-                            if(item.status=='verified')
+                            if (item.status=='verified')
                                 self.hotels.push({id:item.id, text:item.name});
                         });
                     }
@@ -411,7 +411,7 @@ export default {
         },
 
         loadBookings() {
-            if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+            if (this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
                 let self =  this
                 axios.get('/api/bookings').then(
                     function (response) {
@@ -433,7 +433,7 @@ export default {
         },
 
         checkInDate(e) {
-            if(e!=null) {
+            if (e!=null) {
               this.form.checkInD = e;
               this.$refs.mycalendar.invoke('setDate', e, true);
               this.dateRange = `${e.getFullYear()}-${(e.getMonth()+1)}`;
@@ -441,7 +441,7 @@ export default {
         },
 
         checkOutDate(e) {
-            if(e!=null) {
+            if (e!=null) {
               this.form.checkOutD = e;
             }
         },

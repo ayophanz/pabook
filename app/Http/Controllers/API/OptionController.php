@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\Gate\OwnerAndAdminRequest;
 use App\Http\Requests\Option\CreateRequest;
 
@@ -23,7 +22,7 @@ class OptionController extends Controller
    
 	}
 
-   public function create(CreateRequest $request, OwnerAndAdminRequest $ownerAndAdminRequest) 
+   public function create(OwnerAndAdminRequest $ownerAndAdminRequest, CreateRequest $request) 
    {
    	  	$option = null;
    		$dataCreate = [

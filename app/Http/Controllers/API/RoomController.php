@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\Room\CreateRequest;
+use App\Http\Requests\Room\UpdateRequest;
+use App\Http\Requests\Gate\AllRequest;
+use App\Http\Requests\Gate\OwnerAndAdminRequest;
+
 use Illuminate\Support\Facades\File;
 use App\Http\Controllers\Controller;
 use App\Models\Room;
@@ -16,10 +20,7 @@ class RoomController extends Controller
         $this->middleware(['auth:api', 'verified', 'two_factor_auth']);
    }
 
-   public function index() {
-      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
-          return die('not allowed');
-
+   public function index(OwnerAndAdminRequest $ownerAndAdminRequest) {
       if(\Gate::allows('hotelOwner'))
         return Room::whereIn('room_type_id', Helpers::hotelOwner())->with('roomType')->orderBy('created_at', 'desc')->get();
 
@@ -27,48 +28,25 @@ class RoomController extends Controller
 		      return Room::with('roomType')->orderBy('created_at', 'desc')->get();
    }
 
-   public function create(Request $request) {
-      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
-          return die('not allowed');
-   	  
-      $room = null;
-   	  $data = [
-              'name' 	      => 'required|string|max:191|unique_name:rooms,name,room_type_id,'.$request['type'].',0',
-              'type'        => 'required|numeric|min:1',
-              'price'       => 'required|min:1|regex:/^\d+(\.\d{1,2})?$/',
-              'no_of_room'  => 'required|numeric|min:0',
-              'hotel'       => 'required|numeric|min:1',
-              'image'       => 'required|image64:jpeg,jpg,png',
-              'max_adult'   => 'required|numeric|min:1',
-              'max_child'   => 'required|numeric|min:0'
-              ];                                
-            
-      $customMessages = [
-                        'min' => 'The :attribute is required.',
-                        'unique_name' => 'The :attribute field is already exist in the same room type.'
-                        ];          
-
+   public function create(OwnerAndAdminRequest $ownerAndAdminRequest, CreateRequest $request) {   	  
+      $room = null;            
       $dataCreate = [
-                    'status'       => $request['status'],
-                    'name'         => $request['name'],
-                    'room_type_id' => $request['type'],
-                    'description'  => $request['description'],
-                    'price'        => $request['price'],
-                    'total_room'   => $request['no_of_room'],
-                    'max_adult'    => (int)$request['max_adult'],
-                    'max_child'    => (int)$request['max_child']
+                    'status'       => $request->status,
+                    'name'         => $request->name,
+                    'room_type_id' => $request->type,
+                    'description'  => $request->description,
+                    'price'        => $request->price,
+                    'total_room'   => $request->no_of_room,
+                    'max_adult'    => (int)$request->max_adult,
+                    'max_child'    => (int)$request->max_child
                     ];                     
 
-      $this->validate($request, $data, $customMessages);
+      $validated = $request->validated();
 
-      if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner')) 
-        $room = Room::create($dataCreate);
+      if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner')) $room = Room::create($dataCreate);
          
-
       if($request->image) {
-
         $image = Helpers::featureImage($request->image, $room->id, $room->name, 'create');
-        
   			Room::where('id', $room->id)->update(['image'=>$image]);
       }	
       
@@ -88,20 +66,14 @@ class RoomController extends Controller
         RoomMeta::create($dataMetaCreate);                  
       }
 
-      return ( ($room!=null)? $room : die('Something went wrong!') );
+      return $room!=null ? $room : die('Something went wrong!');
    }
 
-   public function show($id) {
-      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
-          return die('not allowed');
-
+   public function show(OwnerAndAdminRequest $ownerAndAdminRequest, $id) {
       return Room::where('id', $id)->with('roomFeature', 'roomFeatureOptional', 'roomType')->first();
    }
 
-   public function availableRooms($start=null, $end=null) {
-      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner') && !\Gate::allows('hotelReceptionist'))
-        return die('not allowed');
-
+   public function availableRooms(AllRequest $allRequest, $start=null, $end=null) {
       if(\Gate::allows('hotelOwner') || \Gate::allows('hotelReceptionist')) 
         return Room::with('roomType', 'roomGallery')->whereIn('room_type_id', $this->owner())->where('status', 'active')->get();
 
@@ -109,49 +81,24 @@ class RoomController extends Controller
         return Room::with('roomType', 'roomGallery')->where('status', 'active')->get();
    }
 
-   public function update(Request $request, $id) {
-      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
-          return die('not allowed');
-
-      $room=null;
-      $data = [
-              'name'        => 'required|string|max:191|unique_name:rooms,name,room_type_id,'.$request['type'].','.$id,
-              'type'        => 'required|numeric|min:1',
-              'price'       => 'required|min:1|regex:/^\d+(\.\d{1,2})?$/',
-              'no_of_room'  => 'required|numeric|min:0',
-              'hotel'       => 'required|numeric|min:1',
-              'max_adult'   => 'required|numeric|min:1',
-              'max_child'   => 'required|numeric|min:0'
-              ];
-
-      $customMessages = [
-                        'min' => 'The :attribute is required.',
-                        'unique_name' => 'The :attribute field is already exist in the same room type.',
-                        ];
-                        
+   public function update(OwnerAndAdminRequest $ownerAndAdminRequest, UpdateRequest $request, $id) {
+      $room=null;                        
       $dataUpdate = [
-                    'status'       => $request['status'],
-                    'name'         => $request['name'],
-                    'room_type_id' => $request['type'],
-                    'description'  => $request['description'],
-                    'price'        => $request['price'],
-                    'total_room'   => $request['no_of_room'],
-                    'max_adult'    => (int)$request['max_adult'],
-                    'max_child'    => (int)$request['max_child']
+                    'status'       => $request->status,
+                    'name'         => $request->name,
+                    'room_type_id' => $request->type,
+                    'description'  => $request->description,
+                    'price'        => $request->price,
+                    'total_room'   => $request->no_of_room,
+                    'max_adult'    => (int)$request->max_adult,
+                    'max_child'    => (int)$request->max_child
                     ];
 
-      if($request['changeFeature']) 
-        $data['image'] = 'required|image64:jpeg,jpg,png';
+      $validated = $request->validated();
+      $room = Room::where('id', $id)->update($dataUpdate);
 
-      $this->validate($request, $data, $customMessages);
-
-
-        $room = Room::where('id', $id)->update($dataUpdate);
-
-      if($request->image && $request['changeFeature']) {
-
-        $image = Helpers::featureImage($request->image, $id, $request['name'], 'update');  
-
+      if($request->image && $request->changeFeature) {
+        $image = Helpers::featureImage($request->image, $id, $request->name, 'update');  
         Room::where('id', $id)->update(['image'=>$image]);
       }
 
@@ -160,9 +107,7 @@ class RoomController extends Controller
       try{Helpers::roomsNo($request->rooms_no, $id, $request->hotel);}catch(Exception $e){}
 
       if($request->gallery) {
-
         $file = Helpers::imageGallery($request->gallery, $id, 'update');
-
         $dataMetaUpdate = ['value' => json_encode($file)];
         RoomMeta::where('room_id', $id)->where('meta_key', 'room_gallery')->update($dataMetaUpdate);                  
       }
@@ -170,10 +115,7 @@ class RoomController extends Controller
       return ( ($room!=null)? $room : die('Something went wrong!') );
    }
 
-   public function destroy($id) {
-      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
-          return die('not allowed');
-
+   public function destroy(OwnerAndAdminRequest $ownerAndAdminRequest, $id) {
       $room = Room::where('id', $id)->first();
 
       if($room) {
@@ -191,9 +133,7 @@ class RoomController extends Controller
     /**
     *  Custom query
     */
-    public function specificRooms($ids) {
-      if(!\Gate::allows('superAdmin') && !\Gate::allows('hotelOwner'))
-        return die('not allowed');
+    public function specificRooms(OwnerAndAdminRequest $ownerAndAdminRequest, $ids) {
       $ids = explode(',', $ids);
       return Room::whereIn('id', $ids)->with('roomType')->orderBy('created_at', 'desc')->get();
     }

@@ -28,7 +28,12 @@
             <div class="card mt-0">
                 <div class="card-header">
                     <div class="card-tool">
-                        <button class="btn btn-outline-primary btn-flat" @click="resetData()">
+                        <router-link to="/">
+                            <button class="btn btn-outline-primary btn-flat">
+                                <i class="fa fa-arrow-left"></i> Go to list
+                            </button>
+                        </router-link>
+                        <button class="btn btn-outline-primary btn-flat float-right" @click="resetData()">
                             <i class="fas fa-broom"></i> Reset Fields
                         </button>
                     </div>

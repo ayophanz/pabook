@@ -18716,3 +18716,7 @@ ul.exclude-rooms-no {
   max-height: 100%;
 }
 
+.float-right {
+  float: right;
+}
+

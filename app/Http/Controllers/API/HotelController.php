@@ -125,7 +125,7 @@ class HotelController extends Controller
     }
 
     public function approveHotel(ApproveRequest $request) {
-        return (\Gate::allows('superAdmin'))? Hotel::where('id', $request['hotelId'])->update(['status'=>'email_verifying']) : 'error';
+        return (\Gate::allows('superAdmin'))? Hotel::where('id', $request->hotelId)->update(['status'=>'email_verifying']) : 'error';
     }
 
     public function destroy(OwnerAndAdminRequest $ownerAndAdminRequest, $id) {
