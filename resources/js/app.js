@@ -46,6 +46,8 @@ const router = new VueRouter({
 /** Global helpers */
 import './global';
 
+
+/** Main vue app */
 const app = new Vue({
   el: '#app',
   router,

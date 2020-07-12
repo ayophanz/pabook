@@ -175,7 +175,7 @@ export default {
                 if(result.value) {
                 this.deleteHotel(hotelId);
                 }
-            })
+            });
         }
     },
     beforeCreate() {

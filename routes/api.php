@@ -37,7 +37,7 @@ Route::get('/profile', 'API\UserController@profile');
 
 Route::put('/update-profile', 'API\UserController@UpdateProfile');
 
-Route::post('/recep-capability/{action}', 'API\UserController@recapCap');
+Route::post('/recep-capability/{action}', 'API\UserController@recepCap');
 
 Route::get('/check-two-factor-if-expired', 'API\UserController@checkTwoFactExpired');
 

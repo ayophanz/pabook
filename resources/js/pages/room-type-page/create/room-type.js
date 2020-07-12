@@ -33,14 +33,23 @@ export default {
                     toast.fire({
                         type: 'success',
                         title: msg
-                    })
+                    }).then(function() {
+                        afterCreate.fire()
+                        .then((result) => {
+                            if (result.value) {
+                                location.reload();
+                            } else {
+                                self.$router.push('/room-types');
+                            }
+                        });
+                    });
                 })
                 .catch(function (error) {
                     self.isLoading = false; 
                     toast.fire({
                         type: 'error',
                         title: 'Something went wrong!'
-                    })
+                    });
                 });
             }
         },

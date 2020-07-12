@@ -88,8 +88,8 @@ export default {
                 reader.readAsDataURL(file);
             }else{
                 toast.fire({
-                type: 'error',
-                title: 'You are uploading large file of zip, Please upload only less than 5MB file.'
+                    type: 'error',
+                    title: 'You are uploading large file of zip, Please upload only less than 5MB file.'
                 })
             }
         },
@@ -99,7 +99,7 @@ export default {
                 this.isLoading = true;
                 let self = this
                 this.form.changeCover = this.isCheckCover       
-                this.form.post('/api/create-hotel') .then(function (response) { 
+                this.form.post('/api/create-hotel').then(function (response) { 
                     let msg = 'Hotel updated successfully';
                     if(self.hotelId==null) {
                         msg = 'Hotel created successfully';
@@ -110,7 +110,16 @@ export default {
                     toast.fire({
                         type: 'success',
                         title: msg
-                    })
+                    }).then(function() {
+                        afterCreate.fire()
+                        .then((result) => {
+                            if (result.value) {
+                                location.reload();
+                            } else {
+                                self.$router.push('/hotels');
+                            }
+                        });
+                    });
 
                 }).catch(function (error) {
                     self.isLoading = false;

@@ -163,12 +163,21 @@ export default {
                     fire.$emit('resetGallery');
                     self.imageUrl = null;
                     self.no_unit_avail = 0;
-                    
+
                     self.isLoading = false;
                     toast.fire({
                       type: 'success',
                       title: msg
-                    })
+                    }).then(function() {
+                      afterCreate.fire()
+                      .then((result) => {
+                          if (result.value) {
+                              location.reload();
+                          } else {
+                              self.$router.push('/rooms');
+                          }
+                      });
+                    });
 
                 })
                 .catch(function (error) {
