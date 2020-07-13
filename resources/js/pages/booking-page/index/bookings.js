@@ -103,7 +103,7 @@ export default {
         },
 
         singleDetails(id) {
-            if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+            if(this.$gate.superAdmin() || this.$gate.hotelReceptionist() || this.$gate.hotelOwner()) {
                 let self = this
                 axios.get('/api/single-booking-details/'+id)
                 .then(
@@ -122,7 +122,7 @@ export default {
         },
 
         loadBookings() {
-            if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+            if(this.$gate.superAdmin() || this.$gate.hotelReceptionist() || this.$gate.hotelOwner()) {
                 let self = this
                 axios.get('/api/bookings')
                 .then(

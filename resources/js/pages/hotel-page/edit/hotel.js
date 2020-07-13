@@ -170,7 +170,7 @@ export default {
         },
         
         register() {
-        if(this.$gate.superAdminOrhotelOwner()) {
+        if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
             this.isLoading = true;
             let self = this
             this.form.changeCover = this.isCheckCover
@@ -249,7 +249,7 @@ export default {
         },
         
         hotelDetails(id) {
-        if(this.$gate.superAdminOrhotelOwner()) {
+        if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
             this.isLoading = true;
             let self = this;
             axios.get('/api/edit-hotel/'+id)

@@ -16,7 +16,7 @@
       },
       methods: {
         reloadNotification() {
-          if (this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+          if (this.$gate.superAdmin() || this.$gate.hotelReceptionist() || this.$gate.hotelOwner()) {
               let self = this
               axios.get('/api/mark-as-read')
               .then(

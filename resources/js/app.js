@@ -70,7 +70,7 @@ const app = new Vue({
     },
 
     twoFactorCheck() {
-      if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+      if(this.$gate.superAdmin() || this.$gate.hotelReceptionist() || this.$gate.hotelOwner()) {
         // let timeOut;
         // axios.get('/api/check-two-factor-if-expired').then((response) => {
         //   if (response.data=='reload') {
@@ -83,7 +83,7 @@ const app = new Vue({
     },
 
     queryIncompleteBook() {
-      // if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) this.listen('incompletebooking');
+      // if(this.$gate.superAdmin() || this.$gate.hotelReceptionist() || this.$gate.hotelOwner()) this.listen('incompletebooking');
     },
 
     cancelBooking(id) {
@@ -99,7 +99,7 @@ const app = new Vue({
       }).then((result) => {
         if(result.value) {
           let self = this
-          if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+          if(this.$gate.superAdmin() || this.$gate.hotelReceptionist() || this.$gate.hotelOwner()) {
             axios.delete('/api/cancel-booking/'+id)
             .then(function (response) {
                 toast.fire({
@@ -118,7 +118,7 @@ const app = new Vue({
 
     continueBooking(id) {
       let self = this
-      if(this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+      if(this.$gate.superAdmin() || this.$gate.hotelReceptionist() || this.$gate.hotelOwner()) {
         axios.get('/api/continue-booking/'+id)
         .then(function (response) {
           self.$store.commit('summaryDetailsMutat', response.data);

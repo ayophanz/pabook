@@ -35,7 +35,7 @@ export default {
             }
         },
         recepCap(action) {
-            if(this.$gate.superAdminOrhotelOwner()) { 
+            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) { 
                 this.isLoading = true;
                 let self = this;
                 this.form.post('/api/recep-capability/'+action).then(function (response) {
@@ -66,7 +66,7 @@ export default {
             });
         },
         loadHotels() {
-            if(this.$gate.superAdminOrhotelOwner()) {
+            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
                 this.hotels = [];
                 let self = this;
                 axios.get('/api/hotels/'+this.form.hotelOwner+'/'+this.form.recep+'/0')
@@ -84,7 +84,7 @@ export default {
             }
         },
         loadUserCap() {
-            if(this.$gate.superAdminOrhotelOwner()) {
+            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
                 if(this.rePick) {
                     this.isLoading = true;
                 }

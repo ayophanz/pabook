@@ -278,7 +278,7 @@ export default {
         },
 
         validateEntries() {
-            if (this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+            if (this.$gate.superAdmin() || this.$gate.hotelReceptionist() || this.$gate.hotelOwner()) {
                 let self = this
                 if (this.$store.getters.bookingPagiGett=='page_1') {
                     this.isLoading = true;
@@ -369,7 +369,7 @@ export default {
         },
 
         isHotelChange(){
-            if (this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+            if (this.$gate.superAdmin() || this.$gate.hotelReceptionist() || this.$gate.hotelOwner()) {
                 let self = this;
                 axios.get('/api/hotel-with-room-types/'+this.form.hotel).then(
                     function (response) {
@@ -397,7 +397,7 @@ export default {
         },
 
         loadHotels() {
-            if (this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+            if (this.$gate.superAdmin() || this.$gate.hotelReceptionist() || this.$gate.hotelOwner()) {
                 let self = this
                 axios.get('/api/hotels').then(
                     function (response) {
@@ -411,7 +411,7 @@ export default {
         },
 
         loadBookings() {
-            if (this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+            if (this.$gate.superAdmin() || this.$gate.hotelReceptionist() || this.$gate.hotelOwner()) {
                 let self =  this
                 axios.get('/api/bookings').then(
                     function (response) {

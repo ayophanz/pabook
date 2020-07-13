@@ -123,7 +123,7 @@ import Loading from 'vue-loading-overlay';
                 return '/storage/images/upload/roomImages/gallery-'+id+'/'+image+'?rnd'+new Date().getTime();
             },
             loadRooms() {
-                if(this.$gate.superAdminOrhotelOwner()) {
+                if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
                     let self = this
                     axios.get('/api/rooms')
                     .then(
@@ -138,7 +138,7 @@ import Loading from 'vue-loading-overlay';
                 }
             },
             deleteRoom(roomId) {
-                if(this.$gate.superAdminOrhotelOwner()) {
+                if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
                     this.isLoading = true;
                     let self = this
                     axios.delete('/api/delete-room/'+roomId)

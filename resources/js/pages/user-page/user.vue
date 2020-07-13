@@ -137,7 +137,7 @@
           //     this.isCheckPass = true;
           // },
           register () {
-            if(this.$gate.superAdminOrhotelOwner()) {
+            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
               this.isLoading = true;
               let self = this
               this.form.changePass = this.isCheckPass
@@ -179,7 +179,7 @@
             }
           },
           userDetails(id) {
-            if(this.$gate.superAdminOrhotelOwner()) {
+            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
               this.isLoading = true;
               let self = this;
               axios.get('/api/edit-user/'+id)

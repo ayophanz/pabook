@@ -46,7 +46,7 @@
         methods: {
             markAsRead(notification) {
                 console.log(notification);
-                if (this.$gate.superAdminOrhotelOwnerOrhotelReceptionist()) {
+                if (this.$gate.superAdmin() || this.$gate.hotelReceptionist() || this.$gate.hotelOwner()) {
                     this.isLoading = true;
                     let self = this
                     axios.put('/api/mark-as-read/'+notification.id).then(

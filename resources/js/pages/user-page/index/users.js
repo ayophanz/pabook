@@ -94,7 +94,7 @@ export default {
     },
     methods: {
         loadUsers() {
-            if(this.$gate.superAdminOrhotelOwner()) {
+            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
                 let self = this
                 axios.get('/api/users')
                 .then(
@@ -106,7 +106,7 @@ export default {
             }
         },
         deleteUser(userId) {
-            if(this.$gate.superAdminOrhotelOwner()) {
+            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
                 this.isLoading = true;
                 let self = this
                 axios.delete('/api/delete-user/'+userId)

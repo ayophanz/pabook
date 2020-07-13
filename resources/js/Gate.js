@@ -21,19 +21,4 @@ export default class Gate {
 			return this.user.role === 'hotel_owner';
 		}catch(e){return false;}
 	}
-
-	superAdminOrhotelOwner() {
-		try {
-			if(this.user.role === 'hotel_owner' || this.user.role === 'super_admin')
-				return	true;
-		}catch(e){return false;}
-	}
-
-	superAdminOrhotelOwnerOrhotelReceptionist() {
-		try {
-			if(this.user.role === 'hotel_owner' || this.user.role === 'super_admin' || this.user.role === 'hotel_receptionist')
-				return	true;
-		}catch(e){return false;}
-	}
-	
 }

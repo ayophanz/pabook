@@ -72,7 +72,7 @@ export default {
     },
     methods: {
         loadTypes() {
-            if(this.$gate.superAdminOrhotelOwner()) {
+            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
                 let self = this
                 axios.get('/api/room-types')
                 .then(
@@ -84,7 +84,7 @@ export default {
             }
         },
         deleteType(typeId) {
-            if(this.$gate.superAdminOrhotelOwner()) {
+            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
                 axios.delete('/api/delete-type/'+typeId)
                 .then(
                     function (response) {

@@ -23,7 +23,7 @@ export default {
     },
     methods: {
         register () {
-            if(this.$gate.superAdminOrhotelOwner()) {
+            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
                 this.isLoading = true;
                 let self = this
                 this.form.post('/api/create-room-type') .then(function () {
@@ -52,7 +52,7 @@ export default {
             }
         },
         loadHotels() {
-            if(this.$gate.superAdminOrhotelOwner()) {
+            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
                 let self = this
                 axios.get('/api/hotels')
                 .then(
@@ -66,7 +66,7 @@ export default {
             }
         },
         typeDetails(id) {
-            if(this.$gate.superAdminOrhotelOwner()) {
+            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
                 this.isLoading = true;
                 let self = this;
                 axios.get('/api/edit-room-type/'+id)

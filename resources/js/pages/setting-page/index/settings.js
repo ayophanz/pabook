@@ -62,7 +62,7 @@ export default {
             }
         },
         register() {
-            if(this.$gate.superAdminOrhotelOwner()) {
+            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
                 this.isLoading = true;
                 let self = this
                 this.form.post('/api/create-config')

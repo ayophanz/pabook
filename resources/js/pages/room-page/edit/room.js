@@ -105,7 +105,7 @@ export default {
         },
         
         loadHotels() {
-            if(this.$gate.superAdminOrhotelOwner()) {
+            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
                 let self = this
                 axios.get('/api/hotels')
                 .then(
@@ -120,7 +120,7 @@ export default {
         },
         
         ifChange() {
-            if(this.$gate.superAdminOrhotelOwner()) {
+            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
                 this.isLoading = true;
                 this.types = [];
                 let self = this;
@@ -157,7 +157,7 @@ export default {
         },
         
         register() {
-            if(this.$gate.superAdminOrhotelOwner()) {
+            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
                 this.form.no_of_room = this.form.rooms_no.length;
                 this.isLoading = true;
                 fire.$emit('uploadImage');
@@ -211,7 +211,7 @@ export default {
         },
         
         roomDetails(id) {
-            if(this.$gate.superAdminOrhotelOwner()) {
+            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
                 let self = this
                 axios.get('/api/edit-room/'+id)
                 .then(
