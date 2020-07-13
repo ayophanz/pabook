@@ -20,7 +20,7 @@ class Hotel extends Model
 				'image',
 				'status',
 				'check_in',
-				'check-out',
+				'check_out',
 				'website',
 				'verify_token',
 				'hotel_rooms_no'

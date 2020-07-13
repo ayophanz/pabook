@@ -44,14 +44,14 @@
                       <div class="col-auto">
                           <div class="form-group">
                             <label for="max_adult">Max Adult <span class="required-asterisk">*</span></label>
-                            <vue-number-input v-model="form.max_adult" :class="{ 'is-invalid': form.errors.has('max_adult') }" size="small" :value="1" :min="1" :inputtable="false" inline center controls id="max_adult"></vue-number-input>
+                            <vue-number-input v-model="form.max_adult" :class="{ 'is-invalid': form.errors.has('max_adult') }" size="small" :min="1" :inputtable="false" inline center controls id="max_adult"></vue-number-input>
                             <has-error :form="form" field="max_adult"></has-error>
                           </div>  
                       </div>
                       <div class="col-auto">
                           <div class="form-group">
                             <label for="max_child">Max Child <span class="required-asterisk">*</span></label>
-                            <vue-number-input v-model="form.max_child" :class="{ 'is-invalid': form.errors.has('max_child') }" size="small" :value="0" :min="0" :inputtable="false" inline center controls id="max_child"></vue-number-input>
+                            <vue-number-input v-model="form.max_child" :class="{ 'is-invalid': form.errors.has('max_child') }" size="small" :min="0" :inputtable="false" inline center controls id="max_child"></vue-number-input>
                             <has-error :form="form" field="max_child"></has-error>
                           </div>
                       </div>

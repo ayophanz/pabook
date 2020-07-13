@@ -14,7 +14,6 @@ export default {
         isRecep: true,
         isSuperAdmin: false,
         isCheckPass: false,
-        buttonText: 'Save',
         hotelOwnerEmails: [],
         form: new form({
             fullname: '',

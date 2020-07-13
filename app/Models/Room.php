@@ -12,11 +12,13 @@ class Room extends Model
     			'description', 
     			'price',
     			'image',
-    			'total_room',
+                'total_room',
+                'max_adult',
+                'max_child',
                 'status'
     			];
 
-    protected $with = ['roomType', 'roomFeature', 'roomFeatureOptional', 'roomGallery', 'roomNumbering'];//rermove this if unnecessary      
+    protected $with = ['roomType', 'roomFeature', 'roomFeatureOptional', 'roomGallery', 'roomNumbering']; //rermove this if unnecessary      
                 
 
     public function roomType() {

@@ -14,7 +14,6 @@ export default {
         isRecep: true,
         isSuperAdmin: false,
         isCheckPass: false,
-        buttonText: 'Save',
         userId: null,
         hotelOwnerEmails: [],
         form: new form({
@@ -105,7 +104,6 @@ export default {
     created(){
         this.userId = this.$route.params.userId;  
         this.userDetails(this.userId);
-        this.buttonText = 'Update';
         //if(this.$gate.hotelOwner()) 
             //this.role.splice(0, 1);
         this.hotelOwners(this.form.role);

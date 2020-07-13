@@ -153,21 +153,14 @@ export default {
                 this.isLoading = true;
                 fire.$emit('uploadImage');
                 this.form.changeFeature = this.isCheckCover
-                let self = this
-                this.form.featureData.forEach(function(item, key){ if(item.value=='') self.form.featureData.splice(key, 1); });
-                this.form.featureOptionalData.forEach(function(item, key){ if(item.value=='') self.form.featureOptionalData.splice(key, 1); });           
-                this.form.post('/api/create-room')  .then(function (response) {
-                    let msg = 'Room created successfully';
-                    self.form.reset();
-                    fire.$emit('reset');
-                    fire.$emit('resetGallery');
-                    self.imageUrl = null;
-                    self.no_unit_avail = 0;
-
+                let self = this;
+                this.form.featureData.forEach(function(item, key){ if (item.value=='') self.form.featureData.splice(key, 1); });
+                this.form.featureOptionalData.forEach(function(item, key){ if (item.value=='') self.form.featureOptionalData.splice(key, 1); });           
+                this.form.post('/api/create-room').then(function (response) {
                     self.isLoading = false;
                     toast.fire({
                       type: 'success',
-                      title: msg
+                      title: 'Room created successfully',
                     }).then(function() {
                       afterCreate.fire()
                       .then((result) => {
@@ -182,6 +175,7 @@ export default {
                 })
                 .catch(function (error) {
                     self.isLoading = false;
+                    console.log(error);
                     toast.fire({
                       type: 'error',
                       title: 'Something went wrong!'

@@ -43,7 +43,7 @@ class RoomController extends Controller
 
       $validated = $request->validated();
 
-      if(\Gate::allows('superAdmin') || \Gate::allows('hotelOwner')) $room = Room::create($dataCreate);
+      $room = Room::create($dataCreate);
          
       if($request->image) {
         $image = Helpers::featureImage($request->image, $room->id, $room->name, 'create');
