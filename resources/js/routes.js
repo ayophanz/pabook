@@ -44,7 +44,7 @@ export default [
     {path: '/users', name:'Users', component: require('./pages/user-page/index/users.vue').default},
     {path: '/profile', name:'Account', component: require('./pages/user-page/profile/profile.vue').default},
     {path: '/add-user', name:'New User', component: require('./pages/user-page/create/user.vue').default},
-    {path: '/edit-user/:userId', name:'Edit User', component: require('./pages/user-page/user.vue').default},
+    {path: '/edit-user/:userId', name:'Edit User', component: require('./pages/user-page/edit/user.vue').default},
     {path: '/users-capability', name:'User Capability', component: require('./pages/user-page/capability/capability.vue').default},
 
     /**
