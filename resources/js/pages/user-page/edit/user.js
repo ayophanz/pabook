@@ -42,7 +42,7 @@ export default {
                 this.isLoading = true;
                 let self = this;
                 this.form.changePass = this.isCheckPass;
-                action = this.form.put('/api/update-user/'+this.userId)
+                this.form.put('/api/update-user/'+this.userId)
                 .then(function () { 
                     self.isLoading = false;
                     toast.fire({
