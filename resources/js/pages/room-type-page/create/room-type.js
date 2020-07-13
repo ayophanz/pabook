@@ -26,13 +26,11 @@ export default {
             if(this.$gate.superAdminOrhotelOwner()) {
                 this.isLoading = true;
                 let self = this
-                this.form.post('/api/create-room-type') .then(function (response) { 
-                    self.form.name = '';
-                    msg = 'Room Type created successfully';
+                this.form.post('/api/create-room-type') .then(function () {
                     self.isLoading = false;
                     toast.fire({
                         type: 'success',
-                        title: msg
+                        title: 'Room Type created successfully',
                     }).then(function() {
                         afterCreate.fire()
                         .then((result) => {
@@ -43,9 +41,9 @@ export default {
                             }
                         });
                     });
-                })
-                .catch(function (error) {
+                }).catch(function (error) {
                     self.isLoading = false; 
+                    console.log(error);
                     toast.fire({
                         type: 'error',
                         title: 'Something went wrong!'

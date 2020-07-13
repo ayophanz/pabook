@@ -259,13 +259,13 @@ class Helpers
         $image =  $name.'-'.$id.'.'.explode('/', 
             explode(':', substr($img, 0, 
             strpos($img, ';')))[1])[1];
-        if($action=='update')
-
+        if($action=='update') {
           $fileExist = public_path().'/storage/images/upload/roomImages/gallery-'.$id.'/'.$name.'-'.$id;
           if (File::exists($fileExist.'.png')) unlink($fileExist.'.png');
           elseif (File::exists($fileExist.'.jpg')) unlink($fileExist.'.jpg');
           elseif (File::exists($fileExist.'.jpeg')) unlink($fileExist.'.jpeg');
           elseif (File::exists($fileExist.'.gif')) unlink($fileExist.'.gif');
+        }  
         \Image::make($img)->save(public_path('storage/images/upload/roomImages/gallery-'.$id.'/').$image);
         return $image;
     }

@@ -27,18 +27,18 @@ export default {
                 this.isLoading = true;
                 let self = this
                 this.form.put('/api/update-room-type/'+this.typeId).then(function (response) { 
-                    let msg = 'Room Type updated successfully';
                     self.isLoading = false;
                     toast.fire({
-                    type: 'success',
-                    title: msg
+                        type: 'success',
+                        title: 'Room Type updated successfully',
                     })
                 })
                 .catch(function (error) {
-                    self.isLoading = false; 
+                    self.isLoading = false;
+                    console.log(error);
                     toast.fire({
-                    type: 'error',
-                    title: 'Something went wrong!'
+                        type: 'error',
+                        title: 'Something went wrong!'
                     })
                 });
             }
