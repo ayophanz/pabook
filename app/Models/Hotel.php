@@ -35,5 +35,9 @@ class Hotel extends Model
 
     public function baseCurrency(){
         return $this->belongsTo(Option::class, 'id', 'meta_value')->where('meta_key', 'base_currency');
+	}
+	
+	public function receptionistAssign(){
+        return $this->belongsTo(ReceptionistAssign::class, 'id', 'hotel_id');
     }
 }

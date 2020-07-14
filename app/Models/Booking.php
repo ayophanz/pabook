@@ -7,33 +7,33 @@ use Illuminate\Database\Eloquent\Model;
 class Booking extends Model
 {
     protected $fillable = [
-                'roomId',
+                'room_id',
     			'name', 
                 'email', 
                 'address',
-    			'phoneNo',
-    			'dateStart',
-    			'dateEnd',
+    			'phone_no',
+    			'date_start',
+    			'date_end',
                 'amount',
                 'currency',
-                'manyRoom',
-                'optionalAmen',
-                'manyAdult',
-                'manyChild',
-                'roomsNo',
-                'userId',
-                'hotelId',
+                'many_room',
+                'optional_amen',
+                'many_adult',
+                'many_child',
+                'rooms_no',
+                'user_id',
+                'hotel_id',
                 'status'
     			];
 
     protected $with = ['room', 'hotel'];//rermove this if unnecessary                  
 
     public function room() {
-        return $this->belongsTo(Room::class, 'roomId', 'id'); 
+        return $this->belongsTo(Room::class, 'room_id', 'id'); 
     }
 
     public function hotel() {
-        return $this->belongsTo(Hotel::class, 'hotelId', 'id'); 
+        return $this->belongsTo(Hotel::class, 'hotel_id', 'id'); 
     }
 
     //public static function boot() {

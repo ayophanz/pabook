@@ -64,4 +64,12 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new ResetPassword($token));
     }
+
+    public function receptionistAssign() {
+        return $this->hasOne(ReceptionistAssign::class, 'receptionist_id', 'id');
+    }
+
+    public function myReceptionist() {
+        return $this->hasOne(ReceptionistAssign::class, 'owner_id', 'id');
+    }
 }

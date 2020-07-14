@@ -31,21 +31,21 @@ class BookController extends Controller
     {
       $validated = $request->validated();
       $data = [
-                'name'         => 'incomplete',
-                'phoneNo'      => 'incomplete',
-                'roomId'       => (int)$request->roomWithRoomType,
-                'hotelId'      => (int)$request->hotel,
-                'dateStart'    => date($request->checkInD),
-                'dateEnd'      => date($request->checkOutD),
-                'amount'       => (float)$request->totalAmount,
-                'currency'     => $request->currency_use,
-                'userId'       => auth('api')->user()->id,
-                'manyRoom'     => (int)$request->manyRoom,
-                'manyAdult'    => (int)$request->manyAdult,
-                'manyChild'    => (int)$request->manyChild,
-                'roomsNo'      =>  json_encode($request->rooms_no),
-                'status'       => 'incomplete',
-                'optionalAmen' =>  json_encode($request->addOnOptionalAmen)
+                'name'          => 'incomplete',
+                'phone_no'      => 'incomplete',
+                'room_id'       => (int)$request->roomWithRoomType,
+                'hotel_id'      => (int)$request->hotel,
+                'date_start'    => date($request->checkInD),
+                'date_end'      => date($request->checkOutD),
+                'amount'        => (float)$request->totalAmount,
+                'currency'      => $request->currency_use,
+                'user_id'       => auth('api')->user()->id,
+                'many_room'     => (int)$request->manyRoom,
+                'many_adult'    => (int)$request->manyAdult,
+                'many_child'    => (int)$request->manyChild,
+                'rooms_no'      =>  json_encode($request->rooms_no),
+                'status'        => 'incomplete',
+                'optional_amen' =>  json_encode($request->addOnOptionalAmen)
               ];      
 
       $book = Booking::create($data);
@@ -66,7 +66,7 @@ class BookController extends Controller
 
       $data = [
         'name'    => $request->name,
-        'phoneNo' => $request->phoneNo,
+        'phone_no' => $request->phoneNo,
         'email'   => ($request->email=='mail@mail.com') ? null : $request->email,
         'status'  => 'active'
       ]; 

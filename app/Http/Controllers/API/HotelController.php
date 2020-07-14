@@ -39,7 +39,7 @@ class HotelController extends Controller
     }
 
     public function create(OwnerAndAdminRequest $ownerAndAdminRequest, CreateRequest $request) {
-
+        
     	$hotel = null;   
         $dataCreate = [
                     'name'           => $request->name,
@@ -105,7 +105,7 @@ class HotelController extends Controller
                       'hotel_rooms_no' => $request->rooms_no
                       ]; 
 
-        if (\Gate::allows('superAdmin'))  $dataUpdate['user_id'] = $request['owner'];
+        if (\Gate::allows('superAdmin'))  $dataUpdate['user_id'] = $request->owner;
 
         $validated = $request->validated();
 
