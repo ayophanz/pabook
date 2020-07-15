@@ -10,6 +10,7 @@ use App\Models\RoomType;
 use App\Models\UserMeta;
 use App\Models\RoomMeta;
 use App\Models\Option;
+use App\Models\ReceptionistAssign;
 use Storage;
 
 class Helpers
@@ -23,10 +24,11 @@ class Helpers
     }
 
     /**
-    *  User Id security verification
+    *  Get owner receptionist
     */
     public static function recep() {
-      return UserMeta::select('value')->where('user_id', auth('api')->user()->id)->get()->toArray();
+      return ReceptionistAssign::select('receptionist_id')->where('owner_id', auth('api')->user()->id)->get()->toArray();
+      // return UserMeta::select('value')->where('user_id', auth('api')->user()->id)->get()->toArray();
     }
 
     /**
