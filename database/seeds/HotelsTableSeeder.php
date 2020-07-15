@@ -57,11 +57,7 @@ class HotelsTableSeeder extends Seeder
     /** Extra function */
     public function randomException() 
     {
-        $user = User::inRandomOrder()->first();
-        if ($user->role == 'hotel_owner') {
-            return $user->id;
-        } else {
-            return $this->randomException();
-        }
+        $user = User::where('role', 'hotel_owner')->inRandomOrder()->first();
+        return $user->id;
     }
 }

@@ -35,21 +35,26 @@ class RoomsTableSeeder extends Seeder
                 'status'          => 'active',
             ]);
             
+            $data = [];
             for ($i = 0; $i < 3; $i++) {
-                RoomMeta::firstOrCreate([
-                    'room_id'  => $room->id,
-                    'meta_key' => 'room_feature',
-                    'value'    => '[{"value":"test'.($i+1).'"}]',
-                ]);
+                array_push($data, (Object) ['value' => 'test'.($i+1)]);
             }
+
+            RoomMeta::firstOrCreate([
+                'room_id'  => $room->id,
+                'meta_key' => 'room_feature',
+                'value'    => json_encode($data),
+            ]);
             
+            $data = [];
             for ($i = 0; $i < 6; $i++) {
-                RoomMeta::firstOrCreate([
-                    'room_id'  => $room->id,
-                    'meta_key' => 'room_feature_optional',
-                    'value'    => '[{"value":"test'.($i+1).'","price":'.rand(100, 800).'}]',
-                ]);
+                array_push($data, (Object) ['value' => 'test'.($i+1), 'price' => rand(100, 800)]);
             }
+            RoomMeta::firstOrCreate([
+                'room_id'  => $room->id,
+                'meta_key' => 'room_feature_optional',
+                'value'    => json_encode($data),
+            ]);
         }
 
         /** Enabling the referrence */
