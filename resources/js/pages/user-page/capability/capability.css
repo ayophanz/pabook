@@ -12,4 +12,28 @@
 }
 .custom-switch {
     text-align: left;
+    display: block;
+}
+label:not(.form-check-label):not(.custom-file-label) {
+    display: block;
+}
+.accordion .item-accord:after {
+    font-family: 'Font Awesome 5 Free';  
+    content: "\f068";
+    float: right;
+}
+.accordion .item-accord.collapsed:after {
+    /* symbol for "collapsed" panels */
+    content: "\f067"; 
+}
+.card-header.item-accord a {
+    width: 100%;
+    margin: 0px;
+}
+.card-header.item-accord {
+    display: flex;
+    cursor: pointer;
+}
+.accordion .custom-switch {
+    padding: 0px;
 }

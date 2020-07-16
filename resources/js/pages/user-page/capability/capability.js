@@ -48,6 +48,7 @@ export default {
                 })
                 .catch(function (error) {
                     self.isLoading = false;
+                    console.log(error);
                     toast.fire({
                         type: 'error',
                         title: 'Something went wrong!'
@@ -72,8 +73,8 @@ export default {
                 axios.get('/api/hotels/'+this.form.hotelOwner+'/'+this.form.recep+'/0')
                 .then(
                     function (response) {
-                        response.data.forEach(function(item, index){
-                            self.hotels.push({id:item.id,name:item.name});
+                        response.data.forEach(function(item){
+                            self.hotels.push({id: item.id, name: item.name, assign: item.receptionist_assign});
                         });
                         if(self.rePick) {
                             self.isLoading = false;
