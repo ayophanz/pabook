@@ -1,6 +1,8 @@
+import userService from './../../../services/user';
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 export default {
+    props: ['userId'],
     components: {
         Loading
     },
@@ -16,45 +18,43 @@ export default {
             hotelsCapa: [],
             recepName: 'No name',
             form: new form({
-                recep: '',
+                recep: null,
                 assignHotel: [],
-                hotelOwner: ''
+                hotelOwner: null,
+                hotelId: null,
+                action: null,
+                type: null,
             })
         }
     },
+    watch : {
+        //
+    },
     methods: {
-        isChck(item, event) {
-            if(event.target.checked) {
-                this.hotels.splice(this.hotels.indexOf(item),1);
-                this.form.assignHotel.push({id:item.id,name:item.name});
-                this.recepCap('add');
-            }else{
-                // this.hotelsCapa.splice(this.hotelsCapa.indexOf(item),1);
-                this.form.assignHotel.splice(this.form.assignHotel.indexOf(item),1);
-                this.recepCap('remove');
-            }
-        },
-        recepCap(action) {
-            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) { 
-                this.isLoading = true;
-                let self = this;
-                this.form.post('/api/recep-capability/'+action).then(function (response) {
-                    self.loadUserCap();
-                    self.isLoading = false;
-                    toast.fire({
-                        type: 'success',
-                        title: 'User created successfully'
-                    });
-                })
-                .catch(function (error) {
-                    self.isLoading = false;
-                    console.log(error);
-                    toast.fire({
-                        type: 'error',
-                        title: 'Something went wrong!'
-                    });
+        isCheck(item, event) {
+            this.isLoading = true;
+            const self = this;
+            
+            this.form.type = item['type'];
+            this.form.hotelId = item['hotel_id'];
+            if (event.target.checked) this.form.action = 1;  
+            else this.form.action = 0;
+            Promise.all([
+                userService.capability(this.form)
+            ]).then(() => {
+                self.isLoading = false;
+                toast.fire({
+                    type: 'success',
+                    title: 'User created successfully'
                 });
-            }
+            }).catch((error) => {
+                self.isLoading = false;
+                console.log(error);
+                toast.fire({
+                    type: 'error',
+                    title: 'Something went wrong!'
+                });
+            });
         },
         selectRecep() {
             this.rePick = true;
@@ -138,7 +138,11 @@ export default {
                     function (response) {
                         self.receps = response.data
                         console.log(response.data);
-                        self.isLoading = false;
+                        if (self.form.recep  != null) {
+                            self.selectRecep();
+                        } else {
+                            self.isLoading = false;
+                        }
                     }
                 );
             }
@@ -148,6 +152,7 @@ export default {
         //
     },
     created(){
+        this.form.recep = this.userId;
         this.loadOwner();
     },
     beforeUpdate() {

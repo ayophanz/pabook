@@ -24,7 +24,10 @@ class RecepCapRequest extends FormRequest
     public function rules()
     {
         return [
-            'recep' => 'required|numeric|min:1'
+            'action' => 'required|numeric',
+            'hotelId' => 'required|numeric',
+            'recep' => 'required|numeric',
+            'type' => 'required|string',
         ];
     }
 }

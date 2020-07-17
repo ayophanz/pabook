@@ -63,18 +63,18 @@
                                                                         <!-- Room privilege -->
                                                                         <span>Room privilege</span>
                                                                         <ul>
-                                                                            <li><input :checked="(item.assign)?item.assign.can_add_room:0" type="checkbox" :class="'room-child-1-'+key"> Add</li>
-                                                                            <li><input :checked="(item.assign)?item.assign.can_edit_room:0" type="checkbox" :class="'room-child-2-'+key"> Edit</li>
-                                                                            <li><input :checked="(item.assign)?item.assign.can_delete_room:0" type="checkbox" :class="'room-child-3-'+key"> Delete</li>
+                                                                            <li><input @change="isCheck({'hotel_id':item.id, 'type':'add_room'}, $event)" :checked="(item.assign)?item.assign.can_add_room:0" type="checkbox" :class="'room-child-1-'+key"> Add</li>
+                                                                            <li><input @change="isCheck({'hotel_id':item.id, 'type':'edit_room'}, $event)" :checked="(item.assign)?item.assign.can_edit_room:0" type="checkbox" :class="'room-child-2-'+key"> Edit</li>
+                                                                            <li><input @change="isCheck({'hotel_id':item.id, 'type':'delete_room'}, $event)" :checked="(item.assign)?item.assign.can_delete_room:0" type="checkbox" :class="'room-child-3-'+key"> Delete</li>
                                                                         </ul>
                                                                     </div>
                                                                     <!-- Room type privilege -->
                                                                     <div class="child-privilege room-type-privilege">
                                                                         <span>Room type privilege</span>
                                                                         <ul>
-                                                                            <li><input :checked="(item.assign)?item.assign.can_add_room_type:0" type="checkbox" :class="'room-type-child-1-'+key"> Add</li>
-                                                                            <li><input :checked="(item.assign)?item.assign.can_edit_room_type:0" type="checkbox" :class="'room-type-child-2-'+key"> Edit</li>
-                                                                            <li><input :checked="(item.assign)?item.assign.can_delete_room_type:0" type="checkbox" :class="'room-type-child-3-'+key"> Delete</li>
+                                                                            <li><input @change="isCheck({'hotel_id':item.id, 'type':'add_room_type'}, $event)" :checked="(item.assign)?item.assign.can_add_room_type:0" type="checkbox" :class="'room-type-child-1-'+key"> Add</li>
+                                                                            <li><input @change="isCheck({'hotel_id':item.id, 'type':'edit_room_type'}, $event)" :checked="(item.assign)?item.assign.can_edit_room_type:0" type="checkbox" :class="'room-type-child-2-'+key"> Edit</li>
+                                                                            <li><input @change="isCheck({'hotel_id':item.id, 'type':'delete_room_type'}, $event)" :checked="(item.assign)?item.assign.can_delete_room_type:0" type="checkbox" :class="'room-type-child-3-'+key"> Delete</li>
                                                                         </ul>
                                                                     </div>
                                                                 </div>

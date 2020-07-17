@@ -30,12 +30,12 @@ export default {
         }
     },
     methods: {
-        // toggleCheck () {
-        //   if(this.isCheckPass)
-        //     this.isCheckPass = false;
-        //   else
-        //     this.isCheckPass = true;
-        // },
+        redirectToCapability () {
+            this.$router.replace({
+                name:'User Capability', 
+                params:{userId: this.userId}
+            });
+        },
         register () {
             if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
                 this.isLoading = true;
@@ -60,42 +60,40 @@ export default {
             }
         },
         showHide () {
-        let pwd = $("#password");
-        let fa = $(".call-password");
-        if(pwd.attr('type') === 'password') {
-            pwd.attr('type', 'text');
-            fa.removeClass('fa-eye');
-            fa.addClass('fa-eye-slash');
-        }else{
-            fa.removeClass('fa-eye-slash');
-            fa.addClass('fa-eye');
-            pwd.attr('type', 'password')
-        }
+            let pwd = $("#password");
+            let fa = $(".call-password");
+            if(pwd.attr('type') === 'password') {
+                pwd.attr('type', 'text');
+                fa.removeClass('fa-eye');
+                fa.addClass('fa-eye-slash');
+            }else{
+                fa.removeClass('fa-eye-slash');
+                fa.addClass('fa-eye');
+                pwd.attr('type', 'password')
+            }
         },
         userDetails(id) {
-        if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
-            this.isLoading = true;
-            let self = this;
-            axios.get('/api/edit-user/'+id)
-            .then(
-                function (response) {
-                self.form.fullname = response.data.name;
-                self.form.email = response.data.email;
-                self.form.role = response.data.role;
-                self.form.status = response.data.status;
-                self.isLoading = false;
-                }
-            );    
-        }
+            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
+                this.isLoading = true;
+                let self = this;
+                axios.get('/api/edit-user/'+id)
+                .then(
+                    function (response) {
+                    self.form.fullname = response.data.name;
+                    self.form.email = response.data.email;
+                    self.form.role = response.data.role;
+                    self.form.status = response.data.status;
+                    self.isLoading = false;
+                    }
+                );    
+            }
         },
         ifChangeRole() {
-        this.hotelOwners(this.form.role);
+            this.hotelOwners(this.form.role);
         },
         hotelOwners(role) {
-        if(role == 'hotel_receptionist')
-            this.isRecep = true;
-        else
-            this.isRecep = false;
+            if(role == 'hotel_receptionist') this.isRecep = true;
+            else this.isRecep = false;
         }
     },
     beforeCreate() {
@@ -104,10 +102,7 @@ export default {
     created(){
         this.userId = this.$route.params.userId;  
         this.userDetails(this.userId);
-        //if(this.$gate.hotelOwner()) 
-            //this.role.splice(0, 1);
         this.hotelOwners(this.form.role);
-            
         if(this.$gate.superAdmin()) {
             this.role.push('hotel_owner');
             this.isSuperAdmin = true;

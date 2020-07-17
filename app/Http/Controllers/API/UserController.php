@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\EmailVerificationForNewRegistered;
 use App\Models\User;
+use App\Models\ReceptionistAssign;
 use App\Models\UserMeta;
 use Helpers;
 
@@ -110,31 +111,21 @@ class UserController extends Controller
             return User::where('role', 'hotel_receptionist')->where('status', 'active')->whereIn('id', Helpers::recep())->get();
     }
 
-    public function recepCap(OwnerAndAdminRequest $ownerAndAdminRequest, RecepCapRequest $request, $action) 
+    public function recepCap(OwnerAndAdminRequest $ownerAndAdminRequest, RecepCapRequest $request) 
     {
-        $hotel_ids = array();
-        foreach ($request->assignHotel as $key => $value) {
-            array_push($hotel_ids, $value['id']);
-        }        
-
-        $userMeta = [
-                'user_id'  => $request->recep,
-                'meta_key' => 'assign_to_hotel',
-                'value'    => json_encode($hotel_ids)
-                ];        
+        $data = [];
+        $assign = ReceptionistAssign::where('receptionist_id', $request->recep)->where('owner_id', Helpers::ownerId())->where('hotel_id', $request->hotelId);
         
-        $validated = $request->validated();
-                
-        if($action=='add') {
-            $isMetakeyExist = UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->first();
-            if($isMetakeyExist) {
-                return UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->update($userMeta);
-           }else{
-                return UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->create($userMeta);
-           }
-        }else{
-            return UserMeta::where('user_id', $request['recep'])->where('meta_key', 'assign_to_hotel')->update($userMeta);
-        }
+        if ($request->type === 'add_room') $data = ['can_add_room' => (int) $request->action];
+        if ($request->type === 'edit_room') $data = ['can_edit_room' => (int) $request->action];
+        if ($request->type === 'delete_room') $data = ['can_delete_room' => (int) $request->action];
+
+        if ($request->type === 'add_room_type') $data = ['can_add_room_type' => (int) $request->action];
+        if ($request->type === 'edit_room_type') $data = ['can_edit_room_type' => (int) $request->action];
+        if ($request->type === 'delete_room_type') $data = ['can_delete_room_type' => (int) $request->action];
+
+        if ($assign->count() > 0) $assign->update($data); 
+        else $assign->create($data);
     }
 
     /**
