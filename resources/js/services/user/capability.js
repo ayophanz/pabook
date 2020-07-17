@@ -7,9 +7,9 @@ const failed = ({ error }, reject) => {
     //reject(console.log(error));
 };
 
-export default (form, data) => {
+export default (form) => {
     new Promise((resolve, reject) => {
-        form.post('/api/recep-capability', data).then((response) => {
+        form.post('/api/recep-capability').then((response) => {
             success(response, resolve);
         }).catch((error) => {
             failed(error, reject);
