@@ -45,7 +45,7 @@ export default {
                 self.isLoading = false;
                 toast.fire({
                     type: 'success',
-                    title: 'User created successfully'
+                    title: 'Updated successfully'
                 });
             }).catch((error) => {
                 self.isLoading = false;
@@ -85,25 +85,6 @@ export default {
                 );
             }
         },
-        // loadUserCap() {
-        //     if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
-        //         if(this.rePick) {
-        //             this.isLoading = true;
-        //         }
-        //         this.hotelsCapa = [];
-        //         let self = this;
-        //         axios.get('/api/hotels/'+this.form.hotelOwner+'/'+this.form.recep)
-        //         .then(
-        //             function (response) {
-        //                 response.data.forEach(function(item, index){
-        //                     self.hotelsCapa.push({id:item.id,name:item.name});
-        //                 });
-        //                 self.form.assignHotel = self.hotelsCapa;
-        //                 self.loadHotels();
-        //             }
-        //         );
-        //     }
-        // },
         ifChangehotelOwner() {
             if(this.$gate.superAdmin()) {
                 this.hotels = [];
