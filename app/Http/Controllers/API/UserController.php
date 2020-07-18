@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Requests\Gate\OwnerAndAdminRequest;
 
-use App\Http\Requests\User\RecepCapRequest;
 use App\Http\Requests\User\CreateRequest;
 use App\Http\Requests\User\UpdateRequest;
 use App\Http\Requests\User\UpdateProfileRequest;
@@ -13,7 +12,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\EmailVerificationForNewRegistered;
 use App\Models\User;
-use App\Models\ReceptionistAssign;
 use App\Models\UserMeta;
 use Helpers;
 
@@ -109,23 +107,6 @@ class UserController extends Controller
         }
         if(\Gate::allows('hotelOwner')) 
             return User::where('role', 'hotel_receptionist')->where('status', 'active')->whereIn('id', Helpers::recep())->get();
-    }
-
-    public function recepCap(OwnerAndAdminRequest $ownerAndAdminRequest, RecepCapRequest $request) 
-    {
-        $data = [];
-        $assign = ReceptionistAssign::where('receptionist_id', $request->recep)->where('owner_id', Helpers::ownerId())->where('hotel_id', $request->hotelId);
-        
-        if ($request->type === 'add_room') $data = ['can_add_room' => (int) $request->action];
-        if ($request->type === 'edit_room') $data = ['can_edit_room' => (int) $request->action];
-        if ($request->type === 'delete_room') $data = ['can_delete_room' => (int) $request->action];
-
-        if ($request->type === 'add_room_type') $data = ['can_add_room_type' => (int) $request->action];
-        if ($request->type === 'edit_room_type') $data = ['can_edit_room_type' => (int) $request->action];
-        if ($request->type === 'delete_room_type') $data = ['can_delete_room_type' => (int) $request->action];
-
-        if ($assign->count() > 0) $assign->update($data); 
-        else $assign->create($data);
     }
 
     /**

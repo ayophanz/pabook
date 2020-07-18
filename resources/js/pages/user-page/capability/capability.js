@@ -62,7 +62,7 @@ export default {
             this.receps.forEach(function(item, index){
                 if(self.form.recep==item.id) {
                     self.recepName = item.name;
-                    self.loadUserCap();
+                    self.loadHotels();
                 }
             });
         },
@@ -70,12 +70,13 @@ export default {
             if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
                 this.hotels = [];
                 let self = this;
-                axios.get('/api/hotels/'+this.form.hotelOwner+'/'+this.form.recep+'/0')
+                axios.get('/api/receptionist-assign/'+this.form.recep)
                 .then(
                     function (response) {
                         response.data.forEach(function(item){
                             self.hotels.push({id: item.id, name: item.name, assign: item.receptionist_assign});
                         });
+                        console.log(self.hotels);
                         if(self.rePick) {
                             self.isLoading = false;
                             self.rePick = false;
@@ -84,25 +85,25 @@ export default {
                 );
             }
         },
-        loadUserCap() {
-            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
-                if(this.rePick) {
-                    this.isLoading = true;
-                }
-                this.hotelsCapa = [];
-                let self = this;
-                axios.get('/api/hotels/'+this.form.hotelOwner+'/'+this.form.recep+'/1')
-                .then(
-                    function (response) {
-                        response.data.forEach(function(item, index){
-                            self.hotelsCapa.push({id:item.id,name:item.name});
-                        });
-                        self.form.assignHotel = self.hotelsCapa;
-                        self.loadHotels();
-                    }
-                );
-            }
-        },
+        // loadUserCap() {
+        //     if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
+        //         if(this.rePick) {
+        //             this.isLoading = true;
+        //         }
+        //         this.hotelsCapa = [];
+        //         let self = this;
+        //         axios.get('/api/hotels/'+this.form.hotelOwner+'/'+this.form.recep)
+        //         .then(
+        //             function (response) {
+        //                 response.data.forEach(function(item, index){
+        //                     self.hotelsCapa.push({id:item.id,name:item.name});
+        //                 });
+        //                 self.form.assignHotel = self.hotelsCapa;
+        //                 self.loadHotels();
+        //             }
+        //         );
+        //     }
+        // },
         ifChangehotelOwner() {
             if(this.$gate.superAdmin()) {
                 this.hotels = [];

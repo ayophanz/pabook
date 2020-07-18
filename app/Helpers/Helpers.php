@@ -24,11 +24,10 @@ class Helpers
     }
 
     /**
-    *  Get owner receptionist
+    *  Get my receptionist
     */
     public static function recep() {
       return ReceptionistAssign::select('receptionist_id')->where('owner_id', auth('api')->user()->id)->get()->toArray();
-      // return UserMeta::select('value')->where('user_id', auth('api')->user()->id)->get()->toArray();
     }
 
     /**

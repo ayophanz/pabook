@@ -37,10 +37,6 @@ Route::get('/profile', 'API\UserController@profile');
 
 Route::put('/update-profile', 'API\UserController@UpdateProfile');
 
-Route::post('/recep-capability', 'API\UserController@recepCap');
-
-// Route::post('/recep-capability/{action}', 'API\UserController@recepCap');
-
 Route::get('/check-two-factor-if-expired', 'API\UserController@checkTwoFactExpired');
 
 
@@ -49,7 +45,7 @@ Route::get('/check-two-factor-if-expired', 'API\UserController@checkTwoFactExpir
 */
 Route::get('/hotels', 'API\HotelController@index');
 
-Route::get('/hotels/{id}/{recep}/{capa}', 'API\HotelController@index');
+Route::get('/hotels/{id}/{recep}', 'API\HotelController@index');
 
 Route::post('/create-hotel', 'API\HotelController@create');
 
@@ -126,6 +122,14 @@ Route::get('/continue-booking/{id}', 'API\BookController@continueBooking');
 Route::post('/save-continue-booking/{id}', 'API\BookController@saveContinueBooking');
 
 Route::get('/single-booking-details/{id}', 'API\BookController@singleDetails');
+
+
+/**
+ * Receptionist assignment
+ */
+Route::get('/receptionist-assign/{id}', 'API\ReceptionistAssignController@index');
+
+Route::post('/recep-capability', 'API\ReceptionistAssignController@recepCap');
 
 
 /**

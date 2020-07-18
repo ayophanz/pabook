@@ -10,7 +10,6 @@ use App\Http\Requests\Gate\ApproveRequest;
 
 use App\Http\Controllers\Controller;
 use App\Models\Hotel;
-use App\Models\UserMeta;
 use Helpers;
 
 class HotelController extends Controller
@@ -19,23 +18,9 @@ class HotelController extends Controller
         $this->middleware(['auth:api', 'verified', 'two_factor_auth']);
     }
 
-    public function index(OwnerAndAdminRequest $ownerAndAdminRequest, $id=null,$recep=null,$capa=null) {
-
-        if ($id==null && $recep==null) {
-            if (\Gate::allows('superAdmin')) return Hotel::orderBy('created_at', 'desc')->get();
-            if (\Gate::allows('hotelOwner')) return Hotel::where('user_id',  Helpers::ownerId())->orderBy('created_at', 'desc')->get(); 
-        }else{
-            if ($id=='0') $id = Helpers::ownerId();
-            $exist_recep = UserMeta::select('value')->where('meta_key', 'assign_to_hotel')->where('user_id', $recep)->get();
-            $exist_recep = json_decode(json_encode($exist_recep),true); 
-            $toarr = array();
-            if ($exist_recep)
-                $toarr = explode(',', substr($exist_recep[0]['value'], 1, -1));
-            if ($capa=='1') 
-                return Hotel::where('status', 'verified')->whereIn('id', $toarr)->where('user_id', $id)->with('receptionistAssign')->orderBy('created_at', 'desc')->get();
-            else
-                return Hotel::where('status', 'verified')->whereNotIn('id', $toarr)->where('user_id', $id)->with('receptionistAssign')->orderBy('created_at', 'desc')->get();
-        } 	
+    public function index(OwnerAndAdminRequest $ownerAndAdminRequest) {
+        if (\Gate::allows('superAdmin')) return Hotel::orderBy('created_at', 'desc')->get();
+        if (\Gate::allows('hotelOwner')) return Hotel::where('user_id',  Helpers::ownerId())->orderBy('created_at', 'desc')->get(); 	
     }
 
     public function create(OwnerAndAdminRequest $ownerAndAdminRequest, CreateRequest $request) {
