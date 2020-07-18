@@ -144,6 +144,7 @@
                   </div>
                   <div class="card-footer">
                     <button :disabled="form.busy" type="submit" class="btn btn-outline-primary btn-flat"><i class="fa fa-save"></i> {{ 'Update' }}</button>
+                    <button :disabled="form.busy" @click="deleteRoom" type="button" class="btn btn-outline-danger btn-flat float-right"><i class="fa fa-trash"></i> {{ 'Delete' }}</button>
                   </div>
               </div>    
             </div>

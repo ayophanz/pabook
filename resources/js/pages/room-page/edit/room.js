@@ -54,6 +54,35 @@ export default {
         }
     },
     methods: {
+
+        deleteRoom () {
+            if(this.$gate.superAdmin() || this.$gate.hotelOwner()) {
+                sure.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'No, cancel! ',
+                    focusCancel: true,
+                    reverseButtons: true
+                }).then((result) => {
+                    if(result.value) {
+                        this.isLoading = true;
+                        let self = this
+                        axios.delete('/api/delete-room/'+this.roomId)
+                        .then(function () {
+                            self.isLoading = false;
+                            toast.fire({
+                                type: 'success',
+                                title: 'User deleted successfully'
+                            })
+                            self.$router.push('/rooms');
+                        });
+                    }
+                })
+            }
+        },
         
         roomsNoOnAdd(value) {
             if(value.status=='ready')
