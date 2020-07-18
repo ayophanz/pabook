@@ -108,8 +108,19 @@ class RoomController extends Controller
 
       if($request->gallery) {
         $file = Helpers::imageGallery($request->gallery, $id, 'update');
-        $dataMetaUpdate = ['value' => json_encode($file)];
-        RoomMeta::where('room_id', $id)->where('meta_key', 'room_gallery')->update($dataMetaUpdate);                  
+        $roomMeta = RoomMeta::where('room_id', $id)->where('meta_key', 'room_gallery');
+
+        $dataMeta = ['value' => json_encode($file)];
+        if ($roomMeta->count() > 0) {
+          $roomMeta->update($dataMeta); 
+        } else {
+          $dataMeta = [
+                  'room_id'  => $id,
+                  'meta_key' => 'room_gallery',
+                  'value'    => json_encode($file)
+                  ];              
+          $roomMeta->create($dataMeta);
+        }           
       }
 
       return ( ($room!=null)? $room : die('Something went wrong!') );

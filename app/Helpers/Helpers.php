@@ -23,12 +23,14 @@ class Helpers
         return auth('api')->user()->id;
     }
 
+
     /**
     *  Get my receptionist
     */
     public static function recep() {
       return ReceptionistAssign::select('receptionist_id')->where('owner_id', auth('api')->user()->id)->get()->toArray();
     }
+
 
     /**
     *  Get rooms belongs to users
@@ -47,6 +49,7 @@ class Helpers
         return $room;
     }
 
+
     /**
     *  validate action by user type
     */
@@ -59,6 +62,7 @@ class Helpers
         return false;
       
     }
+
 
     /**
     *  Users to notify
@@ -85,6 +89,7 @@ class Helpers
         return User::whereIn('id', $allowed)->orwhere('role', 'super_admin')->get();
     }
 
+
     /**
     *  If does have base currency
     */
@@ -105,6 +110,7 @@ class Helpers
                 Option::create($option);
         }
     }
+
 
     /**
     *  File upload
@@ -135,6 +141,7 @@ class Helpers
         return $extension_arr[$mime];
     }
 
+
     /**
     *  Create and update Option
     */
@@ -149,6 +156,7 @@ class Helpers
 
         return $option;
     }
+
 
     /**
     *  update amenities
@@ -170,6 +178,7 @@ class Helpers
         }
     }
 
+
     /**
     *  create amenities
     */
@@ -184,6 +193,7 @@ class Helpers
         RoomMeta::create($dataMetaCreate);
       }
     }
+
 
     /**
     *  create rooms no.
@@ -205,6 +215,7 @@ class Helpers
         Hotel::where('id', $hotel_id)->update($data);
     }
 
+
     /**
     *  Hotel owner
     */
@@ -225,6 +236,7 @@ class Helpers
         }
     }
 
+
     /**
     *  Get owner hotels ID
     */
@@ -232,22 +244,34 @@ class Helpers
         return Hotel::where('user_id', auth('api')->user()->id)->pluck('id')->toArray();
     }
 
+
     /**
     * Gallery upload
     */
     public static function imageGallery($images, $id, $action) {
+        $folder = public_path().'/storage/images/upload/roomImages/gallery-'.$id.'/';
+        if (!File::exists($folder)) 
+            File::makeDirectory($folder, 0775, true);
+
         $file = [];                     
         foreach ($images as $key => $subArr) {
             $image = $subArr['1']['filename'];
-            $fileExist = public_path().'/storage/images/upload/roomImages/gallery-'.$id.'/'.$image;
-            if($action=='update' && File::exists($fileExist))
-              unlink(public_path('storage/images/upload/roomImages/gallery-'.$id.'/'.$image));
-            \Image::make($subArr['2']['image'])->save(storage_path('app/public/images/upload/roomImages/gallery-'.$id.'/').$image); 
+            
+            if($action=='update') {
+              $fileExist = public_path().'/storage/images/upload/roomImages/gallery-'.$id.'/'.$image;
+              if (File::exists($fileExist.'.png')) unlink($fileExist.'.png');
+              elseif (File::exists($fileExist.'.jpg')) unlink($fileExist.'.jpg');
+              elseif (File::exists($fileExist.'.jpeg')) unlink($fileExist.'.jpeg');
+              elseif (File::exists($fileExist.'.gif')) unlink($fileExist.'.gif');
+            }
+
+            \Image::make($subArr['2']['image'])->save(public_path('storage/images/upload/roomImages/gallery-'.$id.'/').$image); 
             unset($subArr['2']);
             $file[$key] = $subArr;  
         }
         return $file;
     }
+
 
     /**
     * Feature image upload
@@ -270,6 +294,7 @@ class Helpers
         \Image::make($img)->save(public_path('storage/images/upload/roomImages/gallery-'.$id.'/').$image);
         return $image;
     }
+
 
     /**
     *  Get unassigned room types
