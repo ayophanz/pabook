@@ -29,7 +29,7 @@
         "admin-lte": "^3.0.2",
         "country-json": "^1.1.0",
         "currency-codes": "^2.1.0",
-        "datatables.net": "^1.10.20",
+        "datatables.net": "^1.10.22",
         "datatables.net-dt": "^1.10.20",
         "laravel-echo": "^1.6.1",
         "moment": "^2.24.0",
