@@ -15,7 +15,7 @@
         "fideloper/proxy": "^4.0",
         "intervention/image": "^2.5",
         "laravel/cashier": "^10.5",
-        "laravel/framework": "6.0.*",
+        "laravel/framework": "6.20.*",
         "laravel/passport": "^7.3",
         "laravel/tinker": "^1.0",
         "pusher/pusher-php-server": "~4.0"
